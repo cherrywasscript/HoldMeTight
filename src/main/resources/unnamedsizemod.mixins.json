@@ -1,0 +1,19 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "com.ricardthegreat.unnamedsizemod.mixins",
+    "compatibilityLevel": "JAVA_17",
+    "refmap": "unnamedsizemod.mixins.refmap.json",
+    "mixins": [
+      "SmallEntityRenderMixin",
+      "EntityMixin",
+      "PlayerMixin",
+      "HumanoidModelMixin",
+      "MultiPlayerGameModeMixin"
+    ],
+    "client": [
+    ],
+    "injectors": {
+      "defaultRequire": 1
+    }
+  }

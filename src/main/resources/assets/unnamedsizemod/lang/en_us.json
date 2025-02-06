@@ -1,0 +1,9 @@
+{
+    "item.unnamedsizemod.size_remote":"Size Remote",
+
+    "gui.unnamedsizemod.size_remote":"Test Screen",
+    "gui.unnamedsizemod.size_remote.button.mult_button":"Multiply",
+    "gui.unnamedsizemod.size_remote.button.set_button":"Set",
+    "gui.unnamedsizemod.size_remote.button.reset_button":"Reset",
+    "gui.unnamedsizemod.size_remote.field.custom_scale_field_tooltip":"Input a scale multiplier"
+}
