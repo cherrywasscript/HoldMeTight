@@ -1,15 +1,9 @@
 package com.ricardthegreat.unnamedsizemod.network;
 
-import java.util.UUID;
 import java.util.function.Supplier;
 
 
 import com.ricardthegreat.unnamedsizemod.utils.PlayerCarryExtension;
-import com.ricardthegreat.unnamedsizemod.utils.PlayerCarryUtils;
-import com.ricardthegreat.unnamedsizemod.utils.SizeUtils;
-
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;

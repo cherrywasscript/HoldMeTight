@@ -4,14 +4,10 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 import com.ricardthegreat.unnamedsizemod.Client.handlers.ClientPacketHandler;
-import com.ricardthegreat.unnamedsizemod.utils.SizeUtils;
-
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
-import net.minecraftforge.network.NetworkEvent.ClientCustomPayloadEvent;
 
 public class CPlayerDismountPlayerPacket {
 

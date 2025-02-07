@@ -7,14 +7,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.ricardthegreat.unnamedsizemod.init.ItemInit;
 import com.ricardthegreat.unnamedsizemod.network.CPlayerCarryPositionPacket;
 import com.ricardthegreat.unnamedsizemod.network.CPlayerDismountPlayerPacket;
 import com.ricardthegreat.unnamedsizemod.network.PacketHandler;
 import com.ricardthegreat.unnamedsizemod.utils.PlayerCarryExtension;
 import com.ricardthegreat.unnamedsizemod.utils.SizeUtils;
 
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -102,13 +100,13 @@ public abstract class EntityMixin {
     @Inject(at = @At("HEAD"), method = "stopRiding()V")
     public void unnamedsizemod$dismount(CallbackInfo info){
         Entity ent = (Entity) (Object) this;
-        if(ent instanceof Player && ent.isPassenger() && ent.getVehicle() instanceof Player){
+        Entity vehicle = ent.getVehicle();
+        if(ent instanceof Player && ent.isPassenger() && vehicle != null && vehicle instanceof Player){
 
-            PlayerCarryExtension player = (PlayerCarryExtension) ent.getVehicle();
+            PlayerCarryExtension player = (PlayerCarryExtension) vehicle;
             PlayerCarryExtension entity = (PlayerCarryExtension) ent;
             
             entity.setCarried(false);
-
             player.setCarrying(false);
 
             if(!ent.level().isClientSide()) {
@@ -117,7 +115,7 @@ public abstract class EntityMixin {
                 System.out.println("stop riding");
 
                 PacketHandler.sendToAllClients(new CPlayerCarryPositionPacket(false, ent.getUUID(), (byte) 0));
-                PacketHandler.sendToAllClients(new CPlayerCarryPositionPacket(false, ent.getVehicle().getUUID(), (byte) 1));
+                PacketHandler.sendToAllClients(new CPlayerCarryPositionPacket(false, vehicle.getUUID(), (byte) 1));
                 PacketHandler.sendToAllClients(new CPlayerDismountPlayerPacket(ent.getUUID()));
             }
         }
@@ -167,7 +165,7 @@ public abstract class EntityMixin {
 
         SizeUtils.getSize(rider);
 
-        vertOffset = vehicle.getY() + vehicle.getPassengersRidingOffset() + rider.getMyRidingOffset() - vehiclePlayer.getVertOffset();
+        vertOffset = vehicle.getY() + vehicle.getPassengersRidingOffset() + rider.getMyRidingOffset() - (vehiclePlayer.getVertOffset()*SizeUtils.getSize(vehicle));
 
         double degrees = vehicle.yBodyRotO + vehiclePlayer.getRotationOffset();
 
@@ -181,7 +179,6 @@ public abstract class EntityMixin {
         xOffset = (Math.cos(rotation)*vehiclePlayer.getXYMult())+x;
         yOffset = (Math.sin(rotation)*vehiclePlayer.getXYMult())+y;
 
-        vertOffset *= SizeUtils.getSize(vehicle);
         xOffset *= SizeUtils.getSize(vehicle);
         yOffset *= SizeUtils.getSize(vehicle);
     }

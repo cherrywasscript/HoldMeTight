@@ -1,7 +1,6 @@
 package com.ricardthegreat.unnamedsizemod.utils;
 
 import net.minecraft.nbt.CompoundTag;
-import virtuoel.pehkui.util.PehkuiEntityExtensions;
 
 public interface PlayerCarryExtension {
 

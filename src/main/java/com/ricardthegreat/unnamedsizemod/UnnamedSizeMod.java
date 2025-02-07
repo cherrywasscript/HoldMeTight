@@ -1,30 +1,16 @@
 package com.ricardthegreat.unnamedsizemod;
 
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.logging.LogUtils;
-import com.ricardthegreat.unnamedsizemod.Commands.TestCommand;
 import com.ricardthegreat.unnamedsizemod.init.CreativeTabInit;
 import com.ricardthegreat.unnamedsizemod.init.ItemInit;
-import com.ricardthegreat.unnamedsizemod.utils.PlayerCarryExtension;
-import com.ricardthegreat.unnamedsizemod.utils.PlayerCarryUtils;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
