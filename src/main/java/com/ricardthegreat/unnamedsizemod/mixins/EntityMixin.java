@@ -13,11 +13,18 @@ import com.ricardthegreat.unnamedsizemod.network.PacketHandler;
 import com.ricardthegreat.unnamedsizemod.utils.PlayerCarryExtension;
 import com.ricardthegreat.unnamedsizemod.utils.SizeUtils;
 
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.monster.Spider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LadderBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import virtuoel.pehkui.mixin.LivingEntityMixin;
 
 
 @Mixin(Entity.class)
@@ -181,6 +188,36 @@ public abstract class EntityMixin {
 
         xOffset *= SizeUtils.getSize(vehicle);
         yOffset *= SizeUtils.getSize(vehicle);
+    }
+
+    //let smaller players climb blocks
+    //@Inject(at = @At("RETURN"), method = "isStateClimbable(Lnet/minecraft/world/level/block/state/BlockState;)Z")
+    
+    private boolean isStateClimbable(BlockState state) {
+
+        if ((Entity) (Object) this instanceof Player) {
+            System.out.println("is state climbable");
+            return true;
+        }else{
+            return state.is(BlockTags.CLIMBABLE) || state.is(Blocks.POWDER_SNOW);
+        }
+
+
+        //LivingEntityMixin
+
+        //return isClimbable(state);
+    }
+
+    private boolean isClimbable(BlockState state){
+
+        
+
+        if(state.is(BlockTags.CLIMBABLE) || state.is(Blocks.POWDER_SNOW)){
+            return true;
+        }else{
+
+            return false;
+        }
     }
 
     

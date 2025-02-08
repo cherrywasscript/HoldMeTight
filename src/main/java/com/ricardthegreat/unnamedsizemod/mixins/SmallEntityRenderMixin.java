@@ -42,6 +42,24 @@ public abstract class SmallEntityRenderMixin<T extends Entity> {
 		}
 
 		return cir.getReturnValueZ();
+
+
+
+
+		/*
+		 if (!p_114491_.shouldRender(p_114493_, p_114494_, p_114495_)) {
+         return false;
+      } else if (p_114491_.noCulling) {
+         return true;
+      } else {
+         AABB aabb = p_114491_.getBoundingBoxForCulling().inflate(0.5D);
+         if (aabb.hasNaN() || aabb.getSize() == 0.0D) {
+            aabb = new AABB(p_114491_.getX() - 2.0D, p_114491_.getY() - 2.0D, p_114491_.getZ() - 2.0D, p_114491_.getX() + 2.0D, p_114491_.getY() + 2.0D, p_114491_.getZ() + 2.0D);
+         }
+
+         return p_114492_.isVisible(aabb);
+      }
+		 */
 	}
 
 	private boolean shouldRenderAtSqrDistance(double doub, Entity entity) {

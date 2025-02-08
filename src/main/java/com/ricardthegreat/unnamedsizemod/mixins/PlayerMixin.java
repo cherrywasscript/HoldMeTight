@@ -57,9 +57,6 @@ public abstract class PlayerMixin implements PlayerCarryExtension, PlayerRenderE
     //if this is true it will sync only the booleans because thats less data
     private boolean shouldSyncSimple = false;
 
-
-    
-
     @Inject(at = @At("TAIL"), method = "tick()V")
     private void tick(CallbackInfo info){
         if(shouldSync){
