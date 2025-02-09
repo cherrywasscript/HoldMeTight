@@ -4,6 +4,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -24,6 +25,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LadderBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.event.level.NoteBlockEvent.Play;
 import virtuoel.pehkui.mixin.LivingEntityMixin;
 
 
@@ -190,35 +192,4 @@ public abstract class EntityMixin {
         yOffset *= SizeUtils.getSize(vehicle);
     }
 
-    //let smaller players climb blocks
-    //@Inject(at = @At("RETURN"), method = "isStateClimbable(Lnet/minecraft/world/level/block/state/BlockState;)Z")
-    
-    private boolean isStateClimbable(BlockState state) {
-
-        if ((Entity) (Object) this instanceof Player) {
-            System.out.println("is state climbable");
-            return true;
-        }else{
-            return state.is(BlockTags.CLIMBABLE) || state.is(Blocks.POWDER_SNOW);
-        }
-
-
-        //LivingEntityMixin
-
-        //return isClimbable(state);
-    }
-
-    private boolean isClimbable(BlockState state){
-
-        
-
-        if(state.is(BlockTags.CLIMBABLE) || state.is(Blocks.POWDER_SNOW)){
-            return true;
-        }else{
-
-            return false;
-        }
-    }
-
-    
 }

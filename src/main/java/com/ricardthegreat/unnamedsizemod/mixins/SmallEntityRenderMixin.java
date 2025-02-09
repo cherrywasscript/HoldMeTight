@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.ricardthegreat.unnamedsizemod.utils.PlayerCarryExtension;
 import com.ricardthegreat.unnamedsizemod.utils.PlayerRenderExtension;
+import com.ricardthegreat.unnamedsizemod.utils.SizeUtils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.font.providers.UnihexProvider.Dimensions;
@@ -20,59 +21,33 @@ import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
-
+import virtuoel.pehkui.mixin.client.CameraMixin;
 
 @Mixin(EntityRenderer.class)
 public abstract class SmallEntityRenderMixin<T extends Entity> {
 	
-	// probably shite and unoptimised but allows players to see entities that are smaller than normal
-	//not sure if it works with zoom mods yet
-
-
+	//currently just makes players always render
 	@Inject(at = @At("RETURN"), method = "shouldRender(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/client/renderer/culling/Frustum;DDD)Z")
 	public boolean shouldRender(T entity, Frustum frustum, double x, double y, double z, CallbackInfoReturnable<Dimensions> cir){
 
-		if(FMLEnvironment.dist == Dist.CLIENT){
-			double doub = 10D;
-
-			return shouldRenderAtSqrDistance(doub, entity);
+		if(FMLEnvironment.dist == Dist.CLIENT && entity instanceof Player){
+			double scale = SizeUtils.getSize(entity);
+			AABB aabb = entity.getBoundingBoxForCulling().inflate(0.5D);
+			if (scale < 1) {
+				aabb = entity.getBoundingBoxForCulling().inflate(0.5D/scale);
+			}else{
+				aabb = entity.getBoundingBoxForCulling().inflate(0.5D*scale);
+			}
+			return frustum.isVisible(aabb);
 		}
 
 		return cir.getReturnValueZ();
-
-
-
-
-		/*
-		 if (!p_114491_.shouldRender(p_114493_, p_114494_, p_114495_)) {
-         return false;
-      } else if (p_114491_.noCulling) {
-         return true;
-      } else {
-         AABB aabb = p_114491_.getBoundingBoxForCulling().inflate(0.5D);
-         if (aabb.hasNaN() || aabb.getSize() == 0.0D) {
-            aabb = new AABB(p_114491_.getX() - 2.0D, p_114491_.getY() - 2.0D, p_114491_.getZ() - 2.0D, p_114491_.getX() + 2.0D, p_114491_.getY() + 2.0D, p_114491_.getZ() + 2.0D);
-         }
-
-         return p_114492_.isVisible(aabb);
-      }
-		 */
 	}
-
-	private boolean shouldRenderAtSqrDistance(double doub, Entity entity) {
-		double d0 = entity.getBoundingBox().getSize() * 10.0D;
-		if (Double.isNaN(d0)) {
-		   d0 = 1.0D;
-		}
-  
-		d0 *= 1000.0D * Entity.getViewScale();
-
-		return doub < d0 * d0;
-	}
-
 	
 	//@Inject(at = @At("HEAD"), method="render(Lnet/minecraft/world/entity/Entity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V")
 	@Overwrite

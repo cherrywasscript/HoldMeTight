@@ -9,7 +9,9 @@
       "EntityMixin",
       "PlayerMixin",
       "HumanoidModelMixin",
-      "MultiPlayerGameModeMixin"
+      "MultiPlayerGameModeMixin",
+      "LivingEntityMixin",
+      "WebBlockMixin"
     ],
     "client": [
     ],
