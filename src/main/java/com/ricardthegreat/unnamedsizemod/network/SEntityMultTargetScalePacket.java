@@ -40,7 +40,7 @@ public class SEntityMultTargetScalePacket {
         ServerPlayer target = player.server.getPlayerList().getPlayer(uuid);
 
         if(target != null){
-            SizeUtils.multTargetSize(target, scale);
+            SizeUtils.multSizeOverTimeDefault(target, scale);
         }
     }
 }

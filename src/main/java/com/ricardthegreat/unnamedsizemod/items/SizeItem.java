@@ -85,7 +85,7 @@ public class SizeItem extends Item {
             item.setTag(tag);
             //setSelectedPlayer((Player) entity);
         } else {
-            SizeUtils.setTargetSize(entity, tag.getFloat(MULT_TAG));
+            SizeUtils.setSizeOverTimeDefault(entity, tag.getFloat(MULT_TAG));
         }
 
         return InteractionResult.SUCCESS;
