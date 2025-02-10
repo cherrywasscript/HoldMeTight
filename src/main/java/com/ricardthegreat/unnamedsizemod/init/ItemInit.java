@@ -2,6 +2,7 @@ package com.ricardthegreat.unnamedsizemod.init;
 
 import com.ricardthegreat.unnamedsizemod.UnnamedSizeMod;
 import com.ricardthegreat.unnamedsizemod.items.PlayerStandinItem;
+import com.ricardthegreat.unnamedsizemod.items.SizeRay;
 import com.ricardthegreat.unnamedsizemod.items.AdvancedSizeRemote;
 
 import net.minecraft.world.food.FoodProperties;
@@ -31,9 +32,11 @@ public class ItemInit {
         */
 
 
-        public static final RegistryObject<Item> SIZE_ITEM = addToTab(
+        public static final RegistryObject<Item> ADVANCED_SIZE_REMOTE = addToTab(
                 ITEMS.register("size_remote", () -> new AdvancedSizeRemote(new Item.Properties().stacksTo(1))));
 
+        public static final RegistryObject<Item> SIZE_RAY = addToTab(
+                ITEMS.register("size_ray", () -> new SizeRay(new Item.Properties().stacksTo(1))));
 
         public static final RegistryObject<Item> PLAYER_ITEM = addToTab(
                 ITEMS.register("player_item", () -> new PlayerStandinItem(new Item.Properties().stacksTo(1))));
