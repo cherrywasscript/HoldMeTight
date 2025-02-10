@@ -21,7 +21,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 
 
-public class SizeItem extends Item {
+public class AdvancedSizeRemote extends Item {
 
     public static final String MULT_TAG = "multiplier";
 
@@ -29,23 +29,12 @@ public class SizeItem extends Item {
 
     private static final Float DEFAULT_SCALE = 1.0f;
 
-    //private Float scale = 1.0f;
-
-    //private Player selectedPlayer;
-
-    private MinecraftServer server;
-
-    public SizeItem(Item.Properties properties) {
+    public AdvancedSizeRemote(Item.Properties properties) {
         super(properties);
     }
 
     @Override
     public InteractionResultHolder<ItemStack> use(@Nonnull Level level, @Nonnull Player player, @Nonnull InteractionHand hand) {
-
-        if (level.getServer() != null){
-            System.out.println("server is not null");
-            server = level.getServer();
-        }
 
         ItemStack item = player.getItemInHand(hand);
         CompoundTag tag = checkDefaultTags(item, player);
@@ -61,7 +50,7 @@ public class SizeItem extends Item {
         //open item screen client side only (need to figure out how to not pause in single player)
         
         if (level.isClientSide()) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientHooks.openSizeItemScreen(player, hand, server));
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientHooks.openSizeRemoteScreen(player, hand));
         }
 
         return super.use(level, player, hand);
@@ -113,8 +102,8 @@ public class SizeItem extends Item {
         CompoundTag tag = stack.getTag();
         if(tag == null){
             tag = stack.getOrCreateTag();
-            tag.putFloat(SizeItem.MULT_TAG, DEFAULT_SCALE);
-            tag.putUUID(SizeItem.UUID_TAG, player.getUUID());
+            tag.putFloat(AdvancedSizeRemote.MULT_TAG, DEFAULT_SCALE);
+            tag.putUUID(AdvancedSizeRemote.UUID_TAG, player.getUUID());
             stack.setTag(tag);
         }
         return tag;
