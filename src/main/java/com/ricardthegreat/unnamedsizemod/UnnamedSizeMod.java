@@ -2,6 +2,7 @@ package com.ricardthegreat.unnamedsizemod;
 
 import com.mojang.logging.LogUtils;
 import com.ricardthegreat.unnamedsizemod.init.CreativeTabInit;
+import com.ricardthegreat.unnamedsizemod.init.EntityInit;
 import com.ricardthegreat.unnamedsizemod.init.ItemInit;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
@@ -34,6 +35,7 @@ public class UnnamedSizeMod {
         
         ItemInit.ITEMS.register(modEventBus);
         CreativeTabInit.TABS.register(modEventBus);
+        EntityInit.ENTITIES.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);

@@ -3,6 +3,7 @@ package com.ricardthegreat.unnamedsizemod.items;
 import javax.annotation.Nonnull;
 
 import com.ricardthegreat.unnamedsizemod.Client.ClientHooks;
+import com.ricardthegreat.unnamedsizemod.entities.projectile.RayGunProjectile;
 import com.ricardthegreat.unnamedsizemod.utils.SizeUtils;
 
 import net.minecraft.client.Minecraft;
@@ -18,6 +19,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.ThrownEnderpearl;
+import net.minecraft.world.entity.projectile.Fireball;
+import net.minecraft.world.entity.projectile.LlamaSpit;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -62,10 +65,11 @@ public class SizeRay extends Item {
 
         }else if (!player.isShiftKeyDown() && !level.isClientSide()) {
 
+            RayGunProjectile rayGunProjectile = new RayGunProjectile(player, level, 1.0f, false);
+            rayGunProjectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1.5F, 1.0F);
             ThrownEnderpearl thrownenderpearl = new ThrownEnderpearl(level, player);
             thrownenderpearl.setItem(itemstack);
-            thrownenderpearl.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1.5F, 1.0F);
-            level.addFreshEntity(thrownenderpearl);
+            level.addFreshEntity(rayGunProjectile);
             
         }
 
