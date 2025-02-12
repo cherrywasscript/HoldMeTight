@@ -2,13 +2,16 @@ package com.ricardthegreat.unnamedsizemod.items;
 
 import javax.annotation.Nonnull;
 
+import com.ricardthegreat.unnamedsizemod.UnnamedSizeMod;
 import com.ricardthegreat.unnamedsizemod.Client.ClientHooks;
+import com.ricardthegreat.unnamedsizemod.Client.models.ModModelLayers;
 import com.ricardthegreat.unnamedsizemod.entities.projectile.RayGunProjectile;
 import com.ricardthegreat.unnamedsizemod.utils.SizeUtils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -67,8 +70,7 @@ public class SizeRay extends Item {
 
             RayGunProjectile rayGunProjectile = new RayGunProjectile(player, level, 1.0f, false);
             rayGunProjectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1.5F, 1.0F);
-            ThrownEnderpearl thrownenderpearl = new ThrownEnderpearl(level, player);
-            thrownenderpearl.setItem(itemstack);
+            rayGunProjectile.setNoGravity(true);
             level.addFreshEntity(rayGunProjectile);
             
         }
