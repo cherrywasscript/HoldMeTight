@@ -1,9 +1,13 @@
 {
-    "item.unnamedsizemod.size_remote":"Size Remote",
+    "item.holdmetight.size_remote":"Size Remote",
 
-    "gui.unnamedsizemod.size_remote":"Test Screen",
-    "gui.unnamedsizemod.size_remote.button.mult_button":"Multiply",
-    "gui.unnamedsizemod.size_remote.button.set_button":"Set",
-    "gui.unnamedsizemod.size_remote.button.reset_button":"Reset",
-    "gui.unnamedsizemod.size_remote.field.custom_scale_field_tooltip":"Input a scale multiplier"
+    "gui.holdmetight.size_remote":"Test Screen",
+    "gui.holdmetight.size_remote.button.mult_button":"Multiply",
+    "gui.holdmetight.size_remote.button.set_button":"Set",
+    "gui.holdmetight.size_remote.button.reset_button":"Reset",
+    "gui.holdmetight.size_remote.field.custom_scale_field_tooltip":"Input a scale multiplier",
+
+
+    "gui.holdmetight.size_ray.button.set_or_mult_button":"Set/Multiply",
+    "gui.holdmetight.size_ray.button.set_or_mult_button_tooltip":"Switch between multiply or set mode"
 }
