@@ -128,7 +128,7 @@ public class AdvancedSizeRemoteScreen extends Screen {
             Button.builder(
                 SET_BUTTON, this::handleSetButton)
                 .bounds(this.leftPos + 91, this.bottomPos -111, 76, 20)
-                .tooltip(Tooltip.create(MULT_BUTTON))
+                .tooltip(Tooltip.create(SET_BUTTON))
                 .build()
         );
 

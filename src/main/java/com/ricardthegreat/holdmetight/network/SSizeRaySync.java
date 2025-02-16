@@ -32,7 +32,6 @@ public class SSizeRaySync {
     }
 
     public void handle(Supplier<NetworkEvent.Context> context){
-        System.out.println("setting tag");
         ItemStack item = context.get().getSender().getItemInHand(InteractionHand.MAIN_HAND);
         if(item.getItem() instanceof SizeRay){
             item.setTag(tag);

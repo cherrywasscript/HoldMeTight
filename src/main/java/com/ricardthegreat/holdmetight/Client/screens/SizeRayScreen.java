@@ -208,7 +208,6 @@ public class SizeRayScreen extends Screen {
 
     @Override
     public void onClose() {
-        System.out.println("closing");
         PacketHandler.sendToServer(new SSizeRaySync(tag));
         super.onClose();
     }
