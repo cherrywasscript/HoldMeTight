@@ -23,7 +23,7 @@ import net.minecraftforge.fml.DistExecutor;
 
 public class AdvancedSizeRemote extends Item {
 
-    public static final String MULT_TAG = "multiplier";
+    public static final String SCALE_TAG = "multiplier";
 
     public static final String UUID_TAG = "target";
 
@@ -74,7 +74,7 @@ public class AdvancedSizeRemote extends Item {
             item.setTag(tag);
             //setSelectedPlayer((Player) entity);
         } else {
-            SizeUtils.setSizeOverTimeDefault(entity, tag.getFloat(MULT_TAG));
+            SizeUtils.setSizeOverTimeDefault(entity, tag.getFloat(SCALE_TAG));
         }
 
         return InteractionResult.SUCCESS;
@@ -102,7 +102,7 @@ public class AdvancedSizeRemote extends Item {
         CompoundTag tag = stack.getTag();
         if(tag == null){
             tag = stack.getOrCreateTag();
-            tag.putFloat(AdvancedSizeRemote.MULT_TAG, DEFAULT_SCALE);
+            tag.putFloat(AdvancedSizeRemote.SCALE_TAG, DEFAULT_SCALE);
             tag.putUUID(AdvancedSizeRemote.UUID_TAG, player.getUUID());
             stack.setTag(tag);
         }

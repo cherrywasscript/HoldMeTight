@@ -35,9 +35,9 @@ import net.minecraft.world.item.EnderpearlItem;
 
 public class SizeRay extends Item {
 
-    public static final String MULT_TAG = "multiplier";
+    public static final String SCALE_TAG = "multiplier";
 
-    public static final String UUID_TAG = "target";
+    public static final String MULT_TAG = "shouldMultiply";
 
     private static final Float DEFAULT_SCALE = 1.0f;
 
@@ -55,12 +55,15 @@ public class SizeRay extends Item {
     public InteractionResultHolder<ItemStack> use(@Nonnull Level level, @Nonnull Player player, @Nonnull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
 
-        //play sound taken from enderpearl
-        level.playSound((Player)null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENDER_PEARL_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
+        if (!itemstack.hasTag()) {
+            setDefaultTags(itemstack);
+        }
 
+        //play sound taken from enderpearl
+        level.playSound((Player)null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENDER_EYE_LAUNCH, SoundSource.NEUTRAL, 0.5F, 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
         player.getCooldowns().addCooldown(this, 20);
 
-        //
+        //open menu if shifted otherwise fire the ray
         if (player.isShiftKeyDown() && level.isClientSide()){
 
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientHooks.openSizeRayScreen(player, hand));
@@ -78,19 +81,18 @@ public class SizeRay extends Item {
         return super.use(level, player, hand);
     }
 
-    private CompoundTag checkDefaultTags(ItemStack stack, Player player){
-        CompoundTag tag = stack.getTag();
-        if(tag == null){
-            tag = stack.getOrCreateTag();
-            tag.putFloat(AdvancedSizeRemote.MULT_TAG, DEFAULT_SCALE);
-            stack.setTag(tag);
-        }
-        return tag;
+    private void setDefaultTags(ItemStack stack){
+        CompoundTag tag = stack.getOrCreateTag();
+        tag.putBoolean(SizeRay.MULT_TAG, false);
+        tag.putFloat(SizeRay.SCALE_TAG, DEFAULT_SCALE);
+        stack.setTag(tag);
     }
 
-    public void inventoryTick(ItemStack p_41404_, Level p_41405_, Entity p_41406_, int p_41407_, boolean p_41408_) {
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int p_41407_, boolean p_41408_) {
     }
 
-    public void onCraftedBy(ItemStack p_41447_, Level p_41448_, Player p_41449_) {
+    public void onCraftedBy(ItemStack stack, Level level, Player player) {
+        System.out.println("this had been crafted hopefully");
+        setDefaultTags(stack);
     }
 }

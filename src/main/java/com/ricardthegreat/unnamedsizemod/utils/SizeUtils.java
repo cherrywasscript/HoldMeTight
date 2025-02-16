@@ -79,9 +79,6 @@ public class SizeUtils {
             widthData.setTargetScale(1.0f);
         }
 
-        System.out.println("Target: " + heightData.getTargetScale());
-        System.out.println("actual" + heightData.getScale());
-
         //return data;
     }
 }
