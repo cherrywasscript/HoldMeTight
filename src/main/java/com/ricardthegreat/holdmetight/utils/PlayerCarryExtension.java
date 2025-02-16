@@ -20,6 +20,10 @@ public interface PlayerCarryExtension {
     
     void setCustomCarry(boolean isCustomCarryPosition);
 
+    boolean getHeadLink();
+
+    void setHeadLink(boolean headLink);
+
     double getVertOffset();
 
     void setVertOffset(double vert);

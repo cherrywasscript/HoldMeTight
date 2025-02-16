@@ -14,7 +14,7 @@ public class CPlayerCarryPositionPacket {
      
     private final boolean position;
     private final UUID uuid;
-    private final byte target;
+    private final byte target; //0 for carried, 1 for carrying, 2 for shoulder, 3 for custom, anything else is nothing
 
     public CPlayerCarryPositionPacket(boolean position, UUID uuid, byte target){
         this.position = position;

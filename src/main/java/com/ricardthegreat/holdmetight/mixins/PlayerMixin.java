@@ -30,6 +30,7 @@ public abstract class PlayerMixin implements PlayerCarryExtension, PlayerRenderE
     private boolean isCarrying = false;
     private boolean isShoulderCarry = false;
     private boolean isCustomCarryPosition = false;
+    private boolean headLink = false;
 
     //xy mult is moving towards and away from the body (smaller number closer to body)
     //the offsets used if it is hand carry
@@ -146,16 +147,14 @@ public abstract class PlayerMixin implements PlayerCarryExtension, PlayerRenderE
         } 
     }
 
-
-    //getter and setter for if its a menu object
     @Override
-    public boolean getIsMenu() {
-        return isMenuGraphic;
+    public boolean getHeadLink(){
+        return headLink;
     }
 
     @Override
-    public void setMenu(boolean menu) {
-        isMenuGraphic = menu;
+    public void setHeadLink(boolean headLink){
+        this.headLink = headLink;
     }
 
 
@@ -265,6 +264,19 @@ public abstract class PlayerMixin implements PlayerCarryExtension, PlayerRenderE
         tag.putDouble(PlayerCarryUtils.LEFT_RIGHT_NBT_TAG, leftRightMove);
 
         return tag;
+    }
+
+
+
+    //getter and setter for if its a menu object
+    @Override
+    public boolean getIsMenu() {
+        return isMenuGraphic;
+    }
+
+    @Override
+    public void setMenu(boolean menu) {
+        isMenuGraphic = menu;
     }
     
 }

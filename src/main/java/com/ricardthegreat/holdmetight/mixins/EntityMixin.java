@@ -25,6 +25,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LadderBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.level.NoteBlockEvent.Play;
 import virtuoel.pehkui.mixin.LivingEntityMixin;
 
@@ -132,15 +133,20 @@ public abstract class EntityMixin {
     protected void positionRider(Entity rider, Entity.MoveFunction p_19958_) {
         Entity vehicle = (Entity) (Object) this;
         if (vehicle.hasPassenger(rider)) {
-            if(vehicle instanceof Player){
+            if(vehicle instanceof Player player){
                 double scaleDif =  SizeUtils.getSize(vehicle)/SizeUtils.getSize(rider);
-                //scaleDif = scaleDif/4;
+                
+                PlayerCarryExtension pExt = (PlayerCarryExtension) player;
+
+                //find the riders position
                 if(scaleDif<4){
                     rider.stopRiding();
-                    //vertOffset = vehicle.getY() + vehicle.getPassengersRidingOffset() + rider.getMyRidingOffset();
-                    //p_19958_.accept(rider, vehicle.getX(), vertOffset, vehicle.getZ());
+                // && pExt.getCustomCarry()
+                }else if (pExt.getHeadLink()) {
+                    calcHeadPosition(player, rider);
+                    p_19958_.accept(rider, vehicle.getX()+xOffset, vertOffset, vehicle.getZ()+yOffset);
                 }else{
-                    calcPosition((Player)vehicle, rider);
+                    calcBodyPosition(player, rider);
                     p_19958_.accept(rider, vehicle.getX()+xOffset, vertOffset, vehicle.getZ()+yOffset);
                 }
             }else{
@@ -156,7 +162,7 @@ public abstract class EntityMixin {
     // if rider is above 0.25 set them to just being on head like normal probably
     //on shoulder rider should get lower e.g. 0.125 should have a larger vertical offset tho im not sure by how much yet
 
-    private void calcPosition(Player vehicle, Entity rider){
+    private void calcBodyPosition(Player vehicle, Entity rider){
 
         PlayerCarryExtension vehiclePlayer = (PlayerCarryExtension)vehicle;
 
@@ -169,21 +175,54 @@ public abstract class EntityMixin {
             }
         }
 
-        SizeUtils.getSize(rider);
-
         vertOffset = vehicle.getY() + vehicle.getPassengersRidingOffset() + rider.getMyRidingOffset() - (vehiclePlayer.getVertOffset()*SizeUtils.getSize(vehicle));
 
         double degrees = vehicle.yBodyRotO + vehiclePlayer.getRotationOffset();
+        
 
         double rotation = Math.toRadians(degrees%360);
+
+        double leftRightOffset = Math.toRadians((degrees+90)%360);
+
+        //i have it as y bc im thinking like graph coords but really it should be z
+        double x = Math.cos(leftRightOffset) * vehiclePlayer.getLeftRightMove();
+        double y = Math.sin(leftRightOffset) * vehiclePlayer.getLeftRightMove();
+
+        xOffset = (Math.cos(rotation)*vehiclePlayer.getXYMult())+x;
+        yOffset = (Math.sin(rotation)*vehiclePlayer.getXYMult())+y;
+
+        xOffset *= SizeUtils.getSize(vehicle);
+        yOffset *= SizeUtils.getSize(vehicle);
+    }
+
+    private void calcHeadPosition(Player vehicle, Entity rider){
+        PlayerCarryExtension vehiclePlayer = (PlayerCarryExtension)vehicle;
+
+        if(vehicle.getMainHandItem() != ItemStack.EMPTY && !vehiclePlayer.getShoulderCarry() && !vehiclePlayer.getCustomCarry()){
+            vehiclePlayer.setShoulderCarry(true);
+
+            if(!vehicle.level().isClientSide){
+                PacketHandler.sendToAllClients(new CPlayerCarryPositionPacket(true, vehicle.getUUID(), (byte) 2));
+                //vechicleExt.setShouldSync(true);
+            }
+        }
+        Vec3 vec = vehicle.getLookAngle();
+
+        double offsetAddition = vehiclePlayer.getVertOffset()*SizeUtils.getSize(vehicle)*Math.abs(vec.y - 1);
+        vertOffset = vehicle.getY() + vehicle.getPassengersRidingOffset() + rider.getMyRidingOffset() - offsetAddition;
+
+        
+        //this doesnt really function how i'd like
+
+        double degrees = vehicle.yHeadRotO + vehiclePlayer.getRotationOffset();
 
         double leftRightOffset = Math.toRadians((degrees+90)%360);
 
         double x = Math.cos(leftRightOffset) * vehiclePlayer.getLeftRightMove();
         double y = Math.sin(leftRightOffset) * vehiclePlayer.getLeftRightMove();
 
-        xOffset = (Math.cos(rotation)*vehiclePlayer.getXYMult())+x;
-        yOffset = (Math.sin(rotation)*vehiclePlayer.getXYMult())+y;
+        xOffset = vec.x*vehiclePlayer.getXYMult()+x;
+        yOffset = vec.z*vehiclePlayer.getXYMult()+y;
 
         xOffset *= SizeUtils.getSize(vehicle);
         yOffset *= SizeUtils.getSize(vehicle);
