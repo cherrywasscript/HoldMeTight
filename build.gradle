@@ -174,8 +174,8 @@ dependencies {
 
 mixin {
     // MixinGradle Settings
-    add sourceSets.main, 'unnamedsizemod.mixins.refmap.json'
-    config 'unnamedsizemod.mixins.json'
+    add sourceSets.main, 'holdmetight.mixins.refmap.json'
+    config 'holdmetight.mixins.json'
 
     debug.verbose = true
     debug.export = true
