@@ -54,6 +54,12 @@ public class RayGunProjectile extends Projectile {
     protected void onHitEntity(EntityHitResult hitEntity) {
         super.onHitEntity(hitEntity);
         Entity entity = this.getOwner();
+        if (level().isClientSide) {
+            System.out.println("clientside, scale: "+ scale + " ismult: " + isMult);
+        }else{
+            System.out.println("is not clientside, scale: "+ scale + " ismult: " + isMult);
+        }
+        
         if (isMult) {
             SizeUtils.multSizeOverTimeDefault(hitEntity.getEntity(), scale);
         }else{

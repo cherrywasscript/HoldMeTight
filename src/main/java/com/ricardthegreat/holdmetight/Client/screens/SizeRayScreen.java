@@ -11,6 +11,7 @@ import com.ricardthegreat.holdmetight.items.SizeRay;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.SEntityMultTargetScalePacket;
 import com.ricardthegreat.holdmetight.network.SEntitySetTargetScalePacket;
+import com.ricardthegreat.holdmetight.network.SSizeRaySync;
 import com.ricardthegreat.holdmetight.utils.PlayerRenderExtension;
 import com.ricardthegreat.holdmetight.utils.SizeUtils;
 
@@ -123,7 +124,7 @@ public class SizeRayScreen extends Screen {
         }else{
             graphics.drawString(this.font,"Set scale to:", this.leftPos + 65, topPos +18,0xdddddd,false);
         }
-        graphics.drawString(this.font, ""+tag.getFloat(SizeRay.SCALE_TAG), this.leftPos + 154, topPos +18,0xdddddd,false);
+        graphics.drawString(this.font, ""+ tag.getFloat(SizeRay.SCALE_TAG), this.leftPos + 154, topPos +18,0xdddddd,false);
              
     }
 
@@ -203,5 +204,12 @@ public class SizeRayScreen extends Screen {
             tag.putFloat(SizeRay.SCALE_TAG, scale);
             stack.setTag(tag);
         }
+    }
+
+    @Override
+    public void onClose() {
+        System.out.println("closing");
+        PacketHandler.sendToServer(new SSizeRaySync(tag));
+        super.onClose();
     }
 }

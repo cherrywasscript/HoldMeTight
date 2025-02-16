@@ -56,6 +56,7 @@ public class SizeRay extends Item {
         ItemStack itemstack = player.getItemInHand(hand);
 
         if (!itemstack.hasTag()) {
+            System.out.println("notag");
             setDefaultTags(itemstack);
         }
 
@@ -73,6 +74,7 @@ public class SizeRay extends Item {
 
         }else if (!player.isShiftKeyDown() && !level.isClientSide()) {
 
+            System.out.println("scale: "+ tag.getFloat(SCALE_TAG) + " ismult: " + tag.getBoolean(MULT_TAG));
             RayGunProjectile rayGunProjectile = new RayGunProjectile(player, level, tag.getFloat(SCALE_TAG), tag.getBoolean(MULT_TAG));
             rayGunProjectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1.5F, 1.0F);
             rayGunProjectile.setNoGravity(true);

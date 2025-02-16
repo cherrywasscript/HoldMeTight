@@ -62,6 +62,11 @@ public class PacketHandler {
         SPlayerPutDownPacket::encode, 
         SPlayerPutDownPacket::new, 
         SPlayerPutDownPacket::handle);
+
+        INSTANCE.registerMessage(id++, SSizeRaySync.class, 
+        SSizeRaySync::encode, 
+        SSizeRaySync::new, 
+        SSizeRaySync::handle);
     }
 
     public static void sendToServer(Object msg){
