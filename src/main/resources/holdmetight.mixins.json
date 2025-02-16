@@ -1,9 +1,9 @@
 {
     "required": true,
     "minVersion": "0.8",
-    "package": "com.ricardthegreat.unnamedsizemod.mixins",
+    "package": "com.ricardthegreat.holdmetight.mixins",
     "compatibilityLevel": "JAVA_17",
-    "refmap": "unnamedsizemod.mixins.refmap.json",
+    "refmap": "holdmetight.mixins.refmap.json",
     "mixins": [
       "SmallEntityRenderMixin",
       "EntityMixin",

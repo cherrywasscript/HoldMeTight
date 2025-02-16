@@ -59,6 +59,8 @@ public class SizeRay extends Item {
             setDefaultTags(itemstack);
         }
 
+        CompoundTag tag = itemstack.getTag();
+
         //play sound taken from enderpearl
         level.playSound((Player)null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENDER_EYE_LAUNCH, SoundSource.NEUTRAL, 0.5F, 0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F));
         player.getCooldowns().addCooldown(this, 20);
@@ -71,10 +73,9 @@ public class SizeRay extends Item {
 
         }else if (!player.isShiftKeyDown() && !level.isClientSide()) {
 
-            RayGunProjectile rayGunProjectile = new RayGunProjectile(player, level, 1.0f, false);
+            RayGunProjectile rayGunProjectile = new RayGunProjectile(player, level, tag.getFloat(SCALE_TAG), tag.getBoolean(MULT_TAG));
             rayGunProjectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1.5F, 1.0F);
             rayGunProjectile.setNoGravity(true);
-            
             level.addFreshEntity(rayGunProjectile);
             
         }

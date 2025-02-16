@@ -54,11 +54,11 @@ public class RayGunProjectile extends Projectile {
     protected void onHitEntity(EntityHitResult hitEntity) {
         super.onHitEntity(hitEntity);
         Entity entity = this.getOwner();
-        if (entity instanceof Player player) {
+        if (isMult) {
             SizeUtils.multSizeOverTimeDefault(hitEntity.getEntity(), scale);
-            //hitEntity.getEntity().hurt(this.damageSources().mobProjectile(this, player), 1.0F);
+        }else{
+            SizeUtils.setSizeOverTimeDefault(hitEntity.getEntity(), scale);
         }
-
     }
 
     public void tick() {
