@@ -72,8 +72,6 @@ public abstract class EntityMixin {
             
         }
         
-        //e.stopRiding();;
-        //System.out.println("Clicked on entity");
     }
 
 
@@ -121,7 +119,6 @@ public abstract class EntityMixin {
             if(!ent.level().isClientSide()) {
                 //entity.setShouldSync(true);
                 //player.setShouldSync(true);
-                System.out.println("stop riding");
 
                 PacketHandler.sendToAllClients(new CPlayerCarryPositionPacket(false, ent.getUUID(), (byte) 0));
                 PacketHandler.sendToAllClients(new CPlayerCarryPositionPacket(false, vehicle.getUUID(), (byte) 1));

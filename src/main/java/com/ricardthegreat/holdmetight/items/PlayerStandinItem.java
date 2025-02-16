@@ -17,7 +17,6 @@ public class PlayerStandinItem extends Item {
     public InteractionResult useOn(UseOnContext context) {
         Vec3 bp = context.getClickLocation();
 
-        System.out.println(bp.x + "," + bp.y + "," + bp.z);
         return InteractionResult.PASS;
     }
     

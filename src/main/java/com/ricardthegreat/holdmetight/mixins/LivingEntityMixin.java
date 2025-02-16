@@ -37,7 +37,6 @@ public class LivingEntityMixin {
         LivingEntity ent = (LivingEntity) (Object) this;
 
         if (original) {
-            System.out.println(ent.getDeltaMovement());
             return original;
         }
 

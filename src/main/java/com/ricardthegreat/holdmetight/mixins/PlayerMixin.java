@@ -61,11 +61,6 @@ public abstract class PlayerMixin implements PlayerCarryExtension, PlayerRenderE
     private void tick(CallbackInfo info){
         if(shouldSync){
             shouldSync = false;
-            if(((Player) (Object) this).level().isClientSide){
-                System.out.println("sync client file for :" + ((Player) (Object) this).getName().toString());
-            }else{
-                System.out.println("sync server file for :" + ((Player) (Object) this).getName().toString());
-            }
             sync();
         }
     }
