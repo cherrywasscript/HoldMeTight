@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/handheld",
     "textures": {
-        "layer0": "unnamedsizemod:item/size_ray"
+        "layer0": "holdmetight:item/size_ray"
     }
 }
