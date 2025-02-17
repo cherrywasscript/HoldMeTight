@@ -6,6 +6,7 @@ import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.items.AdvancedSizeRemote;
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.items.SizeRay;
+import com.ricardthegreat.holdmetight.items.SizeWand;
 
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
@@ -37,6 +38,9 @@ public class ItemInit {
 
         public static final RegistryObject<Item> SIZE_RAY = addToTab(
                 ITEMS.register("size_ray", () -> new SizeRay(new Item.Properties().stacksTo(1))));
+
+        public static final RegistryObject<Item> SIZE_WAND = addToTab(
+                ITEMS.register("size_wand", () -> new SizeWand(new Item.Properties().stacksTo(1))));
 
         public static final RegistryObject<Item> PLAYER_ITEM = addToTab(
                 ITEMS.register("player_item", () -> new PlayerStandinItem(new Item.Properties().stacksTo(1))));

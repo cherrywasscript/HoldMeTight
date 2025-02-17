@@ -35,17 +35,17 @@ import net.minecraft.world.phys.Vec3;
 
 import net.minecraft.world.entity.monster.EnderMan;;
 
-public class RayGunProjectile extends Projectile {
+public class WandProjectile extends Projectile {
 
     private float scale = 1.0f;
     private boolean isMult = false;
 
-    public RayGunProjectile(EntityType<? extends RayGunProjectile> entityType, Level level) {
+    public WandProjectile(EntityType<? extends WandProjectile> entityType, Level level) {
         super(entityType, level);
     }
 
-    public RayGunProjectile(LivingEntity entity, Level level, float scale, boolean isMult) {
-        this(EntityInit.RAY_GUN_PROJECTILE.get(), level);
+    public WandProjectile(LivingEntity entity, Level level, float scale, boolean isMult) {
+        this(EntityInit.WAND_PROJECTILE.get(), level);
         this.setOwner(entity);
         // currently originates the same as an ender pearl, need to do maths to get it
         // to come out of the raygun
@@ -112,6 +112,21 @@ public class RayGunProjectile extends Projectile {
         System.out.println("fire");
     }
 
+    public void recreateFromPacket(ClientboundAddEntityPacket p_150162_) {
+        super.recreateFromPacket(p_150162_);
+        double d0 = p_150162_.getXa();
+        double d1 = p_150162_.getYa();
+        double d2 = p_150162_.getZa();
+        
+  
+        for(int i = 0; i < 7; ++i) {
+           double d3 = 0.4D + 0.1D * (double)i;
+           this.level().addParticle(ParticleTypes.PORTAL, this.getX(), this.getY(), this.getZ(), d0 * d3, d1, d2 * d3);
+        }
+        System.out.println("recreate from packet");
+  
+        this.setDeltaMovement(d0, d1, d2);
+     }
 
     /*
      * public void recreateFromPacket(ClientboundAddEntityPacket p_150162_) {
