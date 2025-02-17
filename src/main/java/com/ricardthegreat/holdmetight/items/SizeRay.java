@@ -41,12 +41,6 @@ public class SizeRay extends Item {
 
     private static final Float DEFAULT_SCALE = 1.0f;
 
-    //private Float scale = 1.0f;
-
-    //private Player selectedPlayer;
-
-    private MinecraftServer server;
-
     public SizeRay(Item.Properties properties) {
         super(properties);
     }

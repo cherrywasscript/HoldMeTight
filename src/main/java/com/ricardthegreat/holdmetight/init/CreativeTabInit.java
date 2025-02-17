@@ -35,7 +35,6 @@ public class CreativeTabInit {
                     .icon(ItemInit.ADVANCED_SIZE_REMOTE.get()::getDefaultInstance)
                     .displayItems((parameters, output) -> TAB_ITEMS
                             .forEach(itemLike -> output.accept(itemLike.get())))
-                    .withSearchBar()
                     .build());
 
 

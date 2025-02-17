@@ -9,6 +9,8 @@ import com.ricardthegreat.holdmetight.Client.Keybindings;
 import com.ricardthegreat.holdmetight.Client.models.ModModelLayers;
 import com.ricardthegreat.holdmetight.Client.models.RayGunProjectileModel;
 import com.ricardthegreat.holdmetight.Client.renderers.RayGunProjectileRenderer;
+import com.ricardthegreat.holdmetight.Client.renderers.WandProjectileRenderer;
+import com.ricardthegreat.holdmetight.entities.projectile.WandProjectile;
 import com.ricardthegreat.holdmetight.init.EntityInit;
 
 import net.minecraft.client.renderer.entity.ArrowRenderer;
@@ -36,6 +38,7 @@ public class ClientModHandler {
     public static void onClientSetup(FMLClientSetupEvent event){
         
         EntityRenderers.register(EntityInit.RAY_GUN_PROJECTILE.get(), RayGunProjectileRenderer::new);
+        EntityRenderers.register(EntityInit.WAND_PROJECTILE.get(), WandProjectileRenderer::new);
     }
     
 }
