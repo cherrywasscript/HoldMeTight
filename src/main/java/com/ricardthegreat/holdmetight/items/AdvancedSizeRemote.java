@@ -12,6 +12,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -37,7 +38,12 @@ public class AdvancedSizeRemote extends Item {
     public InteractionResultHolder<ItemStack> use(@Nonnull Level level, @Nonnull Player player, @Nonnull InteractionHand hand) {
 
         ItemStack item = player.getItemInHand(hand);
-        CompoundTag tag = checkDefaultTags(item, player);
+
+        if (!item.hasTag()) {
+            setDefaultTags(item, player);
+        }
+
+        CompoundTag tag = item.getTag();
 
         if (player.isShiftKeyDown()){
             tag.putUUID(UUID_TAG, player.getUUID());
@@ -59,7 +65,12 @@ public class AdvancedSizeRemote extends Item {
     @Override
     public InteractionResult interactLivingEntity(@Nonnull ItemStack stack, @Nonnull Player player, @Nonnull LivingEntity entity, @Nonnull InteractionHand hand) {
         ItemStack item = player.getItemInHand(hand);
-        CompoundTag tag = checkDefaultTags(item, player);
+
+        if (!item.hasTag()) {
+            setDefaultTags(item, player);
+        }
+
+        CompoundTag tag = item.getTag();
 
         // does nothing if the item is on cooldown
         if (player.getCooldowns().isOnCooldown(this)) {
@@ -98,14 +109,20 @@ public class AdvancedSizeRemote extends Item {
     }
         */
 
-    private CompoundTag checkDefaultTags(ItemStack stack, Player player){
-        CompoundTag tag = stack.getTag();
-        if(tag == null){
-            tag = stack.getOrCreateTag();
-            tag.putFloat(AdvancedSizeRemote.SCALE_TAG, DEFAULT_SCALE);
-            tag.putUUID(AdvancedSizeRemote.UUID_TAG, player.getUUID());
-            stack.setTag(tag);
-        }
+    private CompoundTag setDefaultTags(ItemStack stack, Player player){
+        CompoundTag tag = stack.getOrCreateTag();
+
+        tag.putFloat(AdvancedSizeRemote.SCALE_TAG, DEFAULT_SCALE);
+        tag.putUUID(AdvancedSizeRemote.UUID_TAG, player.getUUID());
+        stack.setTag(tag);
+        
         return tag;
+    }
+
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int p_41407_, boolean p_41408_) {
+    }
+
+    public void onCraftedBy(ItemStack stack, Level level, Player player) {
+        setDefaultTags(stack, player);
     }
 }

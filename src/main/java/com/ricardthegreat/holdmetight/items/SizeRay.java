@@ -90,7 +90,6 @@ public class SizeRay extends Item {
     }
 
     public void onCraftedBy(ItemStack stack, Level level, Player player) {
-        System.out.println("this had been crafted hopefully");
         setDefaultTags(stack);
     }
 }
