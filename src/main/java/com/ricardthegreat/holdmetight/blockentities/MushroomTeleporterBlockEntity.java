@@ -105,7 +105,7 @@ public class MushroomTeleporterBlockEntity extends BlockEntity{
             }
         }
         
-
+        //*25 needs to be changed but is currently like this for testing
         return new Vec3i(pos[0]*25, 64, pos[1]*25);
     }
 
