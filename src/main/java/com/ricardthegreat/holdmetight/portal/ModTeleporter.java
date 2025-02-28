@@ -25,28 +25,6 @@ public class ModTeleporter implements ITeleporter{
 
     @Override
     public Entity placeEntity(Entity entity, ServerLevel currentWorld, ServerLevel destinationWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
-        /* 
-        entity = repositionEntity.apply(false);
-        int y = 61;
-
-        if (!insideDimension) {
-            y = thisPos.getY();
-        }
-
-        BlockPos destinationPos = new BlockPos(thisPos.getX(), y, thisPos.getZ());
-
-        int tries = 0;
-        while ((destinationWorld.getBlockState(destinationPos).getBlock() != Blocks.AIR) &&
-                !destinationWorld.getBlockState(destinationPos).canBeReplaced(Fluids.WATER) &&
-                (destinationWorld.getBlockState(destinationPos.above()).getBlock()  != Blocks.AIR) &&
-                !destinationWorld.getBlockState(destinationPos.above()).canBeReplaced(Fluids.WATER) && (tries < 25)) {
-            destinationPos = destinationPos.above(2);
-            tries++;
-        }
-
-        entity.setPos(thisPos.getX(), thisPos.getY(), thisPos.getZ());
-        */
-
         return repositionEntity.apply(false);
     }
 

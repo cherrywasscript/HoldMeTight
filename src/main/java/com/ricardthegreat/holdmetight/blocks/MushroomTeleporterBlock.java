@@ -102,7 +102,7 @@ public class MushroomTeleporterBlock extends Block implements EntityBlock{
                         MushroomHouseStructureGenerator.generateMushroomHouseStructure(portalDimension, house);
                     }
 
-                    //the target pos in the dimension
+                    //the target pos in the dimension, set one block higher for player spawning
                     BlockPos targetPos = new BlockPos(house.getHousePos());
                     targetPos = targetPos.above();
                                

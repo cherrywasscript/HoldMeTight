@@ -23,7 +23,7 @@ public class MushroomHouseStructureGenerator {
         AABB aabb = new AABB(pos, pos).inflate(5,0,5);
 
         //generate flat platform of grass with dimensions of given aabb, not sure what the final int is for
-        BlockPos.betweenClosedStream(aabb).map(BlockPos::immutable).forEach(i -> level.setBlock(i, Blocks.GRASS_BLOCK.defaultBlockState(), 0));;
+        BlockPos.betweenClosedStream(aabb).map(BlockPos::immutable).forEach(i -> level.setBlock(i, Blocks.GRASS_BLOCK.defaultBlockState(), 0));
     }
     
 }
