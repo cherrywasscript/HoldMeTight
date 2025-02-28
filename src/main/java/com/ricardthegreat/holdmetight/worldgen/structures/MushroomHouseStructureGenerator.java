@@ -20,10 +20,15 @@ public class MushroomHouseStructureGenerator {
         BlockPos pos = new BlockPos(house.getHousePos());
 
         //9x0x9 area at given pos
-        AABB aabb = new AABB(pos, pos).inflate(5,0,5);
+        AABB floor = new AABB(pos, pos).inflate(5,0,5);
+
+        BlockPos posEast = pos.east(6);
+        AABB eastWall = new AABB(posEast.above(), posEast.above()).inflate(0,5,5);
 
         //generate flat platform of grass with dimensions of given aabb, not sure what the final int is for
-        BlockPos.betweenClosedStream(aabb).map(BlockPos::immutable).forEach(i -> level.setBlock(i, Blocks.GRASS_BLOCK.defaultBlockState(), 0));
+        BlockPos.betweenClosedStream(floor).map(BlockPos::immutable).forEach(i -> level.setBlock(i, Blocks.GRASS_BLOCK.defaultBlockState(), 0));
+
+        BlockPos.betweenClosedStream(eastWall).map(BlockPos::immutable).forEach(i -> level.setBlock(i, Blocks.RED_MUSHROOM_BLOCK.defaultBlockState(), 0));
     }
     
 }
