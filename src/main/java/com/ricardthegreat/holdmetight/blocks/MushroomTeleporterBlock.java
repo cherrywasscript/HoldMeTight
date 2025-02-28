@@ -8,7 +8,7 @@ import com.ricardthegreat.holdmetight.portal.ModTeleporter;
 import com.ricardthegreat.holdmetight.save.MushroomHouseSavedData;
 import com.ricardthegreat.holdmetight.utils.SizeUtils;
 import com.ricardthegreat.holdmetight.worldgen.dimension.ModDimensions;
-import com.ricardthegreat.holdmetight.worldgen.structures.StructureGenerator;
+import com.ricardthegreat.holdmetight.worldgen.structures.MushroomHouseStructureGenerator;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
@@ -99,7 +99,7 @@ public class MushroomTeleporterBlock extends Block implements EntityBlock{
                     //generate structure if it doesnt already exist
                     if (!house.getStructureGenerated()) {
                         house.setStructureGenerated(true);
-                        StructureGenerator.generateMushroomHouseStructure(portalDimension, house);
+                        MushroomHouseStructureGenerator.generateMushroomHouseStructure(portalDimension, house);
                     }
 
                     //the target pos in the dimension
