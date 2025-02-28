@@ -1,11 +1,14 @@
 package com.ricardthegreat.holdmetight;
 
 import com.mojang.logging.LogUtils;
+import com.ricardthegreat.holdmetight.init.BlockEntityInit;
+import com.ricardthegreat.holdmetight.init.BlockInit;
 import com.ricardthegreat.holdmetight.init.CreativeTabInit;
 import com.ricardthegreat.holdmetight.init.EntityInit;
 import com.ricardthegreat.holdmetight.init.ItemInit;
 
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -33,7 +36,8 @@ public class HoldMeTight {
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
-        
+        BlockInit.BLOCKS.register(modEventBus);
+        BlockEntityInit.BLOCK_ENTITIES.register(modEventBus);
         ItemInit.ITEMS.register(modEventBus);
         CreativeTabInit.TABS.register(modEventBus);
         EntityInit.ENTITIES.register(modEventBus);

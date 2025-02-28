@@ -4,10 +4,13 @@ import javax.annotation.Nonnull;
 
 import com.ricardthegreat.holdmetight.datagen.DataGenerators;
 import com.ricardthegreat.holdmetight.portal.ModTeleporter;
+import com.ricardthegreat.holdmetight.save.MushroomHouseSavedData;
 import com.ricardthegreat.holdmetight.worldgen.dimension.ModDimensions;
 
+import net.minecraft.client.gui.font.providers.UnihexProvider.Dimensions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.worldgen.DimensionTypes;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
@@ -19,6 +22,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.saveddata.SavedData;
 
 public class DimTeleporter extends Item{
 
@@ -48,13 +52,16 @@ public class DimTeleporter extends Item{
             System.out.println("dimteleporter:44" + resourcekey);
             ServerLevel portalDimension = minecraftserver.getLevel(resourcekey);
             System.out.println("dimteleporter:46" + portalDimension);
+            
+
+            ServerLevel overworld = minecraftserver.getLevel(Level.OVERWORLD);
             if (portalDimension != null && !player.isPassenger()) {
                 if(resourcekey == ModDimensions.DIM_LEVEL_KEY) {
                     System.out.println("dimteleporter:50");
                     player.changeDimension(portalDimension, new ModTeleporter(player.blockPosition(), true));
                 } else {
                     System.out.println("dimteleporter:53");
-                    player.changeDimension(portalDimension, new ModTeleporter(player.blockPosition(), false));
+                    player.changeDimension(overworld, new ModTeleporter(player.blockPosition(), false));
                 }
             }
         }

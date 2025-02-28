@@ -38,7 +38,7 @@ public class ModTeleporter implements ITeleporter{
             tries++;
         }
 
-        entity.setPos(destinationPos.getX(), destinationPos.getY(), destinationPos.getZ());
+        entity.setPos(thisPos.getX(), thisPos.getY(), thisPos.getZ());
 
         /* 
         if (insideDimension) {

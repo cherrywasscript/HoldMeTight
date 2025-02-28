@@ -1,11 +1,12 @@
 {
   "type": "holdmetight:dim_type",
   "generator": {
-    "type": "minecraft:noise",
-    "biome_source": {
-      "type": "minecraft:fixed",
-      "biome": "minecraft:plains"
-    },
-    "settings": "minecraft:amplified"
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "minecraft:the_void",
+      "features": false,
+      "lakes": false,
+      "layers": []
+    }
   }
 }

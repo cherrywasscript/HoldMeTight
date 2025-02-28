@@ -10,6 +10,7 @@ import com.ricardthegreat.holdmetight.items.SizeRay;
 import com.ricardthegreat.holdmetight.items.SizeWand;
 
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Item.Properties;
 import net.minecraftforge.registries.DeferredRegister;
@@ -48,4 +49,12 @@ public class ItemInit {
 
         public static final RegistryObject<Item> DIM_TELEPORTER = addToTab(
                 ITEMS.register("dim_teleporter", () -> new DimTeleporter(new Item.Properties().stacksTo(1))));
+
+
+
+
+        //block items
+
+        public static final RegistryObject<BlockItem> MUSHROOM_HOUSE_ITEM = addToTab(ITEMS.register("mushroom_house", 
+                () -> new BlockItem(BlockInit.MUSHROOM_HOUSE.get(), new Item.Properties())));
 }

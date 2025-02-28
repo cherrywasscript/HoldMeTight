@@ -7,6 +7,7 @@ import java.util.OptionalLong;
 import com.ricardthegreat.holdmetight.HoldMeTight;
 
 import com.mojang.datafixers.util.Pair;
+
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
@@ -31,14 +32,20 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.structure.BuiltinStructureSets;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.biome.FixedBiomeSource;
 import net.minecraft.world.level.biome.MultiNoiseBiomeSource;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.storage.DimensionDataStorage;
 
 public class ModDimensions {
+
+        
     public static final ResourceKey<LevelStem> DIM_KEY = ResourceKey.create(Registries.LEVEL_STEM,
             new ResourceLocation(HoldMeTight.MODID, "dim"));
     public static final ResourceKey<Level> DIM_LEVEL_KEY = ResourceKey.create(Registries.DIMENSION,
@@ -77,14 +84,15 @@ public class ModDimensions {
         //possibly works to make flat with no structures
         //honestly might need to make my own generator if i dont want mobs spawning?
         HolderSet<StructureSet> t = HolderSet.direct(structureGenSettings.getOrThrow(BuiltinStructureSets.VILLAGES));
-        FlatLevelSource flatChunkGenerator = new FlatLevelSource(new FlatLevelGeneratorSettings(Optional.of(t), biomeRegistry.getOrThrow(Biomes.PLAINS), FlatLevelGeneratorSettings.createLakesList(placedFeatureGenSettings)));
+        FlatLevelSource flatChunkGenerator = new FlatLevelSource(new FlatLevelGeneratorSettings(Optional.of(t), biomeRegistry.getOrThrow(Biomes.THE_VOID), FlatLevelGeneratorSettings.createLakesList(placedFeatureGenSettings)));
+        
         
 
         //wrapped chunk gen only does 1 biome type
         NoiseBasedChunkGenerator wrappedChunkGenerator = new NoiseBasedChunkGenerator(
                 //change biome here
-                new FixedBiomeSource(biomeRegistry.getOrThrow(Biomes.PLAINS)),
-                noiseGenSettings.getOrThrow(NoiseGeneratorSettings.AMPLIFIED));
+                new FixedBiomeSource(biomeRegistry.getOrThrow(Biomes.THE_VOID)),
+                noiseGenSettings.getOrThrow(NoiseGeneratorSettings.END));
 
 
         //while this multinoisebiomesource does multiple biomes based somehow on the params set
