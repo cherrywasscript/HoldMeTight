@@ -117,7 +117,9 @@ public class MushroomTeleporterBlockEntity extends BlockEntity{
         this.houseNum = mushroomTeleporterData.getInt("houseNum");
         this.structureGenerated = mushroomTeleporterData.getBoolean("structureGenerated");
         
-        this.housePos = new Vec3i(mushroomTeleporterData.getInt("xpos"), mushroomTeleporterData.getInt("ypos"), mushroomTeleporterData.getInt("zpos"));
+        if (structureGenerated) {
+            this.housePos = new Vec3i(mushroomTeleporterData.getInt("xpos"), mushroomTeleporterData.getInt("ypos"), mushroomTeleporterData.getInt("zpos"));
+        }
     }
 
     @Override
@@ -127,9 +129,12 @@ public class MushroomTeleporterBlockEntity extends BlockEntity{
 
         mushroomTeleporterData.putInt("houseNum", houseNum);
         mushroomTeleporterData.putBoolean("structureGenerated", structureGenerated);
-        mushroomTeleporterData.putInt("xpos", housePos.getX());
-        mushroomTeleporterData.putInt("ypos", housePos.getY());
-        mushroomTeleporterData.putInt("zpos", housePos.getZ());
+        if (housePos != null) {
+            mushroomTeleporterData.putInt("xpos", housePos.getX());
+            mushroomTeleporterData.putInt("ypos", housePos.getY());
+            mushroomTeleporterData.putInt("zpos", housePos.getZ());
+        }
+        
 
 
         nbt.put(HoldMeTight.MODID, mushroomTeleporterData);

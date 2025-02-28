@@ -6,6 +6,7 @@ import com.ricardthegreat.holdmetight.blockentities.MushroomTeleporterBlockEntit
 import com.ricardthegreat.holdmetight.init.BlockEntityInit;
 import com.ricardthegreat.holdmetight.portal.ModTeleporter;
 import com.ricardthegreat.holdmetight.save.MushroomHouseSavedData;
+import com.ricardthegreat.holdmetight.utils.SizeUtils;
 import com.ricardthegreat.holdmetight.worldgen.dimension.ModDimensions;
 import com.ricardthegreat.holdmetight.worldgen.structures.StructureGenerator;
 
@@ -22,6 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
+import net.minecraft.world.level.block.NetherPortalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -69,8 +71,6 @@ public class MushroomTeleporterBlock extends Block implements EntityBlock{
                 m.setTest(m.getTest()+1);
             }
         }
-        
-        System.out.println(house.getHouseNum());
 
         if (player.canChangeDimensions()) {
             handleTeleport(player, pos, house);
@@ -94,30 +94,30 @@ public class MushroomTeleporterBlock extends Block implements EntityBlock{
  
                 //teleport to and from dimension
                 if(resourcekey == ModDimensions.DIM_LEVEL_KEY) {
-
-
+                    //stuff to do when teleporting to the dimension
 
                     //generate structure if it doesnt already exist
                     if (!house.getStructureGenerated()) {
-                        System.out.println("generated");
                         house.setStructureGenerated(true);
                         StructureGenerator.generateMushroomHouseStructure(portalDimension, house);
                     }
-                    BlockPos b = new BlockPos(house.getHousePos());
-                    
-                    ModTeleporter t = new ModTeleporter(b, true);
-                    
-                    //need to get pos
-                    player.changeDimension(portalDimension, t);
-                    //Vec3 playerPos = player.changeDimension(portalDimension, t).position();
-                    //player.moveTo(playerPos);
-                    //System.out.println(playerPos);
 
-                    //System.out.println("block: " + serverlevel.getBlockState(b).getBlock());
+                    //the target pos in the dimension
+                    BlockPos targetPos = new BlockPos(house.getHousePos());
+                    targetPos = targetPos.above();
+                               
+                    //change scale to 1 so the dimensions is normal
+                    SizeUtils.setSizeInstant(player, 1f);
+
+
+                    //change the dimension
+                    player.changeDimension(portalDimension, new ModTeleporter(targetPos, true));
+                    
                 } else {
-                    BlockPos b = new BlockPos(house.getHousePos());
+                    //stuff to do when teleporting out of dimension (probably gonna remove this and add a seperate teleport block to leave)
+
                     System.out.println("dimteleporter:53");
-                    player.changeDimension(overworld, new ModTeleporter(b, false));
+                    player.changeDimension(overworld, new ModTeleporter(pos, false));
                 }
             }
         }

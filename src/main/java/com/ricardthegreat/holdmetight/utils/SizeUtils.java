@@ -16,8 +16,10 @@ public class SizeUtils {
     private static Float maxScale = 8.0f;
 
     
-    public static void setSizeInstant() {
-        
+    public static void setSizeInstant(Entity entity, Float size) {
+        checkMaxHitbox(entity, size, 0);
+        ScaleData data = getScaleData(entity);
+        data.setScale(size);
     }
 
     public static void multSizeInstant() {
@@ -68,16 +70,28 @@ public class SizeUtils {
         ScaleData heightData = pEnt.pehkui_getScaleData(hitbox_height);
         ScaleData widthData = pEnt.pehkui_getScaleData(hitbox_width);
 
-        heightData.setScaleTickDelay(ticks);
-        widthData.setScaleTickDelay(ticks);
+        if (ticks > 0) {
+            heightData.setScaleTickDelay(ticks);
+            widthData.setScaleTickDelay(ticks);
 
-        if (size > maxScale) {
-            heightData.setTargetScale(maxScale/size);
-            widthData.setTargetScale(maxScale/size);
-        }else if (heightData.getTargetScale() < 1.0f || widthData.getTargetScale() < 1.0f){
-            heightData.setTargetScale(1.0f);
-            widthData.setTargetScale(1.0f);
+            if (size > maxScale) {
+                heightData.setTargetScale(maxScale/size);
+                widthData.setTargetScale(maxScale/size);
+            }else if (heightData.getTargetScale() < 1.0f || widthData.getTargetScale() < 1.0f){
+                heightData.setTargetScale(1.0f);
+                widthData.setTargetScale(1.0f);
+            }
+        }else{
+            if (size > maxScale) {
+                heightData.setScale(maxScale/size);
+                widthData.setScale(maxScale/size);
+            }else if (heightData.getTargetScale() < 1.0f || widthData.getTargetScale() < 1.0f){
+                heightData.setScale(1.0f);
+                widthData.setScale(1.0f);
+            }
         }
+
+        
 
         //return data;
     }
