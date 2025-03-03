@@ -22,6 +22,7 @@ public abstract class HumanoidModelMixin<T extends LivingEntity>{
     @Shadow
     HumanoidModel.ArmPose rightArmPose;
 
+    //sets arm position while carrying an entity so it looks natural
     @Inject(at = @At("RETURN"), method = "poseRightArm(Lnet/minecraft/world/entity/LivingEntity;)V")
     //@Overwrite
     private void poseRightArm(T ent, CallbackInfo info){
@@ -32,7 +33,4 @@ public abstract class HumanoidModelMixin<T extends LivingEntity>{
             } 
         }
     }
-
-    
-    
 }

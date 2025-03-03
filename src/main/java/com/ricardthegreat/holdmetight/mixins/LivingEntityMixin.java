@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.swing.text.html.parser.Entity;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -15,12 +17,16 @@ import com.ricardthegreat.holdmetight.utils.SizeUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.CactusBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.WorldData;
 
@@ -67,42 +73,63 @@ public class LivingEntityMixin {
         double xpos = ent.position().x;
         double zpos = ent.position().z;
 
-        //the x y and z coords of their current block position, floored if x or z are negative so it gives the correct block
-        int bpx = (xpos > 0) ?  (int) Math.ceil(xpos) : (int) Math.floor(xpos);
-        int bpy = (int) ent.position().y;
-        int bpz = (zpos > 0) ?  (int) Math.ceil(zpos) : (int) Math.floor(zpos);
+        //the x y and z coords of their current block position
+        BlockPos playerBlockPos = ent.blockPosition();
+        int bpx = playerBlockPos.getX();
+        int bpy = playerBlockPos.getY();
+        int bpz = playerBlockPos.getZ();
 
-        //finding the block positions of what is next to their hitbox on the positive x and z
-        int bpxpos = (xpos > 0) ?  (int) Math.ceil(xpos+bbradius) : (int) Math.floor(xpos+bbradius);
-        int bpzpos = (zpos > 0) ?  (int) Math.ceil(zpos+bbradius) : (int) Math.floor(zpos+bbradius);
+        
+        //because blocks positions are at the most north west point, e.g. a block with centre 0.5, 0.5 counts as at 0,0 these two are simple
+        int bpsouth = (int) Math.floor(zpos+bbradius);
+        int bpeast = (int) Math.floor(xpos+bbradius);
+        //but these two are slightly more complicated as being right on the edge
+        //im making the hitbox count as being 1% larger so that it rolls over to be rounded down to the correct value and hopefully isnt noticeable
+        int bpnorth = (int) Math.floor(zpos-bbradius*1.01);
+        int bpwest = (int) Math.floor(xpos-bbradius*1.01);
 
-        //does the same for the negative x and z but needs an extra step as for an example a player on x47.5 with a hitbox radius of .5 would return
-        //x47, this gives the block they are standing on not the one next to them at x46.
-        int bpxneg = (xpos > 0) ?  (int) Math.ceil(xpos-bbradius) : (int) Math.floor(xpos-bbradius);
-        int bpzneg = (zpos > 0) ?  (int) Math.ceil(zpos-bbradius) : (int) Math.floor(zpos-bbradius);
-        bpxneg = (bpxneg == xpos-bbradius) ? bpxneg-1 : bpxneg;
-        bpzneg = (bpzneg == zpos-bbradius) ? bpzneg-1 : bpzneg;
+        
 
 
         //add the 4 potential blocks to the array
-        List<Vec3i> vecs = new ArrayList<>();
-        vecs.add(new Vec3i(bpxpos, bpy, bpz));
-        vecs.add(new Vec3i(bpxneg, bpy, bpz));
-        vecs.add(new Vec3i(bpx, bpy, bpzpos));
-        vecs.add(new Vec3i(bpx, bpy, bpzneg));
+        Vec3i[] vecs = new Vec3i[4];
+        vecs[0] = new Vec3i(bpeast, bpy, bpz); //east
+        vecs[1] = new Vec3i(bpwest, bpy, bpz); //west
+        vecs[2] = new Vec3i(bpx, bpy, bpsouth); //south
+        vecs[3] = new Vec3i(bpx, bpy, bpnorth); //north
 
-        boolean dirt = false;
+        Level level = ent.level();
 
-        //iterate through the array and check if any of the blocks are valid climbing blocks
+        //iterate through the array and check if any of the blocks are valid climbing blocks 
+        //if they are exit early with true
         for(int i = 0; i < 4; i++){
-            if(ent.level().getBlockState(new BlockPos(vecs.get(i))).is(BlockTags.DIRT)){
-                dirt = true;
+            BlockState state = level.getBlockState(new BlockPos(vecs[i]));
+
+            
+            if (tinyCanClimb(state, ent)) {
+                return true;
             }
+            
         }
 
-        return dirt;
         
+        return false;
     }
 
-    
+    private boolean tinyCanClimb(BlockState state, LivingEntity ent){
+
+        if (!ent.horizontalCollision) {
+            return false;
+        }
+
+        if ((ent.getMainHandItem().is(Items.SLIME_BALL) || ent.getOffhandItem().is(Items.SLIME_BALL))) {
+            return true;
+        }
+
+        if(state.is(BlockTags.DIRT) || state.is(BlockTags.SAND) || state.is(BlockTags.WOOL) || state.is(BlockTags.WOOL) || state.is(BlockTags.WOOL_CARPETS)){
+            return true;
+        }
+
+        return false;
+    }
 }

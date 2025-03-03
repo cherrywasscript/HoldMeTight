@@ -11,7 +11,8 @@
       "HumanoidModelMixin",
       "MultiPlayerGameModeMixin",
       "LivingEntityMixin",
-      "WebBlockMixin"
+      "WebBlockMixin",
+      "CrossCollisionBlockMixin"
     ],
     "client": [
     ],
