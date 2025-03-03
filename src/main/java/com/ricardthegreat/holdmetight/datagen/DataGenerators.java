@@ -3,7 +3,6 @@ package com.ricardthegreat.holdmetight.datagen;
 import java.util.concurrent.CompletableFuture;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.items.DimTeleporter;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.HolderLookup;

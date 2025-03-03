@@ -4,7 +4,6 @@ import static com.ricardthegreat.holdmetight.init.CreativeTabInit.addToTab;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.items.AdvancedSizeRemote;
-import com.ricardthegreat.holdmetight.items.DimTeleporter;
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.items.SizeRay;
 import com.ricardthegreat.holdmetight.items.SizeWand;
@@ -46,9 +45,6 @@ public class ItemInit {
 
         public static final RegistryObject<Item> PLAYER_ITEM = addToTab(
                 ITEMS.register("player_item", () -> new PlayerStandinItem(new Item.Properties().stacksTo(1))));
-
-        public static final RegistryObject<Item> DIM_TELEPORTER = addToTab(
-                ITEMS.register("dim_teleporter", () -> new DimTeleporter(new Item.Properties().stacksTo(1))));
 
 
 
