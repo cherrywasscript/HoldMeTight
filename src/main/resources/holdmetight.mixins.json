@@ -12,7 +12,10 @@
       "MultiPlayerGameModeMixin",
       "LivingEntityMixin",
       "WebBlockMixin",
-      "CrossCollisionBlockMixin"
+      "collisions.CrossCollisionBlockMixin",
+      "collisions.FenceGateBlockMixin",
+      "collisions.LeavesBlockMixin",
+      "collisions.TorchBlockMixin"
     ],
     "client": [
     ],

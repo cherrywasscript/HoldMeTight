@@ -9,7 +9,9 @@ import com.ricardthegreat.holdmetight.utils.SizeUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CrossCollisionBlock;
+import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
@@ -35,7 +37,9 @@ public class CrossCollisionBlockMixin {
 
          Entity ent = entContext.getEntity();
          if(ent != null && SizeUtils.getSize(ent) < 0.21){
-            //System.out.println(ent.getName() + "/" + SizeUtils.getSize(ent));
+            if ((Object) this instanceof FenceBlock) {
+               return Block.box(6, 0.0D, 6, 10, 16, 10);
+            }
             return this.collisionShapeByIndex[0];
          }
       }
