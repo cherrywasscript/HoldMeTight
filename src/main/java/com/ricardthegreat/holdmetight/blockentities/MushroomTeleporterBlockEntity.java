@@ -3,6 +3,8 @@ package com.ricardthegreat.holdmetight.blockentities;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import javax.annotation.Nonnull;
+
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.init.BlockEntityInit;
 
@@ -108,7 +110,7 @@ public class MushroomTeleporterBlockEntity extends BlockEntity{
     }
 
     @Override
-    public void load(CompoundTag nbt) {
+    public void load(@Nonnull CompoundTag nbt) {
         super.load(nbt);
         CompoundTag mushroomTeleporterData = nbt.getCompound(HoldMeTight.MODID);
 
@@ -121,7 +123,7 @@ public class MushroomTeleporterBlockEntity extends BlockEntity{
     }
 
     @Override
-    protected void saveAdditional(CompoundTag nbt) {
+    protected void saveAdditional(@Nonnull CompoundTag nbt) {
         super.saveAdditional(nbt);
         var mushroomTeleporterData = new CompoundTag();
 

@@ -9,16 +9,8 @@ import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.items.SizeRay;
 import com.ricardthegreat.holdmetight.items.SizeWand;
 
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.monster.Shulker;
-import net.minecraft.world.entity.monster.warden.Warden;
-import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Item.Properties;
-import net.minecraft.world.level.block.SculkSensorBlock;
-import net.minecraft.world.level.block.entity.SculkSensorBlockEntity;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;

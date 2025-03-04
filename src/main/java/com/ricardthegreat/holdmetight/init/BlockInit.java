@@ -1,12 +1,7 @@
 package com.ricardthegreat.holdmetight.init;
 
-import static com.ricardthegreat.holdmetight.init.CreativeTabInit.addToTab;
-
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.blocks.MushroomTeleporterBlock;
-import com.ricardthegreat.holdmetight.items.AdvancedSizeRemote;
-
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;

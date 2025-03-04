@@ -6,7 +6,6 @@ import com.ricardthegreat.holdmetight.Client.screens.AdvancedSizeRemoteScreen;
 import com.ricardthegreat.holdmetight.Client.screens.SizeRayScreen;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 

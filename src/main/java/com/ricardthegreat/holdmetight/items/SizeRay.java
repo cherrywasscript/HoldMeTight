@@ -2,36 +2,20 @@ package com.ricardthegreat.holdmetight.items;
 
 import javax.annotation.Nonnull;
 
-import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.Client.ClientHooks;
-import com.ricardthegreat.holdmetight.Client.models.ModModelLayers;
 import com.ricardthegreat.holdmetight.entities.projectile.RayGunProjectile;
-import com.ricardthegreat.holdmetight.utils.SizeUtils;
-
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.ThrownEnderpearl;
-import net.minecraft.world.entity.projectile.Fireball;
-import net.minecraft.world.entity.projectile.LlamaSpit;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-
-import net.minecraft.world.item.BowItem;
-import net.minecraft.world.item.EnderpearlItem;
 
 public class SizeRay extends Item {
 
@@ -86,10 +70,10 @@ public class SizeRay extends Item {
         stack.setTag(tag);
     }
 
-    public void inventoryTick(ItemStack stack, Level level, Entity entity, int p_41407_, boolean p_41408_) {
+    public void inventoryTick(@Nonnull ItemStack stack, @Nonnull Level level, @Nonnull Entity entity, int p_41407_, boolean p_41408_) {
     }
 
-    public void onCraftedBy(ItemStack stack, Level level, Player player) {
+    public void onCraftedBy(@Nonnull ItemStack stack, @Nonnull Level level, @Nonnull Player player) {
         setDefaultTags(stack);
     }
 }

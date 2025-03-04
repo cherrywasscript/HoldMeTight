@@ -2,11 +2,7 @@ package com.ricardthegreat.holdmetight.init;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.blockentities.MushroomTeleporterBlockEntity;
-import com.ricardthegreat.holdmetight.blocks.MushroomTeleporterBlock;
-
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;

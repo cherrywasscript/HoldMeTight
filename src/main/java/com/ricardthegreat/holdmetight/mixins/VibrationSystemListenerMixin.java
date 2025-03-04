@@ -1,8 +1,5 @@
 package com.ricardthegreat.holdmetight.mixins;
 
-import java.util.Optional;
-
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -10,13 +7,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.ricardthegreat.holdmetight.utils.SizeUtils;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.gameevent.vibrations.VibrationSystem;
 import net.minecraft.world.phys.Vec3;
-import virtuoel.pehkui.util.ScaleUtils;
 
 @Mixin(VibrationSystem.Listener.class)
 public class VibrationSystemListenerMixin {

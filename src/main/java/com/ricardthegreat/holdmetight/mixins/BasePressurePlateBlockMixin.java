@@ -1,11 +1,11 @@
 package com.ricardthegreat.holdmetight.mixins;
 
+import javax.annotation.Nonnull;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
 import com.ricardthegreat.holdmetight.utils.SizeUtils;
 
 import net.minecraft.core.BlockPos;
@@ -38,7 +38,7 @@ public class BasePressurePlateBlockMixin extends Block{
 
     //adds a hitbox for those under 0.1
     @Override
-    public VoxelShape getCollisionShape(BlockState p_52357_, BlockGetter p_52358_, BlockPos p_52359_, CollisionContext context) {
+    public VoxelShape getCollisionShape(@Nonnull BlockState p_52357_, @Nonnull BlockGetter p_52358_, @Nonnull BlockPos p_52359_, @Nonnull CollisionContext context) {
         //block with the bounds of a pressure plate
         VoxelShape voxelshape = Block.box(1, 0.0D, 1, 15, 1, 15);
 

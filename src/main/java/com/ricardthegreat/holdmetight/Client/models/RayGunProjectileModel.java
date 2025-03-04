@@ -1,5 +1,7 @@
 package com.ricardthegreat.holdmetight.Client.models;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -30,7 +32,7 @@ public class RayGunProjectileModel<T extends Entity> extends HierarchicalModel<T
     }
 
     @Override
-    public void setupAnim(T p_102618_, float p_102619_, float p_102620_, float p_102621_, float p_102622_, float p_102623_) {
+    public void setupAnim(@Nonnull T p_102618_, float p_102619_, float p_102620_, float p_102621_, float p_102622_, float p_102623_) {
     }
 
     @Override

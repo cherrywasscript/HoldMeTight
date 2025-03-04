@@ -1,5 +1,7 @@
 package com.ricardthegreat.holdmetight.save;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.saveddata.SavedData;
@@ -24,7 +26,7 @@ public class MushroomHouseSavedData extends SavedData{
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
+    public CompoundTag save(@Nonnull CompoundTag tag) {
         tag.putInt("test", test);
         return tag;
     }

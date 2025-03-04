@@ -2,19 +2,14 @@ package com.ricardthegreat.holdmetight.Client.handlers;
 
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.client.renderer.entity.ThrownItemRenderer;
-
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.Client.Keybindings;
 import com.ricardthegreat.holdmetight.Client.models.ModModelLayers;
 import com.ricardthegreat.holdmetight.Client.models.RayGunProjectileModel;
 import com.ricardthegreat.holdmetight.Client.renderers.RayGunProjectileRenderer;
 import com.ricardthegreat.holdmetight.Client.renderers.WandProjectileRenderer;
-import com.ricardthegreat.holdmetight.entities.projectile.WandProjectile;
 import com.ricardthegreat.holdmetight.init.EntityInit;
 
-import net.minecraft.client.renderer.entity.ArrowRenderer;
-import net.minecraft.client.renderer.entity.LlamaSpitRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
