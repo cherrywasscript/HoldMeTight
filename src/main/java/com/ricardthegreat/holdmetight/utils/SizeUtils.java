@@ -27,6 +27,7 @@ public class SizeUtils {
     }
 
     //i should probably grab the actual default from pekhui as if it changes from 20 this wont however a second is a good default i feel
+    //also i should spend some time to encorporate these like 6 similar methods into 1 or 2 methods it should be possible and will make for nicer code
     public static void setSizeOverTimeDefault(Entity entity, Float size) {
         checkMaxHitbox(entity, size, 20);
         ScaleData data = getScaleData(entity);
@@ -52,7 +53,6 @@ public class SizeUtils {
     }
 
 
-
     public static float getSize(Entity entity) {
         return getScaleData(entity).getScale();
     }
@@ -66,6 +66,10 @@ public class SizeUtils {
     private static void checkMaxHitbox(Entity entity, float size, int ticks) {
 
         PehkuiEntityExtensions pEnt = (PehkuiEntityExtensions) entity;
+
+        //im adding this here as a temp thing i need to move it to a proper place later
+        fixStepHeight(pEnt, size, ticks);
+
 
         ScaleData heightData = pEnt.pehkui_getScaleData(hitbox_height);
         ScaleData widthData = pEnt.pehkui_getScaleData(hitbox_width);
@@ -94,5 +98,19 @@ public class SizeUtils {
         
 
         //return data;
+    }
+
+    private static void fixStepHeight(PehkuiEntityExtensions pEnt, float size, int ticks){
+        ScaleData stepData = pEnt.pehkui_getScaleData(ScaleTypes.STEP_HEIGHT);
+
+        //this should make the step height equal to 1 + (height-1)/2
+        float stepHeight = (1+((size-1)/2))/size;
+
+        if (ticks > 0) {
+            stepData.setScaleTickDelay(ticks);
+            stepData.setTargetScale(stepHeight);
+        }else{
+            stepData.setScale(stepHeight);
+        }
     }
 }
