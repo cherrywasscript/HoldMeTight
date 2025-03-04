@@ -15,7 +15,8 @@
       "collisions.CrossCollisionBlockMixin",
       "collisions.FenceGateBlockMixin",
       "collisions.LeavesBlockMixin",
-      "collisions.TorchBlockMixin"
+      "collisions.TorchBlockMixin",
+      "VibrationSystemListenerMixin"
     ],
     "client": [
     ],
