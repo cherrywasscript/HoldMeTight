@@ -9,5 +9,19 @@
 
 
     "gui.holdmetight.size_ray.button.set_or_mult_button":"Set/Multiply",
-    "gui.holdmetight.size_ray.button.set_or_mult_button_tooltip":"Switch between multiply or set mode"
+    "gui.holdmetight.size_ray.button.set_or_mult_button_tooltip":"Switch between multiply or set mode",
+
+
+
+
+    "effect.holdmetight.massive_shrink":"Cherry",
+    "item.minecraft.potion.effect.massive_shrink_potion": "Cherry Potion",
+    "item.minecraft.splash_potion.effect.massive_shrink_potion": "Splash Cherry Potion",
+    "item.minecraft.lingering_potion.effect.massive_shrink_potion": "Lingering Cherry Potion",
+
+
+    "effect.holdmetight.shrink":"Shrink",
+    "item.minecraft.potion.effect.shrink_potion": "Shrink Potion",
+    "item.minecraft.splash_potion.effect.shrink_potion": "Splash Shrink Potion",
+    "item.minecraft.lingering_potion.effect.shrink_potion": "Lingering Shrink Potion"
 }

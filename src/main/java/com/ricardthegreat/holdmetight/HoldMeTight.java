@@ -4,8 +4,10 @@ import com.mojang.logging.LogUtils;
 import com.ricardthegreat.holdmetight.init.BlockEntityInit;
 import com.ricardthegreat.holdmetight.init.BlockInit;
 import com.ricardthegreat.holdmetight.init.CreativeTabInit;
+import com.ricardthegreat.holdmetight.init.EffectsInit;
 import com.ricardthegreat.holdmetight.init.EntityInit;
 import com.ricardthegreat.holdmetight.init.ItemInit;
+import com.ricardthegreat.holdmetight.init.PotionsInit;
 
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
@@ -40,6 +42,8 @@ public class HoldMeTight {
         ItemInit.ITEMS.register(modEventBus);
         CreativeTabInit.TABS.register(modEventBus);
         EntityInit.ENTITIES.register(modEventBus);
+        EffectsInit.register(modEventBus);
+        PotionsInit.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
