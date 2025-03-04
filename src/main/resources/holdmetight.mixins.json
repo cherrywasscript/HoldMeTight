@@ -16,7 +16,8 @@
       "collisions.FenceGateBlockMixin",
       "collisions.LeavesBlockMixin",
       "collisions.TorchBlockMixin",
-      "VibrationSystemListenerMixin"
+      "VibrationSystemListenerMixin",
+      "BasePressurePlateBlockMixin"
     ],
     "client": [
     ],
