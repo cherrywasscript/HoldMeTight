@@ -20,6 +20,9 @@ public class PotionsInit {
     public static final RegistryObject<Potion> SHRINK_POTION = POTIONS.register("shrink_potion", 
         () -> new Potion(new MobEffectInstance(EffectsInit.SHRINK_EFFECT.get(), 1200, 0)));
     
+    public static final RegistryObject<Potion> GROW_POTION = POTIONS.register("grow_potion", 
+        () -> new Potion(new MobEffectInstance(EffectsInit.GROW_EFFECT.get(), 1200, 0)));
+
     public static void register(IEventBus bus){
         POTIONS.register(bus);
     }

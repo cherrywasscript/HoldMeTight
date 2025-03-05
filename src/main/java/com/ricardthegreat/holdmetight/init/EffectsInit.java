@@ -1,6 +1,7 @@
 package com.ricardthegreat.holdmetight.init;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
+import com.ricardthegreat.holdmetight.effects.GrowEffect;
 import com.ricardthegreat.holdmetight.effects.MassiveShrinkEffect;
 import com.ricardthegreat.holdmetight.effects.ShrinkEffect;
 
@@ -20,7 +21,10 @@ public class EffectsInit {
 
     public static final RegistryObject<MobEffect> SHRINK_EFFECT = EFFECTS.register("shrink", 
         () -> new ShrinkEffect(MobEffectCategory.NEUTRAL, 0x36ebab));
-    
+
+    public static final RegistryObject<MobEffect> GROW_EFFECT = EFFECTS.register("shrink", 
+        () -> new GrowEffect(MobEffectCategory.NEUTRAL, 0x36ebab));
+
     public static void register(IEventBus bus){
         EFFECTS.register(bus);
     }

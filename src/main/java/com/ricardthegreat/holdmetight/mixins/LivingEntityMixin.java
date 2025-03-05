@@ -1,16 +1,24 @@
 package com.ricardthegreat.holdmetight.mixins;
 
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
 import java.util.Optional;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.ricardthegreat.holdmetight.utils.SizeUtils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
@@ -118,5 +126,15 @@ public class LivingEntityMixin {
         }
 
         return false;
+    }
+
+
+    //trying to stop particles when smaller than 1x
+    @ModifyVariable(method = "tickEffects()V", at = @At("STORE"), ordinal = 0)
+    private boolean tickEffects(boolean flag1) {
+        if (SizeUtils.getSize((Entity) (Object) this) < 1) {
+            return false;
+        }
+        return flag1;
     }
 }

@@ -19,9 +19,13 @@
     "item.minecraft.splash_potion.effect.massive_shrink_potion": "Splash Cherry Potion",
     "item.minecraft.lingering_potion.effect.massive_shrink_potion": "Lingering Cherry Potion",
 
-
     "effect.holdmetight.shrink":"Shrink",
     "item.minecraft.potion.effect.shrink_potion": "Shrink Potion",
     "item.minecraft.splash_potion.effect.shrink_potion": "Splash Shrink Potion",
-    "item.minecraft.lingering_potion.effect.shrink_potion": "Lingering Shrink Potion"
+    "item.minecraft.lingering_potion.effect.shrink_potion": "Lingering Shrink Potion",
+
+    "effect.holdmetight.grow":"Grow",
+    "item.minecraft.potion.effect.grow_potion": "Growth Potion",
+    "item.minecraft.splash_potion.effect.grow_potion": "Splash Growth Potion",
+    "item.minecraft.lingering_potion.effect.grow_potion": "Lingering Growth Potion"
 }
