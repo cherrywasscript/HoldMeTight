@@ -24,14 +24,14 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class LeverBlockMixin extends FaceAttachedHorizontalDirectionalBlock{
 
     //lever shapes adjusted so collision matches model, interaction box unchanged
-    protected static final VoxelShape NORTH_AABB = Block.box(5.0D, 4.0D, 10.0D, 8.0D, 12.0D, 16.0D);
-    protected static final VoxelShape SOUTH_AABB = Block.box(5.0D, 4.0D, 0.0D, 8.0D, 12.0D, 6.0D);
-    protected static final VoxelShape WEST_AABB = Block.box(10.0D, 4.0D, 5.0D, 16.0D, 12.0D, 8.0D);
-    protected static final VoxelShape EAST_AABB = Block.box(0.0D, 4.0D, 5.0D, 6.0D, 12.0D, 8.0D);
-    protected static final VoxelShape UP_AABB_Z = Block.box(5.0D, 0.0D, 4.0D, 11.0D, 3.0D, 12.0D);
-    protected static final VoxelShape UP_AABB_X = Block.box(4.0D, 0.0D, 5.0D, 12.0D, 3.0D, 11.0D);
-    protected static final VoxelShape DOWN_AABB_Z = Block.box(5.0D, 10.0D, 4.0D, 11.0D, 13.0D, 12.0D);
-    protected static final VoxelShape DOWN_AABB_X = Block.box(4.0D, 10.0D, 5.0D, 12.0D, 13.0D, 11.0D);
+    private static final VoxelShape NORTH_AABB = Block.box(5.0D, 4.0D, 10.0D, 8.0D, 12.0D, 16.0D);
+    private static final VoxelShape SOUTH_AABB = Block.box(5.0D, 4.0D, 0.0D, 8.0D, 12.0D, 6.0D);
+    private static final VoxelShape WEST_AABB = Block.box(10.0D, 4.0D, 5.0D, 16.0D, 12.0D, 8.0D);
+    private static final VoxelShape EAST_AABB = Block.box(0.0D, 4.0D, 5.0D, 6.0D, 12.0D, 8.0D);
+    private static final VoxelShape UP_AABB_Z = Block.box(5.0D, 0.0D, 4.0D, 11.0D, 3.0D, 12.0D);
+    private static final VoxelShape UP_AABB_X = Block.box(4.0D, 0.0D, 5.0D, 12.0D, 3.0D, 11.0D);
+    private static final VoxelShape DOWN_AABB_Z = Block.box(5.0D, 10.0D, 4.0D, 11.0D, 13.0D, 12.0D);
+    private static final VoxelShape DOWN_AABB_X = Block.box(4.0D, 10.0D, 5.0D, 12.0D, 13.0D, 11.0D);
 
     public LeverBlockMixin(Properties p_53182_) {
         super(p_53182_);
