@@ -29,9 +29,8 @@ public class TorchBlockMixin extends Block{
             super(p_49795_);
     }
     
-    @SuppressWarnings("null")
     @Override
-    public VoxelShape getCollisionShape(BlockState p_52357_, BlockGetter p_52358_, BlockPos p_52359_, CollisionContext context) {
+    public VoxelShape getCollisionShape(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos, @Nonnull CollisionContext context) {
         //block with the bounds of a torch
         VoxelShape voxelshape = Block.box(7, 0.0D, 7, 9, 10, 9);
 

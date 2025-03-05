@@ -16,6 +16,7 @@
       "collisions.FenceGateBlockMixin",
       "collisions.LeavesBlockMixin",
       "collisions.TorchBlockMixin",
+      "collisions.LeverBlockMixin",
       "VibrationSystemListenerMixin",
       "BasePressurePlateBlockMixin"
     ],
