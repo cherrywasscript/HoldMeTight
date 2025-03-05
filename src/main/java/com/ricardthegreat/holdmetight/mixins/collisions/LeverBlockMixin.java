@@ -24,14 +24,14 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class LeverBlockMixin extends FaceAttachedHorizontalDirectionalBlock{
 
     //lever shapes adjusted so collision matches model, interaction box unchanged
-    private static final VoxelShape NORTH_AABB = Block.box(5.0D, 4.0D, 10.0D, 8.0D, 12.0D, 16.0D);
-    private static final VoxelShape SOUTH_AABB = Block.box(5.0D, 4.0D, 0.0D, 8.0D, 12.0D, 6.0D);
-    private static final VoxelShape WEST_AABB = Block.box(10.0D, 4.0D, 5.0D, 16.0D, 12.0D, 8.0D);
-    private static final VoxelShape EAST_AABB = Block.box(0.0D, 4.0D, 5.0D, 6.0D, 12.0D, 8.0D);
-    private static final VoxelShape UP_AABB_Z = Block.box(5.0D, 0.0D, 4.0D, 11.0D, 3.0D, 12.0D);
-    private static final VoxelShape UP_AABB_X = Block.box(4.0D, 0.0D, 5.0D, 12.0D, 3.0D, 11.0D);
-    private static final VoxelShape DOWN_AABB_Z = Block.box(5.0D, 10.0D, 4.0D, 11.0D, 13.0D, 12.0D);
-    private static final VoxelShape DOWN_AABB_X = Block.box(4.0D, 10.0D, 5.0D, 12.0D, 13.0D, 11.0D);
+    private static final VoxelShape COLLISION_NORTH_AABB = Block.box(5.0D, 4.0D, 13.0D, 11.0D, 12.0D, 16.0D);
+    private static final VoxelShape COLLISION_SOUTH_AABB = Block.box(5.0D, 4.0D, 0.0D, 11.0D, 12.0D, 3.0D);
+    private static final VoxelShape COLLISION_WEST_AABB = Block.box(13.0D, 4.0D, 5.0D, 16.0D, 12.0D, 11.0D);
+    private static final VoxelShape COLLISION_EAST_AABB = Block.box(0.0D, 4.0D, 5.0D, 3.0D, 12.0D, 11.0D);
+    private static final VoxelShape COLLISION_UP_AABB_Z = Block.box(5.0D, 0.0D, 4.0D, 11.0D, 3.0D, 12.0D);
+    private static final VoxelShape COLLISION_UP_AABB_X = Block.box(4.0D, 0.0D, 5.0D, 12.0D, 3.0D, 11.0D);
+    private static final VoxelShape COLLISION_DOWN_AABB_Z = Block.box(5.0D, 13.0D, 4.0D, 11.0D, 16.0D, 12.0D);
+    private static final VoxelShape COLLISION_DOWN_AABB_X = Block.box(4.0D, 13.0D, 5.0D, 12.0D, 16.0D, 11.0D);
 
     public LeverBlockMixin(Properties p_53182_) {
         super(p_53182_);
@@ -55,31 +55,31 @@ public class LeverBlockMixin extends FaceAttachedHorizontalDirectionalBlock{
             case FLOOR:
                 switch (p_54665_.getValue(FACING).getAxis()) {
                 case X:
-                    return UP_AABB_X;
+                    return COLLISION_UP_AABB_X;
                 case Z:
                 default:
-                    return UP_AABB_Z;
+                    return COLLISION_UP_AABB_Z;
                 }
             case WALL:
                 switch ((Direction)p_54665_.getValue(FACING)) {
                 case EAST:
-                    return EAST_AABB;
+                    return COLLISION_EAST_AABB;
                 case WEST:
-                    return WEST_AABB;
+                    return COLLISION_WEST_AABB;
                 case SOUTH:
-                    return SOUTH_AABB;
+                    return COLLISION_SOUTH_AABB;
                 case NORTH:
                 default:
-                    return NORTH_AABB;
+                    return COLLISION_NORTH_AABB;
                 }
             case CEILING:
             default:
                 switch (p_54665_.getValue(FACING).getAxis()) {
                 case X:
-                    return DOWN_AABB_X;
+                    return COLLISION_DOWN_AABB_X;
                 case Z:
                 default:
-                    return DOWN_AABB_Z;
+                    return COLLISION_DOWN_AABB_Z;
                 }
         }
     }
