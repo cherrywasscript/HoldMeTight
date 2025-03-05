@@ -8,17 +8,9 @@ import com.ricardthegreat.holdmetight.init.EffectsInit;
 import com.ricardthegreat.holdmetight.init.EntityInit;
 import com.ricardthegreat.holdmetight.init.ItemInit;
 import com.ricardthegreat.holdmetight.init.PotionsInit;
-import com.ricardthegreat.holdmetight.utils.BetterBrewingRecipe;
-
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionBrewing;
-import net.minecraft.world.item.alchemy.PotionUtils;
-import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.world.item.crafting.Ingredient;
+import com.ricardthegreat.holdmetight.init.RecipeInit;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
-import net.minecraftforge.common.brewing.IBrewingRecipe;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -72,53 +64,15 @@ public class HoldMeTight {
 
         Config.items.forEach((item) -> LOGGER.info("ITEM >> {}", item.toString()));
 
-
         //not touching the stuff above, should probably comment it out tho
 
         //i've seen mods on 1.20.1 forge use PotionBrewing.addmix() to init potions but for me its private so idk whats up with that????
         //anyway this is a bit of an amalgam because i couldnt find an actual tutorial for 1.20.1 only 1.21 and 1.18.2(https://www.youtube.com/@ModdingByKaupenjoe)
         //they're great but both were slightly wrong for what was needed
-
-        //shrinking pots
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(Potions.AWKWARD, Items.FLOWERING_AZALEA, PotionsInit.SHRINK_POTION.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.SHRINK_POTION.get(), Items.GLOWSTONE_DUST, PotionsInit.SHRINK_POTION_1.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.SHRINK_POTION_1.get(), Items.GLOWSTONE_DUST, PotionsInit.SHRINK_POTION_2.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.SHRINK_POTION_2.get(), Items.GLOWSTONE_DUST, PotionsInit.SHRINK_POTION_3.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.SHRINK_POTION_3.get(), Items.GLOWSTONE_DUST, PotionsInit.SHRINK_POTION_4.get()));
-
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.SHRINK_POTION.get(), Items.REDSTONE, PotionsInit.SHRINK_POTION_LONG.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.SHRINK_POTION_1.get(), Items.REDSTONE, PotionsInit.SHRINK_POTION_1_LONG.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.SHRINK_POTION_2.get(), Items.REDSTONE, PotionsInit.SHRINK_POTION_2_LONG.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.SHRINK_POTION_3.get(), Items.REDSTONE, PotionsInit.SHRINK_POTION_3_LONG.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.SHRINK_POTION_4.get(), Items.REDSTONE, PotionsInit.SHRINK_POTION_4_LONG.get()));
-
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.SHRINK_POTION_LONG.get(), Items.GLOWSTONE_DUST, PotionsInit.SHRINK_POTION_1_LONG.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.SHRINK_POTION_1_LONG.get(), Items.GLOWSTONE_DUST, PotionsInit.SHRINK_POTION_2_LONG.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.SHRINK_POTION_2_LONG.get(), Items.GLOWSTONE_DUST, PotionsInit.SHRINK_POTION_3_LONG.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.SHRINK_POTION_3_LONG.get(), Items.GLOWSTONE_DUST, PotionsInit.SHRINK_POTION_4_LONG.get()));
-
-        //growth pots
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(Potions.AWKWARD, Items.AMETHYST_SHARD, PotionsInit.GROW_POTION.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.GROW_POTION.get(), Items.GLOWSTONE_DUST, PotionsInit.GROW_POTION_1.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.GROW_POTION_1.get(), Items.GLOWSTONE_DUST, PotionsInit.GROW_POTION_2.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.GROW_POTION_2.get(), Items.GLOWSTONE_DUST, PotionsInit.GROW_POTION_3.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.GROW_POTION_3.get(), Items.GLOWSTONE_DUST, PotionsInit.GROW_POTION_4.get()));
-
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.GROW_POTION.get(), Items.REDSTONE, PotionsInit.GROW_POTION_LONG.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.GROW_POTION_1.get(), Items.REDSTONE, PotionsInit.GROW_POTION_1_LONG.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.GROW_POTION_2.get(), Items.REDSTONE, PotionsInit.GROW_POTION_2_LONG.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.GROW_POTION_3.get(), Items.REDSTONE, PotionsInit.GROW_POTION_3_LONG.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.GROW_POTION_4.get(), Items.REDSTONE, PotionsInit.GROW_POTION_4_LONG.get()));
-
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.GROW_POTION_LONG.get(), Items.GLOWSTONE_DUST, PotionsInit.GROW_POTION_1_LONG.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.GROW_POTION_1_LONG.get(), Items.GLOWSTONE_DUST, PotionsInit.GROW_POTION_2_LONG.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.GROW_POTION_2_LONG.get(), Items.GLOWSTONE_DUST, PotionsInit.GROW_POTION_3_LONG.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.GROW_POTION_3_LONG.get(), Items.GLOWSTONE_DUST, PotionsInit.GROW_POTION_4_LONG.get()));
+        RecipeInit.register();
+        
 
         
-        //super shrink pots
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.SHRINK_POTION_4.get(), Items.CHERRY_SAPLING, PotionsInit.MASSIVE_SHRINK_POTION.get()));
-        BrewingRecipeRegistry.addRecipe(new BetterBrewingRecipe(PotionsInit.SHRINK_POTION_4_LONG.get(), Items.CHERRY_SAPLING, PotionsInit.MASSIVE_SHRINK_POTION_LONG.get()));
     }
 
 

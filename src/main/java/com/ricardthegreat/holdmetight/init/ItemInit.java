@@ -11,6 +11,7 @@ import com.ricardthegreat.holdmetight.items.SizeWand;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -31,7 +32,7 @@ public class ItemInit {
                             .saturationMod(2f)
                             .build()))));
         */
-
+        
 
         public static final RegistryObject<Item> ADVANCED_SIZE_REMOTE = addToTab(
                 ITEMS.register("size_remote", () -> new AdvancedSizeRemote(new Item.Properties().stacksTo(1))));
@@ -46,7 +47,7 @@ public class ItemInit {
                 ITEMS.register("player_item", () -> new PlayerStandinItem(new Item.Properties().stacksTo(1))));
 
         public static final RegistryObject<Item> PAPER_WINGS_ITEM = addToTab(
-                ITEMS.register("paper_wings_item", () -> new PaperWingsItem(new Item.Properties().stacksTo(1))));
+                ITEMS.register("paper_wings_item", () -> new PaperWingsItem(new Item.Properties().durability(432).rarity(Rarity.COMMON))));
 
                 
         public static final RegistryObject<BlockItem> MUSHROOM_HOUSE_ITEM = addToTab(ITEMS.register("mushroom_house", 

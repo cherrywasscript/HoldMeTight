@@ -9,6 +9,10 @@ import net.minecraftforge.common.brewing.IBrewingRecipe;
 
 // BetterBrewingRecipe Class by CAS-ual-TY from https://github.com/CAS-ual-TY/Extra-Potions (GPL-3.0 License)
 // https://github.com/CAS-ual-TY/Extra-Potions/blob/main/LICENSE
+
+
+
+//not actually using this file but keeping it around in case i need it
 public class BetterBrewingRecipe implements IBrewingRecipe {
     private final Potion input;
     private final Item ingredient;
