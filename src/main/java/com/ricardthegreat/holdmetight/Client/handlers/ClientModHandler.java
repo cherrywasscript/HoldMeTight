@@ -1,13 +1,21 @@
 package com.ricardthegreat.holdmetight.Client.handlers;
 
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.EntityRenderers;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.layers.ElytraLayer;
+import net.minecraft.world.entity.player.Player;
+
+import java.util.Set;
+
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.Client.Keybindings;
 import com.ricardthegreat.holdmetight.Client.models.ModModelLayers;
 import com.ricardthegreat.holdmetight.Client.models.RayGunProjectileModel;
 import com.ricardthegreat.holdmetight.Client.renderers.RayGunProjectileRenderer;
 import com.ricardthegreat.holdmetight.Client.renderers.WandProjectileRenderer;
+import com.ricardthegreat.holdmetight.Client.renderers.layers.PaperWingsLayer;
 import com.ricardthegreat.holdmetight.init.EntityInit;
 
 import net.minecraftforge.api.distmarker.Dist;
@@ -27,6 +35,20 @@ public class ClientModHandler {
     @SubscribeEvent
     public static void RegisterLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(ModModelLayers.RAY_LAYER, RayGunProjectileModel::createBodyLayer);
+    }
+
+    @SubscribeEvent
+    public static void onRegisterModelLayers(EntityRenderersEvent.AddLayers event) {
+        Set<String> skins = event.getSkins();
+        for (String skin : skins) {
+            try {
+                LivingEntityRenderer<Player, EntityModel<Player>> renderer = event.getSkin(skin);
+                if (renderer != null) {
+                    renderer.addLayer(new PaperWingsLayer<>(renderer, event.getEntityModels()));
+                }
+            } catch (Exception e) {
+            }
+        }
     }
     
     @SubscribeEvent

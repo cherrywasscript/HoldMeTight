@@ -1,6 +1,8 @@
 {
     "item.holdmetight.size_remote":"Size Remote",
 
+    "item.holdmetight.paper_wings_item":"Paper Wings",
+
     "gui.holdmetight.size_remote":"Test Screen",
     "gui.holdmetight.size_remote.button.mult_button":"Multiply",
     "gui.holdmetight.size_remote.button.set_button":"Set",

@@ -3,6 +3,7 @@ package com.ricardthegreat.holdmetight.Client;
 
 
 import com.ricardthegreat.holdmetight.Client.screens.AdvancedSizeRemoteScreen;
+import com.ricardthegreat.holdmetight.Client.screens.CarryPositionScreen;
 import com.ricardthegreat.holdmetight.Client.screens.SizeRayScreen;
 
 import net.minecraft.client.Minecraft;
@@ -16,6 +17,10 @@ public class ClientHooks {
 
     public static void openSizeRayScreen(Player player, InteractionHand hand){
         Minecraft.getInstance().setScreen(new SizeRayScreen(player, hand));
+    }
+
+    public static void openCarryPositionScreen(Player player){
+        Minecraft.getInstance().setScreen(new CarryPositionScreen(player));
     }
     
 }

@@ -40,11 +40,10 @@ public class AdvancedSizeRemoteScreen extends Screen {
     private static final Component RESET_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.reset_button");
 
     private static final Component CUSTOM_SCALE_FIELD = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.custom_scale_field");
-
     private static final Component CUSTOM_SCALE_FIELD_TOOLTIP = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.custom_scale_field_tooltip");
 
 
-    private static final ResourceLocation TEXTURE = new ResourceLocation(HoldMeTight.MODID, "textures/gui/size_remote_bg.png");
+    private static final ResourceLocation BACKGROUND = new ResourceLocation(HoldMeTight.MODID, "textures/gui/size_remote_bg.png");
 
     private static final float DEFAULT_SCALE = 1.0f;
 
@@ -147,7 +146,7 @@ public class AdvancedSizeRemoteScreen extends Screen {
     @Override
     public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         renderBackground(graphics);
-        graphics.blit(TEXTURE, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+        graphics.blit(BACKGROUND, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         super.render(graphics, mouseX, mouseY, partialTicks);
 
         graphics.drawString(this.font,"Target:", this.leftPos + 28, topPos +10,0xdddddd,false);
@@ -283,5 +282,10 @@ public class AdvancedSizeRemoteScreen extends Screen {
         //SizeUtils.setTargetSize(selectedPlayer, item.getScaleFactor());
 
         PacketHandler.sendToServer(new SEntitySetTargetScalePacket(tag.getFloat(AdvancedSizeRemote.SCALE_TAG), selectedPlayer.getUUID()));
+    }
+
+    @Override
+    public boolean isPauseScreen() {
+        return false;
     }
 }

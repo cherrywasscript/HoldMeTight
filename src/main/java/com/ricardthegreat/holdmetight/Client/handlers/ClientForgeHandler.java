@@ -3,6 +3,7 @@ package com.ricardthegreat.holdmetight.Client.handlers;
 import com.mojang.brigadier.CommandDispatcher;
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.Client.Keybindings;
+import com.ricardthegreat.holdmetight.Commands.ChatScaleCommand;
 import com.ricardthegreat.holdmetight.Commands.TestCommand;
 import com.ricardthegreat.holdmetight.utils.PlayerCarryExtension;
 
@@ -24,6 +25,7 @@ public class ClientForgeHandler {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
 
         TestCommand.register(dispatcher);
+        ChatScaleCommand.register(dispatcher);
     } 
 
     @SubscribeEvent

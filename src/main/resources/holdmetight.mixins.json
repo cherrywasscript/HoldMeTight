@@ -18,7 +18,9 @@
       "collisions.TorchBlockMixin",
       "collisions.LeverBlockMixin",
       "VibrationSystemListenerMixin",
-      "BasePressurePlateBlockMixin"
+      "BasePressurePlateBlockMixin",
+      "customchatsizes.ServerPlayerMixin",
+      "customchatsizes.ChatListenerMixin"
     ],
     "client": [
     ],

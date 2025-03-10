@@ -204,4 +204,9 @@ public class SizeRayScreen extends Screen {
         PacketHandler.sendToServer(new SSizeRaySync(tag));
         super.onClose();
     }
+
+    @Override
+    public boolean isPauseScreen() {
+        return false;
+    }
 }

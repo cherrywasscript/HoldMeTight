@@ -1,0 +1,25 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "misc",
+    "pattern": [
+      " S ",
+      "PBP",
+      "   "
+    ],
+    "key": {
+      "S": {
+        "item": "minecraft:string"
+      },
+      "P": {
+        "item": "minecraft:paper"
+      },
+      "B": {
+        "item": "minecraft:slime_ball"
+      }
+    },
+    "result": {
+      "item": "holdmetight:paper_wings_item",
+      "count": 1
+    },
+    "show_notification": true
+  }

@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:item/handheld",
+    "textures": {
+        "layer0": "holdmetight:item/carry_positioner_item"
+    }
+}

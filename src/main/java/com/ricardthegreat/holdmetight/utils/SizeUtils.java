@@ -1,5 +1,7 @@
 package com.ricardthegreat.holdmetight.utils;
 
+import com.ricardthegreat.holdmetight.Config;
+
 import net.minecraft.world.entity.Entity;
 
 import virtuoel.pehkui.api.ScaleData;
@@ -13,8 +15,9 @@ public class SizeUtils {
     private static ScaleType hitbox_height = ScaleTypes.HITBOX_HEIGHT;
     private static ScaleType hitbox_width = ScaleTypes.HITBOX_WIDTH;
 
-    private static Float maxScale = 8.0f;
+    private static float maxScale = (float) Config.maxHitboxScale;
 
+    
     
     public static void setSizeInstant(Entity entity, Float size) {
         checkMaxHitbox(entity, size, 0);

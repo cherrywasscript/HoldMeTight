@@ -8,8 +8,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.ricardthegreat.holdmetight.utils.PlayerCarryExtension;
 
+import net.minecraft.client.model.AnimationUtils;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.resources.metadata.animation.AnimationFrame;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
@@ -29,7 +31,9 @@ public abstract class HumanoidModelMixin<T extends LivingEntity>{
         if(ent instanceof Player){
             PlayerCarryExtension pl = (PlayerCarryExtension) ent;
             if(pl.getIsCarrying() && !pl.getShoulderCarry() && !pl.getCustomCarry()){
-                rightArm.xRot = rightArm.xRot-1.4f;
+                //rightArm.xRot = rightArm.xRot-1.4f;
+                //System.out.println(rightArm.xRot);
+                rightArm.xRot = -1.4f;
             } 
         }
     }
