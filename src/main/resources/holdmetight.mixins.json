@@ -12,13 +12,19 @@
       "MultiPlayerGameModeMixin",
       "LivingEntityMixin",
       "WebBlockMixin",
+      "VibrationSystemListenerMixin",
+      "BasePressurePlateBlockMixin",
+
+
       "collisions.CrossCollisionBlockMixin",
       "collisions.FenceGateBlockMixin",
       "collisions.LeavesBlockMixin",
       "collisions.TorchBlockMixin",
       "collisions.LeverBlockMixin",
-      "VibrationSystemListenerMixin",
-      "BasePressurePlateBlockMixin",
+      "collisions.SignBlockMixin",
+      "collisions.WallHangingSignBlockMixin",
+
+      
       "customchatsizes.ServerPlayerMixin",
       "customchatsizes.ChatListenerMixin"
     ],
