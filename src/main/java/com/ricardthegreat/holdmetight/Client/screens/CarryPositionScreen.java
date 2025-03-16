@@ -11,7 +11,8 @@ import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.items.AdvancedSizeRemote;
+import com.ricardthegreat.holdmetight.items.remotes.setmult.CustomSizeRemote;
+import com.ricardthegreat.holdmetight.utils.PlayerCarryExtension;
 import com.ricardthegreat.holdmetight.utils.PlayerRenderExtension;
 
 import net.minecraft.client.gui.GuiGraphics;
@@ -55,6 +56,7 @@ public class CarryPositionScreen extends Screen{
     private int centerVerticalPos;
 
     private Player user;
+    private PlayerCarryExtension userCarryExt;
 
     private int rotation = 0;
 
@@ -67,6 +69,7 @@ public class CarryPositionScreen extends Screen{
         this.imageWidth = 256;
         this.imageHeight = 256;
         this.user = user;
+        userCarryExt = (PlayerCarryExtension) user;
     }
 
     @Override
@@ -126,8 +129,11 @@ public class CarryPositionScreen extends Screen{
 
     }
     
-    private void handleRotButton(Button button) {
-        rotation += 90;
+    private void handleRotButton(Button button) {  
+        String rot = customInputField.getValue();
+        if (rot != null && !rot.isEmpty()){
+            rotation = Integer.parseInt(rot)%360;
+        }
     }
 
 
@@ -191,7 +197,7 @@ public class CarryPositionScreen extends Screen{
 
                 //try to parse the string as a float, allow it if it succeeds dont if it doesnt
                 try{
-                    Float.parseFloat(t);
+                    Integer.parseInt(t);
                     return true;
                 }catch (Exception e){ 
                     return false;
@@ -206,8 +212,8 @@ public class CarryPositionScreen extends Screen{
 
 
 
-        //need to grab existing position from user
-        customInputField.setValue("unset");
+        //grab existing rotation from user
+        customInputField.setValue(Integer.toString(userCarryExt.getCustomRotOffset()));
         
         Tooltip t = Tooltip.create(CUSTOM_INPUT_FIELD_TOOLTIP, CUSTOM_INPUT_FIELD_TOOLTIP);
         customInputField.setTooltip(t);

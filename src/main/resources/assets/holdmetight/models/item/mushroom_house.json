@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "holdmetight:block/mushroom_house",
   "textures": {
       "layer0": "holdmetight:block/mushroom_house"
   }

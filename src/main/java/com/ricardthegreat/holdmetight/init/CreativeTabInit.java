@@ -32,7 +32,7 @@ public class CreativeTabInit {
             () -> CreativeModeTab.builder()
                     .withTabsBefore(CreativeModeTabs.COMBAT)
                     .title(Component.translatable("itemGroup.size_tab"))
-                    .icon(ItemInit.ADVANCED_SIZE_REMOTE.get()::getDefaultInstance)
+                    .icon(ItemInit.CUSTOM_SIZE_REMOTE.get()::getDefaultInstance)
                     .displayItems((parameters, output) -> TAB_ITEMS
                             .forEach(itemLike -> output.accept(itemLike.get())))
                     .build());

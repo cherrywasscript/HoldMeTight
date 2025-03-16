@@ -1,4 +1,4 @@
-package com.ricardthegreat.holdmetight.Client.screens;
+package com.ricardthegreat.holdmetight.Client.screens.remotes.setmult;
 
 
 
@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.items.AdvancedSizeRemote;
+import com.ricardthegreat.holdmetight.items.remotes.setmult.CustomSizeRemote;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.SEntityMultTargetScalePacket;
 import com.ricardthegreat.holdmetight.network.SEntitySetTargetScalePacket;
@@ -29,7 +29,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 // this file honestly does far more than it probably should but yeah
-public class AdvancedSizeRemoteScreen extends Screen {
+public class CustomSizeRemoteScreen extends Screen {
 
     private static final Component TITLE = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote");
 
@@ -74,7 +74,7 @@ public class AdvancedSizeRemoteScreen extends Screen {
 
     private EditBox customScaleField;
 
-    public AdvancedSizeRemoteScreen(Player user, InteractionHand hand){
+    public CustomSizeRemoteScreen(Player user, InteractionHand hand){
         super(TITLE);
         this.imageWidth = 176;
         this.imageHeight = 256;
@@ -105,10 +105,10 @@ public class AdvancedSizeRemoteScreen extends Screen {
         Level level = this.minecraft.level;
         if(level == null) return;
 
-        selectedPlayer = level.getPlayerByUUID(tag.getUUID(AdvancedSizeRemote.UUID_TAG));
+        selectedPlayer = level.getPlayerByUUID(tag.getUUID(CustomSizeRemote.UUID_TAG));
         if(selectedPlayer == null){
             selectedPlayer = user;
-            tag.putUUID(AdvancedSizeRemote.UUID_TAG, selectedPlayer.getUUID());
+            tag.putUUID(CustomSizeRemote.UUID_TAG, selectedPlayer.getUUID());
             stack.setTag(tag);
         }
         
@@ -178,7 +178,7 @@ public class AdvancedSizeRemoteScreen extends Screen {
             String scaleString = customScaleField.getValue();
             if (scaleString != null && !scaleString.isEmpty()){
                 Float scale = Float.parseFloat(scaleString);  
-                tag.putFloat(AdvancedSizeRemote.SCALE_TAG, scale);
+                tag.putFloat(CustomSizeRemote.SCALE_TAG, scale);
                 stack.setTag(tag);
                 //item.setScaleFactor(scale);
             }
@@ -229,7 +229,7 @@ public class AdvancedSizeRemoteScreen extends Screen {
 
 
 
-        Float mul = tag.getFloat(AdvancedSizeRemote.SCALE_TAG);
+        Float mul = tag.getFloat(CustomSizeRemote.SCALE_TAG);
 
         String floatString = Float.toString(mul);
         //String floatStringNoEndingF = floatString.substring(0, floatString.length()-1);
@@ -256,7 +256,7 @@ public class AdvancedSizeRemoteScreen extends Screen {
 
         if (scaleString != null && !scaleString.isEmpty()){
             Float scale = Float.parseFloat(scaleString);  
-            tag.putFloat(AdvancedSizeRemote.SCALE_TAG, scale);
+            tag.putFloat(CustomSizeRemote.SCALE_TAG, scale);
             stack.setTag(tag);
             //item.setScaleFactor(scale);
         }
@@ -264,7 +264,7 @@ public class AdvancedSizeRemoteScreen extends Screen {
         //SizeUtils.multTargetSize(selectedPlayer, item.getScaleFactor());
 
         //send the multiplier and playeruuid to the server packet handler
-        PacketHandler.sendToServer(new SEntityMultTargetScalePacket(tag.getFloat(AdvancedSizeRemote.SCALE_TAG), selectedPlayer.getUUID(), 1));
+        PacketHandler.sendToServer(new SEntityMultTargetScalePacket(tag.getFloat(CustomSizeRemote.SCALE_TAG), selectedPlayer.getUUID(), 1));
 
     }
     
@@ -274,14 +274,14 @@ public class AdvancedSizeRemoteScreen extends Screen {
 
         if (scaleString != null && !scaleString.isEmpty()){
             Float scale = Float.parseFloat(scaleString);  
-            tag.putFloat(AdvancedSizeRemote.SCALE_TAG, scale);
+            tag.putFloat(CustomSizeRemote.SCALE_TAG, scale);
             stack.setTag(tag);
             //item.setScaleFactor(scale);
         }
 
         //SizeUtils.setTargetSize(selectedPlayer, item.getScaleFactor());
 
-        PacketHandler.sendToServer(new SEntitySetTargetScalePacket(tag.getFloat(AdvancedSizeRemote.SCALE_TAG), selectedPlayer.getUUID()));
+        PacketHandler.sendToServer(new SEntitySetTargetScalePacket(tag.getFloat(CustomSizeRemote.SCALE_TAG), selectedPlayer.getUUID()));
     }
 
     @Override

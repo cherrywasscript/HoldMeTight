@@ -21,6 +21,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
 
+
 @Mixin(Entity.class)
 public abstract class EntityMixin {
 
@@ -217,4 +218,7 @@ public abstract class EntityMixin {
         yOffset *= SizeUtils.getSize(vehicle);
     }
 
+    @Inject(at = @At("HEAD"), method = "tick()V")
+    public void tick(CallbackInfo info) {
+    }
 }

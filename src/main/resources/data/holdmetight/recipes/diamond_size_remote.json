@@ -2,26 +2,23 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    "IQI",
-    "IDI",
-    "IRI"
+    "IGI",
+    "IRI",
+    "III"
   ],
   "key": {
-    "D": {
-      "item": "minecraft:diamond"
-    },
     "I": {
-      "item": "minecraft:iron_ingot"
+      "item": "minecraft:diamond"
     },
     "R": {
       "item": "minecraft:redstone"
     },
-    "Q": {
-      "item": "minecraft:quartz"
+    "G": {
+      "item": "minecraft:glass"
     }
   },
   "result": {
-    "item": "holdmetight:size_remote",
+    "item": "holdmetight:gold_size_remote",
     "count": 1
   },
   "show_notification": true
