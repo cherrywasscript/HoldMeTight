@@ -1,7 +1,16 @@
 {
     "item.holdmetight.gold_size_remote":"Size Remote",
 
+
+    
+    "tooltip.holdmetight.abstract_size_remote_target.tooltip":"Current target: ",
+    "tooltip.holdmetight.abstract_size_remote_no_target.tooltip":"No target selected",
+
+
+
     "item.holdmetight.paper_wings_item":"Paper Wings",
+
+
 
     "gui.holdmetight.size_remote":"Test Screen",
     "gui.holdmetight.size_remote.button.mult_button":"Multiply",
@@ -10,9 +19,9 @@
     "gui.holdmetight.size_remote.field.custom_scale_field_tooltip":"Input a scale multiplier",
 
 
+
     "gui.holdmetight.size_ray.button.set_or_mult_button":"Set/Multiply",
     "gui.holdmetight.size_ray.button.set_or_mult_button_tooltip":"Switch between multiply or set mode",
-
 
 
 

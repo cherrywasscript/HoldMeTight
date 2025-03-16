@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:item/handheld",
+    "textures": {
+        "layer0": "holdmetight:item/remotes/gold_size_remote"
+    }
+}

@@ -8,9 +8,9 @@ import com.ricardthegreat.holdmetight.items.PaperWingsItem;
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.items.SizeRay;
 import com.ricardthegreat.holdmetight.items.SizeWand;
-import com.ricardthegreat.holdmetight.items.remotes.setmult.CustomSizeRemote;
-import com.ricardthegreat.holdmetight.items.remotes.setmult.OtherCustomSizeRemote;
-import com.ricardthegreat.holdmetight.items.remotes.setmult.UserCustomSizeRemote;
+import com.ricardthegreat.holdmetight.items.remotes.setmult.CustomSizeRemoteItem;
+import com.ricardthegreat.holdmetight.items.remotes.setmult.OtherCustomSizeRemoteItem;
+import com.ricardthegreat.holdmetight.items.remotes.setmult.UserCustomSizeRemoteItem;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -38,13 +38,13 @@ public class ItemInit {
         
 
         public static final RegistryObject<Item> CUSTOM_SIZE_REMOTE = addToTab(
-                ITEMS.register("gold_size_remote", () -> new CustomSizeRemote(new Item.Properties().stacksTo(1))));
+                ITEMS.register("remotes/gold_size_remote", () -> new CustomSizeRemoteItem(new Item.Properties().stacksTo(1))));
 
         public static final RegistryObject<Item> OTHER_CUSTOM_SIZE_REMOTE = addToTab(
-                ITEMS.register("iron_size_remote", () -> new OtherCustomSizeRemote(new Item.Properties().stacksTo(1))));
+                ITEMS.register("remotes/iron_size_remote", () -> new OtherCustomSizeRemoteItem(new Item.Properties().stacksTo(1))));
 
         public static final RegistryObject<Item> USER_CUSTOM_SIZE_REMOTE = addToTab(
-                ITEMS.register("copper_size_remote", () -> new UserCustomSizeRemote(new Item.Properties().stacksTo(1))));
+                ITEMS.register("remotes/copper_size_remote", () -> new UserCustomSizeRemoteItem(new Item.Properties().stacksTo(1))));
 
 
                 

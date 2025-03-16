@@ -11,7 +11,7 @@ import org.joml.Vector3f;
 import org.joml.Vector3fc;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.items.remotes.setmult.CustomSizeRemote;
+import com.ricardthegreat.holdmetight.items.remotes.setmult.CustomSizeRemoteItem;
 import com.ricardthegreat.holdmetight.utils.PlayerCarryExtension;
 import com.ricardthegreat.holdmetight.utils.PlayerRenderExtension;
 

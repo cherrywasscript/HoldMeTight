@@ -2,12 +2,14 @@ package com.ricardthegreat.holdmetight.Client.screens.remotes.setmult;
 
 
 
+import java.util.UUID;
 import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.items.remotes.setmult.CustomSizeRemote;
+import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
+import com.ricardthegreat.holdmetight.items.remotes.setmult.OtherCustomSizeRemoteItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.SEntityMultTargetScalePacket;
 import com.ricardthegreat.holdmetight.network.SEntitySetTargetScalePacket;
@@ -29,6 +31,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 // this file honestly does far more than it probably should but yeah
+// works for the 3 remotes in the "setmult" category, honestly the only reason it does is because i was too lazy to make 2 more files like this
 public class CustomSizeRemoteScreen extends Screen {
 
     private static final Component TITLE = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote");
@@ -90,8 +93,6 @@ public class CustomSizeRemoteScreen extends Screen {
     protected void init() {
         super.init();
 
-        //System.out.println("SizeItemScreen line 124: " + SizeUtils.getHitboxScaleData(selectedPlayer).getScale());
-
         this.leftPos = (this.width - this.imageWidth) / 2;
         this.rightPos = (this.width - this.leftPos) ;
         this.topPos = (this.height - this.imageHeight) / 2;
@@ -104,13 +105,19 @@ public class CustomSizeRemoteScreen extends Screen {
         @SuppressWarnings("null")
         Level level = this.minecraft.level;
         if(level == null) return;
-
-        selectedPlayer = level.getPlayerByUUID(tag.getUUID(CustomSizeRemote.UUID_TAG));
-        if(selectedPlayer == null){
-            selectedPlayer = user;
-            tag.putUUID(CustomSizeRemote.UUID_TAG, selectedPlayer.getUUID());
-            stack.setTag(tag);
+        
+        if (tag.contains(OtherCustomSizeRemoteItem.TARGET_TAG) && !tag.getBoolean(OtherCustomSizeRemoteItem.TARGET_TAG)) {
+            selectedPlayer = null;
+        }else {
+            selectedPlayer = level.getPlayerByUUID(tag.getUUID(AbstractSizeRemoteItem.UUID_TAG));
+            if(selectedPlayer == null){
+                selectedPlayer = user;
+                tag.putUUID(AbstractSizeRemoteItem.UUID_TAG, selectedPlayer.getUUID());
+                stack.setTag(tag);
+            }
         }
+
+        
         
 
 
@@ -130,8 +137,6 @@ public class CustomSizeRemoteScreen extends Screen {
                 .build()
         );
 
-        
-
         this.resetButton = addRenderableWidget(
             Button.builder(
                 RESET_BUTTON, this::handleResetButton)
@@ -139,6 +144,12 @@ public class CustomSizeRemoteScreen extends Screen {
                 .tooltip(Tooltip.create(RESET_BUTTON))
                 .build()
         );
+
+        if (selectedPlayer == null) {
+            multButton.active = false;
+            setButton.active = false;
+            resetButton.active = false;
+        }
         
         initCustomScaleField();
     }
@@ -150,26 +161,28 @@ public class CustomSizeRemoteScreen extends Screen {
         super.render(graphics, mouseX, mouseY, partialTicks);
 
         graphics.drawString(this.font,"Target:", this.leftPos + 28, topPos +10,0xdddddd,false);
-
         graphics.drawString(this.font,"Current Scale:", centerHorizonalPos + 5, topPos +10,0xdddddd,false);
         
-        
-        graphics.drawCenteredString(font, Float.toString(SizeUtils.getSize(selectedPlayer)), (rightPos + centerHorizonalPos)/2, topPos +19, 0xdddddd);
-        graphics.drawCenteredString(font, selectedPlayer.getName().getString(), (leftPos + centerHorizonalPos)/2, topPos +19, 0xdddddd);
+        if (selectedPlayer != null) {
+            if (inRange()) {
+                graphics.drawCenteredString(font, Float.toString(SizeUtils.getSize(selectedPlayer)), (rightPos + centerHorizonalPos)/2, topPos +19, 0xdddddd);
+                graphics.drawCenteredString(font, selectedPlayer.getName().getString(), (leftPos + centerHorizonalPos)/2, topPos +19, 0xdddddd);
+            }else{
+                graphics.drawCenteredString(font, "N/A", (rightPos + centerHorizonalPos)/2, topPos +19, 0xffff00);
+                graphics.drawCenteredString(font, "Out of range", (leftPos + centerHorizonalPos)/2, topPos +19, 0xffff00);
+            }
 
-        //graphics.fill(leftPos + 8, topPos + 8, rightPos-8, bottomPos-120, 0xFF373737);
-        //graphics.fill(leftPos + 9, topPos + 9, rightPos-9, bottomPos-121, 0xFF000000);
-        //graphics.hLine(leftPos + 8, rightPos-9, topPos + 8, 0xFFFF0000);
+            PlayerRenderExtension rend = (PlayerRenderExtension) selectedPlayer;
 
-        PlayerRenderExtension rend = (PlayerRenderExtension) selectedPlayer;
-
-        if(rend != null){
-            rend.setMenu(true);
-            InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, centerHorizonalPos, centerVerticalPos, 30, (float)centerHorizonalPos - mouseX, (float)(centerVerticalPos - 80) -mouseY, (Player) rend);
-            rend.setMenu(false);
+            if(rend != null){
+                rend.setMenu(true);
+                InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, centerHorizonalPos, centerVerticalPos, 30, (float)centerHorizonalPos - mouseX, (float)(centerVerticalPos - 80) -mouseY, (Player) rend);
+                rend.setMenu(false);
+            }
+        }else{
+            graphics.drawCenteredString(font, "N/A", (rightPos + centerHorizonalPos)/2, topPos +19, 0xff0000);
+            graphics.drawCenteredString(font, "No Target", (leftPos + centerHorizonalPos)/2, topPos +19, 0xff0000);
         }
-
-        
     }
 
     @Override
@@ -178,7 +191,7 @@ public class CustomSizeRemoteScreen extends Screen {
             String scaleString = customScaleField.getValue();
             if (scaleString != null && !scaleString.isEmpty()){
                 Float scale = Float.parseFloat(scaleString);  
-                tag.putFloat(CustomSizeRemote.SCALE_TAG, scale);
+                tag.putFloat(AbstractSizeRemoteItem.SCALE_TAG, scale);
                 stack.setTag(tag);
                 //item.setScaleFactor(scale);
             }
@@ -224,15 +237,9 @@ public class CustomSizeRemoteScreen extends Screen {
 
         customScaleField.setFilter(filter);
 
-        // get mult from tag, kept in comment
-        //Tag tagMul = tag.get("multiplier");
-
-
-
-        Float mul = tag.getFloat(CustomSizeRemote.SCALE_TAG);
+        Float mul = tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG);
 
         String floatString = Float.toString(mul);
-        //String floatStringNoEndingF = floatString.substring(0, floatString.length()-1);
 
         customScaleField.setValue(floatString);
         
@@ -242,30 +249,34 @@ public class CustomSizeRemoteScreen extends Screen {
     }
 
     // what to do when the reset button is clicked
-    private void handleResetButton(Button button) { 
-        //SizeUtils.setTargetSize(selectedPlayer, DEFAULT_SCALE);
-
-        //send the multiplier and playeruuid to the server packet handler
-        PacketHandler.sendToServer(new SEntitySetTargetScalePacket(DEFAULT_SCALE, selectedPlayer.getUUID()));
+    private void handleResetButton(Button button) {
+        //this check shouldnt be needed but just in case 
+        if (selectedPlayer != null) {
+            if (inRange()) {
+                //send the multiplier and playeruuid to the server packet handler
+                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(DEFAULT_SCALE, selectedPlayer.getUUID()));
+            }
+        }
     }
 
-    // wthat to do when the scale button is clicked
+    // wthat to do when the mult button is clicked
     private void handleMultButton(Button button) {
 
         String scaleString = customScaleField.getValue();
 
         if (scaleString != null && !scaleString.isEmpty()){
             Float scale = Float.parseFloat(scaleString);  
-            tag.putFloat(CustomSizeRemote.SCALE_TAG, scale);
+            tag.putFloat(AbstractSizeRemoteItem.SCALE_TAG, scale);
             stack.setTag(tag);
-            //item.setScaleFactor(scale);
         }
 
-        //SizeUtils.multTargetSize(selectedPlayer, item.getScaleFactor());
-
-        //send the multiplier and playeruuid to the server packet handler
-        PacketHandler.sendToServer(new SEntityMultTargetScalePacket(tag.getFloat(CustomSizeRemote.SCALE_TAG), selectedPlayer.getUUID(), 1));
-
+        //this check shouldnt be needed but just in case
+        if (selectedPlayer != null) {
+            if (inRange()) {
+                //send the multiplier and playeruuid to the server packet handler
+                PacketHandler.sendToServer(new SEntityMultTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedPlayer.getUUID(), 1));
+            }
+        }
     }
     
     private void handleSetButton(Button button) {
@@ -274,18 +285,28 @@ public class CustomSizeRemoteScreen extends Screen {
 
         if (scaleString != null && !scaleString.isEmpty()){
             Float scale = Float.parseFloat(scaleString);  
-            tag.putFloat(CustomSizeRemote.SCALE_TAG, scale);
+            tag.putFloat(AbstractSizeRemoteItem.SCALE_TAG, scale);
             stack.setTag(tag);
-            //item.setScaleFactor(scale);
         }
-
-        //SizeUtils.setTargetSize(selectedPlayer, item.getScaleFactor());
-
-        PacketHandler.sendToServer(new SEntitySetTargetScalePacket(tag.getFloat(CustomSizeRemote.SCALE_TAG), selectedPlayer.getUUID()));
+        
+        //this check shouldnt be needed but just in case
+        if (selectedPlayer != null) {
+            if (inRange()) {
+                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedPlayer.getUUID()));
+            }
+        }
     }
 
     @Override
     public boolean isPauseScreen() {
+        return false;
+    }
+
+    private boolean inRange(){
+        double distance =  user.position().distanceTo(selectedPlayer.position());
+        if (distance <= 100) {
+            return true;
+        }
         return false;
     }
 }
