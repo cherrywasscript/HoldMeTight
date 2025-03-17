@@ -22,17 +22,17 @@ public abstract class HumanoidModelMixin<T extends LivingEntity>{
     @Shadow
     HumanoidModel.ArmPose rightArmPose;
 
+    //sets arm position while carrying an entity so it looks natural
     @Inject(at = @At("RETURN"), method = "poseRightArm(Lnet/minecraft/world/entity/LivingEntity;)V")
     //@Overwrite
     private void poseRightArm(T ent, CallbackInfo info){
         if(ent instanceof Player){
             PlayerCarryExtension pl = (PlayerCarryExtension) ent;
             if(pl.getIsCarrying() && !pl.getShoulderCarry() && !pl.getCustomCarry()){
-                rightArm.xRot = rightArm.xRot-1.4f;
+                //rightArm.xRot = rightArm.xRot-1.4f;
+                //System.out.println(rightArm.xRot);
+                rightArm.xRot = -1.4f;
             } 
         }
     }
-
-    
-    
 }

@@ -11,7 +11,23 @@
       "HumanoidModelMixin",
       "MultiPlayerGameModeMixin",
       "LivingEntityMixin",
-      "WebBlockMixin"
+      "WebBlockMixin",
+      "VibrationSystemListenerMixin",
+      "BasePressurePlateBlockMixin",
+
+
+      "collisions.CrossCollisionBlockMixin",
+      "collisions.FenceGateBlockMixin",
+      "collisions.LeavesBlockMixin",
+      "collisions.TorchBlockMixin",
+      "collisions.LeverBlockMixin",
+      "collisions.SignBlockMixin",
+      "collisions.WallHangingSignBlockMixin",
+      "collisions.ButtonBlockMixin",
+
+      
+      "customchatsizes.ServerPlayerMixin",
+      "customchatsizes.ChatListenerMixin"
     ],
     "client": [
     ],

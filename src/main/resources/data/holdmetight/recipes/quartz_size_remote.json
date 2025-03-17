@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IGI",
+    "IRI",
+    "III"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:quartz"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "G": {
+      "item": "minecraft:glass"
+    }
+  },
+  "result": {
+    "item": "holdmetight:gold_size_remote",
+    "count": 1
+  },
+  "show_notification": true
+}

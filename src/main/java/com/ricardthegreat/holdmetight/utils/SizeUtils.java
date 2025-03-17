@@ -1,5 +1,7 @@
 package com.ricardthegreat.holdmetight.utils;
 
+import com.ricardthegreat.holdmetight.Config;
+
 import net.minecraft.world.entity.Entity;
 
 import virtuoel.pehkui.api.ScaleData;
@@ -13,11 +15,14 @@ public class SizeUtils {
     private static ScaleType hitbox_height = ScaleTypes.HITBOX_HEIGHT;
     private static ScaleType hitbox_width = ScaleTypes.HITBOX_WIDTH;
 
-    private static Float maxScale = 8.0f;
+    private static float maxScale = (float) Config.maxHitboxScale;
 
     
-    public static void setSizeInstant() {
-        
+    
+    public static void setSizeInstant(Entity entity, Float size) {
+        checkMaxHitbox(entity, size, 0);
+        ScaleData data = getScaleData(entity);
+        data.setScale(size);
     }
 
     public static void multSizeInstant() {
@@ -25,6 +30,7 @@ public class SizeUtils {
     }
 
     //i should probably grab the actual default from pekhui as if it changes from 20 this wont however a second is a good default i feel
+    //also i should spend some time to encorporate these like 6 similar methods into 1 or 2 methods it should be possible and will make for nicer code
     public static void setSizeOverTimeDefault(Entity entity, Float size) {
         checkMaxHitbox(entity, size, 20);
         ScaleData data = getScaleData(entity);
@@ -50,7 +56,6 @@ public class SizeUtils {
     }
 
 
-
     public static float getSize(Entity entity) {
         return getScaleData(entity).getScale();
     }
@@ -65,20 +70,50 @@ public class SizeUtils {
 
         PehkuiEntityExtensions pEnt = (PehkuiEntityExtensions) entity;
 
+        //im adding this here as a temp thing i need to move it to a proper place later
+        fixStepHeight(pEnt, size, ticks);
+
+
         ScaleData heightData = pEnt.pehkui_getScaleData(hitbox_height);
         ScaleData widthData = pEnt.pehkui_getScaleData(hitbox_width);
 
-        heightData.setScaleTickDelay(ticks);
-        widthData.setScaleTickDelay(ticks);
+        if (ticks > 0) {
+            heightData.setScaleTickDelay(ticks);
+            widthData.setScaleTickDelay(ticks);
 
-        if (size > maxScale) {
-            heightData.setTargetScale(maxScale/size);
-            widthData.setTargetScale(maxScale/size);
-        }else if (heightData.getTargetScale() < 1.0f || widthData.getTargetScale() < 1.0f){
-            heightData.setTargetScale(1.0f);
-            widthData.setTargetScale(1.0f);
+            if (size > maxScale) {
+                heightData.setTargetScale(maxScale/size);
+                widthData.setTargetScale(maxScale/size);
+            }else if (heightData.getTargetScale() < 1.0f || widthData.getTargetScale() < 1.0f){
+                heightData.setTargetScale(1.0f);
+                widthData.setTargetScale(1.0f);
+            }
+        }else{
+            if (size > maxScale) {
+                heightData.setScale(maxScale/size);
+                widthData.setScale(maxScale/size);
+            }else if (heightData.getTargetScale() < 1.0f || widthData.getTargetScale() < 1.0f){
+                heightData.setScale(1.0f);
+                widthData.setScale(1.0f);
+            }
         }
 
+        
+
         //return data;
+    }
+
+    private static void fixStepHeight(PehkuiEntityExtensions pEnt, float size, int ticks){
+        ScaleData stepData = pEnt.pehkui_getScaleData(ScaleTypes.STEP_HEIGHT);
+
+        //this should make the step height equal to 1 + (height-1)/2
+        float stepHeight = (1+((size-1)/2))/size;
+
+        if (ticks > 0) {
+            stepData.setScaleTickDelay(ticks);
+            stepData.setTargetScale(stepHeight);
+        }else{
+            stepData.setScale(stepHeight);
+        }
     }
 }

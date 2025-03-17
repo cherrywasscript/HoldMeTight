@@ -1,14 +1,11 @@
-package com.ricardthegreat.holdmetight.items;
+package com.ricardthegreat.holdmetight.items.remotes.setmult;
 
 import javax.annotation.Nonnull;
 
 import com.ricardthegreat.holdmetight.Client.ClientHooks;
 import com.ricardthegreat.holdmetight.utils.SizeUtils;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -22,7 +19,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 
 
-public class AdvancedSizeRemote extends Item {
+public class OtherCustomSizeRemote extends Item {
 
     public static final String SCALE_TAG = "multiplier";
 
@@ -30,7 +27,7 @@ public class AdvancedSizeRemote extends Item {
 
     private static final Float DEFAULT_SCALE = 1.0f;
 
-    public AdvancedSizeRemote(Item.Properties properties) {
+    public OtherCustomSizeRemote(Item.Properties properties) {
         super(properties);
     }
 
@@ -112,8 +109,8 @@ public class AdvancedSizeRemote extends Item {
     private CompoundTag setDefaultTags(ItemStack stack, Player player){
         CompoundTag tag = stack.getOrCreateTag();
 
-        tag.putFloat(AdvancedSizeRemote.SCALE_TAG, DEFAULT_SCALE);
-        tag.putUUID(AdvancedSizeRemote.UUID_TAG, player.getUUID());
+        tag.putFloat(CustomSizeRemote.SCALE_TAG, DEFAULT_SCALE);
+        tag.putUUID(CustomSizeRemote.UUID_TAG, player.getUUID());
         stack.setTag(tag);
         
         return tag;

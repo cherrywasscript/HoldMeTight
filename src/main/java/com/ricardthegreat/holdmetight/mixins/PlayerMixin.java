@@ -20,6 +20,14 @@ import net.minecraftforge.fml.DistExecutor;
 @Mixin(Player.class)
 public abstract class PlayerMixin implements PlayerCarryExtension, PlayerRenderExtension{
 
+    /*
+     * xymult,vertoffset, and left right move are named poorly so here is a bad explanation of them
+     * xymult - moves the carried person towards and away from the carriers chest
+     * leftrightmove - moves the carried person to the left or right relative to the way the carriers chest is facing
+     * vertoffset - moves the carried person up and down
+     */
+
+
     //for if they are being rendered in the size remote so that i can disable the nametag
     private boolean isMenuGraphic = false;
 
@@ -51,6 +59,9 @@ public abstract class PlayerMixin implements PlayerCarryExtension, PlayerRenderE
     private double vertOffset = 0;
     private double leftRightMove = 0;
 
+    private float minScale = 0;
+    private float maxScale = 10000;
+    private float defaultScale = 1;
     
     //if this is true it will sync the values that can change next tick and set to false
     private boolean shouldSync = false;
@@ -187,6 +198,12 @@ public abstract class PlayerMixin implements PlayerCarryExtension, PlayerRenderE
         }
     }
 
+    //
+    @Override
+    public int getCustomRotOffset(){
+        return rotationOffset;
+    }
+
     //set custom carry rotation position
     @Override
     public void setRotationOffset(int rotationOffset){
@@ -278,5 +295,34 @@ public abstract class PlayerMixin implements PlayerCarryExtension, PlayerRenderE
     public void setMenu(boolean menu) {
         isMenuGraphic = menu;
     }
-    
+
+    @Override
+    public float getMinScale() {
+        return minScale;
+    }
+
+    @Override
+    public void setMinScale(float minScale) {
+        this.minScale = minScale;
+    }
+
+    @Override
+    public float getMaxScale() {
+        return maxScale;
+    }
+
+    @Override
+    public void setMaxScale(float maxScale) {
+        this.maxScale = maxScale;
+    }
+
+    @Override
+    public float getDefaultScale() {
+        return defaultScale;
+    }
+
+    @Override
+    public void setDefaultScale(float defaultScale) {
+        this.defaultScale = defaultScale;
+    }
 }

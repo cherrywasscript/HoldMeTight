@@ -26,8 +26,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
-import virtuoel.pehkui.mixin.client.CameraMixin;
-
 @Mixin(EntityRenderer.class)
 public abstract class SmallEntityRenderMixin<T extends Entity> {
 	

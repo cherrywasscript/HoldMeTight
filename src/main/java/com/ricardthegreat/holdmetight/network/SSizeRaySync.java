@@ -1,14 +1,10 @@
 package com.ricardthegreat.holdmetight.network;
 
-import java.util.UUID;
 import java.util.function.Supplier;
 
 import com.ricardthegreat.holdmetight.items.SizeRay;
-import com.ricardthegreat.holdmetight.utils.SizeUtils;
-
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkEvent;
