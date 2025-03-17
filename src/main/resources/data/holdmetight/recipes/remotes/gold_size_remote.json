@@ -11,14 +11,14 @@
       "item": "minecraft:gold_ingot"
     },
     "R": {
-      "item": "minecraft:redstone"
+      "item": "holdmetight:remotes/copper_size_remote"
     },
     "G": {
-      "item": "minecraft:glass"
+      "item": "holdmetight:remotes/iron_size_remote"
     }
   },
   "result": {
-    "item": "holdmetight:gold_size_remote",
+    "item": "holdmetight:remotes/gold_size_remote",
     "count": 1
   },
   "show_notification": true

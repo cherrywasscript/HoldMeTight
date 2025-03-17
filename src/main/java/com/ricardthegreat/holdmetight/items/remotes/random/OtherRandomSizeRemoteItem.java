@@ -1,32 +1,27 @@
-package com.ricardthegreat.holdmetight.items.remotes.setmult;
+package com.ricardthegreat.holdmetight.items.remotes.random;
 
 import javax.annotation.Nonnull;
 
 import com.ricardthegreat.holdmetight.Client.ClientHooks;
 import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
-import com.ricardthegreat.holdmetight.utils.SizeUtils;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 
+public class OtherRandomSizeRemoteItem extends AbstractSizeRemoteItem {
 
-public class CustomSizeRemoteItem extends AbstractSizeRemoteItem {
-
-    public CustomSizeRemoteItem(Item.Properties properties) {
+    public OtherRandomSizeRemoteItem(Properties properties) {
         super(properties);
     }
 
-    //suppressing warnings because tag should never be null as if item as no tags i create them before continuing
     @SuppressWarnings("null")
     @Override
     public InteractionResultHolder<ItemStack> use(@Nonnull Level level, @Nonnull Player player, @Nonnull InteractionHand hand) {
@@ -75,5 +70,4 @@ public class CustomSizeRemoteItem extends AbstractSizeRemoteItem {
         }
         return InteractionResult.FAIL;
     }
-
 }

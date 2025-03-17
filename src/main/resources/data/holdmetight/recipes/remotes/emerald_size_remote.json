@@ -11,14 +11,14 @@
       "item": "minecraft:emerald"
     },
     "R": {
-      "item": "minecraft:redstone"
+      "item": "holdmetight:remotes/quartz_size_remote"
     },
     "G": {
-      "item": "minecraft:glass"
+      "item": "holdmetight:remotes/diamond_size_remote"
     }
   },
   "result": {
-    "item": "holdmetight:gold_size_remote",
+    "item": "holdmetight:remotes/emerald_size_remote",
     "count": 1
   },
   "show_notification": true
