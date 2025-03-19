@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:item/handheld",
+    "textures": {
+        "layer0": "holdmetight:item/remotes/amethyst_size_remote"
+    }
+}

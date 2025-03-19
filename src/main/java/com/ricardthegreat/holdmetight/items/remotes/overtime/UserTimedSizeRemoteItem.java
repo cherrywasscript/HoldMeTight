@@ -1,4 +1,4 @@
-package com.ricardthegreat.holdmetight.items.remotes.random;
+package com.ricardthegreat.holdmetight.items.remotes.overtime;
 
 import javax.annotation.Nonnull;
 
@@ -14,9 +14,9 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 
-public class UserRandomSizeRemoteItem extends AbstractSizeRemoteItem {
+public class UserTimedSizeRemoteItem extends AbstractSizeRemoteItem {
 
-    public UserRandomSizeRemoteItem(Properties properties) {
+    public UserTimedSizeRemoteItem(Properties properties) {
         super(properties);
     }
     
@@ -37,7 +37,7 @@ public class UserRandomSizeRemoteItem extends AbstractSizeRemoteItem {
 
         //open item screen client side only
         if (level.isClientSide()) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientHooks.openRandomRemoteScreen(player, hand));
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientHooks.openDurationRemoteScreen(player, hand));
         }
 
         return super.use(level, player, hand);

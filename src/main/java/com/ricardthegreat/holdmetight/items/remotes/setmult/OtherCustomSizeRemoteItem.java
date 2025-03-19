@@ -26,9 +26,6 @@ public class OtherCustomSizeRemoteItem extends AbstractSizeRemoteItem {
 
     public static final String TARGET_TAG = "has target";
 
-    //want to make this translatable at somepoint probably
-    private static final String NO_USERNAME_TARGET = "no target";
-
     public OtherCustomSizeRemoteItem(Item.Properties properties) {
         super(properties);
     }
@@ -50,8 +47,6 @@ public class OtherCustomSizeRemoteItem extends AbstractSizeRemoteItem {
             tag.putUUID(UUID_TAG, player.getUUID());
             tag.putBoolean(TARGET_TAG, false);
             item.setTag(tag);
-            
-            //this.selectedPlayer = null;
             return InteractionResultHolder.success(player.getItemInHand(hand));
         }
 

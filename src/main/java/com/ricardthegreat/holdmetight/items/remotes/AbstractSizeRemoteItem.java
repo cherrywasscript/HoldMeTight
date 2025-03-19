@@ -21,6 +21,9 @@ public abstract class AbstractSizeRemoteItem extends Item{
 
     public static final String SCALE_TAG = "multiplier";
     public static final String UUID_TAG = "target";
+    public static final String MIN_SCALE_TAG = "minscale";
+    public static final String MAX_SCALE_TAG = "maxscale";
+    public static final String NUM_TICKS_TAG = "numticks";
 
     protected static final Float DEFAULT_SCALE = 1.0f;
 
@@ -32,6 +35,10 @@ public abstract class AbstractSizeRemoteItem extends Item{
         CompoundTag tag = stack.getOrCreateTag();
 
         tag.putFloat(SCALE_TAG, DEFAULT_SCALE);
+        tag.putFloat(MIN_SCALE_TAG, 0.5f);
+        tag.putFloat(MAX_SCALE_TAG, 2f);
+        tag.putInt(NUM_TICKS_TAG, 20);
+        
         tag.putUUID(UUID_TAG, player.getUUID());
         stack.setTag(tag);
         

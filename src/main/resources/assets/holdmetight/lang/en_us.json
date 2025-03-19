@@ -3,7 +3,16 @@
     "item.holdmetight.remotes.iron_size_remote":"External Size Remote",
     "item.holdmetight.remotes.copper_size_remote":"Personal Size Remote",
 
-    
+    "item.holdmetight.remotes.amethyst_size_remote":"Randomiser Remote",
+    "item.holdmetight.remotes.glowstone_size_remote":"External Randomiser Remote",
+    "item.holdmetight.remotes.lapis_size_remote":"Personal Randomiser Remote",
+
+    "item.holdmetight.remotes.emerald_size_remote":"Timed Remote",
+    "item.holdmetight.remotes.diamond_size_remote":"External Timed Remote",
+    "item.holdmetight.remotes.quartz_size_remote":"Personal Timed Remote",
+
+    "item.holdmetight.remotes.netherite_size_remote":"Master Remote",
+
     "tooltip.holdmetight.abstract_size_remote_target.tooltip":"Current target: ",
     "tooltip.holdmetight.abstract_size_remote_no_target.tooltip":"No target selected",
 
@@ -17,7 +26,23 @@
     "gui.holdmetight.size_remote.button.mult_button":"Multiply",
     "gui.holdmetight.size_remote.button.set_button":"Set",
     "gui.holdmetight.size_remote.button.reset_button":"Reset",
-    "gui.holdmetight.size_remote.field.custom_scale_field_tooltip":"Input a scale multiplier",
+    "gui.holdmetight.size_remote.field.custom_scale_field":"Custom Scale Field",
+    "gui.holdmetight.size_remote.field.custom_scale_field_tooltip":"Input a scale",
+
+    "gui.holdmetight.size_remote.button.random_button":"Randomise",
+    "gui.holdmetight.size_remote.field.min_scale_field":"Min Scale Field",
+    "gui.holdmetight.size_remote.field.max_scale_field":"Max Scale Field",
+    "gui.holdmetight.size_remote.field.min_scale_field_tooltip":"Input Minimum scale",
+    "gui.holdmetight.size_remote.field.max_scale_field_tooltip":"Input Maximum scale",
+
+    "gui.holdmetight.size_remote.button.mult10_button":"x10",
+    "gui.holdmetight.size_remote.button.divide_button":"/10",
+    "gui.holdmetight.size_remote.field.seconds_field":"Seconds Field",
+    "gui.holdmetight.size_remote.field.minutes_field":"Minutes Field",
+    "gui.holdmetight.size_remote.field.hours_field":"Hours Field",
+    "gui.holdmetight.size_remote.field.seconds_field_tooltip":"Input Duration",
+    "gui.holdmetight.size_remote.field.minutes_field_tooltip":"Input Duration",
+    "gui.holdmetight.size_remote.field.hours_field_tooltip":"Input Duration",
 
 
 

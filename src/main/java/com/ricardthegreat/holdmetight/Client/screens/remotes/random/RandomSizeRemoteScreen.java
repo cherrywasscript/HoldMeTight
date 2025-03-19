@@ -1,7 +1,8 @@
-package com.ricardthegreat.holdmetight.Client.screens.remotes.setmult;
+package com.ricardthegreat.holdmetight.Client.screens.remotes.random;
 
 
 
+import java.util.Random;
 import java.util.UUID;
 import java.util.function.Predicate;
 
@@ -9,6 +10,7 @@ import javax.annotation.Nonnull;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
+import com.ricardthegreat.holdmetight.items.remotes.random.RandomSizeRemoteItem;
 import com.ricardthegreat.holdmetight.items.remotes.setmult.OtherCustomSizeRemoteItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.SEntityMultTargetScalePacket;
@@ -32,18 +34,17 @@ import net.minecraft.world.level.Level;
 
 // this file honestly does far more than it probably should but yeah
 // works for the 3 remotes in the "setmult" category, honestly the only reason it does is because i was too lazy to make 2 more files like this
-public class CustomSizeRemoteScreen extends Screen {
+public class RandomSizeRemoteScreen extends Screen {
 
     private static final Component TITLE = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote");
 
-    private static final Component MULT_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.mult_button");
-
-    private static final Component SET_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.set_button");
-
+    private static final Component RANDOM_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.random_button");
     private static final Component RESET_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.reset_button");
 
-    private static final Component CUSTOM_SCALE_FIELD = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.custom_scale_field");
-    private static final Component CUSTOM_SCALE_FIELD_TOOLTIP = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.custom_scale_field_tooltip");
+    private static final Component MIN_SCALE_FIELD = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.min_scale_field");
+    private static final Component MAX_SCALE_FIELD = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.max_scale_field");
+    private static final Component MIN_SCALE_FIELD_TOOLTIP = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.min_scale_field_tooltip");
+    private static final Component MAX_SCALE_FIELD_TOOLTIP = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.max_scale_field_tooltip");
 
 
 
@@ -57,7 +58,6 @@ public class CustomSizeRemoteScreen extends Screen {
     private static final String NO_TARGET = "No Target";
 
 
-
     private static final ResourceLocation BACKGROUND = new ResourceLocation(HoldMeTight.MODID, "textures/gui/size_remote_bg.png");
 
     private static final float DEFAULT_SCALE = 1.0f;
@@ -67,15 +67,13 @@ public class CustomSizeRemoteScreen extends Screen {
 
     //the item user and the player the item has selected
     private Player user;
-    
     private Player selectedPlayer;
 
     // the held item and its tags to perform stuff with
     private ItemStack stack;
     private CompoundTag tag;
 
-    //private SizeItem item;
-
+    //positions on the gui
     private int leftPos;
     private int rightPos;
     private int topPos;
@@ -83,13 +81,15 @@ public class CustomSizeRemoteScreen extends Screen {
     private int centerHorizonalPos;
     private int centerVerticalPos;
 
-    private Button multButton;
-    private Button setButton;
+    //the buttons used
+    private Button randomButton;
     private Button resetButton;
 
-    private EditBox customScaleField;
+    //the custom fields
+    private EditBox minScaleField;
+    private EditBox maxScaleField;
 
-    public CustomSizeRemoteScreen(Player user, InteractionHand hand){
+    public RandomSizeRemoteScreen(Player user, InteractionHand hand){
         super(TITLE);
         this.imageWidth = 176;
         this.imageHeight = 256;
@@ -133,37 +133,28 @@ public class CustomSizeRemoteScreen extends Screen {
         
 
 
-        this.multButton = addRenderableWidget(
+        this.randomButton = addRenderableWidget(
             Button.builder(
-                MULT_BUTTON, this::handleMultButton)
-                .bounds(this.leftPos + 8, this.bottomPos -111, 76, 20)
-                .tooltip(Tooltip.create(MULT_BUTTON))
-                .build()
-        );
-
-        this.setButton = addRenderableWidget(
-            Button.builder(
-                SET_BUTTON, this::handleSetButton)
-                .bounds(this.leftPos + 91, this.bottomPos -111, 76, 20)
-                .tooltip(Tooltip.create(SET_BUTTON))
+                RANDOM_BUTTON, this::handlerandomButton)
+                .bounds(this.leftPos + 8, this.bottomPos -40, 76, 20)
+                .tooltip(Tooltip.create(RANDOM_BUTTON))
                 .build()
         );
 
         this.resetButton = addRenderableWidget(
             Button.builder(
                 RESET_BUTTON, this::handleResetButton)
-                .bounds(this.centerHorizonalPos - 38, this.bottomPos -40, 76, 20)
+                .bounds(this.leftPos + 91, this.bottomPos -40, 76, 20)
                 .tooltip(Tooltip.create(RESET_BUTTON))
                 .build()
         );
 
         if (selectedPlayer == null) {
-            multButton.active = false;
-            setButton.active = false;
+            randomButton.active = false;
             resetButton.active = false;
         }
         
-        initCustomScaleField();
+        initScaleFields();
     }
 
     @Override
@@ -200,21 +191,28 @@ public class CustomSizeRemoteScreen extends Screen {
     @Override
     public boolean keyPressed(int key, int p_96553_, int p_96554_) {
         if (key == 257) {
-            String scaleString = customScaleField.getValue();
-            if (scaleString != null && !scaleString.isEmpty()){
-                Float scale = Float.parseFloat(scaleString);  
-                tag.putFloat(AbstractSizeRemoteItem.SCALE_TAG, scale);
-                stack.setTag(tag);
-                //item.setScaleFactor(scale);
+            String minScaleString = minScaleField.getValue();
+            String maxScaleString = maxScaleField.getValue();
+
+            if (minScaleString != null && !minScaleString.isEmpty()){
+                Float scale = Float.parseFloat(minScaleString);  
+                tag.putFloat(AbstractSizeRemoteItem.MIN_SCALE_TAG, scale);
             }
+            
+            if (maxScaleString != null && !maxScaleString.isEmpty()){
+                Float scale = Float.parseFloat(maxScaleString);  
+                tag.putFloat(AbstractSizeRemoteItem.MAX_SCALE_TAG, scale);
+            }
+            stack.setTag(tag);
         }
         return super.keyPressed(key, p_96553_, p_96554_);
     }
 
 
     // setup the text box that allows players to type in a height
-    private void initCustomScaleField() {
-        customScaleField = addRenderableWidget(new EditBox(font, this.leftPos + 48, this.bottomPos - 80, 80, 20, CUSTOM_SCALE_FIELD));
+    private void initScaleFields() {
+        minScaleField = addRenderableWidget(new EditBox(font, this.leftPos + 8, this.bottomPos - 80, 76, 20, MIN_SCALE_FIELD));
+        maxScaleField = addRenderableWidget(new EditBox(font, this.leftPos + 91, this.bottomPos - 80, 76, 20, MAX_SCALE_FIELD));
 
         //there's probably a better way to do this but setting up a predicate filter for the box you type sizes into
         Predicate<String> filter = new Predicate<String>() {
@@ -247,17 +245,23 @@ public class CustomSizeRemoteScreen extends Screen {
             }
         };
 
-        customScaleField.setFilter(filter);
+        minScaleField.setFilter(filter);
+        maxScaleField.setFilter(filter);
 
-        Float mul = tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG);
+        Float min = tag.getFloat(AbstractSizeRemoteItem.MIN_SCALE_TAG);
+        Float max = tag.getFloat(AbstractSizeRemoteItem.MAX_SCALE_TAG);
 
-        String floatString = Float.toString(mul);
+        String minFloatString = Float.toString(min);
+        String maxFloatString = Float.toString(max);
 
-        customScaleField.setValue(floatString);
+        minScaleField.setValue(minFloatString);
+        maxScaleField.setValue(maxFloatString);
         
-        Tooltip t = Tooltip.create(CUSTOM_SCALE_FIELD_TOOLTIP, CUSTOM_SCALE_FIELD_TOOLTIP);
-        customScaleField.setTooltip(t);
+        Tooltip minTooltip = Tooltip.create(MIN_SCALE_FIELD_TOOLTIP, MIN_SCALE_FIELD_TOOLTIP);
+        Tooltip maxTooltip = Tooltip.create(MAX_SCALE_FIELD_TOOLTIP, MAX_SCALE_FIELD_TOOLTIP);
 
+        minScaleField.setTooltip(minTooltip);
+        maxScaleField.setTooltip(maxTooltip);
     }
 
     // what to do when the reset button is clicked
@@ -272,39 +276,42 @@ public class CustomSizeRemoteScreen extends Screen {
     }
 
     // wthat to do when the mult button is clicked
-    private void handleMultButton(Button button) {
+    private void handlerandomButton(Button button) {
 
-        String scaleString = customScaleField.getValue();
+        String minString = minScaleField.getValue();
+        String maxString = maxScaleField.getValue();
 
-        if (scaleString != null && !scaleString.isEmpty()){
-            Float scale = Float.parseFloat(scaleString);  
-            tag.putFloat(AbstractSizeRemoteItem.SCALE_TAG, scale);
-            stack.setTag(tag);
-        }
+        Float minScale = tag.getFloat(AbstractSizeRemoteItem.MAX_SCALE_TAG); 
+        Float maxScale = tag.getFloat(AbstractSizeRemoteItem.MIN_SCALE_TAG);  
 
-        //this check shouldnt be needed but just in case
-        if (selectedPlayer != null) {
-            if (inRange()) {
-                //send the multiplier and playeruuid to the server packet handler
-                PacketHandler.sendToServer(new SEntityMultTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedPlayer.getUUID(), 1));
+        if (minString != null && !minString.isEmpty() && maxString != null && !maxString.isEmpty()){
+            minScale = Float.parseFloat(minString); 
+            maxScale = Float.parseFloat(maxString); 
+            if (maxScale > RandomSizeRemoteItem.RANDOM_MAX_LIMIT || maxScale < RandomSizeRemoteItem.RANDOM_MIN_LIMIT) {
+                maxScale = RandomSizeRemoteItem.RANDOM_MAX_LIMIT;
+                maxScaleField.setValue(Float.toString(maxScale));
             }
-        }
-    }
-    
-    private void handleSetButton(Button button) {
-
-        String scaleString = customScaleField.getValue();
-
-        if (scaleString != null && !scaleString.isEmpty()){
-            Float scale = Float.parseFloat(scaleString);  
-            tag.putFloat(AbstractSizeRemoteItem.SCALE_TAG, scale);
+            if (minScale < RandomSizeRemoteItem.RANDOM_MIN_LIMIT || minScale > RandomSizeRemoteItem.RANDOM_MAX_LIMIT) {
+                minScale = RandomSizeRemoteItem.RANDOM_MIN_LIMIT;
+                minScaleField.setValue(Float.toString(minScale));
+            }
+            if (minScale*2 >= maxScale) {
+                minScale = maxScale/2;
+                minScaleField.setValue(Float.toString(minScale));
+            }
+            
+            tag.putFloat(AbstractSizeRemoteItem.MAX_SCALE_TAG, maxScale);
+            tag.putFloat(AbstractSizeRemoteItem.MIN_SCALE_TAG, minScale);
             stack.setTag(tag);
         }
-        
+
         //this check shouldnt be needed but just in case
         if (selectedPlayer != null) {
             if (inRange()) {
-                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedPlayer.getUUID()));
+                Random rand = new Random();
+                float randScale = rand.nextFloat(minScale, maxScale);
+                //send the random scale and playeruuid to the server packet handler
+                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(randScale, selectedPlayer.getUUID()));
             }
         }
     }

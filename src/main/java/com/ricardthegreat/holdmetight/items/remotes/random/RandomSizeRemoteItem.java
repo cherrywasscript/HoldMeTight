@@ -18,6 +18,9 @@ import net.minecraftforge.fml.DistExecutor;
 
 public class RandomSizeRemoteItem extends AbstractSizeRemoteItem {
 
+    public static final float RANDOM_MAX_LIMIT = 100f;
+    public static final float RANDOM_MIN_LIMIT = 0;
+
     public RandomSizeRemoteItem(Properties properties) {
         super(properties);
     }
@@ -39,7 +42,7 @@ public class RandomSizeRemoteItem extends AbstractSizeRemoteItem {
 
         //open item screen client side only
         if (level.isClientSide()) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientHooks.openSizeRemoteScreen(player, hand));
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientHooks.openRandomRemoteScreen(player, hand));
         }
 
         return super.use(level, player, hand);

@@ -1,14 +1,18 @@
-package com.ricardthegreat.holdmetight.Client.screens.remotes.setmult;
+package com.ricardthegreat.holdmetight.Client.screens.remotes.overtime;
 
 
 
+import java.util.Random;
 import java.util.UUID;
 import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
 
+import org.checkerframework.checker.units.qual.min;
+
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
+import com.ricardthegreat.holdmetight.items.remotes.random.RandomSizeRemoteItem;
 import com.ricardthegreat.holdmetight.items.remotes.setmult.OtherCustomSizeRemoteItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.SEntityMultTargetScalePacket;
@@ -32,18 +36,20 @@ import net.minecraft.world.level.Level;
 
 // this file honestly does far more than it probably should but yeah
 // works for the 3 remotes in the "setmult" category, honestly the only reason it does is because i was too lazy to make 2 more files like this
-public class CustomSizeRemoteScreen extends Screen {
+public class TimedSizeRemoteScreen extends Screen {
 
     private static final Component TITLE = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote");
 
-    private static final Component MULT_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.mult_button");
+    private static final Component MULT_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.mult10_button");
+    private static final Component DIVIDE_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.divide_button");
 
-    private static final Component SET_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.set_button");
+    private static final Component SECONDS_FIELD = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.seconds_field");
+    private static final Component MINUTES_FIELD = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.minutes_field");
+    private static final Component HOURS_FIELD = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.hours_field");
 
-    private static final Component RESET_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.reset_button");
-
-    private static final Component CUSTOM_SCALE_FIELD = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.custom_scale_field");
-    private static final Component CUSTOM_SCALE_FIELD_TOOLTIP = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.custom_scale_field_tooltip");
+    private static final Component SECONDS_FIELD_TOOLTIP = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.seconds_field_tooltip");
+    private static final Component MINUTES_FIELD_TOOLTIP = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.minutes_field_tooltip");
+    private static final Component HOURS_FIELD_TOOLTIP = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.hours_field_tooltip");
 
 
 
@@ -57,7 +63,6 @@ public class CustomSizeRemoteScreen extends Screen {
     private static final String NO_TARGET = "No Target";
 
 
-
     private static final ResourceLocation BACKGROUND = new ResourceLocation(HoldMeTight.MODID, "textures/gui/size_remote_bg.png");
 
     private static final float DEFAULT_SCALE = 1.0f;
@@ -67,15 +72,13 @@ public class CustomSizeRemoteScreen extends Screen {
 
     //the item user and the player the item has selected
     private Player user;
-    
     private Player selectedPlayer;
 
     // the held item and its tags to perform stuff with
     private ItemStack stack;
     private CompoundTag tag;
 
-    //private SizeItem item;
-
+    //positions on the gui
     private int leftPos;
     private int rightPos;
     private int topPos;
@@ -83,13 +86,17 @@ public class CustomSizeRemoteScreen extends Screen {
     private int centerHorizonalPos;
     private int centerVerticalPos;
 
+    //the buttons used
     private Button multButton;
-    private Button setButton;
-    private Button resetButton;
+    private Button divideButton;
 
-    private EditBox customScaleField;
+    //the custom fields
+    private EditBox secondsField;
+    private EditBox minutesField;
+    private EditBox hoursField;
 
-    public CustomSizeRemoteScreen(Player user, InteractionHand hand){
+
+    public TimedSizeRemoteScreen(Player user, InteractionHand hand){
         super(TITLE);
         this.imageWidth = 176;
         this.imageHeight = 256;
@@ -129,41 +136,29 @@ public class CustomSizeRemoteScreen extends Screen {
             }
         }
 
-        
-        
-
 
         this.multButton = addRenderableWidget(
             Button.builder(
                 MULT_BUTTON, this::handleMultButton)
-                .bounds(this.leftPos + 8, this.bottomPos -111, 76, 20)
+                .bounds(this.leftPos + 8, this.bottomPos -40, 76, 20)
                 .tooltip(Tooltip.create(MULT_BUTTON))
                 .build()
         );
 
-        this.setButton = addRenderableWidget(
+        this.divideButton = addRenderableWidget(
             Button.builder(
-                SET_BUTTON, this::handleSetButton)
-                .bounds(this.leftPos + 91, this.bottomPos -111, 76, 20)
-                .tooltip(Tooltip.create(SET_BUTTON))
-                .build()
-        );
-
-        this.resetButton = addRenderableWidget(
-            Button.builder(
-                RESET_BUTTON, this::handleResetButton)
-                .bounds(this.centerHorizonalPos - 38, this.bottomPos -40, 76, 20)
-                .tooltip(Tooltip.create(RESET_BUTTON))
+                DIVIDE_BUTTON, this::handleDivideButton)
+                .bounds(this.leftPos + 91, this.bottomPos -40, 76, 20)
+                .tooltip(Tooltip.create(DIVIDE_BUTTON))
                 .build()
         );
 
         if (selectedPlayer == null) {
             multButton.active = false;
-            setButton.active = false;
-            resetButton.active = false;
+            divideButton.active = false;
         }
         
-        initCustomScaleField();
+        initScaleFields();
     }
 
     @Override
@@ -200,21 +195,47 @@ public class CustomSizeRemoteScreen extends Screen {
     @Override
     public boolean keyPressed(int key, int p_96553_, int p_96554_) {
         if (key == 257) {
-            String scaleString = customScaleField.getValue();
-            if (scaleString != null && !scaleString.isEmpty()){
-                Float scale = Float.parseFloat(scaleString);  
-                tag.putFloat(AbstractSizeRemoteItem.SCALE_TAG, scale);
+            String secondsString = secondsField.getValue();
+            String minutesString = minutesField.getValue();
+            String hoursString = hoursField.getValue();
+
+            if (checkNotNull(secondsString, minutesString, hoursString)){
+                Float seconds = Float.parseFloat(secondsString); 
+                Float minutes = Float.parseFloat(minutesString);
+                Float hours = Float.parseFloat(hoursString);
+                hours *= 3600;
+                minutes *= 60;
+                float ticks = seconds + minutes + hours;
+                ticks *= 20;
+
+                tag.putFloat(AbstractSizeRemoteItem.NUM_TICKS_TAG, ticks);
+
                 stack.setTag(tag);
-                //item.setScaleFactor(scale);
             }
         }
         return super.keyPressed(key, p_96553_, p_96554_);
     }
 
+    private boolean checkNotNull(String secs, String mins, String hours){
+        if (secs == null || secs.isEmpty()){
+            return false;
+        }
+        if (mins == null || mins.isEmpty()){
+            return false;
+        }
+        if (hours == null || hours.isEmpty()){
+            return false;
+        }
+        return true;
+    }
+
 
     // setup the text box that allows players to type in a height
-    private void initCustomScaleField() {
-        customScaleField = addRenderableWidget(new EditBox(font, this.leftPos + 48, this.bottomPos - 80, 80, 20, CUSTOM_SCALE_FIELD));
+    private void initScaleFields() {
+        hoursField = addRenderableWidget(new EditBox(font, this.leftPos + 8, this.bottomPos - 80, 49, 20, SECONDS_FIELD));
+        minutesField = addRenderableWidget(new EditBox(font, this.leftPos + 64, this.bottomPos - 80, 49, 20, MINUTES_FIELD));
+        secondsField = addRenderableWidget(new EditBox(font, this.leftPos + 120, this.bottomPos - 80, 49, 20, HOURS_FIELD));
+
 
         //there's probably a better way to do this but setting up a predicate filter for the box you type sizes into
         Predicate<String> filter = new Predicate<String>() {
@@ -239,25 +260,58 @@ public class CustomSizeRemoteScreen extends Screen {
 
                 //try to parse the string as a float, allow it if it succeeds dont if it doesnt
                 try{
-                    Float.parseFloat(t);
-                    return true;
+                    Float f = Float.parseFloat(t);
+                    if (f%1 == 0) {
+                        return true;
+                    }else if ((f*60)%1 == 0) {
+                        return true;
+                    }else if ((f*60*60)%1 == 0) {
+                        return true;
+                    }
+                    return false;
                 }catch (Exception e){ 
                     return false;
                 }      
             }
         };
 
-        customScaleField.setFilter(filter);
+        secondsField.setFilter(filter);
+        minutesField.setFilter(filter);
+        hoursField.setFilter(filter);
 
-        Float mul = tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG);
+        setTimes();
+    }
 
-        String floatString = Float.toString(mul);
+    private void setTimes(){
+        int duration = tag.getInt(AbstractSizeRemoteItem.NUM_TICKS_TAG)/20;
 
-        customScaleField.setValue(floatString);
-        
-        Tooltip t = Tooltip.create(CUSTOM_SCALE_FIELD_TOOLTIP, CUSTOM_SCALE_FIELD_TOOLTIP);
-        customScaleField.setTooltip(t);
+        int seconds = 0;
+        int minutes = 0;
+        int hours = 0;
 
+        seconds += duration%60;
+        duration -= seconds;
+
+        minutes += duration%3600;
+        duration -= minutes;
+
+        hours = duration /3600;
+
+        String secondsString = Integer.toString(seconds);
+        String minutesString = Integer.toString(minutes);
+        String hoursString = Integer.toString(hours);
+
+        secondsField.setValue(secondsString);
+        minutesField.setValue(minutesString);
+        hoursField.setValue(hoursString);
+
+        Tooltip secondsTooltip = Tooltip.create(SECONDS_FIELD_TOOLTIP, SECONDS_FIELD_TOOLTIP);
+        Tooltip minutesTooltip = Tooltip.create(MINUTES_FIELD_TOOLTIP, MINUTES_FIELD_TOOLTIP);
+        Tooltip hoursTooltip = Tooltip.create(HOURS_FIELD_TOOLTIP, HOURS_FIELD_TOOLTIP);
+
+        secondsField.setTooltip(secondsTooltip);
+        minutesField.setTooltip(minutesTooltip);
+        hoursField.setTooltip(hoursTooltip);
     }
 
     // what to do when the reset button is clicked
@@ -272,41 +326,12 @@ public class CustomSizeRemoteScreen extends Screen {
     }
 
     // wthat to do when the mult button is clicked
-    private void handleMultButton(Button button) {
+    private void handleMultButton(Button button){
 
-        String scaleString = customScaleField.getValue();
-
-        if (scaleString != null && !scaleString.isEmpty()){
-            Float scale = Float.parseFloat(scaleString);  
-            tag.putFloat(AbstractSizeRemoteItem.SCALE_TAG, scale);
-            stack.setTag(tag);
-        }
-
-        //this check shouldnt be needed but just in case
-        if (selectedPlayer != null) {
-            if (inRange()) {
-                //send the multiplier and playeruuid to the server packet handler
-                PacketHandler.sendToServer(new SEntityMultTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedPlayer.getUUID(), 1));
-            }
-        }
     }
-    
-    private void handleSetButton(Button button) {
 
-        String scaleString = customScaleField.getValue();
+    private void handleDivideButton(Button button){
 
-        if (scaleString != null && !scaleString.isEmpty()){
-            Float scale = Float.parseFloat(scaleString);  
-            tag.putFloat(AbstractSizeRemoteItem.SCALE_TAG, scale);
-            stack.setTag(tag);
-        }
-        
-        //this check shouldnt be needed but just in case
-        if (selectedPlayer != null) {
-            if (inRange()) {
-                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedPlayer.getUUID()));
-            }
-        }
     }
 
     @Override

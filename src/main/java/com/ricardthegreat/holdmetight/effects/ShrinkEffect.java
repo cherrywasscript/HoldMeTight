@@ -17,7 +17,7 @@ public class ShrinkEffect extends MobEffect{
 
     @Override
     public void applyEffectTick(@Nonnull LivingEntity livingEntity, int amplifier) {
-        //this works out to make the entity approximately 2/3 height after 1min
+        //this works out to make the entity approximately 2/3 height after 1min at amp 0
         double mult = 1-((0.00034)*(amplifier+1));
         float size = SizeUtils.getSize(livingEntity);
         double target = size*mult;

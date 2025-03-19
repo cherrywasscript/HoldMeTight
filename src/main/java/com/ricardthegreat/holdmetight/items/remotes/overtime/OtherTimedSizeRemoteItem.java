@@ -1,4 +1,4 @@
-package com.ricardthegreat.holdmetight.items.remotes.random;
+package com.ricardthegreat.holdmetight.items.remotes.overtime;
 
 import javax.annotation.Nonnull;
 
@@ -17,11 +17,11 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 
-public class OtherRandomSizeRemoteItem extends AbstractSizeRemoteItem {
+public class OtherTimedSizeRemoteItem extends AbstractSizeRemoteItem {
     
     public static final String TARGET_TAG = "has target";
 
-    public OtherRandomSizeRemoteItem(Properties properties) {
+    public OtherTimedSizeRemoteItem(Properties properties) {
         super(properties);
     }
 
@@ -43,7 +43,7 @@ public class OtherRandomSizeRemoteItem extends AbstractSizeRemoteItem {
 
         //open item screen client side only
         if (level.isClientSide()) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientHooks.openRandomRemoteScreen(player, hand));
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientHooks.openDurationRemoteScreen(player, hand));
         }
 
         return super.use(level, player, hand);
@@ -79,8 +79,7 @@ public class OtherRandomSizeRemoteItem extends AbstractSizeRemoteItem {
     protected CompoundTag setDefaultTags(ItemStack stack, Player player){
         CompoundTag tag = stack.getOrCreateTag();
 
-        tag.putFloat(MIN_SCALE_TAG, 0.5f);
-        tag.putFloat(MAX_SCALE_TAG, 2f);
+        tag.putInt(NUM_TICKS_TAG, 20);
         tag.putUUID(CustomSizeRemoteItem.UUID_TAG, player.getUUID());
         tag.putBoolean(TARGET_TAG, false);
         stack.setTag(tag);

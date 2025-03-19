@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "IGI",
+    "IRI",
+    "III"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:amethyst_shard"
+    },
+    "R": {
+      "item": "holdmetight:remotes/lapis_size_remote"
+    },
+    "G": {
+      "item": "holdmetight:remotes/glowstone_size_remote"
+    }
+  },
+  "result": {
+    "item": "holdmetight:remotes/amethyst_size_remote",
+    "count": 1
+  },
+  "show_notification": true
+}

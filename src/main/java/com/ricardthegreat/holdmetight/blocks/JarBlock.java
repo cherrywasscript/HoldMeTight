@@ -12,6 +12,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
@@ -20,6 +21,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.WaterFluid;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -58,12 +60,21 @@ public class JarBlock extends Block {
         return Block.box(4, 0, 4, 12, 11, 12);
     }
 
-    public VoxelShape getCollisionShape(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos, @Nonnull CollisionContext context) {   
-        if (state.getOptionalValue(OPEN).get()) {
-            return makeShape();
-        }else{
-            return makeClosedShape();
+    public VoxelShape getCollisionShape(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos, @Nonnull CollisionContext context) {  
+        if (context instanceof EntityCollisionContext) {
+            EntityCollisionContext entContext = (EntityCollisionContext) context;
+            Entity ent = entContext.getEntity();
+            if(ent != null){
+                if (SizeUtils.getSize(ent) >= 0.8) {
+                    return Block.box(4, 0, 4, 12, 11, 12);
+                }else if (state.getOptionalValue(OPEN).get()) {
+                    return makeShape();
+                }else{
+                    return makeClosedShape();
+                }
+            }
         }
+        return makeShape();
     }
 
     private VoxelShape makeClosedShape(){
