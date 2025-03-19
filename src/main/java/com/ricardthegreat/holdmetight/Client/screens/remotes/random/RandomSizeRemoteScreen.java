@@ -9,6 +9,7 @@ import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
+import com.ricardthegreat.holdmetight.Client.screens.remotes.AbstractSizeRemoteScreen;
 import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
 import com.ricardthegreat.holdmetight.items.remotes.random.RandomSizeRemoteItem;
 import com.ricardthegreat.holdmetight.items.remotes.setmult.OtherCustomSizeRemoteItem;
@@ -34,7 +35,7 @@ import net.minecraft.world.level.Level;
 
 // this file honestly does far more than it probably should but yeah
 // works for the 3 remotes in the "setmult" category, honestly the only reason it does is because i was too lazy to make 2 more files like this
-public class RandomSizeRemoteScreen extends Screen {
+public class RandomSizeRemoteScreen extends AbstractSizeRemoteScreen {
 
     private static final Component TITLE = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote");
 
@@ -46,41 +47,6 @@ public class RandomSizeRemoteScreen extends Screen {
     private static final Component MIN_SCALE_FIELD_TOOLTIP = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.min_scale_field_tooltip");
     private static final Component MAX_SCALE_FIELD_TOOLTIP = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.max_scale_field_tooltip");
 
-
-
-    //these strings need to be translatable at some point
-    //which will also involve figuring out spacing as they wont remain constant lengths if they are
-    //simplest way will probably just be making it smaller? not sure yet
-    private static final String TARGET = "Target:";
-    private static final String CURRENT_SCALE = "Current Scale:";
-    private static final String NOT_APPLICABLE = "N/A";
-    private static final String OUT_OF_RANGE = "Out of range";
-    private static final String NO_TARGET = "No Target";
-
-
-    private static final ResourceLocation BACKGROUND = new ResourceLocation(HoldMeTight.MODID, "textures/gui/size_remote_bg.png");
-
-    private static final float DEFAULT_SCALE = 1.0f;
-
-    private final int imageWidth;
-    private final int imageHeight;
-
-    //the item user and the player the item has selected
-    private Player user;
-    private Player selectedPlayer;
-
-    // the held item and its tags to perform stuff with
-    private ItemStack stack;
-    private CompoundTag tag;
-
-    //positions on the gui
-    private int leftPos;
-    private int rightPos;
-    private int topPos;
-    private int bottomPos;
-    private int centerHorizonalPos;
-    private int centerVerticalPos;
-
     //the buttons used
     private Button randomButton;
     private Button resetButton;
@@ -90,48 +56,15 @@ public class RandomSizeRemoteScreen extends Screen {
     private EditBox maxScaleField;
 
     public RandomSizeRemoteScreen(Player user, InteractionHand hand){
-        super(TITLE);
-        this.imageWidth = 176;
-        this.imageHeight = 256;
-        this.user = user;
-
-        stack = user.getItemInHand(hand);
-        tag = stack.getTag();
+        super(TITLE, user, hand, 176, 256);
         
+        this.BACKGROUND = new ResourceLocation(HoldMeTight.MODID, "textures/gui/size_remote_bg.png");
     }
 
     // "this." is used alot im not sure why but im scared to change it
     @Override
     protected void init() {
         super.init();
-
-        this.leftPos = (this.width - this.imageWidth) / 2;
-        this.rightPos = (this.width - this.leftPos) ;
-        this.topPos = (this.height - this.imageHeight) / 2;
-        this.bottomPos = (this.height - this.topPos) ;
-        this.centerHorizonalPos = (this.leftPos + this.rightPos) / 2 ;
-        this.centerVerticalPos = (this.topPos + this.bottomPos) / 2;
-
-        // im not really sure what this does but im also afraid to change/remove it
-        if(this.minecraft == null) return;
-        @SuppressWarnings("null")
-        Level level = this.minecraft.level;
-        if(level == null) return;
-        
-        if (tag.contains(OtherCustomSizeRemoteItem.TARGET_TAG) && !tag.getBoolean(OtherCustomSizeRemoteItem.TARGET_TAG)) {
-            selectedPlayer = null;
-        }else {
-            selectedPlayer = level.getPlayerByUUID(tag.getUUID(AbstractSizeRemoteItem.UUID_TAG));
-            if(selectedPlayer == null){
-                selectedPlayer = user;
-                tag.putUUID(AbstractSizeRemoteItem.UUID_TAG, selectedPlayer.getUUID());
-                stack.setTag(tag);
-            }
-        }
-
-        
-        
-
 
         this.randomButton = addRenderableWidget(
             Button.builder(
@@ -155,37 +88,6 @@ public class RandomSizeRemoteScreen extends Screen {
         }
         
         initScaleFields();
-    }
-
-    @Override
-    public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-        renderBackground(graphics);
-        graphics.blit(BACKGROUND, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
-        super.render(graphics, mouseX, mouseY, partialTicks);
-
-        graphics.drawString(this.font,TARGET, this.leftPos + 28, topPos +10,0xdddddd,false);
-        graphics.drawString(this.font,CURRENT_SCALE, centerHorizonalPos + 5, topPos +10,0xdddddd,false);
-        
-        if (selectedPlayer != null) {
-            if (inRange()) {
-                graphics.drawCenteredString(font, Float.toString(SizeUtils.getSize(selectedPlayer)), (rightPos + centerHorizonalPos)/2, topPos +19, 0xdddddd);
-                graphics.drawCenteredString(font, selectedPlayer.getName().getString(), (leftPos + centerHorizonalPos)/2, topPos +19, 0xdddddd);
-            }else{
-                graphics.drawCenteredString(font, NOT_APPLICABLE, (rightPos + centerHorizonalPos)/2, topPos +19, 0xffff00);
-                graphics.drawCenteredString(font, OUT_OF_RANGE, (leftPos + centerHorizonalPos)/2, topPos +19, 0xffff00);
-            }
-
-            PlayerRenderExtension rend = (PlayerRenderExtension) selectedPlayer;
-
-            if(rend != null){
-                rend.setMenu(true);
-                InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, centerHorizonalPos, centerVerticalPos, 30, (float)centerHorizonalPos - mouseX, (float)(centerVerticalPos - 80) -mouseY, (Player) rend);
-                rend.setMenu(false);
-            }
-        }else{
-            graphics.drawCenteredString(font, NOT_APPLICABLE, (rightPos + centerHorizonalPos)/2, topPos +19, 0xff0000);
-            graphics.drawCenteredString(font, NO_TARGET, (leftPos + centerHorizonalPos)/2, topPos +19, 0xff0000);
-        }
     }
 
     @Override
@@ -314,18 +216,5 @@ public class RandomSizeRemoteScreen extends Screen {
                 PacketHandler.sendToServer(new SEntitySetTargetScalePacket(randScale, selectedPlayer.getUUID()));
             }
         }
-    }
-
-    @Override
-    public boolean isPauseScreen() {
-        return false;
-    }
-
-    private boolean inRange(){
-        double distance =  user.position().distanceTo(selectedPlayer.position());
-        if (distance <= 100) {
-            return true;
-        }
-        return false;
     }
 }
