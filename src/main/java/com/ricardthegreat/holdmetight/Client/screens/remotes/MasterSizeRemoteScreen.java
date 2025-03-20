@@ -1,0 +1,552 @@
+package com.ricardthegreat.holdmetight.Client.screens.remotes;
+
+import java.util.function.Predicate;
+
+import javax.annotation.Nonnull;
+
+import org.checkerframework.checker.units.qual.min;
+
+import com.ricardthegreat.holdmetight.HoldMeTight;
+import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
+import com.ricardthegreat.holdmetight.items.remotes.random.RandomSizeRemoteItem;
+import com.ricardthegreat.holdmetight.network.PacketHandler;
+import com.ricardthegreat.holdmetight.network.SEntityMultTargetScalePacket;
+import com.ricardthegreat.holdmetight.network.SEntitySetTargetScalePacket;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Checkbox;
+import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.Renderable;
+import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.client.sounds.SoundManager;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+
+public class MasterSizeRemoteScreen extends AbstractSizeRemoteScreen{
+
+    private static final Component TITLE = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote");
+
+    private static final Component SET_MULT_CHOICE_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.set_mult_choice_button");
+    private static final Component RANDOMISE_CHOICE_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.randomise_choice_button");
+    private static final Component MULT_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.mult_button");
+    private static final Component SET_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.set_button");
+    private static final Component RESET_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.reset_button");
+    private static final Component RANDOM_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.random_button");
+
+    private static final Component CUSTOM_SCALE_FIELD = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.custom_scale_field");
+    private static final Component MIN_SCALE_FIELD = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.min_scale_field");
+    private static final Component MAX_SCALE_FIELD = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.max_scale_field");
+    private static final Component SECONDS_FIELD = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.seconds_field");
+    private static final Component MINUTES_FIELD = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.minutes_field");
+    private static final Component HOURS_FIELD = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.hours_field");
+
+    private static final Component CUSTOM_SCALE_FIELD_TOOLTIP = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.custom_scale_field_tooltip");
+    private static final Component MIN_SCALE_FIELD_TOOLTIP = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.min_scale_field_tooltip");
+    private static final Component MAX_SCALE_FIELD_TOOLTIP = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.max_scale_field_tooltip");
+    private static final Component SECONDS_FIELD_TOOLTIP = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.seconds_field_tooltip");
+    private static final Component MINUTES_FIELD_TOOLTIP = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.minutes_field_tooltip");
+    private static final Component HOURS_FIELD_TOOLTIP = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.hours_field_tooltip");
+    
+
+    private static ResourceLocation POPOUT = new ResourceLocation(HoldMeTight.MODID, "textures/gui/master_size_remote_popout.png");
+    private static ResourceLocation SHADOW = new ResourceLocation(HoldMeTight.MODID, "textures/gui/master_size_remote_shadow.png");
+
+
+    private Button setMultChoiceButton;
+    private Button randomiseChoiceButton;
+    private Button multButton;
+    private Button setButton;
+    private Button resetButton;
+    private Button randomButton;
+
+    private Checkbox customDuration;
+
+    private EditBox customScaleField;
+    private EditBox minScaleField;
+    private EditBox maxScaleField;
+    private EditBox secondsField;
+    private EditBox minutesField;
+    private EditBox hoursField;
+
+    private boolean popoutShown;
+
+    public MasterSizeRemoteScreen(Player user, InteractionHand hand) {
+        super(TITLE, user, hand, 176, 256);
+        
+        BACKGROUND = new ResourceLocation(HoldMeTight.MODID, "textures/gui/size_remote_bg.png");
+        range = 10000;
+    }
+
+    @Override
+    protected void init() {
+        super.init();
+
+        //need this here bc sometimes it recalls init while the screen is still up
+        popoutShown = false;
+
+        initButtons();
+
+        initEditBoxes();
+
+        initTimeFields();
+
+        customDuration = addRenderableWidget(new Checkbox(leftPos - 92, topPos, 20, 20, title, false));
+
+        setMultChoiceButton.active = false;
+
+        setMultChoiceButton.visible = false;
+        randomiseChoiceButton.visible = false;
+        customDuration.visible = false;
+
+
+        randomButton.visible = false; 
+        minScaleField.visible = false; 
+        maxScaleField.visible = false; 
+        secondsField.visible = false; 
+        minutesField.visible = false; 
+        hoursField.visible = false;
+    }
+
+    @Override
+    public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
+        renderBackground(graphics);
+        
+        if (popoutShown) {
+            renderPopout(graphics, mouseX, mouseY, partialTicks);
+        }else if (selectingPopoutEdge(mouseX, mouseY)) {
+            graphics.blit(POPOUT, leftPos-7, topPos, 0, 0, 7, imageHeight);
+        }else {
+            graphics.blit(POPOUT, leftPos-4, topPos, 0, 0, 4, imageHeight);
+        }
+
+        graphics.blit(BACKGROUND, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
+
+        if (customDuration.selected()) {
+            graphics.drawString(this.font,"Hours", (leftPos + 30) - (font.width("Hours"))/2, bottomPos - 121,0x222222, false);
+            graphics.drawString(this.font,"Minutes", (leftPos + 86) - (font.width("Minutes"))/2, bottomPos - 121,0x222222, false);
+            graphics.drawString(this.font,"Seconds", (leftPos + 144) - (font.width("Seconds"))/2, bottomPos - 121,0x222222, false);
+        }
+
+        renderPlayerDisplay(graphics, mouseX, mouseY, partialTicks);
+        //have this because i cant just call screen render method
+        for(Renderable renderable : this.renderables) {
+            renderable.render(graphics, mouseX, mouseY, partialTicks);
+        }
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int p_94697_) {
+        if (selectingPopoutEdge((int) mouseX, (int) mouseY)) {
+            popoutShown = !popoutShown;
+            setMultChoiceButton.visible = !setMultChoiceButton.visible;
+            randomiseChoiceButton.visible = !randomiseChoiceButton.visible;
+            customDuration.visible = !customDuration.visible;
+            //play a clicking sound
+            setMultChoiceButton.playDownSound(Minecraft.getInstance().getSoundManager());
+        }
+        boolean changed = customDuration.selected();
+
+        boolean clicked = super.mouseClicked(mouseX, mouseY, p_94697_);
+
+        if (customDuration.selected() != changed) {
+            moveElements();
+        }
+
+        return clicked;
+    }
+
+    private boolean selectingPopoutEdge(int mouseX, int mouseY){
+        int xRight = leftPos;
+        int xLeft = leftPos-8;
+        if (popoutShown) {
+            xRight -= 93;
+            xLeft -= 93;
+        }
+        if (mouseX < xRight && mouseX > xLeft && mouseY >= topPos + 13 && mouseY <= bottomPos - 13) {
+            return true;
+        }
+        return false;
+    }
+
+    private void renderPopout(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks){
+        int popoutLeftPos = leftPos-100;
+        int popoutWidth = 100;
+        if (selectingPopoutEdge(mouseX, mouseY)) {
+            popoutLeftPos += 3;
+            popoutWidth -= 3;
+        }
+        graphics.blit(POPOUT, popoutLeftPos, topPos, 0, 0, popoutWidth, imageHeight);
+
+        customDuration.setPosition(popoutLeftPos + 8, topPos + 20);
+        setMultChoiceButton.setPosition(popoutLeftPos + 8, topPos + 60);
+        randomiseChoiceButton.setPosition(popoutLeftPos + 8, topPos + 100);
+
+        graphics.blit(SHADOW, leftPos-2, topPos, 0, 0, 2, imageHeight);
+    }
+
+    private void handleChoiceButton(Button button){
+        setMultChoiceButton.active = !setMultChoiceButton.active;
+        randomiseChoiceButton.active = !randomiseChoiceButton.active;
+
+        setVisibility();
+    }
+
+    private void initButtons(){
+        setMultChoiceButton = addRenderableWidget(
+            Button.builder(
+                SET_MULT_CHOICE_BUTTON, this::handleChoiceButton)
+                .bounds(leftPos - 92, topPos + 60, 60, 20)
+                .tooltip(Tooltip.create(SET_MULT_CHOICE_BUTTON))
+                .build()
+        );
+
+        randomiseChoiceButton = addRenderableWidget(
+            Button.builder(
+                RANDOMISE_CHOICE_BUTTON, this::handleChoiceButton)
+                .bounds(leftPos - 92, topPos + 100, 60, 20)
+                .tooltip(Tooltip.create(RANDOMISE_CHOICE_BUTTON))
+                .build()
+        );
+
+        this.multButton = addRenderableWidget(
+            Button.builder(
+                MULT_BUTTON, this::handleMultButton)
+                .bounds(this.leftPos + 8, this.bottomPos -111, 76, 20)
+                .tooltip(Tooltip.create(MULT_BUTTON))
+                .build()
+        );
+
+        this.setButton = addRenderableWidget(
+            Button.builder(
+                SET_BUTTON, this::handleSetButton)
+                .bounds(this.leftPos + 91, this.bottomPos -111, 76, 20)
+                .tooltip(Tooltip.create(SET_BUTTON))
+                .build()
+        );
+
+        this.resetButton = addRenderableWidget(
+            Button.builder(
+                RESET_BUTTON, this::handleResetButton)
+                .bounds(this.centerHorizonalPos - 38, this.bottomPos -40, 76, 20)
+                .tooltip(Tooltip.create(RESET_BUTTON))
+                .build()
+        );
+
+        this.randomButton = addRenderableWidget(
+            Button.builder(
+                RANDOM_BUTTON, this::handlerandomButton)
+                .bounds(this.leftPos + 8, this.bottomPos -40, 76, 20)
+                .tooltip(Tooltip.create(RANDOM_BUTTON))
+                .build()
+        );
+    }
+
+    // what to do when the reset button is clicked
+    private void handleResetButton(Button button) {
+        //this check shouldnt be needed but just in case 
+        if (selectedPlayer != null) {
+            if (inRange()) {
+                //send the multiplier and playeruuid to the server packet handler
+                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(DEFAULT_SCALE, selectedPlayer.getUUID(), 0));
+            }
+        }
+    }
+
+    // wthat to do when the mult button is clicked
+    private void handleMultButton(Button button) {
+
+        String scaleString = customScaleField.getValue();
+
+        if (scaleString != null && !scaleString.isEmpty()){
+            Float scale = Float.parseFloat(scaleString);  
+            tag.putFloat(AbstractSizeRemoteItem.SCALE_TAG, scale);
+            stack.setTag(tag);
+        }
+
+        //this check shouldnt be needed but just in case
+        if (selectedPlayer != null) {
+            if (inRange()) {
+                //send the multiplier and playeruuid to the server packet handler
+                PacketHandler.sendToServer(new SEntityMultTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedPlayer.getUUID(), tag.getInt(AbstractSizeRemoteItem.NUM_TICKS_TAG)));
+            }
+        }
+    }
+    
+    private void handleSetButton(Button button) {
+
+        String scaleString = customScaleField.getValue();
+
+        if (scaleString != null && !scaleString.isEmpty()){
+            Float scale = Float.parseFloat(scaleString);  
+            tag.putFloat(AbstractSizeRemoteItem.SCALE_TAG, scale);
+            stack.setTag(tag);
+        }
+        
+        //this check shouldnt be needed but just in case
+        if (selectedPlayer != null) {
+            if (inRange()) {
+                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedPlayer.getUUID(), tag.getInt(AbstractSizeRemoteItem.NUM_TICKS_TAG)));
+            }
+        }
+    }
+
+    private void handlerandomButton(Button button) {
+
+        String minString = minScaleField.getValue();
+        String maxString = maxScaleField.getValue();
+
+        Float minScale = tag.getFloat(AbstractSizeRemoteItem.MAX_SCALE_TAG); 
+        Float maxScale = tag.getFloat(AbstractSizeRemoteItem.MIN_SCALE_TAG);  
+
+        if (minString != null && !minString.isEmpty() && maxString != null && !maxString.isEmpty()){
+            minScale = Float.parseFloat(minString); 
+            maxScale = Float.parseFloat(maxString); 
+            if (maxScale > RandomSizeRemoteItem.RANDOM_MAX_LIMIT || maxScale < RandomSizeRemoteItem.RANDOM_MIN_LIMIT) {
+                maxScale = RandomSizeRemoteItem.RANDOM_MAX_LIMIT;
+                maxScaleField.setValue(Float.toString(maxScale));
+            }
+            if (minScale < RandomSizeRemoteItem.RANDOM_MIN_LIMIT || minScale > RandomSizeRemoteItem.RANDOM_MAX_LIMIT) {
+                minScale = RandomSizeRemoteItem.RANDOM_MIN_LIMIT;
+                minScaleField.setValue(Float.toString(minScale));
+            }
+            if (minScale*2 >= maxScale) {
+                minScale = maxScale/2;
+                minScaleField.setValue(Float.toString(minScale));
+            }
+            
+            tag.putFloat(AbstractSizeRemoteItem.MAX_SCALE_TAG, maxScale);
+            tag.putFloat(AbstractSizeRemoteItem.MIN_SCALE_TAG, minScale);
+            stack.setTag(tag);
+        }
+    }
+
+    // setup the text box that allows players to type in a height
+    private void initEditBoxes() {
+        customScaleField = addRenderableWidget(new EditBox(font, this.leftPos + 48, this.bottomPos - 80, 80, 20, CUSTOM_SCALE_FIELD));
+        minScaleField = addRenderableWidget(new EditBox(font, this.leftPos + 8, this.bottomPos - 80, 76, 20, MIN_SCALE_FIELD));
+        maxScaleField = addRenderableWidget(new EditBox(font, this.leftPos + 91, this.bottomPos - 80, 76, 20, MAX_SCALE_FIELD));
+
+        //there's probably a better way to do this but setting up a predicate filter for the box you type sizes into
+        Predicate<String> filter = new Predicate<String>() {
+            @Override
+            public boolean test(String t){
+                //disallow spaces at the beginning or end
+                if (!t.trim().equals(t)){
+                    return false;
+                }
+
+                //check if the string is empty to allow people to delete everything
+                if(t != null && t.isEmpty()){
+                    return true;
+                }
+
+                //check if the string ends with f or d as these are both fine to parse as floats but i dont want it to be typed
+                //again almost certainly a better way to do this but its just a silly little thing
+                String checkFinalChar = t.substring(t.length()-1);
+                if(checkFinalChar.equals("f") || checkFinalChar.equals("d")){
+                    return false;
+                }
+
+                //try to parse the string as a float, allow it if it succeeds dont if it doesnt
+                try{
+                    Float.parseFloat(t);
+                    return true;
+                }catch (Exception e){ 
+                    return false;
+                }      
+            }
+        };
+
+        customScaleField.setFilter(filter);
+        minScaleField.setFilter(filter);
+        maxScaleField.setFilter(filter);
+
+        Float mul = tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG);
+        Float min = tag.getFloat(AbstractSizeRemoteItem.MIN_SCALE_TAG);
+        Float max = tag.getFloat(AbstractSizeRemoteItem.MAX_SCALE_TAG);
+
+        String floatString = Float.toString(mul);
+        String minFloatString = Float.toString(min);
+        String maxFloatString = Float.toString(max);
+
+        customScaleField.setValue(floatString);
+        minScaleField.setValue(minFloatString);
+        maxScaleField.setValue(maxFloatString);
+        
+        Tooltip t = Tooltip.create(CUSTOM_SCALE_FIELD_TOOLTIP, CUSTOM_SCALE_FIELD_TOOLTIP);
+        Tooltip minTooltip = Tooltip.create(MIN_SCALE_FIELD_TOOLTIP, MIN_SCALE_FIELD_TOOLTIP);
+        Tooltip maxTooltip = Tooltip.create(MAX_SCALE_FIELD_TOOLTIP, MAX_SCALE_FIELD_TOOLTIP);
+
+        customScaleField.setTooltip(t);
+        minScaleField.setTooltip(minTooltip);
+        maxScaleField.setTooltip(maxTooltip);
+    }
+
+    private void initTimeFields() {
+        hoursField = addRenderableWidget(new EditBox(font, this.leftPos + 8, this.bottomPos - 111, 44, 20, SECONDS_FIELD));
+        minutesField = addRenderableWidget(new EditBox(font, this.leftPos + 64, this.bottomPos - 111, 44, 20, MINUTES_FIELD));
+        secondsField = addRenderableWidget(new EditBox(font, this.leftPos + 120, this.bottomPos - 111, 44, 20, HOURS_FIELD));
+
+
+        //there's probably a better way to do this but setting up a predicate filter for the box you type sizes into
+        Predicate<String> filter = new Predicate<String>() {
+            @Override
+            public boolean test(String t){
+                //disallow spaces at the beginning or end
+                if (!t.trim().equals(t)){
+                    return false;
+                }
+
+                //check if the string is empty to allow people to delete everything
+                if(t != null && t.isEmpty()){
+                    return true;
+                }
+
+                //check if the string ends with f or d as these are both fine to parse as floats but i dont want it to be typed
+                //again almost certainly a better way to do this but its just a silly little thing
+                String checkFinalChar = t.substring(t.length()-1);
+                if(checkFinalChar.equals("f") || checkFinalChar.equals("d")){
+                    return false;
+                }
+
+                //try to parse the string as a float, allow it if it succeeds dont if it doesnt
+                try{
+                    Float f = Float.parseFloat(t);
+                    if (f%1 == 0) {
+                        return true;
+                    }else if ((f*60)%1 == 0) {
+                        return true;
+                    }else if ((f*60*60)%1 == 0) {
+                        return true;
+                    }
+                    return false;
+                }catch (Exception e){ 
+                    return false;
+                }      
+            }
+        };
+
+        secondsField.setFilter(filter);
+        minutesField.setFilter(filter);
+        hoursField.setFilter(filter);
+
+        setTimes();
+    }
+
+    private void setTimes(){
+        int duration = tag.getInt(AbstractSizeRemoteItem.NUM_TICKS_TAG)/20;
+
+        int seconds = 0;
+        int minutes = 0;
+        int hours = 0;
+
+        seconds += duration%60;
+        duration -= seconds;
+
+        minutes += duration%3600;
+        duration -= minutes;
+        minutes = minutes/60;
+
+        hours = duration /3600;
+
+        String secondsString = Integer.toString(seconds);
+        String minutesString = Integer.toString(minutes);
+        String hoursString = Integer.toString(hours);
+
+        secondsField.setValue(secondsString);
+        minutesField.setValue(minutesString);
+        hoursField.setValue(hoursString);
+
+        Tooltip secondsTooltip = Tooltip.create(SECONDS_FIELD_TOOLTIP, SECONDS_FIELD_TOOLTIP);
+        Tooltip minutesTooltip = Tooltip.create(MINUTES_FIELD_TOOLTIP, MINUTES_FIELD_TOOLTIP);
+        Tooltip hoursTooltip = Tooltip.create(HOURS_FIELD_TOOLTIP, HOURS_FIELD_TOOLTIP);
+
+        secondsField.setTooltip(secondsTooltip);
+        minutesField.setTooltip(minutesTooltip);
+        hoursField.setTooltip(hoursTooltip);
+    }
+
+    private void setVisibility(){
+        multButton.visible = !multButton.visible;
+        setButton.visible = !setButton.visible;
+        randomButton.visible = !randomButton.visible;
+        customScaleField.visible = !customScaleField.visible;
+        minScaleField.visible = !minScaleField.visible;
+        maxScaleField.visible = !maxScaleField.visible;
+
+        if (multButton.visible) {
+            resetButton.setPosition(this.centerHorizonalPos - 38, this.bottomPos -40);
+        }else{
+            resetButton.setPosition(this.leftPos + 91, this.bottomPos -40);
+        }
+    }
+
+    private void moveElements(){
+        secondsField.visible = !secondsField.visible;
+        minutesField.visible = !minutesField.visible;
+        hoursField.visible = !hoursField.visible;
+
+        if (customDuration.selected()) {
+            multButton.setPosition(leftPos + 8, bottomPos - 86);
+            setButton.setPosition(leftPos + 91, bottomPos - 86);
+            customScaleField.setPosition(leftPos + 48, bottomPos - 64);
+        }else{
+            multButton.setPosition(leftPos + 8, bottomPos - 111);
+            setButton.setPosition(leftPos + 91, bottomPos - 111);
+            customScaleField.setPosition(leftPos + 48, bottomPos - 80);
+        }
+
+        if (multButton.visible) {
+            resetButton.setPosition(this.centerHorizonalPos - 38, this.bottomPos -40);
+        }
+    }
+
+    @Override
+    public boolean keyPressed(int key, int p_96553_, int p_96554_) {
+        if (key == 257) {
+            String secondsString = secondsField.getValue();
+            String minutesString = minutesField.getValue();
+            String hoursString = hoursField.getValue();
+
+            if (checkNotNull(secondsString, minutesString, hoursString)){
+                Float seconds = Float.parseFloat(secondsString); 
+                Float minutes = Float.parseFloat(minutesString);
+                Float hours = Float.parseFloat(hoursString);
+                hours *= 3600;
+                minutes *= 60;
+                float ticks = seconds + minutes + hours;
+                ticks *= 20;
+
+                tag.putFloat(AbstractSizeRemoteItem.NUM_TICKS_TAG, ticks);
+
+                stack.setTag(tag);
+            }
+        }
+        return super.keyPressed(key, p_96553_, p_96554_);
+    }
+
+    private boolean checkNotNull(String secs, String mins, String hours){
+        if (secs == null || secs.isEmpty()){
+            return false;
+        }
+        if (mins == null || mins.isEmpty()){
+            return false;
+        }
+        if (hours == null || hours.isEmpty()){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onClose() {
+        keyPressed(257, 0, 0);
+        super.onClose();
+    }
+}

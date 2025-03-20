@@ -44,7 +44,7 @@ public class MasterSizeRemoteItem extends AbstractSizeRemoteItem {
 
         //open item screen client side only
         if (level.isClientSide()) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientHooks.openSizeRemoteScreen(player, hand));
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientHooks.openMasterRemoteScreen(player, hand));
         }
 
         return super.use(level, player, hand);

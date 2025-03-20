@@ -172,7 +172,7 @@ public class RandomSizeRemoteScreen extends AbstractSizeRemoteScreen {
         if (selectedPlayer != null) {
             if (inRange()) {
                 //send the multiplier and playeruuid to the server packet handler
-                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(DEFAULT_SCALE, selectedPlayer.getUUID()));
+                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(DEFAULT_SCALE, selectedPlayer.getUUID(), 0));
             }
         }
     }
@@ -213,7 +213,7 @@ public class RandomSizeRemoteScreen extends AbstractSizeRemoteScreen {
                 Random rand = new Random();
                 float randScale = rand.nextFloat(minScale, maxScale);
                 //send the random scale and playeruuid to the server packet handler
-                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(randScale, selectedPlayer.getUUID()));
+                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(randScale, selectedPlayer.getUUID(), tag.getInt(AbstractSizeRemoteItem.NUM_TICKS_TAG)));
             }
         }
     }

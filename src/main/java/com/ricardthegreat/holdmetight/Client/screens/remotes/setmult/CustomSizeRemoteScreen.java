@@ -38,13 +38,12 @@ public class CustomSizeRemoteScreen extends AbstractSizeRemoteScreen {
     private static final Component TITLE = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote");
 
     private static final Component MULT_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.mult_button");
-
     private static final Component SET_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.set_button");
-
     private static final Component RESET_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.reset_button");
 
     private static final Component CUSTOM_SCALE_FIELD = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.custom_scale_field");
     private static final Component CUSTOM_SCALE_FIELD_TOOLTIP = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.custom_scale_field_tooltip");
+    
 
 
     //the buttons
@@ -165,7 +164,7 @@ public class CustomSizeRemoteScreen extends AbstractSizeRemoteScreen {
         if (selectedPlayer != null) {
             if (inRange()) {
                 //send the multiplier and playeruuid to the server packet handler
-                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(DEFAULT_SCALE, selectedPlayer.getUUID()));
+                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(DEFAULT_SCALE, selectedPlayer.getUUID(), 0));
             }
         }
     }
@@ -185,7 +184,7 @@ public class CustomSizeRemoteScreen extends AbstractSizeRemoteScreen {
         if (selectedPlayer != null) {
             if (inRange()) {
                 //send the multiplier and playeruuid to the server packet handler
-                PacketHandler.sendToServer(new SEntityMultTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedPlayer.getUUID(), 1));
+                PacketHandler.sendToServer(new SEntityMultTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedPlayer.getUUID(), tag.getInt(AbstractSizeRemoteItem.NUM_TICKS_TAG)));
             }
         }
     }
@@ -203,7 +202,7 @@ public class CustomSizeRemoteScreen extends AbstractSizeRemoteScreen {
         //this check shouldnt be needed but just in case
         if (selectedPlayer != null) {
             if (inRange()) {
-                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedPlayer.getUUID()));
+                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedPlayer.getUUID(), tag.getInt(AbstractSizeRemoteItem.NUM_TICKS_TAG)));
             }
         }
     }

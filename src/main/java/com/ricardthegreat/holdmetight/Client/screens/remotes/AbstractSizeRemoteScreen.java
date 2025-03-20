@@ -108,6 +108,10 @@ public abstract class AbstractSizeRemoteScreen extends Screen{
         graphics.blit(BACKGROUND, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         super.render(graphics, mouseX, mouseY, partialTicks);
 
+        renderPlayerDisplay(graphics, mouseX, mouseY, partialTicks);
+    }
+
+    protected void renderPlayerDisplay(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks){
         graphics.drawString(this.font,TARGET, this.leftPos + 28, topPos +10,0xdddddd,false);
         graphics.drawString(this.font,CURRENT_SCALE, centerHorizonalPos + 5, topPos +10,0xdddddd,false);
         

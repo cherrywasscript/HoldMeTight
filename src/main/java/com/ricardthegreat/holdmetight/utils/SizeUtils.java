@@ -25,8 +25,9 @@ public class SizeUtils {
         data.setScale(size);
     }
 
-    public static void multSizeInstant() {
-        
+    public static void multSizeInstant(Entity entity, Float size) {
+        Float targetScale = getScaleData(entity).getTargetScale()*size;
+        setSizeInstant(entity, targetScale);
     }
 
     //i should probably grab the actual default from pekhui as if it changes from 20 this wont however a second is a good default i feel

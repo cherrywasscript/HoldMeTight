@@ -73,31 +73,6 @@ public class TimedSizeRemoteScreen extends AbstractSizeRemoteScreen {
     protected void init() {
         super.init();
 
-        this.leftPos = (this.width - this.imageWidth) / 2;
-        this.rightPos = (this.width - this.leftPos) ;
-        this.topPos = (this.height - this.imageHeight) / 2;
-        this.bottomPos = (this.height - this.topPos) ;
-        this.centerHorizonalPos = (this.leftPos + this.rightPos) / 2 ;
-        this.centerVerticalPos = (this.topPos + this.bottomPos) / 2;
-
-        // im not really sure what this does but im also afraid to change/remove it
-        if(this.minecraft == null) return;
-        @SuppressWarnings("null")
-        Level level = this.minecraft.level;
-        if(level == null) return;
-        
-        if (tag.contains(OtherCustomSizeRemoteItem.TARGET_TAG) && !tag.getBoolean(OtherCustomSizeRemoteItem.TARGET_TAG)) {
-            selectedPlayer = null;
-        }else {
-            selectedPlayer = level.getPlayerByUUID(tag.getUUID(AbstractSizeRemoteItem.UUID_TAG));
-            if(selectedPlayer == null){
-                selectedPlayer = user;
-                tag.putUUID(AbstractSizeRemoteItem.UUID_TAG, selectedPlayer.getUUID());
-                stack.setTag(tag);
-            }
-        }
-
-
         this.multButton = addRenderableWidget(
             Button.builder(
                 MULT_BUTTON, this::handleMultButton)
@@ -250,7 +225,7 @@ public class TimedSizeRemoteScreen extends AbstractSizeRemoteScreen {
         if (selectedPlayer != null) {
             if (inRange()) {
                 //send the multiplier and playeruuid to the server packet handler
-                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(DEFAULT_SCALE, selectedPlayer.getUUID()));
+                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(DEFAULT_SCALE, selectedPlayer.getUUID(), 0));
             }
         }
     }

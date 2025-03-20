@@ -8,6 +8,7 @@ import com.ricardthegreat.holdmetight.items.PaperWingsItem;
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.items.SizeRay;
 import com.ricardthegreat.holdmetight.items.SizeWand;
+import com.ricardthegreat.holdmetight.items.remotes.MasterSizeRemoteItem;
 import com.ricardthegreat.holdmetight.items.remotes.overtime.OtherTimedSizeRemoteItem;
 import com.ricardthegreat.holdmetight.items.remotes.overtime.TimedSizeRemoteItem;
 import com.ricardthegreat.holdmetight.items.remotes.overtime.UserTimedSizeRemoteItem;
@@ -64,7 +65,10 @@ public class ItemInit {
         public static final RegistryObject<Item> USER_TIMED_SIZE_REMOTE = addToTab(
                 ITEMS.register("remotes/quartz_size_remote", () -> new UserTimedSizeRemoteItem(new Item.Properties().stacksTo(1))));
 
-        
+        public static final RegistryObject<Item> MASTER_SIZE_REMOTE = addToTab(
+                ITEMS.register("remotes/netherite_size_remote", () -> new MasterSizeRemoteItem(new Item.Properties().stacksTo(1))));
+
+                
 
         public static final RegistryObject<Item> SIZE_RAY = addToTab(
                 ITEMS.register("size_ray", () -> new SizeRay(new Item.Properties().stacksTo(1))));

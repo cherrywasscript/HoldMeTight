@@ -13,14 +13,14 @@ public class SEntityMultTargetScalePacket {
 
     private final float scale;
     private final UUID uuid;
-    private final int changeType;
+    private final int ticks;
 
     // for scaleType 0 - sets target,  1- mults target
     //probably gonna add more, not sure on the default yet maybe just setting to 1
-    public SEntityMultTargetScalePacket(float scale, UUID uuid, int changeType){
+    public SEntityMultTargetScalePacket(float scale, UUID uuid, int ticks){
         this.scale = scale;
         this.uuid = uuid;
-        this.changeType = changeType;
+        this.ticks = ticks;
     }
     
     public SEntityMultTargetScalePacket(FriendlyByteBuf buffer){
@@ -30,7 +30,7 @@ public class SEntityMultTargetScalePacket {
     public void encode(FriendlyByteBuf buffer){
         buffer.writeFloat(scale);
         buffer.writeUUID(uuid);
-        buffer.writeInt(changeType);
+        buffer.writeInt(ticks);
     }
 
     public void handle(Supplier<NetworkEvent.Context> context){
@@ -40,7 +40,11 @@ public class SEntityMultTargetScalePacket {
         ServerPlayer target = player.server.getPlayerList().getPlayer(uuid);
 
         if(target != null){
-            SizeUtils.multSizeOverTimeDefault(target, scale);
+            if (ticks > 0) {
+                SizeUtils.multSizeOverTimeCustom(target, scale, ticks);
+            }else{
+                SizeUtils.multSizeInstant(target, scale);
+            }
         }
     }
 }

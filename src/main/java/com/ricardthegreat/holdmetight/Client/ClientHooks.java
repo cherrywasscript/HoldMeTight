@@ -4,6 +4,7 @@ package com.ricardthegreat.holdmetight.Client;
 
 import com.ricardthegreat.holdmetight.Client.screens.CarryPositionScreen;
 import com.ricardthegreat.holdmetight.Client.screens.SizeRayScreen;
+import com.ricardthegreat.holdmetight.Client.screens.remotes.MasterSizeRemoteScreen;
 import com.ricardthegreat.holdmetight.Client.screens.remotes.overtime.TimedSizeRemoteScreen;
 import com.ricardthegreat.holdmetight.Client.screens.remotes.random.RandomSizeRemoteScreen;
 import com.ricardthegreat.holdmetight.Client.screens.remotes.setmult.CustomSizeRemoteScreen;
@@ -26,6 +27,7 @@ public class ClientHooks {
     }
 
     public static void openMasterRemoteScreen(Player player, InteractionHand hand) {
+        Minecraft.getInstance().setScreen(new MasterSizeRemoteScreen(player, hand));
     }
 
     public static void openSizeRayScreen(Player player, InteractionHand hand){
