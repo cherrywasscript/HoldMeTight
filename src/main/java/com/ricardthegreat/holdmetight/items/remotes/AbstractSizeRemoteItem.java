@@ -74,4 +74,14 @@ public abstract class AbstractSizeRemoteItem extends Item{
         }
         super.appendHoverText(stack, level, list, flag);
     }
+
+    //this is probably how to do the "Size Remote (name)" thing i wanted
+    /* 
+    @Override
+    public Component getName(@Nonnull ItemStack stack) {
+        Component.translatable(this.getDescriptionId(stack)).getString();
+         + " hello"
+        return Component.translatable(this.getDescriptionId(stack));
+    }
+        */
 }

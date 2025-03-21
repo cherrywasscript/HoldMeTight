@@ -1,15 +1,15 @@
 {
     "item.holdmetight.remotes.gold_size_remote":"Size Remote",
-    "item.holdmetight.remotes.iron_size_remote":"External Size Remote",
-    "item.holdmetight.remotes.copper_size_remote":"Personal Size Remote",
+    "item.holdmetight.remotes.iron_size_remote":"External Size Remote (To be removed)",
+    "item.holdmetight.remotes.copper_size_remote":"Personal Size Remote (To be removed)",
 
     "item.holdmetight.remotes.amethyst_size_remote":"Randomiser Remote",
-    "item.holdmetight.remotes.glowstone_size_remote":"External Randomiser Remote",
-    "item.holdmetight.remotes.lapis_size_remote":"Personal Randomiser Remote",
+    "item.holdmetight.remotes.glowstone_size_remote":"External Randomiser Remote (To be removed)",
+    "item.holdmetight.remotes.lapis_size_remote":"Personal Randomiser Remote (To be removed)",
 
-    "item.holdmetight.remotes.emerald_size_remote":"Timed Remote",
-    "item.holdmetight.remotes.diamond_size_remote":"External Timed Remote",
-    "item.holdmetight.remotes.quartz_size_remote":"Personal Timed Remote",
+    "item.holdmetight.remotes.emerald_size_remote":"Timed Remote (Not functional currently)",
+    "item.holdmetight.remotes.diamond_size_remote":"External Timed Remote (To be removed)",
+    "item.holdmetight.remotes.quartz_size_remote":"Personal Timed Remote (To be removed)",
 
     "item.holdmetight.remotes.netherite_size_remote":"Master Remote",
 
