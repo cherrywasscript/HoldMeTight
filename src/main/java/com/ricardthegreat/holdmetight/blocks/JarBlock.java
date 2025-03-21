@@ -2,6 +2,7 @@ package com.ricardthegreat.holdmetight.blocks;
 
 import javax.annotation.Nonnull;
 
+import com.ricardthegreat.holdmetight.utils.PlayerCarryExtension;
 import com.ricardthegreat.holdmetight.utils.SizeUtils;
 
 import net.minecraft.core.BlockPos;
@@ -12,14 +13,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.ButtonBlock;
-import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.material.WaterFluid;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -28,8 +27,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class JarBlock extends Block {
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
 
-    public JarBlock(Properties p_49795_) {
-        super(p_49795_);
+    public JarBlock(Properties properties) {
+        super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(OPEN, Boolean.valueOf(false)));
     }
 
@@ -41,6 +40,14 @@ public class JarBlock extends Block {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
         if (SizeUtils.getSize(player) >= 0.8) {
+            PlayerCarryExtension playerExt = (PlayerCarryExtension) player;
+
+            if (playerExt.getIsCarrying() && !playerExt.getCustomCarry() && !playerExt.getShoulderCarry()) {
+                Vec3 center = pos.getCenter();
+                center.add(0, 0.0625, 0);
+                player.getFirstPassenger().dismountTo(center.x(), center.y(), center.z());;
+            }
+
             level.setBlock(pos, state.cycle(OPEN), UPDATE_ALL);
             return InteractionResult.SUCCESS;
         }else{

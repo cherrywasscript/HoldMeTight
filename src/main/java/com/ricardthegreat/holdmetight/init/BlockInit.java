@@ -18,5 +18,5 @@ public class BlockInit {
         () -> new MushroomTeleporterBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM)));
 
     public static final RegistryObject<JarBlock> TINY_JAR = BLOCKS.register("tiny_jar", 
-        () -> new JarBlock(BlockBehaviour.Properties.copy(Blocks.RED_MUSHROOM)));
+        () -> new JarBlock(BlockBehaviour.Properties.copy(Blocks.GLASS)));
 }

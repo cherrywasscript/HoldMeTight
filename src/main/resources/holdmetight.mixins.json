@@ -14,6 +14,7 @@
       "WebBlockMixin",
       "VibrationSystemListenerMixin",
       "BasePressurePlateBlockMixin",
+      "BottleItemMixin",
 
 
       "collisions.CrossCollisionBlockMixin",
