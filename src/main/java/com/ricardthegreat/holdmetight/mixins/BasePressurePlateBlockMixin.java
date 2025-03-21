@@ -24,8 +24,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class BasePressurePlateBlockMixin extends Block{
 
     public BasePressurePlateBlockMixin(Properties p_49795_) {
-            super(p_49795_);
-
+        super(p_49795_);
     }
     
     //disables pressureplate for those under 0.1

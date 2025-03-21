@@ -1,5 +1,6 @@
 package com.ricardthegreat.holdmetight.Client.screens.remotes;
 
+import java.util.Random;
 import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
@@ -111,6 +112,11 @@ public class MasterSizeRemoteScreen extends AbstractSizeRemoteScreen{
         secondsField.visible = false; 
         minutesField.visible = false; 
         hoursField.visible = false;
+
+        if (tag.getInt(AbstractSizeRemoteItem.NUM_TICKS_TAG) != AbstractSizeRemoteItem.DEFAULT_TICKS) {
+            customDuration.onPress();
+            moveElements();
+        }
     }
 
     @Override
@@ -138,6 +144,12 @@ public class MasterSizeRemoteScreen extends AbstractSizeRemoteScreen{
         for(Renderable renderable : this.renderables) {
             renderable.render(graphics, mouseX, mouseY, partialTicks);
         }
+
+        if (popoutShown) {
+            //graphics.blit(SHADOW, leftPos-2, topPos, 0, 0, 2, imageHeight);
+            //graphics.vLine(leftPos-2, topPos, imageHeight, 0xff000000);
+            graphics.fill(leftPos-2, topPos+14, leftPos, bottomPos-14, 0x88000000);
+        }
     }
 
     @Override
@@ -150,10 +162,12 @@ public class MasterSizeRemoteScreen extends AbstractSizeRemoteScreen{
             //play a clicking sound
             setMultChoiceButton.playDownSound(Minecraft.getInstance().getSoundManager());
         }
+        saveEditBox();
+
         boolean changed = customDuration.selected();
 
         boolean clicked = super.mouseClicked(mouseX, mouseY, p_94697_);
-
+        
         if (customDuration.selected() != changed) {
             moveElements();
         }
@@ -186,8 +200,6 @@ public class MasterSizeRemoteScreen extends AbstractSizeRemoteScreen{
         customDuration.setPosition(popoutLeftPos + 8, topPos + 20);
         setMultChoiceButton.setPosition(popoutLeftPos + 8, topPos + 60);
         randomiseChoiceButton.setPosition(popoutLeftPos + 8, topPos + 100);
-
-        graphics.blit(SHADOW, leftPos-2, topPos, 0, 0, 2, imageHeight);
     }
 
     private void handleChoiceButton(Button button){
@@ -201,7 +213,7 @@ public class MasterSizeRemoteScreen extends AbstractSizeRemoteScreen{
         setMultChoiceButton = addRenderableWidget(
             Button.builder(
                 SET_MULT_CHOICE_BUTTON, this::handleChoiceButton)
-                .bounds(leftPos - 92, topPos + 60, 60, 20)
+                .bounds(leftPos - 92, topPos + 60, 88, 20)
                 .tooltip(Tooltip.create(SET_MULT_CHOICE_BUTTON))
                 .build()
         );
@@ -209,7 +221,7 @@ public class MasterSizeRemoteScreen extends AbstractSizeRemoteScreen{
         randomiseChoiceButton = addRenderableWidget(
             Button.builder(
                 RANDOMISE_CHOICE_BUTTON, this::handleChoiceButton)
-                .bounds(leftPos - 92, topPos + 100, 60, 20)
+                .bounds(leftPos - 92, topPos + 100, 88, 20)
                 .tooltip(Tooltip.create(RANDOMISE_CHOICE_BUTTON))
                 .build()
         );
@@ -240,7 +252,7 @@ public class MasterSizeRemoteScreen extends AbstractSizeRemoteScreen{
 
         this.randomButton = addRenderableWidget(
             Button.builder(
-                RANDOM_BUTTON, this::handlerandomButton)
+                RANDOM_BUTTON, this::handleRandomButton)
                 .bounds(this.leftPos + 8, this.bottomPos -40, 76, 20)
                 .tooltip(Tooltip.create(RANDOM_BUTTON))
                 .build()
@@ -271,9 +283,11 @@ public class MasterSizeRemoteScreen extends AbstractSizeRemoteScreen{
 
         //this check shouldnt be needed but just in case
         if (selectedPlayer != null) {
-            if (inRange()) {
+            if (inRange() && customDuration.selected()) {
                 //send the multiplier and playeruuid to the server packet handler
                 PacketHandler.sendToServer(new SEntityMultTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedPlayer.getUUID(), tag.getInt(AbstractSizeRemoteItem.NUM_TICKS_TAG)));
+            }else if (inRange()) {
+                PacketHandler.sendToServer(new SEntityMultTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedPlayer.getUUID(), AbstractSizeRemoteItem.DEFAULT_TICKS));
             }
         }
     }
@@ -290,13 +304,15 @@ public class MasterSizeRemoteScreen extends AbstractSizeRemoteScreen{
         
         //this check shouldnt be needed but just in case
         if (selectedPlayer != null) {
-            if (inRange()) {
+            if (inRange() && customDuration.selected()) {
                 PacketHandler.sendToServer(new SEntitySetTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedPlayer.getUUID(), tag.getInt(AbstractSizeRemoteItem.NUM_TICKS_TAG)));
+            }else if (inRange()) {
+                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedPlayer.getUUID(), AbstractSizeRemoteItem.DEFAULT_TICKS));
             }
         }
     }
 
-    private void handlerandomButton(Button button) {
+    private void handleRandomButton(Button button) {
 
         String minString = minScaleField.getValue();
         String maxString = maxScaleField.getValue();
@@ -323,6 +339,18 @@ public class MasterSizeRemoteScreen extends AbstractSizeRemoteScreen{
             tag.putFloat(AbstractSizeRemoteItem.MAX_SCALE_TAG, maxScale);
             tag.putFloat(AbstractSizeRemoteItem.MIN_SCALE_TAG, minScale);
             stack.setTag(tag);
+        }
+
+        //this check shouldnt be needed but just in case
+        if (selectedPlayer != null) {
+            Random rand = new Random();
+            float randScale = rand.nextFloat(minScale, maxScale);
+            if (inRange() && customDuration.selected()) {
+                //send the random scale and playeruuid to the server packet handler
+                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(randScale, selectedPlayer.getUUID(), tag.getInt(AbstractSizeRemoteItem.NUM_TICKS_TAG)));
+            }else if (inRange()) {
+                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(randScale, selectedPlayer.getUUID(), AbstractSizeRemoteItem.DEFAULT_TICKS));
+            }
         }
     }
 
@@ -510,25 +538,29 @@ public class MasterSizeRemoteScreen extends AbstractSizeRemoteScreen{
     @Override
     public boolean keyPressed(int key, int p_96553_, int p_96554_) {
         if (key == 257) {
-            String secondsString = secondsField.getValue();
-            String minutesString = minutesField.getValue();
-            String hoursString = hoursField.getValue();
-
-            if (checkNotNull(secondsString, minutesString, hoursString)){
-                Float seconds = Float.parseFloat(secondsString); 
-                Float minutes = Float.parseFloat(minutesString);
-                Float hours = Float.parseFloat(hoursString);
-                hours *= 3600;
-                minutes *= 60;
-                float ticks = seconds + minutes + hours;
-                ticks *= 20;
-
-                tag.putFloat(AbstractSizeRemoteItem.NUM_TICKS_TAG, ticks);
-
-                stack.setTag(tag);
-            }
+            saveEditBox();
         }
         return super.keyPressed(key, p_96553_, p_96554_);
+    }
+
+    private void saveEditBox(){
+        String secondsString = secondsField.getValue();
+        String minutesString = minutesField.getValue();
+        String hoursString = hoursField.getValue();
+
+        if (checkNotNull(secondsString, minutesString, hoursString)){
+            Float seconds = Float.parseFloat(secondsString); 
+            Float minutes = Float.parseFloat(minutesString);
+            Float hours = Float.parseFloat(hoursString);
+            hours *= 3600;
+            minutes *= 60;
+            float ticks = seconds + minutes + hours;
+            ticks *= 20;
+
+            tag.putFloat(AbstractSizeRemoteItem.NUM_TICKS_TAG, ticks);
+
+            stack.setTag(tag);
+        }
     }
 
     private boolean checkNotNull(String secs, String mins, String hours){
@@ -546,7 +578,7 @@ public class MasterSizeRemoteScreen extends AbstractSizeRemoteScreen{
 
     @Override
     public void onClose() {
-        keyPressed(257, 0, 0);
+        saveEditBox();
         super.onClose();
     }
 }

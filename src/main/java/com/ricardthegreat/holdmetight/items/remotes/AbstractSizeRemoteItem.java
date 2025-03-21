@@ -25,7 +25,8 @@ public abstract class AbstractSizeRemoteItem extends Item{
     public static final String MAX_SCALE_TAG = "maxscale";
     public static final String NUM_TICKS_TAG = "numticks";
 
-    protected static final Float DEFAULT_SCALE = 1.0f;
+    public static final Float DEFAULT_SCALE = 1.0f;
+    public static final int DEFAULT_TICKS = 20;
 
     public AbstractSizeRemoteItem(Properties properties) {
         super(properties);

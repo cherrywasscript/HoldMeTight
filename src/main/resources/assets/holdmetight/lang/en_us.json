@@ -44,6 +44,9 @@
     "gui.holdmetight.size_remote.field.minutes_field_tooltip":"Input Duration",
     "gui.holdmetight.size_remote.field.hours_field_tooltip":"Input Duration",
 
+    "gui.holdmetight.size_remote.button.set_mult_choice_button":"Choose height",
+    "gui.holdmetight.size_remote.button.randomise_choice_button":"Randomise height",
+
 
 
     "gui.holdmetight.size_ray.button.set_or_mult_button":"Set/Multiply",
