@@ -24,11 +24,7 @@
       "collisions.LeverBlockMixin",
       "collisions.SignBlockMixin",
       "collisions.WallHangingSignBlockMixin",
-      "collisions.ButtonBlockMixin",
-
-      
-      "customchatsizes.ServerPlayerMixin",
-      "customchatsizes.ChatListenerMixin"
+      "collisions.ButtonBlockMixin"
     ],
     "client": [
     ],
