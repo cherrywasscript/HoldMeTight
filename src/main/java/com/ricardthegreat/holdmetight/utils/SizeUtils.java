@@ -11,10 +11,10 @@ import virtuoel.pehkui.util.PehkuiEntityExtensions;
 
 public class SizeUtils {
 
-    private static ScaleType base = ScaleTypes.BASE;
-    private static ScaleType hitbox_height = ScaleTypes.HITBOX_HEIGHT;
-    private static ScaleType hitbox_width = ScaleTypes.HITBOX_WIDTH;
-    private static ScaleType step_height = ScaleTypes.STEP_HEIGHT;
+    private static final ScaleType base = ScaleTypes.BASE;
+    private static final ScaleType hitbox_height = ScaleTypes.HITBOX_HEIGHT;
+    private static final ScaleType hitbox_width = ScaleTypes.HITBOX_WIDTH;
+    private static final ScaleType step_height = ScaleTypes.STEP_HEIGHT;
 
     private static float maxScale = (float) Config.maxHitboxScale;
 
