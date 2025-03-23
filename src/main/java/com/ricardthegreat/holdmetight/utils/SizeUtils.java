@@ -14,6 +14,7 @@ public class SizeUtils {
     private static ScaleType base = ScaleTypes.BASE;
     private static ScaleType hitbox_height = ScaleTypes.HITBOX_HEIGHT;
     private static ScaleType hitbox_width = ScaleTypes.HITBOX_WIDTH;
+    private static ScaleType step_height = ScaleTypes.STEP_HEIGHT;
 
     private static float maxScale = (float) Config.maxHitboxScale;
 
@@ -105,7 +106,7 @@ public class SizeUtils {
     }
 
     private static void fixStepHeight(PehkuiEntityExtensions pEnt, float size, int ticks){
-        ScaleData stepData = pEnt.pehkui_getScaleData(ScaleTypes.STEP_HEIGHT);
+        ScaleData stepData = pEnt.pehkui_getScaleData(step_height);
 
         //this should make the step height equal to 1 + (height-1)/2
         float stepHeight = (1+((size-1)/2))/size;
