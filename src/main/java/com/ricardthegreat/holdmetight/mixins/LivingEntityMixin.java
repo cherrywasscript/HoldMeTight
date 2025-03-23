@@ -129,7 +129,7 @@ public abstract class LivingEntityMixin extends Entity{
             return true;
         }
 
-        if(state.is(BlockTags.DIRT) || state.is(BlockTags.SAND) || state.is(BlockTags.WOOL) || state.is(BlockTags.WOOL) || state.is(BlockTags.WOOL_CARPETS)){
+        if(state.is(BlockTags.DIRT) || state.is(BlockTags.SAND) || state.is(BlockTags.WOOL) || state.is(BlockTags.WOOL_CARPETS)){
             return true;
         }
 
