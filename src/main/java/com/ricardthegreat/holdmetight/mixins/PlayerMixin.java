@@ -59,6 +59,9 @@ public abstract class PlayerMixin implements PlayerCarryExtension, PlayerRenderE
     private double vertOffset = 0;
     private double leftRightMove = 0;
 
+
+    //might replace this with each player having their own size utils class
+    //could be awful? but idk im shit at efficiency
     private float minScale = 0;
     private float maxScale = 10000;
     private float defaultScale = 1;
@@ -69,6 +72,8 @@ public abstract class PlayerMixin implements PlayerCarryExtension, PlayerRenderE
     //if this is true it will sync only the booleans because thats less data
     private boolean shouldSyncSimple = false;
 
+
+    //checks every tick if the player should sync
     @Inject(at = @At("TAIL"), method = "tick()V")
     private void tick(CallbackInfo info){
         if(shouldSync){
