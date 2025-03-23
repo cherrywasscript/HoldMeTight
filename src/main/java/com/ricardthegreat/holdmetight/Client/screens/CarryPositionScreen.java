@@ -44,6 +44,8 @@ public class CarryPositionScreen extends Screen{
     private static final Component CUSTOM_INPUT_FIELD = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.custom_input_field");
     private static final Component CUSTOM_INPUT_FIELD_TOOLTIP = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.custom_input_field_tooltip");
 
+    private final double[] chestPreset = new double[]{0,0,0,0};
+    private final double[] mouthPreset = new double[]{0,0,0,0};
 
     private final int imageWidth;
     private final int imageHeight;
