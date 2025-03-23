@@ -25,7 +25,7 @@ public class ClientForgeHandler {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
 
         TestCommand.register(dispatcher);
-        ChatScaleCommand.register(dispatcher);
+        //ChatScaleCommand.register(dispatcher);
     } 
 
     @SubscribeEvent

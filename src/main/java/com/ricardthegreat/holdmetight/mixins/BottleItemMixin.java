@@ -47,7 +47,7 @@ public class BottleItemMixin extends Item{
         }
 
         if (level.getBlockState(targetBlock).canBeReplaced() && (!shouldFill(level, player) || player.isShiftKeyDown())) {
-            level.setBlock(targetBlock, BlockInit.TINY_JAR.get().defaultBlockState(), Block.UPDATE_NEIGHBORS);
+            level.setBlock(targetBlock, BlockInit.TINY_JAR.get().defaultBlockState(), Block.UPDATE_ALL);
             if (!player.getAbilities().instabuild) {
                 if (player.getMainHandItem().is(Items.GLASS_BOTTLE)) {
                     player.getMainHandItem().shrink(1);

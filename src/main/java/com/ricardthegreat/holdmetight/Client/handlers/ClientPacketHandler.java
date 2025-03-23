@@ -2,6 +2,7 @@ package com.ricardthegreat.holdmetight.Client.handlers;
 
 import java.util.function.Supplier;
 
+import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.network.CPlayerCarryPositionPacket;
 import com.ricardthegreat.holdmetight.network.CPlayerDismountPlayerPacket;
 import com.ricardthegreat.holdmetight.network.CPlayerMixinSyncPacket;
@@ -20,6 +21,7 @@ public class ClientPacketHandler {
             Player player = level.getPlayerByUUID(msg.getUuid());
             if(player != null) {
                 player.stopRiding();
+                HoldMeTight.LOGGER.info("ClientPacketHandler 23: " + player.position());
             }
         }   
     }

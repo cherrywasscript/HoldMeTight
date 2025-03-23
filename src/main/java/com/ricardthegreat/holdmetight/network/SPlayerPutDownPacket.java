@@ -3,6 +3,8 @@ package com.ricardthegreat.holdmetight.network;
 import java.util.UUID;
 import java.util.function.Supplier;
 
+import com.ricardthegreat.holdmetight.HoldMeTight;
+
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
@@ -41,6 +43,13 @@ public class SPlayerPutDownPacket {
 
         if (target != null) {
             target.stopRiding();
+
+            //log if it isnt 1 for error checking
+            //wont always be an error as if theyre on the side of a block or a non full block but it should help
+            if (pos.y%1 != 0) {
+                HoldMeTight.LOGGER.info("SPlayerPutDownPacket.java line 46: " + pos);
+            }
+
             target.dismountTo(pos.x, pos.y, pos.z);
         }
     }

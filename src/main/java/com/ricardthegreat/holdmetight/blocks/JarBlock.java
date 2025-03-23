@@ -23,6 +23,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.api.distmarker.Dist;
 
 public class JarBlock extends Block {
     public static final BooleanProperty OPEN = BlockStateProperties.OPEN;
@@ -42,13 +43,21 @@ public class JarBlock extends Block {
         if (SizeUtils.getSize(player) >= 0.8) {
             PlayerCarryExtension playerExt = (PlayerCarryExtension) player;
 
+            System.out.println(level.isClientSide);
+
             if (playerExt.getIsCarrying() && !playerExt.getCustomCarry() && !playerExt.getShoulderCarry()) {
                 Vec3 center = pos.getCenter();
-                center.add(0, 0.0625, 0);
-                player.getFirstPassenger().dismountTo(center.x(), center.y(), center.z());;
+                center = center.add(0, -0.4375, 0);
+
+                Entity passenger = player.getFirstPassenger();
+                passenger.stopRiding();
+                passenger.dismountTo(center.x(), center.y(), center.z());
+
+                System.out.println(center + "/" + passenger.position());
             }
 
             level.setBlock(pos, state.cycle(OPEN), UPDATE_ALL);
+
             return InteractionResult.SUCCESS;
         }else{
             return InteractionResult.FAIL;

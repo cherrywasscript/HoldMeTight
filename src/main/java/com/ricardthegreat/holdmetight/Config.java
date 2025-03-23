@@ -32,7 +32,8 @@ public class Config
                 .define("minParticleScale", 0.5d);
 
         private static final ForgeConfigSpec.ConfigValue<Boolean> PLAYER_CHAT_SCALE = BUILDER
-                .comment("should player messages be scaled based on their size (this is not properly tested and could cause many issues use at your own risk)")
+                //.comment("should player messages be scaled based on their size (this is not properly tested and could cause many issues use at your own risk)")
+                .comment("this isnt used currently")
                 .define("playerChatScale", false);
 
         /* 
