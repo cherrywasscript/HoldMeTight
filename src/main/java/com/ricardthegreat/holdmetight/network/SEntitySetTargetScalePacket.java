@@ -3,6 +3,7 @@ package com.ricardthegreat.holdmetight.network;
 import java.util.UUID;
 import java.util.function.Supplier;
 
+import com.ricardthegreat.holdmetight.utils.PlayerSizeUtils;
 import com.ricardthegreat.holdmetight.utils.SizeUtils;
 
 import net.minecraft.network.FriendlyByteBuf;
@@ -40,11 +41,14 @@ public class SEntitySetTargetScalePacket {
         ServerPlayer target = player.server.getPlayerList().getPlayer(uuid);
 
         if(target != null){
+            PlayerSizeUtils.setSize(target, scale, ticks);
+            /* 
             if (ticks > 0) {
                 SizeUtils.setSizeOverTimeCustom(target, scale, ticks);
             }else{
                 SizeUtils.setSizeInstant(target, scale);
             } 
+                */
         }
     }
 }
