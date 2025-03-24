@@ -13,9 +13,9 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 
-public class CarryPositonerItem extends Item{
+public class CarryPositonItem extends Item{
 
-    public CarryPositonerItem(Properties p_41383_) {
+    public CarryPositonItem(Properties p_41383_) {
         super(p_41383_);
     }
 
