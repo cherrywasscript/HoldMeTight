@@ -1,4 +1,4 @@
-package com.ricardthegreat.holdmetight.mixins;
+package com.ricardthegreat.holdmetight.mixins.playerextensions;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
