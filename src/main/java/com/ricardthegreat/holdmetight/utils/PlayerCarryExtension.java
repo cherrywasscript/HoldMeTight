@@ -38,9 +38,8 @@ public interface PlayerCarryExtension {
 
     void updateSyncables(int rotationOffset, double xymult, double vertOffset, double leftRightMove, boolean isCarried, boolean isCarrying, boolean isShoulderCarry, boolean isCustomCarryPosition);
 
-    void readCarryNbt(CompoundTag tag);
-
     CompoundTag writeCarryNbt(CompoundTag tag);
+    void readCarryNbt(CompoundTag tag);
 
     void setMaxScale(float maxScale);
     float getMaxScale();
