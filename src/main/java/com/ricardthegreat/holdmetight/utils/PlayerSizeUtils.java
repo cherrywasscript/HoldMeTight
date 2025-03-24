@@ -16,30 +16,6 @@ import virtuoel.pehkui.util.PehkuiEntityExtensions;
 public class PlayerSizeUtils {
 
     private static ScaleType base = ScaleTypes.BASE;
-    private static ScaleType hitbox_height = ScaleTypes.HITBOX_HEIGHT;
-    private static ScaleType hitbox_width = ScaleTypes.HITBOX_WIDTH;
-    private static ScaleType step_height = ScaleTypes.STEP_HEIGHT;
-
-    private static float maxHitboxScale = (float) Config.maxHitboxScale; 
-
-    private float maxScale = 50000;
-    private float minScale = 0;
-
-    private float currentScale;
-    private float targetScale;
-
-    public PlayerSizeUtils() {
-    }
-
-    public PlayerSizeUtils(float maxScale, float minScale) {
-        this.maxScale = maxScale;
-        this.minScale = minScale;
-    }
-
-    public static PlayerSizeUtils getPlayerSizeUtil(Player player){
-        PlayerSizeExtension playerExt = (PlayerSizeExtension) player;
-        return playerExt.getSizeUtil();
-    }
 
     /**
      * set the player to change size
@@ -96,56 +72,5 @@ public class PlayerSizeUtils {
         PehkuiEntityExtensions pEnt = (PehkuiEntityExtensions) player;
         ScaleData data = pEnt.pehkui_getScaleData(base);
         return data;
-    }
-
-    private static void checkMaxHitbox(Entity entity, float size, int ticks) {
-
-        PehkuiEntityExtensions pEnt = (PehkuiEntityExtensions) entity;
-
-        //im adding this here as a temp thing i need to move it to a proper place later
-        //fixStepHeight(pEnt, size, ticks);
-
-
-        ScaleData heightData = pEnt.pehkui_getScaleData(hitbox_height);
-        ScaleData widthData = pEnt.pehkui_getScaleData(hitbox_width);
-
-        if (ticks > 0) {
-            heightData.setScaleTickDelay(ticks);
-            widthData.setScaleTickDelay(ticks);
-
-            if (size > maxHitboxScale) {
-                heightData.setTargetScale(maxHitboxScale/size);
-                widthData.setTargetScale(maxHitboxScale/size);
-            }else if (heightData.getTargetScale() < 1.0f || widthData.getTargetScale() < 1.0f){
-                heightData.setTargetScale(1.0f);
-                widthData.setTargetScale(1.0f);
-            }
-        }else{
-            if (size > maxHitboxScale) {
-                heightData.setScale(maxHitboxScale/size);
-                widthData.setScale(maxHitboxScale/size);
-            }else if (heightData.getTargetScale() < 1.0f || widthData.getTargetScale() < 1.0f){
-                heightData.setScale(1.0f);
-                widthData.setScale(1.0f);
-            }
-        }
-
-        
-
-        //return data;
-    }
-
-    private static void fixStepHeight(PehkuiEntityExtensions pEnt, float size, int ticks){
-        ScaleData stepData = pEnt.pehkui_getScaleData(ScaleTypes.STEP_HEIGHT);
-
-        //this should make the step height equal to 1 + (height-1)/2
-        float stepHeight = (1+((size-1)/2))/size;
-
-        if (ticks > 0) {
-            stepData.setScaleTickDelay(ticks);
-            stepData.setTargetScale(stepHeight);
-        }else{
-            stepData.setScale(stepHeight);
-        }
     }
 }
