@@ -3,14 +3,14 @@ package com.ricardthegreat.holdmetight.utils;
 import com.ricardthegreat.holdmetight.Config;
 
 import net.minecraft.world.entity.Entity;
-
+import net.minecraft.world.entity.player.Player;
 import virtuoel.pehkui.api.ScaleData;
 import virtuoel.pehkui.api.ScaleType;
 import virtuoel.pehkui.api.ScaleTypes;
 import virtuoel.pehkui.api.ScaleTypes;
 import virtuoel.pehkui.util.PehkuiEntityExtensions;
 
-public class SizeUtilsNew {
+public class PlayerSizeUtils {
 
     private ScaleType base = ScaleTypes.BASE;
     private ScaleType hitbox_height = ScaleTypes.HITBOX_HEIGHT;
@@ -21,49 +21,31 @@ public class SizeUtilsNew {
     private float maxScale = (float) Config.maxHitboxScale;
     private float minScale = 0;
 
-    public SizeUtilsNew() {
+
+    private float currentScale;
+    private float targetScale;
+
+    public PlayerSizeUtils() {
     }
 
-    public SizeUtilsNew(float maxScale, float minScale) {
+    public PlayerSizeUtils(float maxScale, float minScale) {
         this.maxScale = maxScale;
         this.minScale = minScale;
     }
-    
-    public void setSizeInstant(Entity entity, Float size) {
-        checkMaxHitbox(entity, size, 0);
+
+    public static PlayerSizeUtils getPlayerSizeUtil(Player player){
+
+    }
+
+    public void setSize(Entity entity, Float size, int ticks){
+        checkMaxHitbox(entity, size, ticks);
         ScaleData data = getScaleData(entity);
         data.setScale(size);
     }
 
-    public void multSizeInstant(Entity entity, Float size) {
+    public void multSize(Entity entity, Float size, int ticks){
         Float targetScale = getScaleData(entity).getTargetScale()*size;
-        setSizeInstant(entity, targetScale);
-    }
-
-    //i should probably grab the actual default from pekhui as if it changes from 20 this wont however a second is a good default i feel
-    //also i should spend some time to encorporate these like 6 similar methods into 1 or 2 methods it should be possible and will make for nicer code
-    public void setSizeOverTimeDefault(Entity entity, Float size) {
-        checkMaxHitbox(entity, size, 20);
-        ScaleData data = getScaleData(entity);
-        data.setScaleTickDelay(20);
-        data.setTargetScale(size);
-    }   
-
-    public void multSizeOverTimeDefault(Entity entity, Float size){
-        Float targetScale = getScaleData(entity).getTargetScale()*size;
-        setSizeOverTimeDefault(entity, targetScale);
-    }
-
-    public void setSizeOverTimeCustom(Entity entity, Float size, int ticks) {
-        checkMaxHitbox(entity, size, ticks);
-        ScaleData data = getScaleData(entity);
-        data.setScaleTickDelay(ticks);
-        data.setTargetScale(size);
-    }   
-
-    public void multSizeOverTimeCustom(Entity entity, Float size, int ticks){
-        Float targetScale = getScaleData(entity).getTargetScale()*size;
-        setSizeOverTimeCustom(entity, targetScale, ticks);
+        setSize(entity, targetScale, ticks);
     }
 
 
