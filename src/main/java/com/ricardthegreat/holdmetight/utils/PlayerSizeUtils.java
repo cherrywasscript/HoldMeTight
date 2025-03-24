@@ -57,6 +57,9 @@ public class PlayerSizeUtils {
             float mult = size/pMix.getCurrentScale();
             pMix.setCurrentScale(size);
             pMix.setTargetScale(pMix.getTargetScale()*mult);
+            if (pMix.getRemainingTicks() == 0) {
+                pMix.setRemainingTicks(1);
+            }
         }else{
             pMix.setTargetScale(size);
             pMix.setRemainingTicks(ticks);
@@ -81,7 +84,7 @@ public class PlayerSizeUtils {
      * @param ticks - the time in ticks (1/20 seconds) in which the player should change by the amount given in size
      */
     public static void perpetualSize(Player player, Float size, int ticks){
-        
+
     }
 
     //get a players size

@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.ricardthegreat.holdmetight.Config;
+import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.utils.PlayerSizeExtension;
 import com.ricardthegreat.holdmetight.utils.PlayerSizeUtils;
 
@@ -41,18 +42,26 @@ public abstract class PlayerSizeMixin implements PlayerSizeExtension {
     //maximum size a hitbox can be
     private float maxHitboxScale = (float) Config.maxHitboxScale; 
 
+
+    private ScaleData data = ((PehkuiEntityExtensions) (Player) (Object) this).pehkui_getScaleData(ScaleTypes.BASE);
+
     @Inject(at = @At("TAIL"), method = "tick()V")
     private void tick(CallbackInfo info){
         if (remainingTicks > 0) {
             nextScaleStep();
 
-            getScaleData().setScale(currentScale);
+            if (data.getScaleTickDelay() != 1) {
+                data.setScaleTickDelay(1);
+            }
+
+            data.setTargetScale(currentScale);
+
             clampMaxHitbox();
             fixStepHeight();
         }
 
         if (perpetualChange) {
-            getScaleData().setScale(currentScale*perpetualChangeValue);
+            data.setScale(currentScale*perpetualChangeValue);
             clampMaxHitbox();
             fixStepHeight();
         }
@@ -64,14 +73,6 @@ public abstract class PlayerSizeMixin implements PlayerSizeExtension {
         float scaleChange = (targetScale - currentScale)/remainingTicks;
         currentScale += scaleChange;
         remainingTicks--;
-    }
-
-    //returns the scale data for this player, i am unsure if this is something i can just grab once or not so currently
-    //it is freshly grabbed every time
-    private ScaleData getScaleData() {
-        PehkuiEntityExtensions pEnt = (PehkuiEntityExtensions) (Player) (Object) this;
-        ScaleData data = pEnt.pehkui_getScaleData(ScaleTypes.BASE);
-        return data;
     }
 
     //ensure that the players hitbox does not go above the maximum and 
