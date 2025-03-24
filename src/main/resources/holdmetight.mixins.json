@@ -7,7 +7,6 @@
     "mixins": [
       "SmallEntityRenderMixin",
       "EntityMixin",
-      "PlayerMixin",
       "HumanoidModelMixin",
       "MultiPlayerGameModeMixin",
       "LivingEntityMixin",
@@ -15,6 +14,10 @@
       "VibrationSystemListenerMixin",
       "BasePressurePlateBlockMixin",
       "BottleItemMixin",
+
+
+      "playerextensions.PlayerMixin",
+      "playerextensions.PlayerSizeMixin",
 
 
       "collisions.CrossCollisionBlockMixin",
