@@ -34,6 +34,7 @@ public class EntitySizeUtils {
         data.setScale(size);
     }
 
+    @Deprecated
     public static void multSizeInstant(Entity entity, Float size) {
         Float targetScale = getScaleData(entity).getTargetScale()*size;
         setSizeInstant(entity, targetScale);
@@ -41,6 +42,7 @@ public class EntitySizeUtils {
 
     //i should probably grab the actual default from pekhui as if it changes from 20 this wont however a second is a good default i feel
     //also i should spend some time to encorporate these like 6 similar methods into 1 or 2 methods it should be possible and will make for nicer code
+    @Deprecated
     public static void setSizeOverTimeDefault(Entity entity, Float size) {
 
         if (entity instanceof Player) {
@@ -53,11 +55,13 @@ public class EntitySizeUtils {
         data.setTargetScale(size);
     }   
 
+    @Deprecated
     public static void multSizeOverTimeDefault(Entity entity, Float size){
         Float targetScale = getScaleData(entity).getTargetScale()*size;
         setSizeOverTimeDefault(entity, targetScale);
     }
 
+    @Deprecated
     public static void setSizeOverTimeCustom(Entity entity, Float size, int ticks) {
 
         if (entity instanceof Player) {
@@ -70,12 +74,13 @@ public class EntitySizeUtils {
         data.setTargetScale(size);
     }   
 
+    @Deprecated
     public static void multSizeOverTimeCustom(Entity entity, Float size, int ticks){
         Float targetScale = getScaleData(entity).getTargetScale()*size;
         setSizeOverTimeCustom(entity, targetScale, ticks);
     }
 
-
+    @Deprecated
     public static float getSize(Entity entity) {
         return getScaleData(entity).getScale();
     }
