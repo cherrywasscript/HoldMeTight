@@ -1,7 +1,7 @@
 package com.ricardthegreat.holdmetight.entities.projectile;
 
 import com.ricardthegreat.holdmetight.init.EntityInit;
-import com.ricardthegreat.holdmetight.utils.SizeUtils;
+import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
@@ -46,9 +46,9 @@ public class WandProjectile extends Projectile {
         }
         
         if (isMult) {
-            SizeUtils.multSizeOverTimeDefault(hitEntity.getEntity(), scale);
+            EntitySizeUtils.multSizeOverTimeDefault(hitEntity.getEntity(), scale);
         }else{
-            SizeUtils.setSizeOverTimeDefault(hitEntity.getEntity(), scale);
+            EntitySizeUtils.setSizeOverTimeDefault(hitEntity.getEntity(), scale);
         }
     }
 

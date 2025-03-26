@@ -6,7 +6,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import com.ricardthegreat.holdmetight.utils.SizeUtils;
+
+import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
@@ -30,7 +31,7 @@ public class BasePressurePlateBlockMixin extends Block{
     //disables pressureplate for those under 0.1
     @Inject(at = @At("HEAD"), method = "entityInside(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/Entity;)V", cancellable = true)
     public void entityInside(BlockState p_49314_, Level p_49315_, BlockPos p_49316_, Entity entity, CallbackInfo info) {
-        if(SizeUtils.getSize(entity) < 0.1){
+        if(EntitySizeUtils.getSize(entity) < 0.1){
             info.cancel();
         }
     }
@@ -44,7 +45,7 @@ public class BasePressurePlateBlockMixin extends Block{
         if (context instanceof EntityCollisionContext) {
             EntityCollisionContext entContext = (EntityCollisionContext) context;
             Entity ent = entContext.getEntity();
-            if(ent != null && SizeUtils.getSize(ent) < 0.1){
+            if(ent != null && EntitySizeUtils.getSize(ent) < 0.1){
                 return voxelshape;
             }
         }

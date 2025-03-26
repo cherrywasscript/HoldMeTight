@@ -1,9 +1,10 @@
-package com.ricardthegreat.holdmetight.utils;
+package com.ricardthegreat.holdmetight.utils.sizeutils;
 
 import org.stringtemplate.v4.compiler.CodeGenerator.primary_return;
 
 import com.ricardthegreat.holdmetight.Config;
 import com.ricardthegreat.holdmetight.mixins.playerextensions.PlayerSizeMixin;
+import com.ricardthegreat.holdmetight.utils.PlayerSizeExtension;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;

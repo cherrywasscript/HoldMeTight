@@ -5,7 +5,7 @@ import javax.annotation.Nonnull;
 import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
 import com.ricardthegreat.holdmetight.items.remotes.setmult.OtherCustomSizeRemoteItem;
 import com.ricardthegreat.holdmetight.utils.PlayerRenderExtension;
-import com.ricardthegreat.holdmetight.utils.SizeUtils;
+import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -117,7 +117,7 @@ public abstract class AbstractSizeRemoteScreen extends Screen{
         
         if (selectedPlayer != null) {
             if (inRange()) {
-                graphics.drawCenteredString(font, Float.toString(SizeUtils.getSize(selectedPlayer)), (rightPos + centerHorizonalPos)/2, topPos +19, 0xdddddd);
+                graphics.drawCenteredString(font, Float.toString(EntitySizeUtils.getSize(selectedPlayer)), (rightPos + centerHorizonalPos)/2, topPos +19, 0xdddddd);
                 graphics.drawCenteredString(font, selectedPlayer.getName().getString(), (leftPos + centerHorizonalPos)/2, topPos +19, 0xdddddd);
             }else{
                 graphics.drawCenteredString(font, NOT_APPLICABLE, (rightPos + centerHorizonalPos)/2, topPos +19, 0xffff00);

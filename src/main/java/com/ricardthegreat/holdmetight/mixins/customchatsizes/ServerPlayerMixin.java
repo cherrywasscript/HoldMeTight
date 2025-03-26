@@ -16,7 +16,7 @@ import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 import com.ricardthegreat.holdmetight.Config;
 import com.ricardthegreat.holdmetight.utils.IChatComponentPlayerSent;
-import com.ricardthegreat.holdmetight.utils.SizeUtils;
+import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.GuiMessage;
@@ -217,7 +217,7 @@ public abstract class ServerPlayerMixin implements IChatComponentPlayerSent{
          player = level.getPlayerByUUID(profile.getId());
       }
       if (player != null) {
-         scale = SizeUtils.getSize(player) > 1 ? 1 : SizeUtils.getSize(player);
+         scale = EntitySizeUtils.getSize(player) > 1 ? 1 : EntitySizeUtils.getSize(player);
       }
 
 

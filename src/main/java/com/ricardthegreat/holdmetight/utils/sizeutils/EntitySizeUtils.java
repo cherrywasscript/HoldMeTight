@@ -1,15 +1,18 @@
-package com.ricardthegreat.holdmetight.utils;
+package com.ricardthegreat.holdmetight.utils.sizeutils;
 
 import com.ricardthegreat.holdmetight.Config;
 
 import net.minecraft.world.entity.Entity;
-
+import net.minecraft.world.entity.player.Player;
 import virtuoel.pehkui.api.ScaleData;
 import virtuoel.pehkui.api.ScaleType;
 import virtuoel.pehkui.api.ScaleTypes;
 import virtuoel.pehkui.util.PehkuiEntityExtensions;
 
-public class SizeUtils {
+/*
+ * need to completely redo this class at some point as it currently is crap
+ */
+public class EntitySizeUtils {
 
     private static final ScaleType base = ScaleTypes.BASE;
     private static final ScaleType hitbox_height = ScaleTypes.HITBOX_HEIGHT;
@@ -19,8 +22,13 @@ public class SizeUtils {
     private static float maxScale = (float) Config.maxHitboxScale;
 
     
-    
+    @Deprecated
     public static void setSizeInstant(Entity entity, Float size) {
+
+        if (entity instanceof Player) {
+            PlayerSizeUtils.setSize((Player) entity, size, 0);
+        }
+
         checkMaxHitbox(entity, size, 0);
         ScaleData data = getScaleData(entity);
         data.setScale(size);
@@ -34,6 +42,11 @@ public class SizeUtils {
     //i should probably grab the actual default from pekhui as if it changes from 20 this wont however a second is a good default i feel
     //also i should spend some time to encorporate these like 6 similar methods into 1 or 2 methods it should be possible and will make for nicer code
     public static void setSizeOverTimeDefault(Entity entity, Float size) {
+
+        if (entity instanceof Player) {
+            PlayerSizeUtils.setSize((Player) entity, size, 0);
+        }
+
         checkMaxHitbox(entity, size, 20);
         ScaleData data = getScaleData(entity);
         data.setScaleTickDelay(20);
@@ -46,6 +59,11 @@ public class SizeUtils {
     }
 
     public static void setSizeOverTimeCustom(Entity entity, Float size, int ticks) {
+
+        if (entity instanceof Player) {
+            PlayerSizeUtils.setSize((Player) entity, size, 0);
+        }
+
         checkMaxHitbox(entity, size, ticks);
         ScaleData data = getScaleData(entity);
         data.setScaleTickDelay(ticks);

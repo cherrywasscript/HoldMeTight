@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.ricardthegreat.holdmetight.utils.SizeUtils;
+import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
@@ -25,7 +25,7 @@ public abstract class WallHangingSignBlockMixin{
         if (context instanceof EntityCollisionContext) {
             EntityCollisionContext entContext = (EntityCollisionContext) context;
             Entity ent = entContext.getEntity();
-            if(ent != null && (SizeUtils.getSize(ent) < 0.21)){
+            if(ent != null && (EntitySizeUtils.getSize(ent) < 0.21)){
                 info.setReturnValue(((WallHangingSignBlock) (Object) this).getShape(state, getter, pos, context));
             }
         }

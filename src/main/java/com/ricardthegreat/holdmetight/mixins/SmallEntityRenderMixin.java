@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.ricardthegreat.holdmetight.utils.PlayerCarryExtension;
 import com.ricardthegreat.holdmetight.utils.PlayerRenderExtension;
-import com.ricardthegreat.holdmetight.utils.SizeUtils;
+import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.font.providers.UnihexProvider.Dimensions;
@@ -34,7 +34,7 @@ public abstract class SmallEntityRenderMixin<T extends Entity> {
 	public boolean shouldRender(T entity, Frustum frustum, double x, double y, double z, CallbackInfoReturnable<Dimensions> cir){
 
 		if(FMLEnvironment.dist == Dist.CLIENT && entity instanceof Player){
-			double scale = SizeUtils.getSize(entity);
+			double scale = EntitySizeUtils.getSize(entity);
 			AABB aabb = entity.getBoundingBoxForCulling().inflate(0.5D);
 			if (scale < 1) {
 				aabb = entity.getBoundingBoxForCulling().inflate(0.5D/scale);

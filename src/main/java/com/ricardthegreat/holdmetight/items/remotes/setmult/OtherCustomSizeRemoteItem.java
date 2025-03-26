@@ -6,7 +6,7 @@ import javax.annotation.Nonnull;
 
 import com.ricardthegreat.holdmetight.Client.ClientHooks;
 import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
-import com.ricardthegreat.holdmetight.utils.SizeUtils;
+import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;

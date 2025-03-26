@@ -12,7 +12,7 @@ import com.ricardthegreat.holdmetight.network.CPlayerCarryPositionPacket;
 import com.ricardthegreat.holdmetight.network.CPlayerDismountPlayerPacket;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.utils.PlayerCarryExtension;
-import com.ricardthegreat.holdmetight.utils.SizeUtils;
+import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -36,7 +36,7 @@ public abstract class EntityMixin {
     public void unnamedsizemod$interact(Player vehicle, InteractionHand hand, CallbackInfoReturnable<InteractionResult> info) {
         Entity rider = (Entity) (Object) this;
         
-        if(rider instanceof Player && vehicle.getMainHandItem() == ItemStack.EMPTY && SizeUtils.getSize(rider) <= SizeUtils.getSize(vehicle)/4){
+        if(rider instanceof Player && vehicle.getMainHandItem() == ItemStack.EMPTY && EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)/4){
 
             PlayerCarryExtension vehicleExt = (PlayerCarryExtension) vehicle;
             PlayerCarryExtension riderExt = (PlayerCarryExtension) rider;
@@ -125,7 +125,7 @@ public abstract class EntityMixin {
         Entity vehicle = (Entity) (Object) this;
         if (vehicle.hasPassenger(rider)) {
             if(vehicle instanceof Player player){
-                double scaleDif =  SizeUtils.getSize(vehicle)/SizeUtils.getSize(rider);
+                double scaleDif =  EntitySizeUtils.getSize(vehicle)/EntitySizeUtils.getSize(rider);
                 
                 PlayerCarryExtension pExt = (PlayerCarryExtension) player;
 
@@ -166,7 +166,7 @@ public abstract class EntityMixin {
             }
         }
 
-        vertOffset = vehicle.getY() + vehicle.getPassengersRidingOffset() + rider.getMyRidingOffset() - (vehiclePlayer.getVertOffset()*SizeUtils.getSize(vehicle));
+        vertOffset = vehicle.getY() + vehicle.getPassengersRidingOffset() + rider.getMyRidingOffset() - (vehiclePlayer.getVertOffset()*EntitySizeUtils.getSize(vehicle));
 
         double degrees = vehicle.yBodyRotO + vehiclePlayer.getRotationOffset();
         
@@ -182,8 +182,8 @@ public abstract class EntityMixin {
         xOffset = (Math.cos(rotation)*vehiclePlayer.getXYMult())+x;
         yOffset = (Math.sin(rotation)*vehiclePlayer.getXYMult())+y;
 
-        xOffset *= SizeUtils.getSize(vehicle);
-        yOffset *= SizeUtils.getSize(vehicle);
+        xOffset *= EntitySizeUtils.getSize(vehicle);
+        yOffset *= EntitySizeUtils.getSize(vehicle);
     }
 
     private void calcHeadPosition(Player vehicle, Entity rider){
@@ -199,7 +199,7 @@ public abstract class EntityMixin {
         }
         Vec3 vec = vehicle.getLookAngle();
 
-        double offsetAddition = vehiclePlayer.getVertOffset()*SizeUtils.getSize(vehicle)*Math.abs(vec.y - 1);
+        double offsetAddition = vehiclePlayer.getVertOffset()*EntitySizeUtils.getSize(vehicle)*Math.abs(vec.y - 1);
         vertOffset = vehicle.getY() + vehicle.getPassengersRidingOffset() + rider.getMyRidingOffset() - offsetAddition;
 
         
@@ -215,8 +215,8 @@ public abstract class EntityMixin {
         xOffset = vec.x*vehiclePlayer.getXYMult()+x;
         yOffset = vec.z*vehiclePlayer.getXYMult()+y;
 
-        xOffset *= SizeUtils.getSize(vehicle);
-        yOffset *= SizeUtils.getSize(vehicle);
+        xOffset *= EntitySizeUtils.getSize(vehicle);
+        yOffset *= EntitySizeUtils.getSize(vehicle);
     }
 
     @Inject(at = @At("HEAD"), method = "tick()V")

@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 
 import org.spongepowered.asm.mixin.Mixin;
 
-import com.ricardthegreat.holdmetight.utils.SizeUtils;
+import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -42,7 +42,7 @@ public class LeverBlockMixin extends FaceAttachedHorizontalDirectionalBlock{
         if (context instanceof EntityCollisionContext) {
             EntityCollisionContext entContext = (EntityCollisionContext) context;
             Entity ent = entContext.getEntity();
-            if(ent != null && SizeUtils.getSize(ent) < 0.21){
+            if(ent != null && EntitySizeUtils.getSize(ent) < 0.21){
                 return getCollision(state, level, pos, context);
             }
         }

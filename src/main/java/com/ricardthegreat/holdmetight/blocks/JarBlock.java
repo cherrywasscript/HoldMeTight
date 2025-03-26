@@ -3,7 +3,7 @@ package com.ricardthegreat.holdmetight.blocks;
 import javax.annotation.Nonnull;
 
 import com.ricardthegreat.holdmetight.utils.PlayerCarryExtension;
-import com.ricardthegreat.holdmetight.utils.SizeUtils;
+import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -40,7 +40,7 @@ public class JarBlock extends Block {
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
-        if (SizeUtils.getSize(player) >= 0.8) {
+        if (EntitySizeUtils.getSize(player) >= 0.8) {
             PlayerCarryExtension playerExt = (PlayerCarryExtension) player;
 
             System.out.println(level.isClientSide);
@@ -81,7 +81,7 @@ public class JarBlock extends Block {
             EntityCollisionContext entContext = (EntityCollisionContext) context;
             Entity ent = entContext.getEntity();
             if(ent != null){
-                if (SizeUtils.getSize(ent) >= 0.8) {
+                if (EntitySizeUtils.getSize(ent) >= 0.8) {
                     return Block.box(4, 0, 4, 12, 11, 12);
                 }else if (state.getOptionalValue(OPEN).get()) {
                     return makeShape();

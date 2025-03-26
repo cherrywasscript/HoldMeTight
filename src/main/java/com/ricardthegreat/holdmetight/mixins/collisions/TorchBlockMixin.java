@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 
 import org.spongepowered.asm.mixin.Mixin;
 
-import com.ricardthegreat.holdmetight.utils.SizeUtils;
+import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
@@ -37,7 +37,7 @@ public class TorchBlockMixin extends Block{
         if (context instanceof EntityCollisionContext) {
             EntityCollisionContext entContext = (EntityCollisionContext) context;
             Entity ent = entContext.getEntity();
-            if(ent != null && SizeUtils.getSize(ent) < 0.21){
+            if(ent != null && EntitySizeUtils.getSize(ent) < 0.21){
                 return voxelshape;
             }
         }
@@ -47,7 +47,7 @@ public class TorchBlockMixin extends Block{
     @Override
     public void entityInside(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull Entity entity) {
         
-        if (entity instanceof LivingEntity && !EnchantmentHelper.hasFrostWalker((LivingEntity)entity) && entOnTop(entity, pos) && SizeUtils.getSize(entity) < 0.21) {
+        if (entity instanceof LivingEntity && !EnchantmentHelper.hasFrostWalker((LivingEntity)entity) && entOnTop(entity, pos) && EntitySizeUtils.getSize(entity) < 0.21) {
             if (state.is(Blocks.TORCH)) {
                 entity.hurt(level.damageSources().inFire(), 1);
             }else if (state.is(Blocks.SOUL_TORCH)) {

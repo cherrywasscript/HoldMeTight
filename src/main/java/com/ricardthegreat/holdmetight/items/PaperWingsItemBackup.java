@@ -3,7 +3,7 @@ package com.ricardthegreat.holdmetight.items;
 import javax.annotation.Nonnull;
 
 import com.ricardthegreat.holdmetight.Config;
-import com.ricardthegreat.holdmetight.utils.SizeUtils;
+import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.client.model.ElytraModel;
 import net.minecraft.client.particle.FireworkParticles;
@@ -31,7 +31,7 @@ public class PaperWingsItemBackup extends Item implements Equipable {
     }
     
     public InteractionResultHolder<ItemStack> swapWithEquipmentSlot(@Nonnull Item item, @Nonnull Level level, @Nonnull Player player, @Nonnull InteractionHand hand) {
-        if (SizeUtils.getSize(player) > 0.5) {
+        if (EntitySizeUtils.getSize(player) > 0.5) {
             return InteractionResultHolder.fail(player.getItemInHand(hand));
         }
         return swapWithEquipmentSlot(item, level, player, hand);
@@ -46,7 +46,7 @@ public class PaperWingsItemBackup extends Item implements Equipable {
     }
 
     private boolean checkCorrectScale(Entity ent){
-        if (SizeUtils.getSize(ent) >= Config.maxWingsScale) {
+        if (EntitySizeUtils.getSize(ent) >= Config.maxWingsScale) {
             return false;
         }
         return true;

@@ -1,7 +1,7 @@
 package com.ricardthegreat.holdmetight.entities.projectile;
 
 import com.ricardthegreat.holdmetight.init.EntityInit;
-import com.ricardthegreat.holdmetight.utils.SizeUtils;
+import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -44,9 +44,9 @@ public class RayGunProjectile extends Projectile {
         }
         
         if (isMult) {
-            SizeUtils.multSizeOverTimeDefault(hitEntity.getEntity(), scale);
+            EntitySizeUtils.multSizeOverTimeDefault(hitEntity.getEntity(), scale);
         }else{
-            SizeUtils.setSizeOverTimeDefault(hitEntity.getEntity(), scale);
+            EntitySizeUtils.setSizeOverTimeDefault(hitEntity.getEntity(), scale);
         }
     }
 

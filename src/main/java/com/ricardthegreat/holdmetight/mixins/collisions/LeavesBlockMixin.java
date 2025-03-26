@@ -2,7 +2,7 @@ package com.ricardthegreat.holdmetight.mixins.collisions;
 
 import org.spongepowered.asm.mixin.Mixin;
 
-import com.ricardthegreat.holdmetight.utils.SizeUtils;
+import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
@@ -30,7 +30,7 @@ public class LeavesBlockMixin extends Block{
         if (context instanceof EntityCollisionContext) {
             EntityCollisionContext entContext = (EntityCollisionContext) context;
             Entity ent = entContext.getEntity();
-            if(ent != null && (SizeUtils.getSize(ent) < 0.21 || SizeUtils.getSize(ent) >=4)){
+            if(ent != null && (EntitySizeUtils.getSize(ent) < 0.21 || EntitySizeUtils.getSize(ent) >=4)){
                 return Shapes.empty();
             }
         }

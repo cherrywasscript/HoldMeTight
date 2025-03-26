@@ -7,7 +7,7 @@ import com.ricardthegreat.holdmetight.blockentities.MushroomTeleporterBlockEntit
 import com.ricardthegreat.holdmetight.init.BlockEntityInit;
 import com.ricardthegreat.holdmetight.portal.ModTeleporter;
 import com.ricardthegreat.holdmetight.save.MushroomHouseSavedData;
-import com.ricardthegreat.holdmetight.utils.SizeUtils;
+import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 import com.ricardthegreat.holdmetight.worldgen.dimension.ModDimensions;
 import com.ricardthegreat.holdmetight.worldgen.structures.MushroomHouseStructureGenerator;
 
@@ -103,7 +103,7 @@ public class MushroomTeleporterBlock extends Block implements EntityBlock{
                     targetPos = targetPos.above();
                                
                     //change scale to 1 so the dimensions is normal
-                    SizeUtils.setSizeInstant(player, 1f);
+                    EntitySizeUtils.setSizeInstant(player, 1f);
 
 
                     //change the dimension

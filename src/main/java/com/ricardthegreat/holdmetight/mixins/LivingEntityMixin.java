@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.ricardthegreat.holdmetight.Config;
-import com.ricardthegreat.holdmetight.utils.SizeUtils;
+import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
@@ -50,7 +50,7 @@ public abstract class LivingEntityMixin extends Entity{
         }
 
         //checks if entity is .5 or less and is player
-        if (ent.isSpectator() || SizeUtils.getSize(ent) >= 0.8 || !(ent instanceof Player)) {
+        if (ent.isSpectator() || EntitySizeUtils.getSize(ent) >= 0.8 || !(ent instanceof Player)) {
             return false;
         }else{
 
@@ -202,7 +202,7 @@ public abstract class LivingEntityMixin extends Entity{
                 flag &= this.random.nextInt(5) == 0;
             }
 
-            if (flag && i > 0 && SizeUtils.getSize(this) >= Config.minParticleScale) {
+            if (flag && i > 0 && EntitySizeUtils.getSize(this) >= Config.minParticleScale) {
                 double d0 = (double)(i >> 16 & 255) / 255.0D;
                 double d1 = (double)(i >> 8 & 255) / 255.0D;
                 double d2 = (double)(i >> 0 & 255) / 255.0D;
