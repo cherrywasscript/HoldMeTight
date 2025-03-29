@@ -1,4 +1,4 @@
-package com.ricardthegreat.holdmetight.mixins;
+package com.ricardthegreat.holdmetight.mixins.collisions;
 
 import javax.annotation.Nonnull;
 
@@ -38,7 +38,7 @@ public class BasePressurePlateBlockMixin extends Block{
 
     //adds a hitbox for those under 0.1
     @Override
-    public VoxelShape getCollisionShape(@Nonnull BlockState p_52357_, @Nonnull BlockGetter p_52358_, @Nonnull BlockPos p_52359_, @Nonnull CollisionContext context) {
+    public VoxelShape getCollisionShape(@Nonnull BlockState state, @Nonnull BlockGetter getter, @Nonnull BlockPos pos, @Nonnull CollisionContext context) {
         //block with the bounds of a pressure plate
         VoxelShape voxelshape = Block.box(1, 0.0D, 1, 15, 1, 15);
 
@@ -46,7 +46,7 @@ public class BasePressurePlateBlockMixin extends Block{
             EntityCollisionContext entContext = (EntityCollisionContext) context;
             Entity ent = entContext.getEntity();
             if(ent != null && EntitySizeUtils.getSize(ent) < 0.1){
-                return voxelshape;
+                return ((BasePressurePlateBlock) (Object) this).getShape(state, getter, pos, context);
             }
         }
         return Shapes.empty();

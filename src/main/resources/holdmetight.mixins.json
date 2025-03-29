@@ -12,7 +12,6 @@
       "LivingEntityMixin",
       "WebBlockMixin",
       "VibrationSystemListenerMixin",
-      "BasePressurePlateBlockMixin",
       "BottleItemMixin",
 
 
@@ -20,6 +19,7 @@
       "playerextensions.PlayerSizeMixin",
 
 
+      "collisions.BasePressurePlateBlockMixin",
       "collisions.CrossCollisionBlockMixin",
       "collisions.FenceGateBlockMixin",
       "collisions.LeavesBlockMixin",
