@@ -8,6 +8,7 @@ import com.ricardthegreat.holdmetight.Commands.TestCommand;
 import com.ricardthegreat.holdmetight.utils.PlayerCarryExtension;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.api.distmarker.Dist;
@@ -31,10 +32,11 @@ public class ClientForgeHandler {
     @SubscribeEvent
     public static void clientTick(TickEvent.ClientTickEvent event) {
         Minecraft minecraft = Minecraft.getInstance();
-        if(Keybindings.INSTANCE.shoulderCarryKey.consumeClick() && minecraft.player != null) {
-            minecraft.player.displayClientMessage(KEY_PRESSED, false);
+        LocalPlayer mcPlayer = minecraft.player;
+        if(Keybindings.INSTANCE.shoulderCarryKey.consumeClick() && mcPlayer != null) {
+            mcPlayer.displayClientMessage(KEY_PRESSED, false);
 
-            PlayerCarryExtension player = (PlayerCarryExtension) minecraft.player;
+            PlayerCarryExtension player = (PlayerCarryExtension) mcPlayer;
 
             player.setShoulderCarry(!player.getShoulderCarry());
             player.setCustomCarry(false);
