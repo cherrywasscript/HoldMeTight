@@ -40,8 +40,6 @@ public class BasePressurePlateBlockMixin extends Block{
     @Override
     public VoxelShape getCollisionShape(@Nonnull BlockState state, @Nonnull BlockGetter getter, @Nonnull BlockPos pos, @Nonnull CollisionContext context) {
         //block with the bounds of a pressure plate
-        VoxelShape voxelshape = Block.box(1, 0.0D, 1, 15, 1, 15);
-
         if (context instanceof EntityCollisionContext) {
             EntityCollisionContext entContext = (EntityCollisionContext) context;
             Entity ent = entContext.getEntity();
@@ -51,4 +49,5 @@ public class BasePressurePlateBlockMixin extends Block{
         }
         return Shapes.empty();
     }
+    
 }
