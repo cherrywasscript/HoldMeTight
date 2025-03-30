@@ -30,6 +30,7 @@
       "collisions.ButtonBlockMixin",
 
       "interaction.ButtonBlockInteractionMixin",
+      "interaction.DoorBlockInteractionMixin",
       "interaction.LeverBlockInteractionMixin"
     ],
     "client": [
