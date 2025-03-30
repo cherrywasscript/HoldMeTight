@@ -6,11 +6,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.ricardthegreat.holdmetight.Config;
-import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.utils.PlayerSizeExtension;
 import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
 
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import virtuoel.pehkui.api.ScaleData;
 import virtuoel.pehkui.api.ScaleTypes;

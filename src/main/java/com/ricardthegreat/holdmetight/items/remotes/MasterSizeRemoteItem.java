@@ -3,14 +3,10 @@ package com.ricardthegreat.holdmetight.items.remotes;
 import javax.annotation.Nonnull;
 
 import com.ricardthegreat.holdmetight.Client.ClientHooks;
-import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
-import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
-
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;

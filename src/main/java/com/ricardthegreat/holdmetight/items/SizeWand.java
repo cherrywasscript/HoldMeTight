@@ -5,7 +5,6 @@ import javax.annotation.Nonnull;
 import com.ricardthegreat.holdmetight.Client.ClientHooks;
 import com.ricardthegreat.holdmetight.entities.projectile.WandProjectile;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;

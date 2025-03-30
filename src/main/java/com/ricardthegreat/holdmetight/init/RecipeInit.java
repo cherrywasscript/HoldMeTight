@@ -1,7 +1,5 @@
 package com.ricardthegreat.holdmetight.init;
 
-import com.ricardthegreat.holdmetight.utils.BetterBrewingRecipe;
-
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;

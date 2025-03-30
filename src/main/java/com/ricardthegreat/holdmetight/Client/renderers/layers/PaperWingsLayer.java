@@ -3,7 +3,6 @@ package com.ricardthegreat.holdmetight.Client.renderers.layers;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.Client.models.ModModelLayers;
 import com.ricardthegreat.holdmetight.init.ItemInit;
 
 import net.minecraft.client.model.ElytraModel;
@@ -22,7 +21,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.PlayerModelPart;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 
 public class PaperWingsLayer<T extends LivingEntity, M extends EntityModel<T>> extends ElytraLayer<T,M>{
 
