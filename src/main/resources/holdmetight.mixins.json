@@ -27,7 +27,10 @@
       "collisions.LeverBlockMixin",
       "collisions.SignBlockMixin",
       "collisions.WallHangingSignBlockMixin",
-      "collisions.ButtonBlockMixin"
+      "collisions.ButtonBlockMixin",
+
+      "interaction.ButtonBlockInteractionMixin",
+      "interaction.LeverBlockInteractionMixin"
     ],
     "client": [
     ],
