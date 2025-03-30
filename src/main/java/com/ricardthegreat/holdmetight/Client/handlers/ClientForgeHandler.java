@@ -3,7 +3,6 @@ package com.ricardthegreat.holdmetight.Client.handlers;
 import com.mojang.brigadier.CommandDispatcher;
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.Client.Keybindings;
-import com.ricardthegreat.holdmetight.Commands.ChatScaleCommand;
 import com.ricardthegreat.holdmetight.Commands.TestCommand;
 import com.ricardthegreat.holdmetight.utils.PlayerCarryExtension;
 
@@ -41,13 +40,13 @@ public class ClientForgeHandler {
             player.setShoulderCarry(!player.getShoulderCarry());
             player.setCustomCarry(false);
             player.setShouldSync(true);
-
+            
         }
 
-        if(Keybindings.INSTANCE.customCarryKey.consumeClick() && minecraft.player != null) {
-            minecraft.player.displayClientMessage(KEY_PRESSED, true);
+        if(Keybindings.INSTANCE.customCarryKey.consumeClick() && mcPlayer != null) {
+            mcPlayer.displayClientMessage(KEY_PRESSED, true);
 
-            PlayerCarryExtension player = (PlayerCarryExtension) minecraft.player;
+            PlayerCarryExtension player = (PlayerCarryExtension) mcPlayer;
 
             player.setCustomCarry(!player.getCustomCarry());
             player.setShoulderCarry(false);
