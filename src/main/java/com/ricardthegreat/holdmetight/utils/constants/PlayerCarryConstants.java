@@ -1,6 +1,6 @@
-package com.ricardthegreat.holdmetight.utils;
+package com.ricardthegreat.holdmetight.utils.constants;
 
-public class PlayerCarryUtils{
+public class PlayerCarryConstants{
 
     public static final String CARRIED_NBT_TAG = "isCarried";
     public static final String CARRYING_NBT_TAG = "isCarrying";
