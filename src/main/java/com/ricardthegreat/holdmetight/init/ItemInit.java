@@ -8,6 +8,8 @@ import com.ricardthegreat.holdmetight.items.PaperWingsItem;
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.items.SizeRay;
 import com.ricardthegreat.holdmetight.items.SizeWand;
+import com.ricardthegreat.holdmetight.items.remotes.AdvancedSizeRemoteItem;
+import com.ricardthegreat.holdmetight.items.remotes.BasicSizeRemoteItem;
 import com.ricardthegreat.holdmetight.items.remotes.MasterSizeRemoteItem;
 import com.ricardthegreat.holdmetight.items.remotes.overtime.OtherTimedSizeRemoteItem;
 import com.ricardthegreat.holdmetight.items.remotes.overtime.TimedSizeRemoteItem;
@@ -42,29 +44,11 @@ public class ItemInit {
                             .saturationMod(2f)
                             .build()))));
         */
-        
 
-        public static final RegistryObject<Item> CUSTOM_SIZE_REMOTE = addToTab(
-                ITEMS.register("remotes/gold_size_remote", () -> new CustomSizeRemoteItem(new Item.Properties().stacksTo(1))));
-        public static final RegistryObject<Item> OTHER_CUSTOM_SIZE_REMOTE = addToTab(
-                ITEMS.register("remotes/iron_size_remote", () -> new OtherCustomSizeRemoteItem(new Item.Properties().stacksTo(1))));
-        public static final RegistryObject<Item> USER_CUSTOM_SIZE_REMOTE = addToTab(
-                ITEMS.register("remotes/copper_size_remote", () -> new UserCustomSizeRemoteItem(new Item.Properties().stacksTo(1))));
-
-        public static final RegistryObject<Item> RANDOM_SIZE_REMOTE = addToTab(
-                ITEMS.register("remotes/amethyst_size_remote", () -> new RandomSizeRemoteItem(new Item.Properties().stacksTo(1))));
-        public static final RegistryObject<Item> OTHER_RANDOM_SIZE_REMOTE = addToTab(
-                ITEMS.register("remotes/glowstone_size_remote", () -> new OtherRandomSizeRemoteItem(new Item.Properties().stacksTo(1))));
-        public static final RegistryObject<Item> USER_RANDOM_SIZE_REMOTE = addToTab(
-                ITEMS.register("remotes/lapis_size_remote", () -> new UserRandomSizeRemoteItem(new Item.Properties().stacksTo(1))));
-                
-        public static final RegistryObject<Item> TIMED_SIZE_REMOTE = addToTab(
-                ITEMS.register("remotes/emerald_size_remote", () -> new TimedSizeRemoteItem(new Item.Properties().stacksTo(1))));
-        public static final RegistryObject<Item> OTHER_TIMED_SIZE_REMOTE = addToTab(
-                ITEMS.register("remotes/diamond_size_remote", () -> new OtherTimedSizeRemoteItem(new Item.Properties().stacksTo(1))));
-        public static final RegistryObject<Item> USER_TIMED_SIZE_REMOTE = addToTab(
-                ITEMS.register("remotes/quartz_size_remote", () -> new UserTimedSizeRemoteItem(new Item.Properties().stacksTo(1))));
-
+        public static final RegistryObject<Item> BASIC_SIZE_REMOTE = addToTab(
+                ITEMS.register("remotes/iron_size_remote", () -> new BasicSizeRemoteItem(new Item.Properties().stacksTo(1))));
+        public static final RegistryObject<Item> ADVANCED_SIZE_REMOTE = addToTab(
+                ITEMS.register("remotes/gold_size_remote", () -> new AdvancedSizeRemoteItem(new Item.Properties().stacksTo(1))));
         public static final RegistryObject<Item> MASTER_SIZE_REMOTE = addToTab(
                 ITEMS.register("remotes/netherite_size_remote", () -> new MasterSizeRemoteItem(new Item.Properties().stacksTo(1))));
 
