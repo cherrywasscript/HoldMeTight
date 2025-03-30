@@ -9,8 +9,8 @@ import com.ricardthegreat.holdmetight.network.CPlayerMixinSyncPacket;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.SPlayerMixinSyncPacket;
 import com.ricardthegreat.holdmetight.utils.PlayerCarryExtension;
-import com.ricardthegreat.holdmetight.utils.PlayerCarryUtils;
 import com.ricardthegreat.holdmetight.utils.PlayerRenderExtension;
+import com.ricardthegreat.holdmetight.utils.constants.PlayerCarryConstants;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
@@ -261,29 +261,29 @@ public abstract class PlayerMixin implements PlayerCarryExtension, PlayerRenderE
 
     public void readCarryNbt(CompoundTag tag){
 
-        isCarried = tag.getBoolean(PlayerCarryUtils.CARRIED_NBT_TAG);
-        isCarrying = tag.getBoolean(PlayerCarryUtils.CARRYING_NBT_TAG);
-        isShoulderCarry = tag.getBoolean(PlayerCarryUtils.SHOULDER_CARRY_NBT_TAG);
-        isCustomCarryPosition = tag.getBoolean(PlayerCarryUtils.CUSTOM_CARRY_NBT_TAG);
+        isCarried = tag.getBoolean(PlayerCarryConstants.CARRIED_NBT_TAG);
+        isCarrying = tag.getBoolean(PlayerCarryConstants.CARRYING_NBT_TAG);
+        isShoulderCarry = tag.getBoolean(PlayerCarryConstants.SHOULDER_CARRY_NBT_TAG);
+        isCustomCarryPosition = tag.getBoolean(PlayerCarryConstants.CUSTOM_CARRY_NBT_TAG);
 
-        rotationOffset = tag.getInt(PlayerCarryUtils.ROTATION_NBT_TAG);
-        xymult = tag.getDouble(PlayerCarryUtils.MULT_NBT_TAG);
-        vertOffset = tag.getDouble(PlayerCarryUtils.VERT_NBT_TAG);
-        leftRightMove = tag.getDouble(PlayerCarryUtils.LEFT_RIGHT_NBT_TAG);
+        rotationOffset = tag.getInt(PlayerCarryConstants.ROTATION_NBT_TAG);
+        xymult = tag.getDouble(PlayerCarryConstants.MULT_NBT_TAG);
+        vertOffset = tag.getDouble(PlayerCarryConstants.VERT_NBT_TAG);
+        leftRightMove = tag.getDouble(PlayerCarryConstants.LEFT_RIGHT_NBT_TAG);
         
     }
 
     public CompoundTag writeCarryNbt(CompoundTag tag){
         
-        tag.putBoolean(PlayerCarryUtils.CARRIED_NBT_TAG, isCarried);
-        tag.putBoolean(PlayerCarryUtils.CARRYING_NBT_TAG, isCarrying);
-        tag.putBoolean(PlayerCarryUtils.SHOULDER_CARRY_NBT_TAG, isShoulderCarry);
-        tag.putBoolean(PlayerCarryUtils.CUSTOM_CARRY_NBT_TAG, isCustomCarryPosition);
+        tag.putBoolean(PlayerCarryConstants.CARRIED_NBT_TAG, isCarried);
+        tag.putBoolean(PlayerCarryConstants.CARRYING_NBT_TAG, isCarrying);
+        tag.putBoolean(PlayerCarryConstants.SHOULDER_CARRY_NBT_TAG, isShoulderCarry);
+        tag.putBoolean(PlayerCarryConstants.CUSTOM_CARRY_NBT_TAG, isCustomCarryPosition);
 
-        tag.putInt(PlayerCarryUtils.ROTATION_NBT_TAG, rotationOffset);
-        tag.putDouble(PlayerCarryUtils.MULT_NBT_TAG, xymult);
-        tag.putDouble(PlayerCarryUtils.VERT_NBT_TAG, vertOffset);
-        tag.putDouble(PlayerCarryUtils.LEFT_RIGHT_NBT_TAG, leftRightMove);
+        tag.putInt(PlayerCarryConstants.ROTATION_NBT_TAG, rotationOffset);
+        tag.putDouble(PlayerCarryConstants.MULT_NBT_TAG, xymult);
+        tag.putDouble(PlayerCarryConstants.VERT_NBT_TAG, vertOffset);
+        tag.putDouble(PlayerCarryConstants.LEFT_RIGHT_NBT_TAG, leftRightMove);
 
         return tag;
     }
