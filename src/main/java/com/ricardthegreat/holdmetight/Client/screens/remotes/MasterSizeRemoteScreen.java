@@ -145,11 +145,8 @@ public class MasterSizeRemoteScreen extends AbstractSizeRemoteScreen{
             renderable.render(graphics, mouseX, mouseY, partialTicks);
         }
 
-        if (popoutShown) {
-            //graphics.blit(SHADOW, leftPos-2, topPos, 0, 0, 2, imageHeight);
-            //graphics.vLine(leftPos-2, topPos, imageHeight, 0xff000000);
-            graphics.fill(leftPos-2, topPos+14, leftPos, bottomPos-14, 0x88000000);
-        }
+        //transparent black bar that emulates a small shadow over the popout
+        graphics.fill(leftPos-2, topPos+14, leftPos, bottomPos-15, 0x88000000);
     }
 
     @Override
