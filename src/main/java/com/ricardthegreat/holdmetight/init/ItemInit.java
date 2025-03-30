@@ -11,15 +11,6 @@ import com.ricardthegreat.holdmetight.items.SizeWand;
 import com.ricardthegreat.holdmetight.items.remotes.AdvancedSizeRemoteItem;
 import com.ricardthegreat.holdmetight.items.remotes.BasicSizeRemoteItem;
 import com.ricardthegreat.holdmetight.items.remotes.MasterSizeRemoteItem;
-import com.ricardthegreat.holdmetight.items.remotes.overtime.OtherTimedSizeRemoteItem;
-import com.ricardthegreat.holdmetight.items.remotes.overtime.TimedSizeRemoteItem;
-import com.ricardthegreat.holdmetight.items.remotes.overtime.UserTimedSizeRemoteItem;
-import com.ricardthegreat.holdmetight.items.remotes.random.OtherRandomSizeRemoteItem;
-import com.ricardthegreat.holdmetight.items.remotes.random.RandomSizeRemoteItem;
-import com.ricardthegreat.holdmetight.items.remotes.random.UserRandomSizeRemoteItem;
-import com.ricardthegreat.holdmetight.items.remotes.setmult.CustomSizeRemoteItem;
-import com.ricardthegreat.holdmetight.items.remotes.setmult.OtherCustomSizeRemoteItem;
-import com.ricardthegreat.holdmetight.items.remotes.setmult.UserCustomSizeRemoteItem;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;

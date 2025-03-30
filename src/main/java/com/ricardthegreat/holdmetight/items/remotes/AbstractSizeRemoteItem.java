@@ -5,9 +5,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.ricardthegreat.holdmetight.items.remotes.setmult.CustomSizeRemoteItem;
-import com.ricardthegreat.holdmetight.items.remotes.setmult.OtherCustomSizeRemoteItem;
-
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
@@ -24,9 +21,13 @@ public abstract class AbstractSizeRemoteItem extends Item{
     public static final String MIN_SCALE_TAG = "minscale";
     public static final String MAX_SCALE_TAG = "maxscale";
     public static final String NUM_TICKS_TAG = "numticks";
+    public static final String TARGET_TAG = "has target";
+    
 
     public static final Float DEFAULT_SCALE = 1.0f;
     public static final int DEFAULT_TICKS = 20;
+    public static final float RANDOM_MAX_LIMIT = 100f;
+    public static final float RANDOM_MIN_LIMIT = 0;
 
     public AbstractSizeRemoteItem(Properties properties) {
         super(properties);
@@ -63,7 +64,7 @@ public abstract class AbstractSizeRemoteItem extends Item{
             if (level != null) {
                 Player player = level.getPlayerByUUID(tag.getUUID(UUID_TAG));
                 if (player != null) {
-                    if (tag.contains(OtherCustomSizeRemoteItem.TARGET_TAG) && !tag.getBoolean(OtherCustomSizeRemoteItem.TARGET_TAG)) {
+                    if (tag.contains(TARGET_TAG) && !tag.getBoolean(TARGET_TAG)) {
                         list.add(Component.literal(noTarget.getString()));
                     }else{
                         list.add(Component.literal(tooltip + player.getName().getString()));

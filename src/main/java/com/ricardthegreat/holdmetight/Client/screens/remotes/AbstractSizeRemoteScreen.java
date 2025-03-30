@@ -3,7 +3,6 @@ package com.ricardthegreat.holdmetight.Client.screens.remotes;
 import javax.annotation.Nonnull;
 
 import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
-import com.ricardthegreat.holdmetight.items.remotes.setmult.OtherCustomSizeRemoteItem;
 import com.ricardthegreat.holdmetight.utils.PlayerRenderExtension;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
@@ -90,7 +89,7 @@ public abstract class AbstractSizeRemoteScreen extends Screen{
         Level level = this.minecraft.level;
         if(level == null) return;
         
-        if (tag.contains(OtherCustomSizeRemoteItem.TARGET_TAG) && !tag.getBoolean(OtherCustomSizeRemoteItem.TARGET_TAG)) {
+        if (tag.contains(AbstractSizeRemoteItem.TARGET_TAG) && !tag.getBoolean(AbstractSizeRemoteItem.TARGET_TAG)) {
             selectedPlayer = null;
         }else {
             selectedPlayer = level.getPlayerByUUID(tag.getUUID(AbstractSizeRemoteItem.UUID_TAG));
@@ -143,6 +142,14 @@ public abstract class AbstractSizeRemoteScreen extends Screen{
             return true;
         }
         return false;
+    }
+
+    protected abstract void saveEditBox();
+
+    @Override
+    public void onClose() {
+        saveEditBox();
+        super.onClose();
     }
 
     @Override
