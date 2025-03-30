@@ -1,17 +1,11 @@
 package com.ricardthegreat.holdmetight.Client.screens;
 
-import java.util.Vector;
 import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
 
-import org.joml.Matrix4f;
 import org.joml.Quaternionf;
-import org.joml.Vector3f;
-import org.joml.Vector3fc;
-
 import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.items.remotes.setmult.CustomSizeRemoteItem;
 import com.ricardthegreat.holdmetight.utils.PlayerCarryExtension;
 import com.ricardthegreat.holdmetight.utils.PlayerRenderExtension;
 
@@ -20,15 +14,11 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
-import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.phys.Vec3;
 
 
 
@@ -61,8 +51,14 @@ public class CarryPositionScreen extends Screen{
     private PlayerCarryExtension userCarryExt;
 
     private int rotation = 0;
+    private double forwardsBackwardsMultiplier = 0;
+    private double vertical = 0;
+    private double leftRight = 0;
 
-    private Button rotButton;
+    private boolean topDownView = true;
+    
+
+    private Button setButton;
 
     private EditBox customInputField;
 
@@ -83,9 +79,9 @@ public class CarryPositionScreen extends Screen{
         this.centerHorizonalPos = (this.leftPos + this.rightPos) / 2 ;
         this.centerVerticalPos = (this.topPos + this.bottomPos) / 2;
 
-        this.rotButton = addRenderableWidget(
+        this.setButton = addRenderableWidget(
             Button.builder(
-                ROT_BUTTON, this::handleRotButton)
+                ROT_BUTTON, this::handleSetButton)
                 .bounds(this.leftPos + 8, this.topPos +200, 76, 20)
                 .tooltip(Tooltip.create(ROT_BUTTON))
                 .build()
@@ -94,47 +90,61 @@ public class CarryPositionScreen extends Screen{
         initCustomInputField();
     }
 
+    //32 pixels is 1 meter in this screen im psure
     @Override
     public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         renderBackground(graphics);
         graphics.blit(BACKGROUND, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         super.render(graphics, mouseX, mouseY, partialTicks);
 
-        //graphics.blit(CIRCLE, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
-        int xpos = centerHorizonalPos;
-        int ypos = centerVerticalPos;
-        graphics.fill(xpos-5, ypos-5, xpos+5, ypos + 5, 0xFFFFFFFF);
-
-
-        double xOffset = (Math.cos(Math.toRadians(rotation%360)));
-        double yOffset = (Math.sin(Math.toRadians(rotation%360)));
-
-        xpos += xOffset*10;
-        ypos += yOffset*10;
-
-        //graphics.fill(leftPos + 10, topPos + 10, leftPos+30, topPos+30, 0xFFFF0000);
-        graphics.fill(xpos - 2, ypos - 2, xpos + 2, ypos + 2, 0xFFFF0000);
-
         
-
+        
         PlayerRenderExtension rend = (PlayerRenderExtension) user;
         //possibly use this in place of coloured boxes
         if(rend != null){
             rend.setMenu(true);
-            //renderEntityInInventoryFollowsAngle(graphics, centerHorizonalPos, centerVerticalPos, 30, 0, -4.5f, (Player) rend);
+            if (topDownView) {
+                //top down facing to the top of the screen
+                renderEntityInInventoryFollowsAngle(graphics, centerHorizonalPos, centerVerticalPos, 60, 0, -4.5f, (Player) rend);
+            }else{
+                //from the side facing to the left of the screen
+                renderEntityInInventoryFollowsAngle(graphics, centerHorizonalPos, centerVerticalPos+60, 60, 270, 0, (Player) rend);
+            }
             rend.setMenu(false);
         }
+
+
+        renderTopDown(graphics, mouseX, mouseY, partialTicks);
 
         //graphics.fill(leftPos + 9, topPos + 9, this.leftPos+55, this.topPos+55, 0xFF00FF00);
 
         //graphics.pose().rotateAround(null, mouseX, mouseY, partialTicks);
 
     }
+
+    private void renderTopDown(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks){
+        int xpos = centerHorizonalPos;
+        int ypos = centerVerticalPos;
+        //graphics.fill(xpos-5, ypos-5, xpos+5, ypos + 5, 0xFFFFFFFF);
+
+        double xOffset = (Math.cos(Math.toRadians((rotation - 90)%360)));
+        double yOffset = (Math.sin(Math.toRadians((rotation - 90)%360)));
+
+        forwardsBackwardsMultiplier = 1;
+        xpos += xOffset*64*forwardsBackwardsMultiplier;
+        ypos += yOffset*64*forwardsBackwardsMultiplier;
+
+        graphics.fill(xpos - 2, ypos - 2, xpos + 2, ypos + 2, 0xFFFF0000);
+    }
     
-    private void handleRotButton(Button button) {  
+    private void handleSetButton(Button button) {  
         String rot = customInputField.getValue();
+
+        topDownView = !topDownView;
+
         if (rot != null && !rot.isEmpty()){
-            rotation = Integer.parseInt(rot)%360;
+            rotation = (Integer.parseInt(rot)%360);
+            userCarryExt.setRotationOffset(rotation);
         }
     }
 
@@ -159,10 +169,11 @@ public class CarryPositionScreen extends Screen{
         
         //entity.yBodyRot = 180.0F + f * 20.0F;
         //entity.setXRot(-f1 * 20.0F);
-        entity.yBodyRot = 0;
-        entity.setYRot(180.0F + f * 40.0F);
+        entity.yBodyRot = f;
+        //entity.setYRot(180.0F + f * 40.0F);
+        entity.setYRot(f);
         entity.setXRot(0);
-        entity.yHeadRot = 0;
+        entity.yHeadRot = f;
         entity.yHeadRotO = 0;
         InventoryScreen.renderEntityInInventory(graphics, xPos, yPos, scale, quaternionf, quaternionf1, entity);
         entity.yBodyRot = f2;
@@ -172,7 +183,7 @@ public class CarryPositionScreen extends Screen{
         entity.yHeadRot = f6;
    }
 
-   //this is straight copied from advanced size remote so need to actually look at once other stuff done
+   //this is straight copied from size remote so need to actually look at once other stuff done
    private void initCustomInputField() {
         customInputField = addRenderableWidget(new EditBox(font, this.leftPos + 48, this.bottomPos - 80, 80, 20, CUSTOM_INPUT_FIELD));
 
@@ -184,19 +195,16 @@ public class CarryPositionScreen extends Screen{
                 if (!t.trim().equals(t)){
                     return false;
                 }
-
                 //check if the string is empty to allow people to delete everything
                 if(t != null && t.isEmpty()){
                     return true;
                 }
-
                 //check if the string ends with f or d as these are both fine to parse as floats but i dont want it to be typed
                 //again almost certainly a better way to do this but its just a silly little thing
                 String checkFinalChar = t.substring(t.length()-1);
                 if(checkFinalChar.equals("f") || checkFinalChar.equals("d")){
                     return false;
                 }
-
                 //try to parse the string as a float, allow it if it succeeds dont if it doesnt
                 try{
                     Integer.parseInt(t);
