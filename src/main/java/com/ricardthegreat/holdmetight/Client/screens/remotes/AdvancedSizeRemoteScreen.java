@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
+import com.ricardthegreat.holdmetight.Client.guielements.checkboxes.CustomCheckbox;
 import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.SEntityMultTargetScalePacket;
@@ -55,7 +56,7 @@ public class AdvancedSizeRemoteScreen extends BasicSizeRemoteScreen{
     protected Button randomiseChoiceButton;
     protected Button randomButton;
 
-    protected Checkbox customDuration;
+    protected CustomCheckbox customDuration;
 
     protected EditBox minScaleField;
     protected EditBox maxScaleField;
@@ -66,10 +67,7 @@ public class AdvancedSizeRemoteScreen extends BasicSizeRemoteScreen{
     protected boolean popoutShown;
 
     public AdvancedSizeRemoteScreen(Player user, InteractionHand hand) {
-        super(TITLE, user, hand, 176, 256);
-        
-        BACKGROUND = new ResourceLocation(HoldMeTight.MODID, "textures/gui/size_remote_bg.png");
-        range = 1000;
+        this(TITLE, user, hand, 176, 256);
     }
 
     public AdvancedSizeRemoteScreen(Component title, Player user, InteractionHand hand, int width, int height) {
@@ -88,7 +86,8 @@ public class AdvancedSizeRemoteScreen extends BasicSizeRemoteScreen{
 
         initTimeFields();
 
-        customDuration = addRenderableWidget(new Checkbox(leftPos - 92, topPos, 20, 20, CUSTOM_DURATION, false));
+        //customDuration = addRenderableWidget(new Checkbox(leftPos - 92, topPos, 20, 20, CUSTOM_DURATION, false));
+        customDuration = addRenderableWidget(new CustomCheckbox(leftPos - 92, topPos, 20, 20, CUSTOM_DURATION, false));
 
         setMultChoiceButton.active = false;
 
