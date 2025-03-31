@@ -25,7 +25,7 @@ import net.minecraft.world.entity.player.Player;
 
 public class AdvancedSizeRemoteScreen extends BasicSizeRemoteScreen{
 
-    protected static final Component TITLE = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote");
+    protected static final Component TITLE = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote_title");
 
     protected static final Component SET_MULT_CHOICE_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.set_mult_choice_button");
     protected static final Component RANDOMISE_CHOICE_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.randomise_choice_button");

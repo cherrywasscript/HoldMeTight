@@ -22,7 +22,7 @@ import net.minecraft.world.entity.player.Player;
 
 public class BasicSizeRemoteScreen extends AbstractSizeRemoteScreen{
 
-    protected static final Component TITLE = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote");
+    protected static final Component TITLE = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote_title");
 
     protected static final Component MULT_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.mult_button");
     protected static final Component SET_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.set_button");
