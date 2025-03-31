@@ -43,10 +43,7 @@ public class BasicSizeRemoteScreen extends AbstractSizeRemoteScreen{
     protected EditBox customScaleField;
 
     public BasicSizeRemoteScreen(Player user, InteractionHand hand) {
-        super(TITLE, user, hand, 176, 256);
-        
-        BACKGROUND = new ResourceLocation(HoldMeTight.MODID, "textures/gui/size_remote_bg.png");
-        range = 100;
+        this(TITLE, user, hand, 176, 256);
     }
 
     public BasicSizeRemoteScreen(Component title, Player user, InteractionHand hand, int width, int height) {
