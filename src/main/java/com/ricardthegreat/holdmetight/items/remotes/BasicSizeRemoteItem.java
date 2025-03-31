@@ -3,6 +3,8 @@ package com.ricardthegreat.holdmetight.items.remotes;
 import javax.annotation.Nonnull;
 
 import com.ricardthegreat.holdmetight.Client.ClientHooks;
+
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -21,11 +23,16 @@ public class BasicSizeRemoteItem extends AbstractSizeRemoteItem {
 
     @Override
     public InteractionResultHolder<ItemStack> use(@Nonnull Level level, @Nonnull Player player, @Nonnull InteractionHand hand) {
-
         ItemStack item = player.getItemInHand(hand);
-
         if (!item.hasTag()) {
             setDefaultTags(item, player);
+        }
+        CompoundTag tag = item.getTag();
+
+        if (player.isShiftKeyDown()){
+            tag.putUUID(UUID_TAG, player.getUUID());
+            item.setTag(tag);
+            return InteractionResultHolder.success(player.getItemInHand(hand));
         }
 
         //open item screen client side only (need to figure out how to not pause in single player)
