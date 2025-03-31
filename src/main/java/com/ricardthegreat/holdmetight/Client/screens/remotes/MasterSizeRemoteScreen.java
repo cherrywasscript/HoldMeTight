@@ -1,16 +1,9 @@
 package com.ricardthegreat.holdmetight.Client.screens.remotes;
 
-import static com.ricardthegreat.holdmetight.Client.screens.remotes.AbstractSizeRemoteScreen.CURRENT_SCALE;
-import static com.ricardthegreat.holdmetight.Client.screens.remotes.AbstractSizeRemoteScreen.NOT_APPLICABLE;
-import static com.ricardthegreat.holdmetight.Client.screens.remotes.AbstractSizeRemoteScreen.NO_TARGET;
-import static com.ricardthegreat.holdmetight.Client.screens.remotes.AbstractSizeRemoteScreen.OUT_OF_RANGE;
-import static com.ricardthegreat.holdmetight.Client.screens.remotes.AbstractSizeRemoteScreen.TARGET;
-
 import javax.annotation.Nonnull;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.utils.PlayerRenderExtension;
-import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
 
 import net.minecraft.client.gui.GuiGraphics;
