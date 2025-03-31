@@ -508,7 +508,6 @@ public class AdvancedSizeRemoteScreen extends BasicSizeRemoteScreen{
     }
 
     protected boolean checkNotNull(String secs, String mins, String hours){
-        System.out.println("advanced check null");
         if (secs == null || secs.isEmpty()){
             return false;
         }
