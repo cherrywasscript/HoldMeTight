@@ -7,24 +7,31 @@
     "tooltip.holdmetight.abstract_size_remote_no_target.tooltip":"No target selected",
 
 
-
     "item.holdmetight.paper_wings_item":"Paper Wings",
 
 
 
-    "gui.holdmetight.size_remote":"Test Screen",
+    "gui.holdmetight.size_remote_title":"Test Screen",
     "gui.holdmetight.size_remote.button.mult_button":"Multiply",
     "gui.holdmetight.size_remote.button.set_button":"Set",
     "gui.holdmetight.size_remote.button.reset_button":"Reset",
-    "gui.holdmetight.size_remote.field.custom_scale_field":"Custom Scale Field",
-    "gui.holdmetight.size_remote.field.custom_scale_field_tooltip":"Input a scale",
-
     "gui.holdmetight.size_remote.button.random_button":"Randomise",
+
+    "gui.holdmetight.size_remote.button.mult_button_tooltip":"Multiply current height by value in scale field",
+    "gui.holdmetight.size_remote.button.set_button_tooltip":"Set current height to value in scale field",
+    "gui.holdmetight.size_remote.button.reset_button_tooltip":"Reset height to the players default scale",
+    "gui.holdmetight.size_remote.button.random_button_tooltip":"Randomise height between the values in minimum and maximum scale fields",
+
+
+    "gui.holdmetight.size_remote.field.custom_scale_field":"Custom Scale Field",
     "gui.holdmetight.size_remote.field.min_scale_field":"Min Scale Field",
     "gui.holdmetight.size_remote.field.max_scale_field":"Max Scale Field",
-    "gui.holdmetight.size_remote.field.min_scale_field_tooltip":"Input Minimum scale",
-    "gui.holdmetight.size_remote.field.max_scale_field_tooltip":"Input Maximum scale",
 
+    "gui.holdmetight.size_remote.field.custom_scale_field_tooltip":"Input desired scale (try to avoid going too large too quickly as it may cause issues)",
+    "gui.holdmetight.size_remote.field.min_scale_field_tooltip":"Input desired minimum scale",
+    "gui.holdmetight.size_remote.field.max_scale_field_tooltip":"Input desired maximum scale",
+
+    
     "gui.holdmetight.size_remote.field.seconds_field":"Seconds Field",
     "gui.holdmetight.size_remote.field.minutes_field":"Minutes Field",
     "gui.holdmetight.size_remote.field.hours_field":"Hours Field",
