@@ -1,11 +1,22 @@
 package com.ricardthegreat.holdmetight.Client.screens.remotes;
 
+import static com.ricardthegreat.holdmetight.Client.screens.remotes.AbstractSizeRemoteScreen.CURRENT_SCALE;
+import static com.ricardthegreat.holdmetight.Client.screens.remotes.AbstractSizeRemoteScreen.NOT_APPLICABLE;
+import static com.ricardthegreat.holdmetight.Client.screens.remotes.AbstractSizeRemoteScreen.NO_TARGET;
+import static com.ricardthegreat.holdmetight.Client.screens.remotes.AbstractSizeRemoteScreen.OUT_OF_RANGE;
+import static com.ricardthegreat.holdmetight.Client.screens.remotes.AbstractSizeRemoteScreen.TARGET;
+
 import javax.annotation.Nonnull;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
+import com.ricardthegreat.holdmetight.utils.PlayerRenderExtension;
+import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
+import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
+
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Renderable;
+import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
@@ -16,10 +27,7 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
     protected static final Component TITLE = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote");
 
     public MasterSizeRemoteScreen(Player user, InteractionHand hand) {
-        super(TITLE, user, hand, 176, 256);
-        
-        BACKGROUND = new ResourceLocation(HoldMeTight.MODID, "textures/gui/size_remote_bg.png");
-        range = 10000;
+        this(TITLE, user, hand, 176, 256);
     }
 
     public MasterSizeRemoteScreen(Component title, Player user, InteractionHand hand, int width, int height) {
@@ -34,10 +42,12 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
         super.init();
     }
 
+    //cant super call render as it ends up drawing things in the wrong order
     @Override
     public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         renderBackground(graphics);
         
+        //draw the popout, might wanna move this into its own method?
         if (popoutShown) {
             renderPopout(graphics, mouseX, mouseY, partialTicks);
         }else if (selectingPopoutEdge(mouseX, mouseY)) {
@@ -46,6 +56,7 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
             graphics.blit(POPOUT, leftPos-4, topPos, 0, 0, 4, imageHeight);
         }
 
+        //draw the main screen image
         graphics.blit(BACKGROUND, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
 
         if (customDuration.selected()) {
@@ -54,14 +65,51 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
             graphics.drawString(this.font,"Seconds", (leftPos + 144) - (font.width("Seconds"))/2, bottomPos - 121,0x222222, false);
         }
 
+        //the main display with the player and information about them
         renderPlayerDisplay(graphics, mouseX, mouseY, partialTicks);
-        //have this because i cant just call screen render method
+
+
+        //have this because i cant just call screen render method as it draws in the wrong layer
         for(Renderable renderable : this.renderables) {
             renderable.render(graphics, mouseX, mouseY, partialTicks);
         }
 
         //transparent black bar that emulates a small shadow over the popout
         graphics.fill(leftPos-2, topPos+14, leftPos, bottomPos-15, 0x88000000);
+    }
+
+    protected void renderPlayerDisplay(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks){
+        int screenLeft = leftPos+8;
+        int screenTop = topPos+8;
+        int verTextSep = font.lineHeight + 5;
+
+        graphics.drawString(font, TARGET, screenLeft + 2, screenTop + 2,0xdddddd,false);
+        graphics.drawString(font, CURRENT_SCALE, screenLeft + 2, screenTop + verTextSep,0xdddddd,false);
+        graphics.drawString(font, TARGET_SCALE, screenLeft + 2, screenTop + verTextSep*2,0xdddddd,false);
+        graphics.drawString(font, SCALE_TIME, screenLeft + 2, screenTop + verTextSep*3,0xdddddd,false);
+        
+        if (selectedPlayer != null) {
+            if (inRange()) {
+                graphics.drawString(font, Float.toString(PlayerSizeUtils.getSize(selectedPlayer)), screenLeft + font.width(TARGET) + 2, screenTop + 2, 0xadd8e6,false);
+                graphics.drawString(font, selectedPlayer.getName().getString(), screenLeft + font.width(CURRENT_SCALE) + 2, screenTop + verTextSep, 0xadd8e6,false);
+            }else{
+                graphics.drawString(font, NOT_APPLICABLE, screenLeft + font.width(TARGET) + 2, screenTop + 2, 0xffff00, false);
+                graphics.drawString(font, OUT_OF_RANGE, screenLeft + font.width(CURRENT_SCALE) + 2, screenTop + verTextSep, 0xffff00, false);
+            }
+
+            PlayerRenderExtension rend = (PlayerRenderExtension) selectedPlayer;
+
+            if(rend != null){
+                rend.setMenu(true);
+                InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, centerHorizonalPos, centerVerticalPos, 30, (float)centerHorizonalPos - mouseX, (float)(centerVerticalPos - 80) -mouseY, (Player) rend);
+                rend.setMenu(false);
+            }
+        }else{
+            graphics.drawString(font, NOT_APPLICABLE, screenLeft + font.width(TARGET) + 2, screenTop + 2, 0xff0000, false);
+            graphics.drawString(font, NO_TARGET, screenLeft + font.width(CURRENT_SCALE) + 2, screenTop + verTextSep, 0xff0000, false);
+            graphics.drawString(font, NOT_APPLICABLE, screenLeft + font.width(TARGET) + 2, screenTop + verTextSep*2, 0xff0000, false);
+            graphics.drawString(font, NOT_APPLICABLE, screenLeft + font.width(TARGET) + 2, screenTop + verTextSep*3, 0xff0000, false);
+        }
     }
 
     @Override
