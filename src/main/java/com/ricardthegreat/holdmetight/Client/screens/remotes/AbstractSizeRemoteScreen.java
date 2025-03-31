@@ -2,6 +2,7 @@ package com.ricardthegreat.holdmetight.Client.screens.remotes;
 
 import javax.annotation.Nonnull;
 
+import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
 import com.ricardthegreat.holdmetight.utils.PlayerRenderExtension;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
@@ -26,11 +27,11 @@ public abstract class AbstractSizeRemoteScreen extends Screen{
     //these strings need to be translatable at some point
     //which will also involve figuring out spacing as they wont remain constant lengths if they are
     //simplest way will probably just be making it smaller? not sure yet
-    private static final String TARGET = "Target:";
-    private static final String CURRENT_SCALE = "Current Scale:";
-    private static final String NOT_APPLICABLE = "N/A";
-    private static final String OUT_OF_RANGE = "Out of range";
-    private static final String NO_TARGET = "No Target";
+    protected static final String TARGET = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.strings.target_string").getString() + ":";
+    protected static final String CURRENT_SCALE = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.strings.current_scale_string").getString() + ":";
+    protected static final String NOT_APPLICABLE = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.strings.not_applicable_string").getString() + ":";
+    protected static final String OUT_OF_RANGE = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.strings.out_of_range_string").getString() + ":";
+    protected static final String NO_TARGET = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.strings.no_target_string").getString() + ":";
     
 
     protected final int imageWidth;
