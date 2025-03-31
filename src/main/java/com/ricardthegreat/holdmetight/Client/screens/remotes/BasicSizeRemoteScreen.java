@@ -28,6 +28,10 @@ public class BasicSizeRemoteScreen extends AbstractSizeRemoteScreen{
     protected static final Component SET_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.set_button");
     protected static final Component RESET_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.reset_button");
 
+    protected static final Component MULT_BUTTON_TOOLTIP = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.mult_button_tooltip");
+    protected static final Component SET_BUTTON_TOOLTIP = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.set_button_tooltip");
+    protected static final Component RESET_BUTTON_TOOLTIP = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.reset_button_tooltip");
+
     protected static final Component CUSTOM_SCALE_FIELD = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.custom_scale_field");
 
     protected static final Component CUSTOM_SCALE_FIELD_TOOLTIP = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.custom_scale_field_tooltip");
@@ -86,7 +90,7 @@ public class BasicSizeRemoteScreen extends AbstractSizeRemoteScreen{
             Button.builder(
                 MULT_BUTTON, this::handleMultButton)
                 .bounds(this.leftPos + 8, this.bottomPos -111, 76, 20)
-                .tooltip(Tooltip.create(MULT_BUTTON))
+                .tooltip(Tooltip.create(MULT_BUTTON_TOOLTIP))
                 .build()
         );
 
@@ -94,7 +98,7 @@ public class BasicSizeRemoteScreen extends AbstractSizeRemoteScreen{
             Button.builder(
                 SET_BUTTON, this::handleSetButton)
                 .bounds(this.leftPos + 91, this.bottomPos -111, 76, 20)
-                .tooltip(Tooltip.create(SET_BUTTON))
+                .tooltip(Tooltip.create(SET_BUTTON_TOOLTIP))
                 .build()
         );
 
@@ -102,7 +106,7 @@ public class BasicSizeRemoteScreen extends AbstractSizeRemoteScreen{
             Button.builder(
                 RESET_BUTTON, this::handleResetButton)
                 .bounds(this.centerHorizonalPos - 38, this.bottomPos -40, 76, 20)
-                .tooltip(Tooltip.create(RESET_BUTTON))
+                .tooltip(Tooltip.create(RESET_BUTTON_TOOLTIP))
                 .build()
         );
     }

@@ -29,7 +29,9 @@ public class AdvancedSizeRemoteScreen extends BasicSizeRemoteScreen{
 
     protected static final Component SET_MULT_CHOICE_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.set_mult_choice_button");
     protected static final Component RANDOMISE_CHOICE_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.randomise_choice_button");
+
     protected static final Component RANDOM_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.random_button");
+    protected static final Component RANDOM_BUTTON_TOOLTIP = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.random_button_tooltip");
 
     protected static final Component MIN_SCALE_FIELD = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.min_scale_field");
     protected static final Component MAX_SCALE_FIELD = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.max_scale_field");
@@ -217,7 +219,7 @@ public class AdvancedSizeRemoteScreen extends BasicSizeRemoteScreen{
             Button.builder(
                 RANDOM_BUTTON, this::handleRandomButton)
                 .bounds(this.leftPos + 8, this.bottomPos -40, 76, 20)
-                .tooltip(Tooltip.create(RANDOM_BUTTON))
+                .tooltip(Tooltip.create(RANDOM_BUTTON_TOOLTIP))
                 .build()
         );
     }
