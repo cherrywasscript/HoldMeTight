@@ -487,7 +487,6 @@ public class AdvancedSizeRemoteScreen extends BasicSizeRemoteScreen{
     @Override
     protected void saveEditBox(){
         super.saveEditBox();
-        System.out.println("advanced save box");
 
         String secondsString = secondsField.getValue();
         String minutesString = minutesField.getValue();

@@ -222,7 +222,6 @@ public class BasicSizeRemoteScreen extends AbstractSizeRemoteScreen{
     }
 
     protected boolean checkNotNull(String scale){
-        System.out.println("basic check null");
         if (scale == null || scale.isEmpty()){
             return false;
         }
