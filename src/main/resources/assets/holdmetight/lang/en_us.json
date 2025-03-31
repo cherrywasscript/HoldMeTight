@@ -31,7 +31,7 @@
     "gui.holdmetight.size_remote.field.min_scale_field_tooltip":"Input desired minimum scale",
     "gui.holdmetight.size_remote.field.max_scale_field_tooltip":"Input desired maximum scale",
 
-    
+
     "gui.holdmetight.size_remote.field.seconds_field":"Seconds Field",
     "gui.holdmetight.size_remote.field.minutes_field":"Minutes Field",
     "gui.holdmetight.size_remote.field.hours_field":"Hours Field",
@@ -41,6 +41,18 @@
 
     "gui.holdmetight.size_remote.button.set_mult_choice_button":"Choose height",
     "gui.holdmetight.size_remote.button.randomise_choice_button":"Randomise height",
+
+
+    "gui.holdmetight.size_remote.checkbox.custom_duration":"Custom duration",
+
+
+    "gui.holdmetight.size_remote.strings.target_string":"Target",
+    "gui.holdmetight.size_remote.strings.current_scale_string":"Current scale",
+    "gui.holdmetight.size_remote.strings.target_scale_string":"Target scale",
+    "gui.holdmetight.size_remote.strings.scale_time_string":"Time to target scale",
+    "gui.holdmetight.size_remote.strings.not_applicable_string":"N/A",
+    "gui.holdmetight.size_remote.strings.out_of_range_string":"Out of range",
+    "gui.holdmetight.size_remote.strings.no_target_string":"No target",
 
 
 

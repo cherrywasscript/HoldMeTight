@@ -44,6 +44,8 @@ public class AdvancedSizeRemoteScreen extends BasicSizeRemoteScreen{
     protected static final Component SECONDS_FIELD_TOOLTIP = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.seconds_field_tooltip");
     protected static final Component MINUTES_FIELD_TOOLTIP = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.minutes_field_tooltip");
     protected static final Component HOURS_FIELD_TOOLTIP = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.field.hours_field_tooltip");
+
+    protected static final Component CUSTOM_DURATION = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.checkbox.custom_duration");
     
 
     protected static ResourceLocation POPOUT = new ResourceLocation(HoldMeTight.MODID, "textures/gui/master_size_remote_popout.png");
@@ -86,7 +88,7 @@ public class AdvancedSizeRemoteScreen extends BasicSizeRemoteScreen{
 
         initTimeFields();
 
-        customDuration = addRenderableWidget(new Checkbox(leftPos - 92, topPos, 20, 20, title, false));
+        customDuration = addRenderableWidget(new Checkbox(leftPos - 92, topPos, 20, 20, CUSTOM_DURATION, false));
 
         setMultChoiceButton.active = false;
 
