@@ -44,7 +44,9 @@ public class PlayerSizeUtils {
      * @param ticks - the time it should take for the player to reach the given size in ticks (1/20 seconds)
      */
     public static void multSize(Player player, Float size, int ticks){
-        Float targetScale = getScaleData(player).getTargetScale()*size;
+        PlayerSizeExtension pMix = (PlayerSizeExtension) player;
+        Float targetScale = pMix.getTargetScale()*size;
+        
         setSize(player, targetScale, ticks);
     }
 
