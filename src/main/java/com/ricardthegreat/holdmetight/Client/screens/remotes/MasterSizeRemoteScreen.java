@@ -64,6 +64,7 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
         perpetualChoiceButton.visible = false;
 
         stealButton.visible = false;
+        giveButton.visible = false;
         stealField.visible = false;
     }
 
