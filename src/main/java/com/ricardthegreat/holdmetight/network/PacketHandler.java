@@ -37,6 +37,11 @@ public class PacketHandler {
             .consumerMainThread(SEntitySetTargetScalePacket::handle)
             .add();
 
+        INSTANCE.registerMessage(id++, SEntityAddTargetScalePacket.class, 
+        SEntityAddTargetScalePacket::encode, 
+        SEntityAddTargetScalePacket::new, 
+        SEntityAddTargetScalePacket::handle);
+
         
         INSTANCE.registerMessage(id++, CPlayerDismountPlayerPacket.class, 
         CPlayerDismountPlayerPacket::encode, 
