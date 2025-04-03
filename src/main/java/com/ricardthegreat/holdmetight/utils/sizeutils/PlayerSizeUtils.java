@@ -67,8 +67,8 @@ public class PlayerSizeUtils {
      */
     public static void addSize(Player player, Float size){
         PlayerSizeExtension pMix = (PlayerSizeExtension) player;
-        Float currentScale = pMix.getCurrentScale()*size;
-        Float targetScale = pMix.getTargetScale()*size;
+        Float currentScale = pMix.getCurrentScale();
+        Float targetScale = pMix.getTargetScale();
 
         pMix.setCurrentScale(currentScale + size);
         pMix.setTargetScale(targetScale + size);
