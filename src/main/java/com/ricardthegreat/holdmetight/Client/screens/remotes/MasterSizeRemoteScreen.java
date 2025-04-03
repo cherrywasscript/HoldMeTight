@@ -266,13 +266,13 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
         //this check shouldnt be needed but just in case
         if (selectedPlayer != null && selectedPlayer != user) {
             if (inRange()) {
-                PlayerSizeExtension pext = (PlayerSizeExtension) selectedPlayer;
+                PlayerSizeExtension pext = (PlayerSizeExtension) user;
 
                 float current = pext.getCurrentScale();
                 float target = pext.getTargetScale();
                 
-                current += scale;
-                target += scale;
+                current -= scale;
+                target -= scale;
 
 
                 if (current < 0) {
