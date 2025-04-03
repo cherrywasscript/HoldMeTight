@@ -1,14 +1,24 @@
 package com.ricardthegreat.holdmetight.Client.screens.remotes;
 
+import java.util.function.Predicate;
+
 import javax.annotation.Nonnull;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
+import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
+import com.ricardthegreat.holdmetight.network.PacketHandler;
+import com.ricardthegreat.holdmetight.network.SEntityAddTargetScalePacket;
+import com.ricardthegreat.holdmetight.network.SEntityMultTargetScalePacket;
 import com.ricardthegreat.holdmetight.utils.PlayerRenderExtension;
+import com.ricardthegreat.holdmetight.utils.PlayerSizeExtension;
 import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Renderable;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -18,6 +28,22 @@ import net.minecraft.world.entity.player.Player;
 public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
 
     protected static final Component TITLE = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote");
+
+    protected static final Component SIZE_STEAL_CHOICE_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.size_steal_choice_button");
+    protected static final Component PERPETUAL_CHANGE_CHOICE_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.perpetual_change_choice_button");
+
+    protected static final Component STEAL_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.steal_button");
+    protected static final Component GIVE_BUTTON = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.give_button");
+
+    protected static final Component TRANSFER_FIELD = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.button.transfer_field");
+
+    Button stealChoiceButton;
+    Button perpetualChoiceButton;
+
+    Button stealButton;
+    Button giveButton;
+
+    EditBox stealField;
 
     public MasterSizeRemoteScreen(Player user, InteractionHand hand) {
         this(TITLE, user, hand, 176, 256);
@@ -33,6 +59,12 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
     @Override
     protected void init() {
         super.init();
+
+        stealChoiceButton.visible = false;
+        perpetualChoiceButton.visible = false;
+
+        stealButton.visible = false;
+        stealField.visible = false;
     }
 
     //cant super call render as it ends up drawing things in the wrong order
@@ -107,7 +139,11 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int p_94697_) {
-        //extra on click stuff goes here
+        if (selectingPopoutEdge((int) mouseX, (int) mouseY)) {
+            stealChoiceButton.visible = !stealChoiceButton.visible;
+            perpetualChoiceButton.visible = !perpetualChoiceButton.visible;
+        }
+
         return super.mouseClicked(mouseX, mouseY, p_94697_);
     }
     
@@ -122,10 +158,27 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
     @Override
     protected void handleChoiceButton(Button button){
 
-        System.out.println(button == setMultChoiceButton);
-
-        setMultChoiceButton.active = !setMultChoiceButton.active;
-        randomiseChoiceButton.active = !randomiseChoiceButton.active;
+        if (button == setMultChoiceButton) {
+            setMultChoiceButton.active = false;
+            randomiseChoiceButton.active = true;
+            stealChoiceButton.active = true;
+            perpetualChoiceButton.active = true;
+        }else if (button == randomiseChoiceButton) {
+            setMultChoiceButton.active = true;
+            randomiseChoiceButton.active = false;
+            stealChoiceButton.active = true;
+            perpetualChoiceButton.active = true;
+        }else if (button == stealChoiceButton) {
+            setMultChoiceButton.active = true;
+            randomiseChoiceButton.active = true;
+            stealChoiceButton.active = false;
+            perpetualChoiceButton.active = true;
+        }else{
+            setMultChoiceButton.active = true;
+            randomiseChoiceButton.active = true;
+            stealChoiceButton.active = true;
+            perpetualChoiceButton.active = false;
+        }
 
         setVisibility();
     }
@@ -134,7 +187,103 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
     protected void initButtons(){
         super.initButtons();
 
-        //add extra buttons here
+        stealChoiceButton = addRenderableWidget(
+            Button.builder(
+                SIZE_STEAL_CHOICE_BUTTON, this::handleChoiceButton)
+                .bounds(leftPos - 92, topPos + 140, 88, 20)
+                .tooltip(Tooltip.create(SIZE_STEAL_CHOICE_BUTTON))
+                .build()
+        );
+
+        perpetualChoiceButton = addRenderableWidget(
+            Button.builder(
+                PERPETUAL_CHANGE_CHOICE_BUTTON, this::handleChoiceButton)
+                .bounds(leftPos - 92, topPos + 180, 88, 20)
+                .tooltip(Tooltip.create(PERPETUAL_CHANGE_CHOICE_BUTTON))
+                .build()
+        );
+
+        stealButton = addRenderableWidget(
+            Button.builder(
+                STEAL_BUTTON, this::handleStealButton)
+                .bounds(this.leftPos + 91, this.bottomPos -40, 76, 20)
+                .tooltip(Tooltip.create(STEAL_BUTTON))
+                .build()
+        );
+
+        giveButton = addRenderableWidget(
+            Button.builder(
+                GIVE_BUTTON, this::handleGiveButton)
+                .bounds(this.leftPos + 8, this.bottomPos -40, 76, 20)
+                .tooltip(Tooltip.create(GIVE_BUTTON))
+                .build()
+        );
+    }
+
+    protected void handleStealButton(Button button){
+
+        String stealString = stealField.getValue();
+        Float scale = 0f;
+
+        if (stealString != null && !stealString.isEmpty()){
+            scale = Float.parseFloat(stealString);  
+            scale = -scale;
+        }
+
+        //this check shouldnt be needed but just in case
+        if (selectedPlayer != null && selectedPlayer != user) {
+            if (inRange()) {
+                PlayerSizeExtension pext = (PlayerSizeExtension) selectedPlayer;
+
+                float current = pext.getCurrentScale();
+                float target = pext.getTargetScale();
+                
+                current += scale;
+                target += scale;
+
+
+                if (current < 0) {
+                    scale = 0f;
+                }
+                if (target < 0) {
+                    scale = 0f;
+                }
+                //send the multiplier and playeruuid to the server packet handler
+                PacketHandler.sendToServer(new SEntityAddTargetScalePacket(scale, selectedPlayer.getUUID()));
+            }
+        }
+    }
+
+    protected void handleGiveButton(Button button){
+        String stealString = stealField.getValue();
+        Float scale = 0f;
+
+        if (stealString != null && !stealString.isEmpty()){
+            scale = Float.parseFloat(stealString);  
+        }
+
+        //this check shouldnt be needed but just in case
+        if (selectedPlayer != null && selectedPlayer != user) {
+            if (inRange()) {
+                PlayerSizeExtension pext = (PlayerSizeExtension) selectedPlayer;
+
+                float current = pext.getCurrentScale();
+                float target = pext.getTargetScale();
+                
+                current += scale;
+                target += scale;
+
+
+                if (current < 0) {
+                    scale = 0f;
+                }
+                if (target < 0) {
+                    scale = 0f;
+                }
+                //send the multiplier and playeruuid to the server packet handler
+                PacketHandler.sendToServer(new SEntityAddTargetScalePacket(scale, selectedPlayer.getUUID()));
+            }
+        }
     }
 
     // setup the text box that allows players to type in a height
@@ -142,26 +291,121 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
     protected void initEditBoxes() {
         super.initEditBoxes();
         
-        //add extra edit boxes here
+        stealField = addRenderableWidget(new EditBox(font, this.leftPos + 48, this.bottomPos - 80, 80, 20, TRANSFER_FIELD));
+
+        //there's probably a better way to do this but setting up a predicate filter for the box you type sizes into
+        Predicate<String> filter = new Predicate<String>() {
+            @Override
+            public boolean test(String t){
+                //disallow spaces at the beginning or end
+                if (!t.trim().equals(t)){
+                    return false;
+                }
+
+                //check if the string is empty to allow people to delete everything
+                if(t != null && t.isEmpty()){
+                    return true;
+                }
+
+                //check if the string ends with f or d as these are both fine to parse as floats but i dont want it to be typed
+                //again almost certainly a better way to do this but its just a silly little thing
+                String checkFinalChar = t.substring(t.length()-1);
+                if(checkFinalChar.equals("f") || checkFinalChar.equals("d")){
+                    return false;
+                }
+
+                //try to parse the string as a float, allow it if it succeeds dont if it doesnt
+                try{
+                    float f = Float.parseFloat(t);
+
+                    //ensure that the input it not less than 0 as that can cause issues
+                    if (f < 0) {
+                        return false;
+                    }
+                    
+                    return true;
+                }catch (Exception e){ 
+                    return false;
+                }      
+            }
+        };
+
+        stealField.setFilter(filter);
+
+        stealField.setValue("0");
+        
+        Tooltip stealTooltip = Tooltip.create(TRANSFER_FIELD, TRANSFER_FIELD);
+
+        stealField.setTooltip(stealTooltip);
+
     }
 
     @Override
     protected void setVisibility(){
-        //possibly could just use super call here but i need to test
-        multButton.visible = !multButton.visible;
-        setButton.visible = !setButton.visible;
-        randomButton.visible = !randomButton.visible;
-        customScaleField.visible = !customScaleField.visible;
-        minScaleField.visible = !minScaleField.visible;
-        maxScaleField.visible = !maxScaleField.visible;
+
+        if (!setMultChoiceButton.active) {
+            resetButton.visible = true;
+
+            multButton.visible = true;
+            setButton.visible = true;
+            customScaleField.visible = true;
+
+            randomButton.visible = false;
+            minScaleField.visible = false;
+            maxScaleField.visible = false;
+
+            stealButton.visible = false;
+            giveButton.visible = false;
+            stealField.visible = false;
+        }else if (!randomiseChoiceButton.active) {
+            resetButton.visible = true;
+
+            multButton.visible = false;
+            setButton.visible = false;
+            customScaleField.visible = false;
+
+            randomButton.visible = true;
+            minScaleField.visible = true;
+            maxScaleField.visible = true;
+
+            stealButton.visible = false;
+            giveButton.visible = false;
+            stealField.visible = false;
+        }else if (!stealChoiceButton.active) {
+            resetButton.visible = false;
+
+            multButton.visible = false;
+            setButton.visible = false;
+            customScaleField.visible = false;
+
+            randomButton.visible = false;
+            minScaleField.visible = false;
+            maxScaleField.visible = false;
+
+            stealButton.visible = true;
+            giveButton.visible = true;
+            stealField.visible = true;
+        }else{
+            resetButton.visible = false;
+
+            multButton.visible = false;
+            setButton.visible = false;
+            customScaleField.visible = false;
+
+            randomButton.visible = false;
+            minScaleField.visible = false;
+            maxScaleField.visible = false;
+            
+            stealButton.visible = false;
+            giveButton.visible = false;
+            stealField.visible = false;
+        }
 
         if (multButton.visible) {
             resetButton.setPosition(this.centerHorizonalPos - 38, this.bottomPos -40);
         }else{
             resetButton.setPosition(this.leftPos + 91, this.bottomPos -40);
         }
-
-        //blabla extra stuff here etc
     }
 
     @Override
