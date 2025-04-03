@@ -6,7 +6,9 @@ import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.network.CPlayerCarryPositionPacket;
 import com.ricardthegreat.holdmetight.network.CPlayerDismountPlayerPacket;
 import com.ricardthegreat.holdmetight.network.CPlayerMixinSyncPacket;
+import com.ricardthegreat.holdmetight.network.CPlayerSizeMixinSyncPacket;
 import com.ricardthegreat.holdmetight.utils.PlayerCarryExtension;
+import com.ricardthegreat.holdmetight.utils.PlayerSizeExtension;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -38,6 +40,20 @@ public class ClientPacketHandler {
                 //playerCarry.setVertOffset(msg.getHeight());
             }
         }   
+    }
+
+    public static void handleSizePacket(CPlayerSizeMixinSyncPacket msg, Supplier<NetworkEvent.Context> context){
+        ClientLevel level = Minecraft.getInstance().level;
+        if(level != null){
+            Player player = level.getPlayerByUUID(msg.getUuid());
+            if(player != null) {
+                PlayerSizeExtension playerSize = (PlayerSizeExtension) player;
+                msg.playerSyncablesUpdate(playerSize);
+                //playerCarry.setRotationOffset(msg.getRotation());
+                //playerCarry.setXYMult(msg.getDistance());
+                //playerCarry.setVertOffset(msg.getHeight());
+            }
+        }  
     }
 
     public static void handleCarryPositionPacket(CPlayerCarryPositionPacket msg, Supplier<NetworkEvent.Context> context){

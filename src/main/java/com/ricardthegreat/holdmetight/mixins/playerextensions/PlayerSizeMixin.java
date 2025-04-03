@@ -6,10 +6,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.ricardthegreat.holdmetight.Config;
+import com.ricardthegreat.holdmetight.network.CPlayerMixinSyncPacket;
+import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.utils.PlayerSizeExtension;
 import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
 
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import virtuoel.pehkui.api.ScaleData;
 import virtuoel.pehkui.api.ScaleTypes;
 import virtuoel.pehkui.util.PehkuiEntityExtensions;
@@ -43,6 +47,8 @@ public abstract class PlayerSizeMixin implements PlayerSizeExtension {
 
     private ScaleData data = ((PehkuiEntityExtensions) (Player) (Object) this).pehkui_getScaleData(ScaleTypes.BASE);
 
+    boolean shouldSync = false;
+
     @Inject(at = @At("TAIL"), method = "tick()V")
     private void tick(CallbackInfo info){
         if (remainingTicks > 0) {
@@ -63,6 +69,35 @@ public abstract class PlayerSizeMixin implements PlayerSizeExtension {
             clampMaxHitbox();
             fixStepHeight();
         }
+
+        if (shouldSync) {
+            sync();
+        }
+    }
+    
+    private void sync(){
+        if (((Player) (Object) this).level().isClientSide) {
+            
+        }else{
+            DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> 
+            PacketHandler.sendToAllClients(new CPlayerMixinSyncPacket(maxScale, minScale, defaultScale, currentScale, 
+            targetScale, remainingTicks, ((Player) (Object) this).getUUID())));
+        }
+    }
+
+    @Override
+    public void updateSyncables(float maxScale, float minScale, float defaultScale, float currentScale, float targetScale, int remainingTicks){
+        this.maxScale = maxScale;
+        this.minScale = minScale;
+        this.defaultScale = defaultScale;
+        this.currentScale = currentScale;
+        this.targetScale = targetScale;
+        this.remainingTicks = remainingTicks;
+
+        /*
+         * perpetualChange
+         * perpetualChangeValue
+         */
     }
 
     //step the players size by 1 stage
@@ -175,6 +210,11 @@ public abstract class PlayerSizeMixin implements PlayerSizeExtension {
     @Override
     public void setPerpetualChangeValue(float perpetualChangeValue) {
         this.perpetualChangeValue = perpetualChangeValue;
+    }
+
+    @Override
+    public void updateShouldSync(){
+        this.shouldSync = true;
     }
     
 }

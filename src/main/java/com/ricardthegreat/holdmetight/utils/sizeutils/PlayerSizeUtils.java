@@ -35,6 +35,8 @@ public class PlayerSizeUtils {
             pMix.setTargetScale(size);
             pMix.setRemainingTicks(ticks);
         }
+
+        pMix.updateShouldSync();
     }
 
     /**
@@ -76,6 +78,8 @@ public class PlayerSizeUtils {
         if (pMix.getRemainingTicks() == 0) {
             pMix.setRemainingTicks(1);
         }
+
+        pMix.updateShouldSync();
     }
 
     //get a players size

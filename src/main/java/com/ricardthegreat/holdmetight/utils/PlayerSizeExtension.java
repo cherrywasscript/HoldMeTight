@@ -27,4 +27,7 @@ public interface PlayerSizeExtension {
     float getPerpetualChangeValue();
     void setPerpetualChangeValue(float perpetualChangeValue);
 
+    void updateShouldSync();
+
+    void updateSyncables(float maxScale, float minScale, float defaultScale, float currentScale, float targetScale, int remainingTicks);
 }

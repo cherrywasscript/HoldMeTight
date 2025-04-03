@@ -72,6 +72,11 @@ public class PacketHandler {
         SSizeRaySync::encode, 
         SSizeRaySync::new, 
         SSizeRaySync::handle);
+
+        INSTANCE.registerMessage(id++, CPlayerSizeMixinSyncPacket.class, 
+        CPlayerSizeMixinSyncPacket::encode, 
+        CPlayerSizeMixinSyncPacket::new, 
+        CPlayerSizeMixinSyncPacket::handle);
     }
 
     public static void sendToServer(Object msg){
