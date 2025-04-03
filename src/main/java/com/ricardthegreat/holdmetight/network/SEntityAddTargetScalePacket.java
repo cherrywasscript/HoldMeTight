@@ -37,7 +37,7 @@ public class SEntityAddTargetScalePacket {
         ServerPlayer target = player.server.getPlayerList().getPlayer(uuid);
 
         if(target != null){
-            PlayerSizeUtils.addSize(player, scale);
+            PlayerSizeUtils.addSize(target, scale);
         }
     }
 }
