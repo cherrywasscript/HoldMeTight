@@ -60,6 +60,24 @@ public class PlayerSizeUtils {
 
     }
 
+    /**
+     * add to the players height instantly
+     * @param player - the player whos size is changing
+     * @param size - the amount that should be added to their size
+     */
+    public static void addSize(Player player, Float size){
+        PlayerSizeExtension pMix = (PlayerSizeExtension) player;
+        Float currentScale = pMix.getCurrentScale()*size;
+        Float targetScale = pMix.getTargetScale()*size;
+
+        pMix.setCurrentScale(currentScale + size);
+        pMix.setTargetScale(targetScale + size);
+
+        if (pMix.getRemainingTicks() == 0) {
+            pMix.setRemainingTicks(1);
+        }
+    }
+
     //get a players size
     public static float getSize(Player player) {
         return getScaleData(player).getScale();
