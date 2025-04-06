@@ -1,8 +1,12 @@
 package com.ricardthegreat.holdmetight.utils.sizeutils;
 
+import com.ricardthegreat.holdmetight.size.PlayerSize;
+import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
 import com.ricardthegreat.holdmetight.utils.PlayerSizeExtension;
 
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.common.capabilities.CapabilityProvider;
+import net.minecraftforge.common.util.LazyOptional;
 import virtuoel.pehkui.api.ScaleData;
 import virtuoel.pehkui.api.ScaleType;
 import virtuoel.pehkui.api.ScaleTypes;
@@ -21,22 +25,26 @@ public class PlayerSizeUtils {
     public static void setSize(Player player, Float size, int ticks){
         PlayerSizeExtension pMix = (PlayerSizeExtension) player;
 
+        LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
+        PlayerSize orElse = optional.orElse(null);
+
         //check if it is perpetual, instant, or over time change
         if (ticks < 0) {
             
         }else if (ticks == 0) {
-            float mult = size/pMix.getCurrentScale();
-            pMix.setCurrentScale(size);
-            pMix.setTargetScale(pMix.getTargetScale()*mult);
-            if (pMix.getRemainingTicks() == 0) {
-                pMix.setRemainingTicks(1);
+            float mult = size/orElse.getCurrentScale();
+            
+            orElse.setCurrentScale(size);
+            orElse.setTargetScale(orElse.getTargetScale()*mult);
+            if (orElse.getRemainingTicks() == 0) {
+                orElse.setRemainingTicks(1);
             }
         }else{
-            pMix.setTargetScale(size);
-            pMix.setRemainingTicks(ticks);
+            orElse.setTargetScale(size);
+            orElse.setRemainingTicks(ticks);
         }
 
-        pMix.updateShouldSync();
+        orElse.updateShouldSync();
     }
 
     /**
@@ -47,7 +55,11 @@ public class PlayerSizeUtils {
      */
     public static void multSize(Player player, Float size, int ticks){
         PlayerSizeExtension pMix = (PlayerSizeExtension) player;
-        Float targetScale = pMix.getTargetScale()*size;
+
+        LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
+        PlayerSize orElse = optional.orElse(null);
+
+        Float targetScale = orElse.getTargetScale()*size;
         
         setSize(player, targetScale, ticks);
     }
@@ -63,28 +75,35 @@ public class PlayerSizeUtils {
     }
 
     /**
-     * add to the players height instantly
+     * add to the players height instantly (use SEntityAddTargetScalePacket to call this from client)
      * @param player - the player whos size is changing
      * @param size - the amount that should be added to their size
      */
     public static void addSize(Player player, Float size){
         PlayerSizeExtension pMix = (PlayerSizeExtension) player;
-        Float currentScale = pMix.getCurrentScale();
-        Float targetScale = pMix.getTargetScale();
 
-        pMix.setCurrentScale(currentScale + size);
-        pMix.setTargetScale(targetScale + size);
+        LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
+        PlayerSize orElse = optional.orElse(new PlayerSize());
 
-        if (pMix.getRemainingTicks() == 0) {
-            pMix.setRemainingTicks(1);
+        Float currentScale = orElse.getCurrentScale();
+        Float targetScale = orElse.getTargetScale();
+
+        orElse.setCurrentScale(currentScale + size);
+        orElse.setTargetScale(targetScale + size);
+
+        if (orElse.getRemainingTicks() == 0) {
+            orElse.setRemainingTicks(1);
         }
 
-        pMix.updateShouldSync();
+        orElse.updateShouldSync();
     }
 
     //get a players size
     public static float getSize(Player player) {
-        return getScaleData(player).getScale();
+        LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
+        PlayerSize orElse = optional.orElse(null);
+        return orElse.getCurrentScale();
+        //return getScaleData(player).getScale();
     }
 
     private static ScaleData getScaleData(Player player) {

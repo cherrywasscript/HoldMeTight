@@ -9,6 +9,8 @@ import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.SEntityAddTargetScalePacket;
 import com.ricardthegreat.holdmetight.network.SEntityMultTargetScalePacket;
+import com.ricardthegreat.holdmetight.size.PlayerSize;
+import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
 import com.ricardthegreat.holdmetight.utils.PlayerRenderExtension;
 import com.ricardthegreat.holdmetight.utils.PlayerSizeExtension;
 import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
@@ -24,6 +26,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.common.util.LazyOptional;
 
 public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
 
@@ -228,7 +231,6 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
 
         if (stealString != null && !stealString.isEmpty()){
             scale = Float.parseFloat(stealString);  
-            scale = -scale;
         }
 
         //this check shouldnt be needed but just in case
@@ -236,11 +238,14 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
             if (inRange()) {
                 PlayerSizeExtension pext = (PlayerSizeExtension) selectedPlayer;
 
-                float current = pext.getCurrentScale();
-                float target = pext.getTargetScale();
+                LazyOptional<PlayerSize> optional = selectedPlayer.getCapability(PlayerSizeProvider.PLAYER_SIZE);
+                PlayerSize orElse = optional.orElse(null);
+
+                float current = orElse.getCurrentScale();
+                float target = orElse.getTargetScale();
                 
-                current += scale;
-                target += scale;
+                current -= scale;
+                target -= scale;
 
 
                 if (current < 0) {
@@ -250,7 +255,8 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
                     scale = 0f;
                 }
                 //send the multiplier and playeruuid to the server packet handler
-                PacketHandler.sendToServer(new SEntityAddTargetScalePacket(scale, selectedPlayer.getUUID()));
+                PacketHandler.sendToServer(new SEntityAddTargetScalePacket(scale, user.getUUID()));
+                PacketHandler.sendToServer(new SEntityAddTargetScalePacket(-scale, selectedPlayer.getUUID()));
             }
         }
     }
@@ -268,8 +274,11 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
             if (inRange()) {
                 PlayerSizeExtension pext = (PlayerSizeExtension) user;
 
-                float current = pext.getCurrentScale();
-                float target = pext.getTargetScale();
+                LazyOptional<PlayerSize> optional = user.getCapability(PlayerSizeProvider.PLAYER_SIZE);
+                PlayerSize orElse = optional.orElse(new PlayerSize());
+
+                float current = orElse.getCurrentScale();
+                float target = orElse.getTargetScale();
                 
                 current -= scale;
                 target -= scale;
@@ -282,6 +291,7 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
                     scale = 0f;
                 }
                 //send the multiplier and playeruuid to the server packet handler
+                PacketHandler.sendToServer(new SEntityAddTargetScalePacket(-scale, user.getUUID()));
                 PacketHandler.sendToServer(new SEntityAddTargetScalePacket(scale, selectedPlayer.getUUID()));
             }
         }

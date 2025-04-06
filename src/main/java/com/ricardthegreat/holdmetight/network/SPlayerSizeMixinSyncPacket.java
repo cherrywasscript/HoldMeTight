@@ -5,15 +5,18 @@ import java.util.function.Supplier;
 
 import com.ricardthegreat.holdmetight.Client.handlers.ClientPacketHandler;
 import com.ricardthegreat.holdmetight.size.PlayerSize;
+import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
 import com.ricardthegreat.holdmetight.utils.PlayerCarryExtension;
 import com.ricardthegreat.holdmetight.utils.PlayerSizeExtension;
 
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
-public class CPlayerSizeMixinSyncPacket {
+public class SPlayerSizeMixinSyncPacket {
 
     private final float maxScale;
     private final float minScale;
@@ -23,7 +26,7 @@ public class CPlayerSizeMixinSyncPacket {
     private final int remainingTicks;
     private final UUID uuid;
 
-    public CPlayerSizeMixinSyncPacket(float maxScale, float minScale, float defaultScale, float currentScale, float targetScale, int remainingTicks, UUID uuid){
+    public SPlayerSizeMixinSyncPacket(float maxScale, float minScale, float defaultScale, float currentScale, float targetScale, int remainingTicks, UUID uuid){
         this.maxScale = maxScale;
         this.minScale = minScale;
         this.defaultScale = defaultScale;
@@ -33,7 +36,7 @@ public class CPlayerSizeMixinSyncPacket {
         this.uuid = uuid;
     }
 
-    public CPlayerSizeMixinSyncPacket(FriendlyByteBuf buffer){
+    public SPlayerSizeMixinSyncPacket(FriendlyByteBuf buffer){
         this(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readInt(), buffer.readUUID());
     }
 
@@ -48,18 +51,17 @@ public class CPlayerSizeMixinSyncPacket {
     }
 
     public void handle(Supplier<NetworkEvent.Context> context){
-        context.get().enqueueWork(() -> 
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientPacketHandler.handleSizePacket(this, context))
-        );
+        ServerPlayer player = context.get().getSender();
         
-        context.get().setPacketHandled(true);
-    }
+        ServerPlayer target = player.server.getPlayerList().getPlayer(uuid);
 
-    public void playerSyncablesUpdate(PlayerSize playerSize){
-        playerSize.updateSyncables(maxScale, minScale, defaultScale, currentScale, targetScale, remainingTicks);
-    }
+        if(target != null){
+            LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
 
-    public UUID getUuid() {
-        return uuid;
+            if (optional.isPresent()) {
+                PlayerSize orElse = optional.orElse(null);
+                orElse.updateSyncables(maxScale, minScale, defaultScale, currentScale, targetScale, remainingTicks);
+            }
+        }
     }
 }

@@ -7,11 +7,14 @@ import com.ricardthegreat.holdmetight.network.CPlayerCarryPositionPacket;
 import com.ricardthegreat.holdmetight.network.CPlayerDismountPlayerPacket;
 import com.ricardthegreat.holdmetight.network.CPlayerMixinSyncPacket;
 import com.ricardthegreat.holdmetight.network.CPlayerSizeMixinSyncPacket;
+import com.ricardthegreat.holdmetight.size.PlayerSize;
+import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
 import com.ricardthegreat.holdmetight.utils.PlayerCarryExtension;
 import com.ricardthegreat.holdmetight.utils.PlayerSizeExtension;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraft.world.entity.player.Player;
 
@@ -47,11 +50,9 @@ public class ClientPacketHandler {
         if(level != null){
             Player player = level.getPlayerByUUID(msg.getUuid());
             if(player != null) {
-                PlayerSizeExtension playerSize = (PlayerSizeExtension) player;
-                msg.playerSyncablesUpdate(playerSize);
-                //playerCarry.setRotationOffset(msg.getRotation());
-                //playerCarry.setXYMult(msg.getDistance());
-                //playerCarry.setVertOffset(msg.getHeight());
+                LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
+                PlayerSize orElse = optional.orElse(new PlayerSize());
+                msg.playerSyncablesUpdate(orElse);
             }
         }  
     }

@@ -9,7 +9,17 @@ import com.ricardthegreat.holdmetight.init.EntityInit;
 import com.ricardthegreat.holdmetight.init.ItemInit;
 import com.ricardthegreat.holdmetight.init.PotionsInit;
 import com.ricardthegreat.holdmetight.init.RecipeInit;
+import com.ricardthegreat.holdmetight.network.CPlayerSizeMixinSyncPacket;
+import com.ricardthegreat.holdmetight.network.PacketHandler;
+import com.ricardthegreat.holdmetight.size.PlayerSize;
+import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
+
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -18,6 +28,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+import java.util.function.Supplier;
+
 import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/mods.toml file
@@ -71,8 +84,26 @@ public class HoldMeTight {
 
     @SubscribeEvent
     public void playerLoggedInEvent(PlayerLoggedInEvent event){
+
+        Player joiner = event.getEntity();
+        Level level = joiner.level();
+        MinecraftServer server = level.getServer();
         
-        //System.out.println(event.getEntity().getPersistentData().getInt(PlayerCarryUtils.ROTATION_NBT_TAG));
+        if (server != null) {
+
+            ServerPlayer serverJoiner = server.getPlayerList().getPlayer(joiner.getUUID());
+
+            Supplier<ServerPlayer> supplier = () -> serverJoiner;
+
+            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+                LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
+                if (optional.isPresent()) {
+                    PlayerSize orElse = optional.orElse(new PlayerSize());
+
+                    PacketHandler.sendToPlayer(orElse.getSyncPacket(player), supplier);
+                }
+            }
+        }
         
         //System.out.println("event " + event.getEntity().getUUID());
         
