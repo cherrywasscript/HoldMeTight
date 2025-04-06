@@ -73,7 +73,7 @@ public class AdvancedSizeRemoteScreen extends BasicSizeRemoteScreen{
         super(title, user, hand, width, height);
         
         BACKGROUND = new ResourceLocation(HoldMeTight.MODID, "textures/gui/size_remote_bg.png");
-        range = 1000;
+        range = 100;
     }
 
     @Override
