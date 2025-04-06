@@ -1,5 +1,6 @@
 package com.ricardthegreat.holdmetight.mixins;
 
+import org.antlr.v4.parse.ANTLRParser.elementEntry_return;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,6 +15,7 @@ import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.utils.PlayerCarryExtension;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -219,7 +221,44 @@ public abstract class EntityMixin {
         yOffset *= EntitySizeUtils.getSize(vehicle);
     }
 
-    @Inject(at = @At("HEAD"), method = "tick()V")
-    public void tick(CallbackInfo info) {
+    
+    
+
+
+
+
+
+
+
+    /*
+     * fixing pushing for smaller and larger entities
+     */
+
+    @Inject(at = @At("HEAD"), method = "push(Lnet/minecraft/world/entity/Entity;)V", cancellable = true)
+    public void push(Entity entity, CallbackInfo info) {
+         
+        Entity thisEnt = (Entity) (Object) this;
+        float scaleDif = EntitySizeUtils.getSize(entity)/EntitySizeUtils.getSize(thisEnt);
+
+
+        if (scaleDif < 0.25 || scaleDif > 4) {
+            info.cancel();
+        }
+
+        if (thisEnt instanceof Player && entity instanceof Player && thisEnt != entity) {
+            System.out.println(thisEnt.getName() + "/" + entity.getName());
+        }
+            
     }
+
+    @Inject(at = @At("HEAD"), method = "canCollideWith(Lnet/minecraft/world/entity/Entity;)Z", cancellable = true)
+    public void canCollideWith(Entity entity, CallbackInfoReturnable<Boolean> info) {
+        Entity thisEnt = (Entity) (Object) this;
+        float scaleDif = EntitySizeUtils.getSize(entity)/EntitySizeUtils.getSize(thisEnt);
+
+        if (scaleDif < 0.25 || scaleDif > 4) {
+            info.cancel();
+        }
+    }
+
 }
