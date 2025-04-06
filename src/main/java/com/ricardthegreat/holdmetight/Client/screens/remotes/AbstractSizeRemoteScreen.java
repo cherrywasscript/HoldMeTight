@@ -6,6 +6,7 @@ import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
 import com.ricardthegreat.holdmetight.utils.PlayerRenderExtension;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
+import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
@@ -110,16 +111,22 @@ public abstract class AbstractSizeRemoteScreen extends Screen{
     }
 
     protected void renderPlayerDisplay(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks){
-        graphics.drawString(this.font,TARGET, this.leftPos + 28, topPos +10,0xdddddd,false);
-        graphics.drawString(this.font,CURRENT_SCALE, centerHorizonalPos + 5, topPos +10,0xdddddd,false);
+        int screenLeft = leftPos+8;
+        int screenTop = topPos+8;
+        int verTextSep = font.lineHeight + 5;
+
+        graphics.drawString(font, TARGET, screenLeft + 2, screenTop + 2,0xdddddd,false);
+        graphics.drawString(font, CURRENT_SCALE, screenLeft + 2, screenTop + verTextSep,0xdddddd,false);
+        graphics.drawString(font, TARGET_SCALE, screenLeft + 2, screenTop + verTextSep*2,0xdddddd,false);
+        graphics.drawString(font, SCALE_TIME, screenLeft + 2, screenTop + verTextSep*3,0xdddddd,false);
         
         if (selectedPlayer != null) {
             if (inRange()) {
-                graphics.drawCenteredString(font, Float.toString(EntitySizeUtils.getSize(selectedPlayer)), (rightPos + centerHorizonalPos)/2, topPos +19, 0xdddddd);
-                graphics.drawCenteredString(font, selectedPlayer.getName().getString(), (leftPos + centerHorizonalPos)/2, topPos +19, 0xdddddd);
+                graphics.drawString(font, selectedPlayer.getName().getString(), screenLeft + font.width(TARGET) + 5, screenTop + 2, 0xadd8e6,false);
+                graphics.drawString(font, Float.toString(PlayerSizeUtils.getSize(selectedPlayer)), screenLeft + font.width(CURRENT_SCALE) + 5, screenTop + verTextSep, 0xadd8e6,false);
             }else{
-                graphics.drawCenteredString(font, NOT_APPLICABLE, (rightPos + centerHorizonalPos)/2, topPos +19, 0xffff00);
-                graphics.drawCenteredString(font, OUT_OF_RANGE, (leftPos + centerHorizonalPos)/2, topPos +19, 0xffff00);
+                graphics.drawString(font, OUT_OF_RANGE, screenLeft + font.width(TARGET) + 2, screenTop + 2, 0xffff00, false);
+                graphics.drawString(font, NOT_APPLICABLE, screenLeft + font.width(CURRENT_SCALE) + 2, screenTop + verTextSep, 0xffff00, false);
             }
 
             PlayerRenderExtension rend = (PlayerRenderExtension) selectedPlayer;
@@ -130,8 +137,10 @@ public abstract class AbstractSizeRemoteScreen extends Screen{
                 rend.setMenu(false);
             }
         }else{
-            graphics.drawCenteredString(font, NOT_APPLICABLE, (rightPos + centerHorizonalPos)/2, topPos +19, 0xff0000);
-            graphics.drawCenteredString(font, NO_TARGET, (leftPos + centerHorizonalPos)/2, topPos +19, 0xff0000);
+            graphics.drawString(font, NOT_APPLICABLE, screenLeft + font.width(TARGET) + 2, screenTop + 2, 0xff0000, false);
+            graphics.drawString(font, NO_TARGET, screenLeft + font.width(CURRENT_SCALE) + 2, screenTop + verTextSep, 0xff0000, false);
+            graphics.drawString(font, NOT_APPLICABLE, screenLeft + font.width(TARGET) + 2, screenTop + verTextSep*2, 0xff0000, false);
+            graphics.drawString(font, NOT_APPLICABLE, screenLeft + font.width(TARGET) + 2, screenTop + verTextSep*3, 0xff0000, false);
         }
     }
 

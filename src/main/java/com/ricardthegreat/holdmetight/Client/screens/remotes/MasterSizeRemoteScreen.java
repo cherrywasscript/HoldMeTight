@@ -107,40 +107,6 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
         graphics.fill(leftPos-2, topPos+14, leftPos, bottomPos-15, 0x88000000);
     }
 
-    protected void renderPlayerDisplay(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks){
-        int screenLeft = leftPos+8;
-        int screenTop = topPos+8;
-        int verTextSep = font.lineHeight + 5;
-
-        graphics.drawString(font, TARGET, screenLeft + 2, screenTop + 2,0xdddddd,false);
-        graphics.drawString(font, CURRENT_SCALE, screenLeft + 2, screenTop + verTextSep,0xdddddd,false);
-        graphics.drawString(font, TARGET_SCALE, screenLeft + 2, screenTop + verTextSep*2,0xdddddd,false);
-        graphics.drawString(font, SCALE_TIME, screenLeft + 2, screenTop + verTextSep*3,0xdddddd,false);
-        
-        if (selectedPlayer != null) {
-            if (inRange()) {
-                graphics.drawString(font, Float.toString(PlayerSizeUtils.getSize(selectedPlayer)), screenLeft + font.width(TARGET) + 2, screenTop + 2, 0xadd8e6,false);
-                graphics.drawString(font, selectedPlayer.getName().getString(), screenLeft + font.width(CURRENT_SCALE) + 2, screenTop + verTextSep, 0xadd8e6,false);
-            }else{
-                graphics.drawString(font, NOT_APPLICABLE, screenLeft + font.width(TARGET) + 2, screenTop + 2, 0xffff00, false);
-                graphics.drawString(font, OUT_OF_RANGE, screenLeft + font.width(CURRENT_SCALE) + 2, screenTop + verTextSep, 0xffff00, false);
-            }
-
-            PlayerRenderExtension rend = (PlayerRenderExtension) selectedPlayer;
-
-            if(rend != null){
-                rend.setMenu(true);
-                InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, centerHorizonalPos, centerVerticalPos, 30, (float)centerHorizonalPos - mouseX, (float)(centerVerticalPos - 80) -mouseY, (Player) rend);
-                rend.setMenu(false);
-            }
-        }else{
-            graphics.drawString(font, NOT_APPLICABLE, screenLeft + font.width(TARGET) + 2, screenTop + 2, 0xff0000, false);
-            graphics.drawString(font, NO_TARGET, screenLeft + font.width(CURRENT_SCALE) + 2, screenTop + verTextSep, 0xff0000, false);
-            graphics.drawString(font, NOT_APPLICABLE, screenLeft + font.width(TARGET) + 2, screenTop + verTextSep*2, 0xff0000, false);
-            graphics.drawString(font, NOT_APPLICABLE, screenLeft + font.width(TARGET) + 2, screenTop + verTextSep*3, 0xff0000, false);
-        }
-    }
-
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int p_94697_) {
         if (selectingPopoutEdge((int) mouseX, (int) mouseY)) {
