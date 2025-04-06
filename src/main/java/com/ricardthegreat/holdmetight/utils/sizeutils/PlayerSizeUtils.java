@@ -106,6 +106,20 @@ public class PlayerSizeUtils {
         //return getScaleData(player).getScale();
     }
 
+    public static int getRemainingTicks(Player player) {
+        LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
+        PlayerSize orElse = optional.orElse(null);
+        return orElse.getRemainingTicks();
+        //return getScaleData(player).getScale();
+    }
+
+    public static float getTargetSize(Player player) {
+        LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
+        PlayerSize orElse = optional.orElse(null);
+        return orElse.getTargetScale();
+        //return getScaleData(player).getScale();
+    }
+
     private static ScaleData getScaleData(Player player) {
         PehkuiEntityExtensions pEnt = (PehkuiEntityExtensions) player;
         ScaleData data = pEnt.pehkui_getScaleData(base);
