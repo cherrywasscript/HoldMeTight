@@ -80,8 +80,10 @@ public class EntitySizeUtils {
         setSizeOverTimeCustom(entity, targetScale, ticks);
     }
 
-    @Deprecated
     public static float getSize(Entity entity) {
+        if (entity instanceof Player) {
+            return PlayerSizeUtils.getSize((Player) entity);
+        }
         return getScaleData(entity).getScale();
     }
 
