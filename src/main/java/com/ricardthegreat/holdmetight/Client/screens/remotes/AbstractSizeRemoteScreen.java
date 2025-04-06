@@ -124,6 +124,8 @@ public abstract class AbstractSizeRemoteScreen extends Screen{
             if (inRange()) {
                 graphics.drawString(font, selectedPlayer.getName().getString(), screenLeft + font.width(TARGET) + 5, screenTop + 2, 0xadd8e6,false);
                 graphics.drawString(font, Float.toString(PlayerSizeUtils.getSize(selectedPlayer)), screenLeft + font.width(CURRENT_SCALE) + 5, screenTop + verTextSep, 0xadd8e6,false);
+                graphics.drawString(font, Float.toString(PlayerSizeUtils.getTargetSize(selectedPlayer)), screenLeft + font.width(TARGET_SCALE) + 5, screenTop + verTextSep*2, 0xadd8e6,false);
+                graphics.drawString(font, ticksToTime(PlayerSizeUtils.getRemainingTicks(selectedPlayer)), screenLeft + font.width(SCALE_TIME) + 5, screenTop + verTextSep*3, 0xadd8e6,false);
             }else{
                 graphics.drawString(font, OUT_OF_RANGE, screenLeft + font.width(TARGET) + 2, screenTop + 2, 0xffff00, false);
                 graphics.drawString(font, NOT_APPLICABLE, screenLeft + font.width(CURRENT_SCALE) + 2, screenTop + verTextSep, 0xffff00, false);
@@ -142,6 +144,46 @@ public abstract class AbstractSizeRemoteScreen extends Screen{
             graphics.drawString(font, NOT_APPLICABLE, screenLeft + font.width(TARGET) + 2, screenTop + verTextSep*2, 0xff0000, false);
             graphics.drawString(font, NOT_APPLICABLE, screenLeft + font.width(TARGET) + 2, screenTop + verTextSep*3, 0xff0000, false);
         }
+    }
+
+    protected String ticksToTime(int ticks){
+
+        int duration = (int) Math.ceil(((double) ticks)/20);
+
+        int seconds = 0;
+        int minutes = 0;
+        int hours = 0;
+
+        seconds += duration%60;
+        duration -= seconds;
+
+        minutes += duration%3600;
+        duration -= minutes;
+        minutes = minutes/60;
+
+        hours = duration/3600;
+
+        String output = "";
+
+        if (hours < 10) {
+            output = output + "0" + hours + ":";
+        }else{
+            output = output + hours + ":";
+        }
+
+        if (minutes < 10) {
+            output = output + "0" + minutes + ":";
+        }else{
+            output = output + minutes + ":";
+        }
+
+        if (seconds < 10) {
+            output = output + "0" + seconds;
+        }else{
+            output = output + seconds;
+        }
+
+        return output;
     }
 
     protected boolean inRange(){

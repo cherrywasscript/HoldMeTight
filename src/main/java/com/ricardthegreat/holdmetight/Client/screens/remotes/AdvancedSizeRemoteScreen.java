@@ -338,7 +338,13 @@ public class AdvancedSizeRemoteScreen extends BasicSizeRemoteScreen{
 
                 //try to parse the string as a float, allow it if it succeeds dont if it doesnt
                 try{
-                    Float.parseFloat(t);
+                    float f = Float.parseFloat(t);
+
+                    //ensure that the input it not less than 0 as that can cause issues
+                    if (f < 0) {
+                        return false;
+                    }
+
                     return true;
                 }catch (Exception e){ 
                     return false;
@@ -394,14 +400,13 @@ public class AdvancedSizeRemoteScreen extends BasicSizeRemoteScreen{
 
                 //try to parse the string as a float, allow it if it succeeds dont if it doesnt
                 try{
-                    Float f = Float.parseFloat(t);
-                    if (f%1 == 0) {
-                        return true;
-                    }else if ((f*60)%1 == 0) {
-                        return true;
-                    }else if ((f*60*60)%1 == 0) {
-                        return true;
+                    int f = Integer.parseInt(t);
+
+                    //ensure that the input it not less than 0 as that can cause issues
+                    if (f < 0) {
+                        return false;
                     }
+
                     return false;
                 }catch (Exception e){ 
                     return false;
@@ -500,6 +505,10 @@ public class AdvancedSizeRemoteScreen extends BasicSizeRemoteScreen{
             minutes *= 60;
             float ticks = seconds + minutes + hours;
             ticks *= 20;
+
+            if (ticks > 359999) {
+                ticks = 359999;
+            }
 
             tag.putFloat(AbstractSizeRemoteItem.NUM_TICKS_TAG, ticks);
 

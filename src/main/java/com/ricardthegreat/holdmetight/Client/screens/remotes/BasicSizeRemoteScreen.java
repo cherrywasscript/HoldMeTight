@@ -181,7 +181,12 @@ public class BasicSizeRemoteScreen extends AbstractSizeRemoteScreen{
                 }
                 //try to parse the string as a float, allow it if it succeeds dont if it doesnt
                 try{
-                    Float.parseFloat(t);
+                    float f = Float.parseFloat(t);
+
+                    //ensure that the input it not less than 0 as that can cause issues
+                    if (f < 0) {
+                        return false;
+                    }
                     return true;
                 }catch (Exception e){ 
                     return false;
