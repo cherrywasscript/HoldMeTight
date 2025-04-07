@@ -24,4 +24,16 @@ public final class Keybindings {
          KeyConflictContext.IN_GAME, 
          InputConstants.getKey(InputConstants.KEY_V, -1),
          CATEGORY);
+
+    public final KeyMapping sizePrefsKey = new KeyMapping(
+        "key." + HoldMeTight.MODID + ".size_prefs_key",
+         KeyConflictContext.IN_GAME, 
+         InputConstants.getKey(InputConstants.KEY_RBRACKET, -1),
+         CATEGORY);
+
+    public final KeyMapping carryScreenKey = new KeyMapping(
+        "key." + HoldMeTight.MODID + ".carry_screen_key",
+         KeyConflictContext.IN_GAME, 
+         InputConstants.getKey(InputConstants.KEY_LBRACKET, -1),
+         CATEGORY);
 }
