@@ -12,6 +12,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import virtuoel.pehkui.api.PehkuiConfig;
 
 @Mod.EventBusSubscriber(modid = HoldMeTight.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ForgeModEvents {
@@ -27,12 +28,14 @@ public class ForgeModEvents {
 
     @SubscribeEvent
     public static void onPlayerCloned(PlayerEvent.Clone event) {
-        if(event.isWasDeath()) {
+        if(event.isWasDeath() && PehkuiConfig.COMMON.keepAllScalesOnRespawn.get()) {
+            event.getOriginal().reviveCaps(); //need this as death removes caps from what i've read
             event.getOriginal().getCapability(PlayerSizeProvider.PLAYER_SIZE).ifPresent(oldStore -> {
-                event.getOriginal().getCapability(PlayerSizeProvider.PLAYER_SIZE).ifPresent(newStore -> {
+                event.getEntity().getCapability(PlayerSizeProvider.PLAYER_SIZE).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);
                 });
             });
+            event.getOriginal().invalidateCaps();//reinvalidating the caps after doing what i need
         }
     }
 
