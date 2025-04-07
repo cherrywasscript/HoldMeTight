@@ -20,7 +20,6 @@ import virtuoel.pehkui.api.ScaleTypes;
 import virtuoel.pehkui.util.PehkuiEntityExtensions;
 
 public class PlayerSize {
-    private PlayerSizeUtils sizeUtil = new PlayerSizeUtils();
 
     //the max and min size this player can be as well as their default size
     //default size is what it will be set to when "reset" is used on size devices
@@ -151,10 +150,6 @@ public class PlayerSize {
         float stepHeight = (1+((currentScale-1)/2))/currentScale;
 
         stepData.setScale(stepHeight);
-    }
-
-    public PlayerSizeUtils getSizeUtil() {
-        return sizeUtil;
     }
 
     public Float getMaxScale() {
