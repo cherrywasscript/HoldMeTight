@@ -100,7 +100,11 @@ public class HoldMeTight {
                 if (optional.isPresent()) {
                     PlayerSize orElse = optional.orElse(new PlayerSize());
 
-                    PacketHandler.sendToPlayer(orElse.getSyncPacket(player), supplier);
+                    if (player == serverJoiner) {
+                        PacketHandler.sendToAllClients(orElse.getSyncPacket(player));
+                    }else{
+                        PacketHandler.sendToPlayer(orElse.getSyncPacket(player), supplier);
+                    }
                 }
             }
         }
