@@ -23,28 +23,25 @@ public class PlayerSizeUtils {
      * @param ticks - the time it should take for the player to reach the given size in ticks (1/20 seconds)
      */
     public static void setSize(Player player, Float size, int ticks){
-        PlayerSizeExtension pMix = (PlayerSizeExtension) player;
-
-        LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
-        PlayerSize orElse = optional.orElse(null);
+        PlayerSize playerSize = PlayerSizeProvider.getPlayerSizeCapability(player);
 
         //check if it is perpetual, instant, or over time change
         if (ticks < 0) {
             
         }else if (ticks == 0) {
-            float mult = size/orElse.getCurrentScale();
+            float mult = size/playerSize.getCurrentScale();
             
-            orElse.setCurrentScale(size);
-            orElse.setTargetScale(orElse.getTargetScale()*mult);
-            if (orElse.getRemainingTicks() == 0) {
-                orElse.setRemainingTicks(1);
+            playerSize.setCurrentScale(size);
+            playerSize.setTargetScale(playerSize.getTargetScale()*mult);
+            if (playerSize.getRemainingTicks() == 0) {
+                playerSize.setRemainingTicks(1);
             }
         }else{
-            orElse.setTargetScale(size);
-            orElse.setRemainingTicks(ticks);
+            playerSize.setTargetScale(size);
+            playerSize.setRemainingTicks(ticks);
         }
 
-        orElse.updateShouldSync();
+        playerSize.updateShouldSync();
     }
 
     /**
@@ -54,12 +51,9 @@ public class PlayerSizeUtils {
      * @param ticks - the time it should take for the player to reach the given size in ticks (1/20 seconds)
      */
     public static void multSize(Player player, Float size, int ticks){
-        PlayerSizeExtension pMix = (PlayerSizeExtension) player;
+        PlayerSize playerSize = PlayerSizeProvider.getPlayerSizeCapability(player);
 
-        LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
-        PlayerSize orElse = optional.orElse(null);
-
-        Float targetScale = orElse.getTargetScale()*size;
+        Float targetScale = playerSize.getTargetScale()*size;
         
         setSize(player, targetScale, ticks);
     }
@@ -80,43 +74,37 @@ public class PlayerSizeUtils {
      * @param size - the amount that should be added to their size
      */
     public static void addSize(Player player, Float size){
-        PlayerSizeExtension pMix = (PlayerSizeExtension) player;
+        PlayerSize playerSize = PlayerSizeProvider.getPlayerSizeCapability(player);
 
-        LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
-        PlayerSize orElse = optional.orElse(new PlayerSize());
+        Float currentScale = playerSize.getCurrentScale();
+        Float targetScale = playerSize.getTargetScale();
 
-        Float currentScale = orElse.getCurrentScale();
-        Float targetScale = orElse.getTargetScale();
+        playerSize.setCurrentScale(currentScale + size);
+        playerSize.setTargetScale(targetScale + size);
 
-        orElse.setCurrentScale(currentScale + size);
-        orElse.setTargetScale(targetScale + size);
-
-        if (orElse.getRemainingTicks() == 0) {
-            orElse.setRemainingTicks(1);
+        if (playerSize.getRemainingTicks() == 0) {
+            playerSize.setRemainingTicks(1);
         }
 
-        orElse.updateShouldSync();
+        playerSize.updateShouldSync();
     }
 
     //get a players size
     public static float getSize(Player player) {
-        LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
-        PlayerSize orElse = optional.orElse(null);
-        return orElse.getCurrentScale();
+        PlayerSize playerSize = PlayerSizeProvider.getPlayerSizeCapability(player);
+        return playerSize.getCurrentScale();
         //return getScaleData(player).getScale();
     }
 
     public static int getRemainingTicks(Player player) {
-        LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
-        PlayerSize orElse = optional.orElse(null);
-        return orElse.getRemainingTicks();
+        PlayerSize playerSize = PlayerSizeProvider.getPlayerSizeCapability(player);
+        return playerSize.getRemainingTicks();
         //return getScaleData(player).getScale();
     }
 
     public static float getTargetSize(Player player) {
-        LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
-        PlayerSize orElse = optional.orElse(null);
-        return orElse.getTargetScale();
+        PlayerSize playerSize = PlayerSizeProvider.getPlayerSizeCapability(player);
+        return playerSize.getTargetScale();
         //return getScaleData(player).getScale();
     }
 
