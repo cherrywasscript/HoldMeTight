@@ -212,7 +212,7 @@ public class PlayerSize {
         this.shouldSync = true;
     }
 
-    public void copyFrom(PlayerSize source){
+    public void copyAll(PlayerSize source){
         this.maxScale = source.maxScale;
         this.minScale = source.minScale;
         this.defaultScale = source.defaultScale;
@@ -221,6 +221,12 @@ public class PlayerSize {
         this.perpetualChange = source.perpetualChange;
         this.perpetualChangeValue = source.perpetualChangeValue;
         this.remainingTicks = source.remainingTicks;
+    }
+
+    public void copyBasic(PlayerSize source){
+        this.maxScale = source.maxScale;
+        this.minScale = source.minScale;
+        this.defaultScale = source.defaultScale;
     }
 
     public void saveNBTData(CompoundTag tag){
