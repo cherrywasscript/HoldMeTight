@@ -3,7 +3,6 @@ package com.ricardthegreat.holdmetight.init;
 import static com.ricardthegreat.holdmetight.init.CreativeTabInit.addToTab;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.items.CarryPositonItem;
 import com.ricardthegreat.holdmetight.items.PaperWingsItem;
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.items.SizeRay;
@@ -51,9 +50,6 @@ public class ItemInit {
         public static final RegistryObject<Item> SIZE_WAND = addToTab(
                 ITEMS.register("size_wand", () -> new SizeWand(new Item.Properties().stacksTo(1))));
 
-
-        public static final RegistryObject<Item> CARRY_POSITION_ITEM = addToTab(
-                ITEMS.register("carry_position_item", () -> new CarryPositonItem(new Item.Properties().stacksTo(1))));
 
 
 
