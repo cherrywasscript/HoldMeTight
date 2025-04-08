@@ -69,5 +69,13 @@
     "effect.holdmetight.grow":"Grow",
     "item.minecraft.potion.effect.grow_potion": "Growth Potion",
     "item.minecraft.splash_potion.effect.grow_potion": "Splash Growth Potion",
-    "item.minecraft.lingering_potion.effect.grow_potion": "Lingering Growth Potion"
+    "item.minecraft.lingering_potion.effect.grow_potion": "Lingering Growth Potion",
+
+
+
+
+
+
+
+    "curios.identifier.collar":"Collar"
 }
