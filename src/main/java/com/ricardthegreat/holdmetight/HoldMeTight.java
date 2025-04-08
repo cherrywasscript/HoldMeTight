@@ -23,6 +23,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -41,11 +42,22 @@ public class HoldMeTight {
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
 
+
+    
+    public static boolean curiosInstalled;
+
     public HoldMeTight() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
+
+
+        //this exists so i dont have to call ModList.get().isLoaded("curios") every time i wanna check
+        //not sure if this is bad or not honestly
+        curiosInstalled = ModList.get().isLoaded("curios");
+
+
 
         BlockInit.BLOCKS.register(modEventBus);
         BlockEntityInit.BLOCK_ENTITIES.register(modEventBus);

@@ -3,6 +3,7 @@ package com.ricardthegreat.holdmetight.init;
 import static com.ricardthegreat.holdmetight.init.CreativeTabInit.addToTab;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
+import com.ricardthegreat.holdmetight.items.CollarItem;
 import com.ricardthegreat.holdmetight.items.PaperWingsItem;
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.items.SizeRay;
@@ -68,4 +69,8 @@ public class ItemInit {
         public static final RegistryObject<BlockItem> JAR_ITEM = addToTab(ITEMS.register("tiny_jar", 
                 () -> new BlockItem(BlockInit.TINY_JAR.get(), new Item.Properties())));
                  */
+
+        public static final RegistryObject<Item> COLLAR_ITEM = addToTab(
+                ITEMS.register("collar_item", () -> new CollarItem(new Item.Properties().stacksTo(1))));
+
 }
