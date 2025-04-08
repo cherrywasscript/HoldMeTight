@@ -1,5 +1,5 @@
 {
-    "operation": "ADD",
-    "icon": "holdmetight:slot/collar",
-    "size": 0
+    "operation": "SET",
+    "size": 1,
+    "icon": "holdmetight:slot/collar"
 }
