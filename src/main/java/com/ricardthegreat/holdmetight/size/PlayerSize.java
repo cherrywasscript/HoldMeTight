@@ -14,6 +14,7 @@ import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.extensions.IForgeEntity;
 import net.minecraftforge.fml.DistExecutor;
 import virtuoel.pehkui.api.ScaleData;
 import virtuoel.pehkui.api.ScaleTypes;
@@ -76,6 +77,8 @@ public class PlayerSize {
                 shouldSync = true;
             }
         }
+
+        
 
         if (shouldSync) {
             sync(player);
@@ -146,8 +149,8 @@ public class PlayerSize {
 
         ScaleData stepData = pEnt.pehkui_getScaleData(ScaleTypes.STEP_HEIGHT);
 
-        //this should make the step height equal to 1 + (height-1)/2
-        float stepHeight = (1+((currentScale-1)/2))/currentScale;
+        //for some reason step height increases by step height scale^2 so i need to counteract that
+        float stepHeight = (float) (1/Math.sqrt(currentScale));
 
         stepData.setScale(stepHeight);
     }
