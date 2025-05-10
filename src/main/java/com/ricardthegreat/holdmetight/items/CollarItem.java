@@ -1,21 +1,33 @@
 package com.ricardthegreat.holdmetight.items;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
+import com.ricardthegreat.holdmetight.Client.renderers.ArmorRenderer;
+import com.ricardthegreat.holdmetight.Client.renderers.layers.CollarModelLayers;
 
 import java.lang.reflect.*;
+import java.util.function.Consumer;
 
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.Equipable;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
-public class CollarItem extends Item {
+public class CollarItem extends Item implements Equipable{
 
     public CollarItem(Properties p_41383_) {
         super(p_41383_);
-        //TODO Auto-generated constructor stub
     }
     
     @Override
@@ -31,5 +43,30 @@ public class CollarItem extends Item {
             }
         }
         return super.initCapabilities(stack, nbt);
+    }
+
+    @Override
+    public EquipmentSlot getEquipmentSlot() {
+        return ArmorItem.Type.HELMET.getSlot();
+    }
+
+    @Override
+    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+        consumer.accept(new IClientItemExtensions() {
+            @Override
+            public @NotNull HumanoidModel<?> getHumanoidArmorModel(LivingEntity livingEntity, ItemStack itemStack,
+                    EquipmentSlot equipmentSlot, HumanoidModel<?> original) {
+                HumanoidModel<?> armourModel = new HumanoidModel<>(new ArmorRenderer<>(CollarModelLayers::createBodyLayer, CollarModelLayers::new).makeArmorParts(equipmentSlot));
+                armourModel.crouching = original.crouching;
+                armourModel.riding = original.riding;
+                armourModel.young = original.young;
+                return armourModel;
+            }
+        });
+    }
+
+    @Override
+    public @Nullable String getArmorTexture(ItemStack stack, Entity entity, EquipmentSlot slot, String type) {
+        return new ResourceLocation(HoldMeTight.MODID, "/textures/entity/collar.png").toString();
     }
 }
