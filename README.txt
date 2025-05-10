@@ -20,3 +20,5 @@ Plans:
 - allow carrying of more than 1 player
 - a way to set your size preferences
 - a more intuitive way to set custom carry positioning
+
+- probably more as i think of stuff
