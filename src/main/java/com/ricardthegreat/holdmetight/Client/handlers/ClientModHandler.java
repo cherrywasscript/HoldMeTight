@@ -29,6 +29,8 @@ public class ClientModHandler {
     public static void registerKeys(RegisterKeyMappingsEvent event) {
         event.register(Keybindings.INSTANCE.shoulderCarryKey);
         event.register(Keybindings.INSTANCE.customCarryKey);
+        event.register(Keybindings.INSTANCE.sizePrefsKey);
+        event.register(Keybindings.INSTANCE.carryScreenKey);
     } 
 
     @SubscribeEvent
@@ -55,5 +57,4 @@ public class ClientModHandler {
         EntityRenderers.register(EntityInit.RAY_GUN_PROJECTILE.get(), RayGunProjectileRenderer::new);
         EntityRenderers.register(EntityInit.WAND_PROJECTILE.get(), WandProjectileRenderer::new);
     }
-    
 }

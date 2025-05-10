@@ -2,7 +2,9 @@ package com.ricardthegreat.holdmetight.Client.handlers;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.ricardthegreat.holdmetight.HoldMeTight;
+import com.ricardthegreat.holdmetight.Client.ClientHooks;
 import com.ricardthegreat.holdmetight.Client.Keybindings;
+import com.ricardthegreat.holdmetight.Client.screens.CarryPositionScreen;
 import com.ricardthegreat.holdmetight.Commands.TestCommand;
 import com.ricardthegreat.holdmetight.utils.PlayerCarryExtension;
 
@@ -14,6 +16,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = HoldMeTight.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
@@ -52,6 +55,21 @@ public class ClientForgeHandler {
             player.setShoulderCarry(false);
             player.setShouldSync(true);
             
+        }
+
+        //key to open size prefs screen
+        if(Keybindings.INSTANCE.sizePrefsKey.consumeClick() && mcPlayer != null) {     
+            if (mcPlayer.level().isClientSide) {
+                //not this but kinda this
+                //DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientHooks.openCarryPositionScreen(mcPlayer));
+            }    
+        }
+
+        //key to open carry positioning screen
+        if(Keybindings.INSTANCE.carryScreenKey.consumeClick() && mcPlayer != null) { 
+            if (mcPlayer.level().isClientSide) {
+                DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientHooks.openCarryPositionScreen(mcPlayer));
+            }
         }
     }
 }
