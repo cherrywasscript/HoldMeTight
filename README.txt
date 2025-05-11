@@ -17,6 +17,8 @@ Features:
 
 Plans:
 - more functions for the size remotes!
+- functional shrink/growth rays!
+- options for size changing that are more magical than technological (like wands + cauldrons and stuff)
 - allow carrying of more than 1 player
 - a way to set your size preferences
 - a more intuitive way to set custom carry positioning
