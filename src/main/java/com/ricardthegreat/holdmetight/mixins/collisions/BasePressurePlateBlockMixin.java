@@ -30,7 +30,7 @@ public class BasePressurePlateBlockMixin extends Block{
     
     //disables pressureplate for those under 0.1
     @Inject(at = @At("HEAD"), method = "entityInside(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/Entity;)V", cancellable = true)
-    public void entityInside(BlockState p_49314_, Level p_49315_, BlockPos p_49316_, Entity entity, CallbackInfo info) {
+    public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, CallbackInfo info) {
         if(EntitySizeUtils.getSize(entity) < 0.1){
             info.cancel();
         }
