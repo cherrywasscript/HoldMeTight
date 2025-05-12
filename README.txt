@@ -14,6 +14,8 @@ Features:
 - Extremely small players are too light to trigger pressureplates or activate switches and buttons
 - customised hitboxes so tinies can walk along surfaces that aren't normally collidable
 - paper wings (elytras for the very small to make travel easier)
+- Large players are immune to the slowing and damage effects of certain blocks such as sweet berry bushes and slime blocks
+- Large players do not collide with leaf blocks to make walking through forests easier
 
 Plans:
 - more functions for the size remotes!
@@ -22,5 +24,10 @@ Plans:
 - allow carrying of more than 1 player
 - a way to set your size preferences
 - a more intuitive way to set custom carry positioning
+- make Large players immune to the chilling effects of powdered snow
+- make large players immune to soul sand slow
+- add config options to give larger/smaller players faster/slower mining speeds
+- add config options to make larger/smaller players take less/more damage
+- add config options to make larger/smaller players deal more/less damage
 
-- probably more as i think of stuff
+- probably more as i think of stuff (feel free to give suggestions if you have anything you want to see)
