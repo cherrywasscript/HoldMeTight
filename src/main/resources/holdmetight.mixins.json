@@ -22,10 +22,13 @@
       "collisions.BasePressurePlateBlockMixin",
       "collisions.CrossCollisionBlockMixin",
       "collisions.FenceGateBlockMixin",
+      "collisions.HoneyBlockMixin",
       "collisions.LeavesBlockMixin",
       "collisions.TorchBlockMixin",
       "collisions.LeverBlockMixin",
       "collisions.SignBlockMixin",
+      "collisions.SlimeBlockMixin",
+      "collisions.SweetBerryBushBlockMixin",
       "collisions.WallHangingSignBlockMixin",
       "collisions.ButtonBlockMixin",
 
