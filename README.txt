@@ -18,6 +18,8 @@ Features:
 - Large players do not collide with leaf blocks to make walking through forests easier
 - Large players do not stick to honey blocks (though they are still slowed by them)
 
+- Probably some stuff I have missed my workflow is very scattered
+
 Plans:
 - more functions for the size remotes!
 - functional shrink/growth rays!
