@@ -14,8 +14,9 @@ Features:
 - Extremely small players are too light to trigger pressureplates or activate switches and buttons
 - customised hitboxes so tinies can walk along surfaces that aren't normally collidable
 - paper wings (elytras for the very small to make travel easier)
-- Large players are immune to the slowing and damage effects of certain blocks such as sweet berry bushes and slime blocks
+- Large players are immune to the slowing and damage effects of certain blocks such as sweet berry bushes and cobwebs
 - Large players do not collide with leaf blocks to make walking through forests easier
+- Large players do not stick to honey blocks (though they are still slowed by them)
 
 Plans:
 - more functions for the size remotes!
