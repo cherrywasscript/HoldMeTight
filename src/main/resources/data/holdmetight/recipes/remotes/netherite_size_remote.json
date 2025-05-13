@@ -1,15 +1,15 @@
 {
   "type": "minecraft:smithing_transform",
-  "base": [
-    "holdmetight:remotes/gold_size_remote"
-  ],
-  "addition": [
-    "minecraft:netherite_ingot"
-  ],
-  "template": [
-    "minecraft:netherite_upgrade_smithing_template"
-  ],
+  "base": {
+    "item": "holdmetight:remotes/gold_size_remote"
+  },
+  "addition": {
+    "item": "minecraft:netherite_ingot"
+  },
+  "template": {
+    "item": "minecraft:netherite_upgrade_smithing_template"
+  },
   "result": {
-    "id": "holdmetight:remotes/netherite_size_remote"
+    "item": "holdmetight:remotes/netherite_size_remote"
   }
 }
