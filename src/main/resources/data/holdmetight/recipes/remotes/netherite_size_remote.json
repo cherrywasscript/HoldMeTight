@@ -8,5 +8,8 @@
   ],
   "template": [
     "minecraft:netherite_upgrade_smithing_template"
-  ]
+  ],
+  "result": {
+    "id": "holdmetight:remotes/netherite_size_remote"
+  }
 }
