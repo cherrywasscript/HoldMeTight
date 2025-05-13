@@ -91,10 +91,16 @@ public class PlayerSize {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> 
                 PacketHandler.sendToServer(new SPlayerSizeMixinSyncPacket(maxScale, minScale, defaultScale, currentScale, 
                 targetScale, remainingTicks, player.getUUID())));
-        }else{
-            DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> 
-            PacketHandler.sendToAllClients(new CPlayerSizeMixinSyncPacket(maxScale, minScale, defaultScale, currentScale, 
-            targetScale, remainingTicks, player.getUUID())));
+        }else {
+            if (!player.getServer().isDedicatedServer()) {
+                DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> 
+                PacketHandler.sendToAllClients(new CPlayerSizeMixinSyncPacket(maxScale, minScale, defaultScale, currentScale, 
+                targetScale, remainingTicks, player.getUUID())));
+            }else{
+                DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> 
+                PacketHandler.sendToAllClients(new CPlayerSizeMixinSyncPacket(maxScale, minScale, defaultScale, currentScale, 
+                targetScale, remainingTicks, player.getUUID())));
+            }
         }
             
         shouldSync = false;
