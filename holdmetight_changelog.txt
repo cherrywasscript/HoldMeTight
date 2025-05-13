@@ -1,4 +1,5 @@
 version 0.2.1-alpha:
 - Fixed size syncing non dedicated servers (probably)
 - fixed recipes for gold and netherite remotes
-- 
+
+version 0.2.2-alpha:
