@@ -1,31 +1,12 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "category": "misc",
-  "pattern": [
-    " A ",
-    "GNE",
-    " R "
+  "type": "minecraft:smithing_transform",
+  "base": [
+    "holdmetight:remotes/gold_size_remote"
   ],
-  "key": {
-    "N": {
-      "item": "minecraft:netherite_ingot"
-    },
-    "R": {
-      "item": "minecraft:redstone"
-    },
-    "G": {
-      "item": "holdmetight:remotes/gold_size_remote"
-    },
-    "A": {
-      "item": "holdmetight:remotes/amethyst_size_remote"
-    },
-    "E": {
-      "item": "holdmetight:remotes/emerald_size_remote"
-    }
-  },
-  "result": {
-    "item": "holdmetight:remotes/netherite_size_remote",
-    "count": 1
-  },
-  "show_notification": true
+  "addition": [
+    "minecraft:netherite_ingot"
+  ],
+  "template": [
+    "minecraft:netherite_upgrade_smithing_template"
+  ]
 }

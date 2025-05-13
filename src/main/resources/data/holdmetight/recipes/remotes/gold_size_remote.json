@@ -11,7 +11,7 @@
       "item": "minecraft:gold_ingot"
     },
     "R": {
-      "item": "holdmetight:remotes/copper_size_remote"
+      "item": "minecraft:redstone"
     },
     "G": {
       "item": "holdmetight:remotes/iron_size_remote"
