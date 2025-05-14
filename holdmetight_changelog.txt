@@ -3,3 +3,7 @@ version 0.2.1-alpha:
 - fixed recipes for gold and netherite remotes
 
 version 0.2.2-alpha:
+- fixed popups when changing carry positioning
+- fixed the names of arrows tipped in shrink/growth potions
+- removed the recipe for the size ray while it is still unfinished
+- fixed a crash with growth/shrink potion effects in singleplayer
