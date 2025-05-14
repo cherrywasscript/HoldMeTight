@@ -21,7 +21,9 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = HoldMeTight.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientForgeHandler {
-    private static final Component KEY_PRESSED = Component.translatable("message." + HoldMeTight.MODID + ".key_pressed");
+    private static final Component SHOULDER_KEY_PRESSED = Component.translatable("message." + HoldMeTight.MODID + ".shoulder_key_pressed");
+    private static final Component CUSTOM_KEY_PRESSED = Component.translatable("message." + HoldMeTight.MODID + ".custom_key_pressed");
+    private static final Component DEFAULT_KEY_PRESSED = Component.translatable("message." + HoldMeTight.MODID + ".default_key_pressed");
 
     @SubscribeEvent
     public static void RegisterClientCommandsEvent(RegisterClientCommandsEvent event){
@@ -36,32 +38,37 @@ public class ClientForgeHandler {
         Minecraft minecraft = Minecraft.getInstance();
         LocalPlayer mcPlayer = minecraft.player;
         if(Keybindings.INSTANCE.shoulderCarryKey.consumeClick() && mcPlayer != null) {
-            mcPlayer.displayClientMessage(KEY_PRESSED, false);
-
             PlayerCarryExtension player = (PlayerCarryExtension) mcPlayer;
 
             player.setShoulderCarry(!player.getShoulderCarry());
             player.setCustomCarry(false);
             player.setShouldSync(true);
-            
+
+            if (player.getShoulderCarry()) {
+                mcPlayer.displayClientMessage(SHOULDER_KEY_PRESSED, true);
+            }else{
+                mcPlayer.displayClientMessage(DEFAULT_KEY_PRESSED, true);
+            }
         }
 
         if(Keybindings.INSTANCE.customCarryKey.consumeClick() && mcPlayer != null) {
-            mcPlayer.displayClientMessage(KEY_PRESSED, true);
-
             PlayerCarryExtension player = (PlayerCarryExtension) mcPlayer;
 
             player.setCustomCarry(!player.getCustomCarry());
             player.setShoulderCarry(false);
             player.setShouldSync(true);
             
+            if (player.getCustomCarry()) {
+                mcPlayer.displayClientMessage(CUSTOM_KEY_PRESSED, true);
+            }else{
+                mcPlayer.displayClientMessage(DEFAULT_KEY_PRESSED, true);
+            }
         }
 
         //key to open size prefs screen
         if(Keybindings.INSTANCE.sizePrefsKey.consumeClick() && mcPlayer != null) {     
             if (mcPlayer.level().isClientSide) {
-                //not this but kinda this
-                //DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientHooks.openCarryPositionScreen(mcPlayer));
+                DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientHooks.openSizePrefsScreen(mcPlayer));
             }    
         }
 

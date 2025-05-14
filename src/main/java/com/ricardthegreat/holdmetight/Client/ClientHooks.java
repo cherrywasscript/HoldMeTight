@@ -3,6 +3,7 @@ package com.ricardthegreat.holdmetight.Client;
 
 
 import com.ricardthegreat.holdmetight.Client.screens.CarryPositionScreen;
+import com.ricardthegreat.holdmetight.Client.screens.SizePrefsScreen;
 import com.ricardthegreat.holdmetight.Client.screens.SizeRayScreen;
 import com.ricardthegreat.holdmetight.Client.screens.remotes.AdvancedSizeRemoteScreen;
 import com.ricardthegreat.holdmetight.Client.screens.remotes.BasicSizeRemoteScreen;
@@ -12,6 +13,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 
+//i think theres a way to be like "@dist only in client" or seomthing i should look into that so that this class only runs clientside
 public class ClientHooks {
 
     //remote screens
@@ -35,6 +37,10 @@ public class ClientHooks {
     //carry pos screen
     public static void openCarryPositionScreen(Player player){
         Minecraft.getInstance().setScreen(new CarryPositionScreen(player));
+    }
+
+    public static void openSizePrefsScreen(Player player){
+        Minecraft.getInstance().setScreen(new SizePrefsScreen(player));
     }
     
 }
