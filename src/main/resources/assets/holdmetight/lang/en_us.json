@@ -73,7 +73,9 @@
 
 
 
-
+    "message.holdmetight.shoulder_key_pressed":"Set carry position to shoulder",
+    "message.holdmetight.custom_key_pressed":"Set carry position to custom",
+    "message.holdmetight.default_key_pressed":"Set carry position to hand",
 
 
 
