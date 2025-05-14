@@ -88,9 +88,9 @@ public class PlayerSize {
     private void sync(Player player){
         
         if (player.level().isClientSide) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> 
-                PacketHandler.sendToServer(new SPlayerSizeMixinSyncPacket(maxScale, minScale, defaultScale, currentScale, 
-                targetScale, remainingTicks, player.getUUID())));
+            //DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> 
+            //    PacketHandler.sendToServer(new SPlayerSizeMixinSyncPacket(maxScale, minScale, defaultScale, currentScale, 
+            //    targetScale, remainingTicks, player.getUUID())));
         }else {
             if (!player.getServer().isDedicatedServer()) {
                 DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> 
@@ -182,7 +182,13 @@ public class PlayerSize {
     }
 
     public void setTargetScale(Float targetScale) {
-        this.targetScale = targetScale;
+        if (targetScale > maxScale) {
+            this.targetScale = maxScale;
+        }else if (targetScale < minScale) {
+            this.targetScale = minScale;
+        }else {
+            this.targetScale = targetScale;
+        } 
     }
 
     public Float getCurrentScale() {
