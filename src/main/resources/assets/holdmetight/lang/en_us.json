@@ -9,6 +9,7 @@
 
     "item.holdmetight.paper_wings_item":"Paper Wings",
 
+    "item.holdmetight.size_ray":"Size ray (experimental)",
 
 
     "gui.holdmetight.size_remote_title":"Test Screen",
@@ -74,6 +75,8 @@
     "item.minecraft.tipped_arrow.shrink_potion":"Arrow of shrinking",
     "item.minecraft.tipped_arrow.massive_shrink_potion":"Arrow of like super mega shrinking",
     "item.minecraft.tipped_arrow.grow_potion":"Arrow of growth",
+
+
 
     "message.holdmetight.shoulder_key_pressed":"Set carry position to shoulder",
     "message.holdmetight.custom_key_pressed":"Set carry position to custom",
