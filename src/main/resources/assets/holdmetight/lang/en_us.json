@@ -72,9 +72,9 @@
     "item.minecraft.splash_potion.effect.grow_potion": "Splash Growth Potion",
     "item.minecraft.lingering_potion.effect.grow_potion": "Lingering Growth Potion",
 
-    "item.minecraft.tipped_arrow.shrink_potion":"Arrow of shrinking",
-    "item.minecraft.tipped_arrow.massive_shrink_potion":"Arrow of like super mega shrinking",
-    "item.minecraft.tipped_arrow.grow_potion":"Arrow of growth",
+    "item.minecraft.tipped_arrow.effect.shrink_potion":"Arrow of shrinking",
+    "item.minecraft.tipped_arrow.effect.massive_shrink_potion":"Arrow of like super mega shrinking",
+    "item.minecraft.tipped_arrow.effect.grow_potion":"Arrow of growth",
 
 
 
