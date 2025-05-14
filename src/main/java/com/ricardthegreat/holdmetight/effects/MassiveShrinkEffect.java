@@ -27,7 +27,6 @@ public class MassiveShrinkEffect extends MobEffect{
 
     @Override
     public boolean isDurationEffectTick(int p_19455_, int p_19456_) {
-        System.out.println("1st:" + p_19455_ + "/2nd:" + p_19456_);
         return true;
     }
 
