@@ -41,7 +41,7 @@ public class JarBlock extends Block {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
         if (EntitySizeUtils.getSize(player) >= 0.8) {
-            PlayerCarry playerCarry = PlayerCarryProvider.getPlayerSizeCapability(player);
+            PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
 
             System.out.println(level.isClientSide);
 

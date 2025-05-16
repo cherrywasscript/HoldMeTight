@@ -68,7 +68,7 @@ public class CarryPositionScreen extends Screen{
         this.imageWidth = 256;
         this.imageHeight = 256;
         this.user = user;
-        userCarry = PlayerCarryProvider.getPlayerSizeCapability(user);
+        userCarry = PlayerCarryProvider.getPlayerCarryCapability(user);
     }
 
     @Override

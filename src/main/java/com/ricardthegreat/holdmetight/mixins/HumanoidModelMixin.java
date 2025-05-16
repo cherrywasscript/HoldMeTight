@@ -28,7 +28,7 @@ public abstract class HumanoidModelMixin<T extends LivingEntity>{
     //@Overwrite
     private void poseRightArm(T ent, CallbackInfo info){
         if(ent instanceof Player){
-            PlayerCarry playerCarry = PlayerCarryProvider.getPlayerSizeCapability((Player) ent);
+            PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability((Player) ent);
             if(playerCarry.getIsCarrying() && playerCarry.getCarryPosition().posName == "hand"){
                 //rightArm.xRot = rightArm.xRot-1.4f;
                 //System.out.println(rightArm.xRot);

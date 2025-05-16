@@ -37,7 +37,7 @@ public class ClientPacketHandler {
         if(level != null){
             Player player = level.getPlayerByUUID(msg.getUuid());
             if(player != null) {
-                PlayerCarry playerCarry = PlayerCarryProvider.getPlayerSizeCapability(player);
+                PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
                 msg.playerSyncablesUpdate(playerCarry);
                 //playerCarry.setRotationOffset(msg.getRotation());
                 //playerCarry.setXYMult(msg.getDistance());
@@ -64,7 +64,7 @@ public class ClientPacketHandler {
         if(level != null){
             Player player = level.getPlayerByUUID(uuid);
             if(player != null) {
-                PlayerCarry playerCarry = PlayerCarryProvider.getPlayerSizeCapability(player);
+                PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
 
                 playerCarry.updateSimpleSyncables(carried, carrying, carryPos);
             }

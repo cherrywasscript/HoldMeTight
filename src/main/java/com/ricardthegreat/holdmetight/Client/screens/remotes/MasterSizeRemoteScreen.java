@@ -203,7 +203,7 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
         //this check shouldnt be needed but just in case
         if (selectedPlayer != null && selectedPlayer != user) {
             if (inRange()) {
-                PlayerCarry playerCarry = PlayerCarryProvider.getPlayerSizeCapability(user);
+                PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(user);
 
                 LazyOptional<PlayerSize> optional = selectedPlayer.getCapability(PlayerSizeProvider.PLAYER_SIZE);
                 PlayerSize orElse = optional.orElse(null);
@@ -239,7 +239,7 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
         //this check shouldnt be needed but just in case
         if (selectedPlayer != null && selectedPlayer != user) {
             if (inRange()) {
-                PlayerCarry playerCarry = PlayerCarryProvider.getPlayerSizeCapability(user);
+                PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(user);
 
                 LazyOptional<PlayerSize> optional = user.getCapability(PlayerSizeProvider.PLAYER_SIZE);
                 PlayerSize orElse = optional.orElse(new PlayerSize());

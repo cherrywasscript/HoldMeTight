@@ -30,7 +30,7 @@ public abstract class MultiPlayerGameModeMixin {
         if(player.getItemInHand(hand).isEmpty() && hand != InteractionHand.OFF_HAND){
             Vec3 bp = blockHit.getLocation();
             Entity passenger = player.getFirstPassenger();
-            PlayerCarry playerCarry = PlayerCarryProvider.getPlayerSizeCapability(player);
+            PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
             
             if (player.level().getBlockState(blockHit.getBlockPos()).is(Blocks.AIR)) {
                 HoldMeTight.LOGGER.info("MultiPlayerGameModeMixin.java line 35: block is air");
@@ -42,6 +42,7 @@ public abstract class MultiPlayerGameModeMixin {
             }
 
             if (passenger != null && passenger instanceof Player && playerCarry.getCarryPosition().posName == "hand") {
+                passenger.stopRiding();
                 PacketHandler.sendToServer(new SPlayerPutDownPacket(passenger.getUUID(), bp));
                 info.setReturnValue(InteractionResult.SUCCESS);
             }

@@ -51,7 +51,7 @@ public class PlayerCarryProvider implements ICapabilityProvider, INBTSerializabl
         return LazyOptional.empty();
     }
 
-    public static PlayerCarry getPlayerSizeCapability(Player player){
+    public static PlayerCarry getPlayerCarryCapability(Player player){
         LazyOptional<PlayerCarry> optional = player.getCapability(PLAYER_CARRY);
         return optional.orElse(new PlayerCarry());
     }

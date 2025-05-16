@@ -40,7 +40,7 @@ public class SPlayerCarrySimplePacket {
     public void handle(Supplier<NetworkEvent.Context> context){
         ServerPlayer player = context.get().getSender();
 
-        PlayerCarry carry = PlayerCarryProvider.getPlayerSizeCapability(player);
+        PlayerCarry carry = PlayerCarryProvider.getPlayerCarryCapability(player);
 
         if(carry != null){
             carry.updateSimpleSyncables(carried, carrying, carryPos);

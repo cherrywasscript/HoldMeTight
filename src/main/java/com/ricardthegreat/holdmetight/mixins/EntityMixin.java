@@ -42,8 +42,8 @@ public abstract class EntityMixin {
         
         if(rider instanceof Player && vehicle.getMainHandItem() == ItemStack.EMPTY && EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)/4){
 
-            PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerSizeCapability(vehicle);
-            PlayerCarry riderCarry = PlayerCarryProvider.getPlayerSizeCapability((Player) rider);
+            PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerCarryCapability(vehicle);
+            PlayerCarry riderCarry = PlayerCarryProvider.getPlayerCarryCapability((Player) rider);
 
             rider.startRiding(vehicle);
             
@@ -80,8 +80,8 @@ public abstract class EntityMixin {
         Entity ent = (Entity) (Object) this;
         Entity vehicle = ent.getVehicle();
         if(ent instanceof Player && ent.isPassenger() && vehicle != null && vehicle instanceof Player){
-            PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerSizeCapability((Player) vehicle);
-            PlayerCarry riderCarry = PlayerCarryProvider.getPlayerSizeCapability((Player) ent);
+            PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerCarryCapability((Player) vehicle);
+            PlayerCarry riderCarry = PlayerCarryProvider.getPlayerCarryCapability((Player) ent);
 
 
             vehicleCarry.setCarrying(false);
@@ -106,7 +106,7 @@ public abstract class EntityMixin {
             if(vehicle instanceof Player player){
                 double scaleDif =  EntitySizeUtils.getSize(vehicle)/EntitySizeUtils.getSize(rider);
                 
-                PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerSizeCapability(player);
+                PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
 
                 //find the riders position
                 if(scaleDif<4){
@@ -134,7 +134,7 @@ public abstract class EntityMixin {
 
     private void calcBodyPosition(Player vehicle, Entity rider){
         
-        PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerSizeCapability(vehicle);
+        PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerCarryCapability(vehicle);
         CarryPosition carryPos = vehicleCarry.getCarryPosition();
 
         if(vehicle.getMainHandItem() != ItemStack.EMPTY && carryPos.posName == "hand"){
@@ -167,7 +167,7 @@ public abstract class EntityMixin {
     }
 
     private void calcHeadPosition(Player vehicle, Entity rider){
-        PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerSizeCapability(vehicle);
+        PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerCarryCapability(vehicle);
         CarryPosition carryPos = vehicleCarry.getCarryPosition();
 
         if(vehicle.getMainHandItem() != ItemStack.EMPTY && carryPos.posName == "hand"){

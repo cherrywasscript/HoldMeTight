@@ -36,7 +36,7 @@ public class TestCommand {
     public static int run(CommandSourceStack command, int rotation, double distance, double height, double sideways, @Nullable Boolean head, Entity ent) throws CommandSyntaxException {
         rotation = rotation%360;
         if(ent instanceof Player){
-            PlayerCarry playerCarry = PlayerCarryProvider.getPlayerSizeCapability((Player) ent);
+            PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability((Player) ent);
 
             boolean headlink = (head != null) ? head : false;
 

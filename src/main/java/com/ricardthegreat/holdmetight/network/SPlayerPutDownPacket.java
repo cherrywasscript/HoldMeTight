@@ -4,6 +4,8 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
+import com.ricardthegreat.holdmetight.carry.PlayerCarry;
+import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -42,13 +44,21 @@ public class SPlayerPutDownPacket {
         ServerPlayer target = player.server.getPlayerList().getPlayer(uuid);
 
         if (target != null) {
-            target.stopRiding();
+            PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
+            PlayerCarry targetCarry = PlayerCarryProvider.getPlayerCarryCapability(target);
+
+            playerCarry.setCarrying(false);
+            playerCarry.setShouldSyncSimple(true);
+            targetCarry.setCarried(false);
+            targetCarry.setShouldSyncSimple(true);
 
             //log if it isnt 1 for error checking
             //wont always be an error as if theyre on the side of a block or a non full block but it should help
             if (pos.y%1 != 0) {
                 HoldMeTight.LOGGER.info("SPlayerPutDownPacket.java line 46: " + pos);
             }
+
+            System.out.println(pos);
 
             target.dismountTo(pos.x, pos.y, pos.z);
         }
