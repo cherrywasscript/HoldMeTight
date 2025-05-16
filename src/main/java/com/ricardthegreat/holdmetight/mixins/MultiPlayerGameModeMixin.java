@@ -6,10 +6,11 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
+import com.ricardthegreat.holdmetight.carry.PlayerCarry;
+import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.init.BlockInit;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.SPlayerPutDownPacket;
-import com.ricardthegreat.holdmetight.utils.PlayerCarryExtension;
 
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.player.LocalPlayer;
@@ -29,7 +30,7 @@ public abstract class MultiPlayerGameModeMixin {
         if(player.getItemInHand(hand).isEmpty() && hand != InteractionHand.OFF_HAND){
             Vec3 bp = blockHit.getLocation();
             Entity passenger = player.getFirstPassenger();
-            PlayerCarryExtension playerExt = (PlayerCarryExtension) player;
+            PlayerCarry playerCarry = PlayerCarryProvider.getPlayerSizeCapability(player);
             
             if (player.level().getBlockState(blockHit.getBlockPos()).is(Blocks.AIR)) {
                 HoldMeTight.LOGGER.info("MultiPlayerGameModeMixin.java line 35: block is air");
@@ -40,7 +41,7 @@ public abstract class MultiPlayerGameModeMixin {
                 return;
             }
 
-            if (passenger != null && passenger instanceof Player && !playerExt.getShoulderCarry() && !playerExt.getCustomCarry()) {
+            if (passenger != null && passenger instanceof Player && playerCarry.getCarryPosition().posName == "head") {
                 PacketHandler.sendToServer(new SPlayerPutDownPacket(passenger.getUUID(), bp));
                 info.setReturnValue(InteractionResult.SUCCESS);
             }

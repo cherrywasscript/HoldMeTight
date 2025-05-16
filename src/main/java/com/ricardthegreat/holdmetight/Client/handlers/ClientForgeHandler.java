@@ -6,7 +6,8 @@ import com.ricardthegreat.holdmetight.Client.ClientHooks;
 import com.ricardthegreat.holdmetight.Client.Keybindings;
 import com.ricardthegreat.holdmetight.Client.screens.CarryPositionScreen;
 import com.ricardthegreat.holdmetight.Commands.TestCommand;
-import com.ricardthegreat.holdmetight.utils.PlayerCarryExtension;
+import com.ricardthegreat.holdmetight.carry.PlayerCarry;
+import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -38,31 +39,31 @@ public class ClientForgeHandler {
         Minecraft minecraft = Minecraft.getInstance();
         LocalPlayer mcPlayer = minecraft.player;
         if(Keybindings.INSTANCE.shoulderCarryKey.consumeClick() && mcPlayer != null) {
-            PlayerCarryExtension player = (PlayerCarryExtension) mcPlayer;
+            PlayerCarry playerCarry = PlayerCarryProvider.getPlayerSizeCapability(mcPlayer);
 
-            player.setShoulderCarry(!player.getShoulderCarry());
-            player.setCustomCarry(false);
-            player.setShouldSync(true);
-
-            if (player.getShoulderCarry()) {
+            if (playerCarry.getCarryPosition().posName != "shoulder") {
+                playerCarry.setCarryPosition(false, 1);
                 mcPlayer.displayClientMessage(SHOULDER_KEY_PRESSED, true);
             }else{
+                playerCarry.setCarryPosition(false, 0);
                 mcPlayer.displayClientMessage(DEFAULT_KEY_PRESSED, true);
             }
+
+            playerCarry.setShouldSyncSimple(true);
         }
 
         if(Keybindings.INSTANCE.customCarryKey.consumeClick() && mcPlayer != null) {
-            PlayerCarryExtension player = (PlayerCarryExtension) mcPlayer;
+            PlayerCarry playerCarry = PlayerCarryProvider.getPlayerSizeCapability(mcPlayer);
 
-            player.setCustomCarry(!player.getCustomCarry());
-            player.setShoulderCarry(false);
-            player.setShouldSync(true);
-            
-            if (player.getCustomCarry()) {
+            if (playerCarry.getCarryPosition().posName == "shoulder" || playerCarry.getCarryPosition().posName == "hand" ) {
+                playerCarry.setCarryPosition(true, 0);
                 mcPlayer.displayClientMessage(CUSTOM_KEY_PRESSED, true);
             }else{
+                playerCarry.setCarryPosition(false, 0);
                 mcPlayer.displayClientMessage(DEFAULT_KEY_PRESSED, true);
             }
+
+            playerCarry.setShouldSyncSimple(true);
         }
 
         //key to open size prefs screen

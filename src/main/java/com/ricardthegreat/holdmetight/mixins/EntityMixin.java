@@ -9,10 +9,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.network.CPlayerCarryPositionPacket;
+import com.ricardthegreat.holdmetight.carry.CarryPosition;
+import com.ricardthegreat.holdmetight.carry.PlayerCarry;
+import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.network.CPlayerCarrySimplePacket;
 import com.ricardthegreat.holdmetight.network.CPlayerDismountPlayerPacket;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
-import com.ricardthegreat.holdmetight.utils.PlayerCarryExtension;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.util.Mth;
@@ -40,60 +42,35 @@ public abstract class EntityMixin {
         
         if(rider instanceof Player && vehicle.getMainHandItem() == ItemStack.EMPTY && EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)/4){
 
-            PlayerCarryExtension vehicleExt = (PlayerCarryExtension) vehicle;
-            PlayerCarryExtension riderExt = (PlayerCarryExtension) rider;
+            PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerSizeCapability(vehicle);
+            PlayerCarry riderCarry = PlayerCarryProvider.getPlayerSizeCapability((Player) rider);
 
             rider.startRiding(vehicle);
             
-            riderExt.setCarried(true);
-
-            vehicleExt.setCarrying(true);
+            riderCarry.setCarried(true);
+            vehicleCarry.setCarrying(true);
 
             if(!rider.level().isClientSide()) {
-                //riderExt.setShouldSync(true);
-                //vehicleExt.setShouldSync(true);  
+                riderCarry.setShouldSyncSimple(true);
+                vehicleCarry.setShouldSyncSimple(true);
 
-                PacketHandler.sendToAllClients(new CPlayerCarryPositionPacket(true, rider.getUUID(), (byte) 0));
-                PacketHandler.sendToAllClients(new CPlayerCarryPositionPacket(true, vehicle.getUUID(), (byte) 1));
+                //PacketHandler.sendToAllClients(new CPlayerCarryPositionPacket(true, rider.getUUID(), (byte) 0));
+                //PacketHandler.sendToAllClients(new CPlayerCarryPositionPacket(true, vehicle.getUUID(), (byte) 1));
             }
             
+
             //when i get round to doing item holding this works im pretty sure
-
-
             /* 
             ItemStack item = new ItemStack(ItemInit.PLAYER_ITEM.get());
             item.setHoverName(Component.literal("hello"));
             vehicle.getInventory().add(vehicle.getInventory().selected, item);
             */
             
+        }else if (!(rider instanceof Player) && vehicle.getMainHandItem() == ItemStack.EMPTY && EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)/4) {
+            rider.startRiding(vehicle);
         }
         
     }
-
-    
-    /* 
-    @Inject(at = @At("HEAD"), method = "saveWithoutId(Lnet/minecraft/nbt/CompoundTag;)Lnet/minecraft/nbt/CompoundTag;")
-    private void saveWithoutId(CompoundTag tag, CallbackInfoReturnable<CompoundTag> info) {
-        Entity ent = (Entity) (Object) this;
-
-        if(ent instanceof Player){
-            PlayerCarryExtension player = (PlayerCarryExtension) ent;
-            player.writeCarryNbt(tag);
-        }
-    }
-
-    @Inject(at = @At("HEAD"), method = "load(Lnet/minecraft/nbt/CompoundTag;)V")
-    public void load(CompoundTag tag, CallbackInfo info) {
-        Entity ent = (Entity) (Object) this;
-
-        if(ent instanceof Player){
-            PlayerCarryExtension player = (PlayerCarryExtension) ent;
-            player.readCarryNbt(tag);
-        }
-    }
-    */
-
-
 
 
     //dismounting players is desynced so this sends a packet from the server to all clients which should sync it up
@@ -103,19 +80,19 @@ public abstract class EntityMixin {
         Entity ent = (Entity) (Object) this;
         Entity vehicle = ent.getVehicle();
         if(ent instanceof Player && ent.isPassenger() && vehicle != null && vehicle instanceof Player){
+            PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerSizeCapability((Player) vehicle);
+            PlayerCarry riderCarry = PlayerCarryProvider.getPlayerSizeCapability((Player) ent);
 
-            PlayerCarryExtension player = (PlayerCarryExtension) vehicle;
-            PlayerCarryExtension entity = (PlayerCarryExtension) ent;
-            
-            entity.setCarried(false);
-            player.setCarrying(false);
+
+            vehicleCarry.setCarrying(false);
+            riderCarry.setCarried(false);
 
             if(!ent.level().isClientSide()) {
-                //entity.setShouldSync(true);
-                //player.setShouldSync(true);
-                HoldMeTight.LOGGER.info("EntityMixin 113: " + ent.position());
-                PacketHandler.sendToAllClients(new CPlayerCarryPositionPacket(false, ent.getUUID(), (byte) 0));
-                PacketHandler.sendToAllClients(new CPlayerCarryPositionPacket(false, vehicle.getUUID(), (byte) 1));
+                //PacketHandler.sendToAllClients(new CPlayerCarryPositionPacket(false, ent.getUUID(), (byte) 0));
+                //PacketHandler.sendToAllClients(new CPlayerCarryPositionPacket(false, vehicle.getUUID(), (byte) 1));
+
+                vehicleCarry.setShouldSyncSimple(true);
+                riderCarry.setShouldSyncSimple(true);
                 PacketHandler.sendToAllClients(new CPlayerDismountPlayerPacket(ent.getUUID()));
             }
         }
@@ -123,29 +100,29 @@ public abstract class EntityMixin {
 
     //@Inject(at = @At("RETURN"), method = "positionRider(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity/MoveFunction;)V")
     @Overwrite
-    protected void positionRider(Entity rider, Entity.MoveFunction p_19958_) {
+    protected void positionRider(Entity rider, Entity.MoveFunction func) {
         Entity vehicle = (Entity) (Object) this;
         if (vehicle.hasPassenger(rider)) {
             if(vehicle instanceof Player player){
                 double scaleDif =  EntitySizeUtils.getSize(vehicle)/EntitySizeUtils.getSize(rider);
                 
-                PlayerCarryExtension pExt = (PlayerCarryExtension) player;
+                PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerSizeCapability(player);
 
                 //find the riders position
                 if(scaleDif<4){
                     rider.stopRiding();
                 // && pExt.getCustomCarry()
-                }else if (pExt.getHeadLink()) {
+                }else if (vehicleCarry.getCarryPosition().headLink) {
                     calcHeadPosition(player, rider);
-                    p_19958_.accept(rider, vehicle.getX()+xOffset, vertOffset, vehicle.getZ()+yOffset);
+                    func.accept(rider, vehicle.getX()+xOffset, vertOffset, vehicle.getZ()+yOffset);
                 }else{
                     calcBodyPosition(player, rider);
-                    p_19958_.accept(rider, vehicle.getX()+xOffset, vertOffset, vehicle.getZ()+yOffset);
+                    func.accept(rider, vehicle.getX()+xOffset, vertOffset, vehicle.getZ()+yOffset);
                 }
             }else{
 
                 vertOffset = vehicle.getY() + vehicle.getPassengersRidingOffset() + rider.getMyRidingOffset();
-                p_19958_.accept(rider, vehicle.getX(), vertOffset, vehicle.getZ());
+                func.accept(rider, vehicle.getX(), vertOffset, vehicle.getZ());
 
             }
          }
@@ -156,21 +133,22 @@ public abstract class EntityMixin {
     //on shoulder rider should get lower e.g. 0.125 should have a larger vertical offset tho im not sure by how much yet
 
     private void calcBodyPosition(Player vehicle, Entity rider){
+        
+        PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerSizeCapability(vehicle);
+        CarryPosition carryPos = vehicleCarry.getCarryPosition();
 
-        PlayerCarryExtension vehiclePlayer = (PlayerCarryExtension)vehicle;
-
-        if(vehicle.getMainHandItem() != ItemStack.EMPTY && !vehiclePlayer.getShoulderCarry() && !vehiclePlayer.getCustomCarry()){
-            vehiclePlayer.setShoulderCarry(true);
+        if(vehicle.getMainHandItem() != ItemStack.EMPTY && carryPos.posName == "hand"){
+            vehicleCarry.setCarryPosition(false, 1);
 
             if(!vehicle.level().isClientSide){
-                PacketHandler.sendToAllClients(new CPlayerCarryPositionPacket(true, vehicle.getUUID(), (byte) 2));
-                //vechicleExt.setShouldSync(true);
+                vehicleCarry.setShouldSyncSimple(true);
+                //PacketHandler.sendToAllClients(new CPlayerCarryPositionPacket(true, vehicle.getUUID(), (byte) 2));
             }
         }
 
-        vertOffset = vehicle.getY() + vehicle.getPassengersRidingOffset() + rider.getMyRidingOffset() - (vehiclePlayer.getVertOffset()*EntitySizeUtils.getSize(vehicle));
+        vertOffset = vehicle.getY() + vehicle.getPassengersRidingOffset() + rider.getMyRidingOffset() - (carryPos.vertOffset*EntitySizeUtils.getSize(vehicle));
 
-        double degrees = vehicle.yBodyRotO + vehiclePlayer.getRotationOffset();
+        double degrees = vehicle.yBodyRotO + carryPos.RotationOffset;
         
 
         double rotation = Math.toRadians(degrees%360);
@@ -178,44 +156,46 @@ public abstract class EntityMixin {
         double leftRightOffset = Math.toRadians((degrees+90)%360);
 
         //i have it as y bc im thinking like graph coords but really it should be z
-        double x = Math.cos(leftRightOffset) * vehiclePlayer.getLeftRightMove();
-        double y = Math.sin(leftRightOffset) * vehiclePlayer.getLeftRightMove();
+        double x = Math.cos(leftRightOffset) * carryPos.leftRightMove;
+        double y = Math.sin(leftRightOffset) * carryPos.leftRightMove;
 
-        xOffset = (Math.cos(rotation)*vehiclePlayer.getXYMult())+x;
-        yOffset = (Math.sin(rotation)*vehiclePlayer.getXYMult())+y;
+        xOffset = (Math.cos(rotation)*carryPos.xymult)+x;
+        yOffset = (Math.sin(rotation)*carryPos.xymult)+y;
 
         xOffset *= EntitySizeUtils.getSize(vehicle);
         yOffset *= EntitySizeUtils.getSize(vehicle);
     }
 
     private void calcHeadPosition(Player vehicle, Entity rider){
-        PlayerCarryExtension vehiclePlayer = (PlayerCarryExtension)vehicle;
+        PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerSizeCapability(vehicle);
+        CarryPosition carryPos = vehicleCarry.getCarryPosition();
 
-        if(vehicle.getMainHandItem() != ItemStack.EMPTY && !vehiclePlayer.getShoulderCarry() && !vehiclePlayer.getCustomCarry()){
-            vehiclePlayer.setShoulderCarry(true);
+        if(vehicle.getMainHandItem() != ItemStack.EMPTY && carryPos.posName == "hand"){
+            vehicleCarry.setCarryPosition(false, 1);
 
             if(!vehicle.level().isClientSide){
-                PacketHandler.sendToAllClients(new CPlayerCarryPositionPacket(true, vehicle.getUUID(), (byte) 2));
-                //vechicleExt.setShouldSync(true);
+                vehicleCarry.setShouldSyncSimple(true);
+                //PacketHandler.sendToAllClients(new CPlayerCarryPositionPacket(true, vehicle.getUUID(), (byte) 2));
             }
         }
+
         Vec3 vec = vehicle.getLookAngle();
 
-        double offsetAddition = vehiclePlayer.getVertOffset()*EntitySizeUtils.getSize(vehicle)*Math.abs(vec.y - 1);
+        double offsetAddition = carryPos.vertOffset*EntitySizeUtils.getSize(vehicle)*Math.abs(vec.y - 1);
         vertOffset = vehicle.getY() + vehicle.getPassengersRidingOffset() + rider.getMyRidingOffset() - offsetAddition;
 
         
         //this doesnt really function how i'd like
 
-        double degrees = vehicle.yHeadRotO + vehiclePlayer.getRotationOffset();
+        double degrees = vehicle.yHeadRotO + carryPos.RotationOffset;
 
         double leftRightOffset = Math.toRadians((degrees+90)%360);
 
-        double x = Math.cos(leftRightOffset) * vehiclePlayer.getLeftRightMove();
-        double y = Math.sin(leftRightOffset) * vehiclePlayer.getLeftRightMove();
+        double x = Math.cos(leftRightOffset) * carryPos.leftRightMove;
+        double y = Math.sin(leftRightOffset) * carryPos.leftRightMove;
 
-        xOffset = vec.x*vehiclePlayer.getXYMult()+x;
-        yOffset = vec.z*vehiclePlayer.getXYMult()+y;
+        xOffset = vec.x*carryPos.xymult+x;
+        yOffset = vec.z*carryPos.xymult+y;
 
         xOffset *= EntitySizeUtils.getSize(vehicle);
         yOffset *= EntitySizeUtils.getSize(vehicle);

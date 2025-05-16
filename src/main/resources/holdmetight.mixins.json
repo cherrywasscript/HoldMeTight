@@ -16,7 +16,7 @@
 
 
       "playerextensions.PlayerMixin",
-      "playerextensions.PlayerSizeMixin",
+      "playerextensions.PlayerCapabilityMixin",
 
 
       "collisions.BasePressurePlateBlockMixin",

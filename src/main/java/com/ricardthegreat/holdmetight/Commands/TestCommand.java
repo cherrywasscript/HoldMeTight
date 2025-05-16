@@ -7,7 +7,9 @@ import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.DoubleArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.ricardthegreat.holdmetight.utils.PlayerCarryExtension;
+import com.ricardthegreat.holdmetight.carry.CarryPosition;
+import com.ricardthegreat.holdmetight.carry.PlayerCarry;
+import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -32,21 +34,16 @@ public class TestCommand {
     }
 
     public static int run(CommandSourceStack command, int rotation, double distance, double height, double sideways, @Nullable Boolean head, Entity ent) throws CommandSyntaxException {
-        if(rotation >= 360){
-            rotation = 0;
-        }
+        rotation = rotation%360;
         if(ent instanceof Player){
-            PlayerCarryExtension pl = (PlayerCarryExtension) ent;
+            PlayerCarry playerCarry = PlayerCarryProvider.getPlayerSizeCapability((Player) ent);
 
-            if (head != null) {
-                pl.setHeadLink(head);
-            }
+            boolean headlink = (head != null) ? head : false;
 
-            pl.setRotationOffset(rotation);
-            pl.setXYMult(distance);
-            pl.setVertOffset(height);
-            pl.setLeftRightMove(sideways);
-            pl.setShouldSync(true);
+            CarryPosition pos = new CarryPosition("custom", rotation, distance, sideways, height, headlink);
+
+            playerCarry.addCustomCarryPos(pos);
+            playerCarry.setShouldSyncAll(true);
         }
         return 1;
     }

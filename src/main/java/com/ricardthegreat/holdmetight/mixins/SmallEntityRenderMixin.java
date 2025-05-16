@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.ricardthegreat.holdmetight.utils.PlayerCarryExtension;
 import com.ricardthegreat.holdmetight.utils.PlayerRenderExtension;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
@@ -53,7 +52,7 @@ public abstract class SmallEntityRenderMixin<T extends Entity> {
 
 		ClientLevel level = Minecraft.getInstance().level;
 
-		if(level != null && level.isClientSide && ent instanceof PlayerCarryExtension){
+		if(level != null && level.isClientSide && ent instanceof PlayerRenderExtension){
 			if(((PlayerRenderExtension) ent).getIsMenu()){
 				LocalPlayer player = Minecraft.getInstance().player;
 				if(player != null){

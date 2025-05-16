@@ -5,6 +5,8 @@ import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
+import com.ricardthegreat.holdmetight.carry.PlayerCarry;
+import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.SEntityAddTargetScalePacket;
@@ -12,7 +14,6 @@ import com.ricardthegreat.holdmetight.network.SEntityMultTargetScalePacket;
 import com.ricardthegreat.holdmetight.size.PlayerSize;
 import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
 import com.ricardthegreat.holdmetight.utils.PlayerRenderExtension;
-import com.ricardthegreat.holdmetight.utils.PlayerSizeExtension;
 import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
 
 import net.minecraft.client.Minecraft;
@@ -202,7 +203,7 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
         //this check shouldnt be needed but just in case
         if (selectedPlayer != null && selectedPlayer != user) {
             if (inRange()) {
-                PlayerSizeExtension pext = (PlayerSizeExtension) selectedPlayer;
+                PlayerCarry playerCarry = PlayerCarryProvider.getPlayerSizeCapability(user);
 
                 LazyOptional<PlayerSize> optional = selectedPlayer.getCapability(PlayerSizeProvider.PLAYER_SIZE);
                 PlayerSize orElse = optional.orElse(null);
@@ -238,7 +239,7 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
         //this check shouldnt be needed but just in case
         if (selectedPlayer != null && selectedPlayer != user) {
             if (inRange()) {
-                PlayerSizeExtension pext = (PlayerSizeExtension) user;
+                PlayerCarry playerCarry = PlayerCarryProvider.getPlayerSizeCapability(user);
 
                 LazyOptional<PlayerSize> optional = user.getCapability(PlayerSizeProvider.PLAYER_SIZE);
                 PlayerSize orElse = optional.orElse(new PlayerSize());

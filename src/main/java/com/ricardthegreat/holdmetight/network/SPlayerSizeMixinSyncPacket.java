@@ -6,8 +6,6 @@ import java.util.function.Supplier;
 import com.ricardthegreat.holdmetight.Client.handlers.ClientPacketHandler;
 import com.ricardthegreat.holdmetight.size.PlayerSize;
 import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
-import com.ricardthegreat.holdmetight.utils.PlayerCarryExtension;
-import com.ricardthegreat.holdmetight.utils.PlayerSizeExtension;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;

@@ -48,20 +48,20 @@ public class PacketHandler {
         CPlayerDismountPlayerPacket::new, 
         CPlayerDismountPlayerPacket::handle);
 
-        INSTANCE.registerMessage(id++, SPlayerMixinSyncPacket.class, 
-        SPlayerMixinSyncPacket::encode, 
-        SPlayerMixinSyncPacket::new, 
-        SPlayerMixinSyncPacket::handle);
+        INSTANCE.registerMessage(id++, SPlayerCarrySyncPacket.class, 
+        SPlayerCarrySyncPacket::encode, 
+        SPlayerCarrySyncPacket::new, 
+        SPlayerCarrySyncPacket::handle);
 
-        INSTANCE.registerMessage(id++, CPlayerMixinSyncPacket.class, 
-        CPlayerMixinSyncPacket::encode, 
-        CPlayerMixinSyncPacket::new, 
-        CPlayerMixinSyncPacket::handle);
+        INSTANCE.registerMessage(id++, CPlayerCarrySyncPacket.class, 
+        CPlayerCarrySyncPacket::encode, 
+        CPlayerCarrySyncPacket::new, 
+        CPlayerCarrySyncPacket::handle);
 
-        INSTANCE.registerMessage(id++, CPlayerCarryPositionPacket.class, 
-        CPlayerCarryPositionPacket::encode, 
-        CPlayerCarryPositionPacket::new, 
-        CPlayerCarryPositionPacket::handle);
+        INSTANCE.registerMessage(id++, CPlayerCarrySimplePacket.class, 
+        CPlayerCarrySimplePacket::encode, 
+        CPlayerCarrySimplePacket::new, 
+        CPlayerCarrySimplePacket::handle);
 
         INSTANCE.registerMessage(id++, SPlayerPutDownPacket.class, 
         SPlayerPutDownPacket::encode, 
@@ -77,6 +77,11 @@ public class PacketHandler {
         CPlayerSizeMixinSyncPacket::encode, 
         CPlayerSizeMixinSyncPacket::new, 
         CPlayerSizeMixinSyncPacket::handle);
+
+        INSTANCE.registerMessage(id++, SPlayerCarrySimplePacket.class, 
+        SPlayerCarrySimplePacket::encode, 
+        SPlayerCarrySimplePacket::new, 
+        SPlayerCarrySimplePacket::handle);
     }
 
     public static void sendToServer(Object msg){

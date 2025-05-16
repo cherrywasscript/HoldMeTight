@@ -1,6 +1,7 @@
 package com.ricardthegreat.holdmetight.events;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
+import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.size.PlayerSize;
 import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
@@ -23,7 +24,11 @@ public class ForgeModEvents {
     public static void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent<Entity> event) {
         if(event.getObject() instanceof Player) {
             if(!event.getObject().getCapability(PlayerSizeProvider.PLAYER_SIZE).isPresent()) {
-                event.addCapability(new ResourceLocation(HoldMeTight.MODID, "properties"), new PlayerSizeProvider());
+                event.addCapability(new ResourceLocation(HoldMeTight.MODID, "size"), new PlayerSizeProvider());
+            }
+
+            if(!event.getObject().getCapability(PlayerCarryProvider.PLAYER_CARRY).isPresent()) {
+                event.addCapability(new ResourceLocation(HoldMeTight.MODID, "carry"), new PlayerCarryProvider());
             }
         }
     }
@@ -39,6 +44,11 @@ public class ForgeModEvents {
                     }else{
                         newStore.copyBasic(oldStore);
                     }
+                });
+            });
+            event.getOriginal().getCapability(PlayerCarryProvider.PLAYER_CARRY).ifPresent(oldStore -> {
+                event.getEntity().getCapability(PlayerCarryProvider.PLAYER_CARRY).ifPresent(newStore -> {
+                    newStore.copyFrom(oldStore);
                 });
             });
             event.getOriginal().invalidateCaps();//reinvalidating the caps after doing what i need

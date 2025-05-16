@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.ricardthegreat.holdmetight.Config;
 import com.ricardthegreat.holdmetight.network.CPlayerSizeMixinSyncPacket;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
-import com.ricardthegreat.holdmetight.network.SPlayerMixinSyncPacket;
+import com.ricardthegreat.holdmetight.network.SPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.SPlayerSizeMixinSyncPacket;
 import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
 

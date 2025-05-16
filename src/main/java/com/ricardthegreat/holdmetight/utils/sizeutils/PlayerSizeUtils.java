@@ -2,7 +2,6 @@ package com.ricardthegreat.holdmetight.utils.sizeutils;
 
 import com.ricardthegreat.holdmetight.size.PlayerSize;
 import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
-import com.ricardthegreat.holdmetight.utils.PlayerSizeExtension;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.capabilities.CapabilityProvider;

@@ -6,7 +6,8 @@ import javax.annotation.Nonnull;
 
 import org.joml.Quaternionf;
 import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.utils.PlayerCarryExtension;
+import com.ricardthegreat.holdmetight.carry.PlayerCarry;
+import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.utils.PlayerRenderExtension;
 
 import net.minecraft.client.gui.GuiGraphics;
@@ -48,7 +49,7 @@ public class CarryPositionScreen extends Screen{
     private int centerVerticalPos;
 
     private Player user;
-    private PlayerCarryExtension userCarryExt;
+    private PlayerCarry userCarry;
 
     private int rotation = 0;
     private double forwardsBackwardsMultiplier = 0;
@@ -67,7 +68,7 @@ public class CarryPositionScreen extends Screen{
         this.imageWidth = 256;
         this.imageHeight = 256;
         this.user = user;
-        userCarryExt = (PlayerCarryExtension) user;
+        userCarry = PlayerCarryProvider.getPlayerSizeCapability(user);
     }
 
     @Override
@@ -144,7 +145,7 @@ public class CarryPositionScreen extends Screen{
 
         if (rot != null && !rot.isEmpty()){
             rotation = (Integer.parseInt(rot)%360);
-            userCarryExt.setRotationOffset(rotation);
+            //userCarryExt.setRotationOffset(rotation);
         }
     }
 
@@ -223,7 +224,7 @@ public class CarryPositionScreen extends Screen{
 
 
         //grab existing rotation from user
-        customInputField.setValue(Integer.toString(userCarryExt.getCustomRotOffset()));
+        customInputField.setValue(Integer.toString(userCarry.getCarryPosition().RotationOffset));
         
         Tooltip t = Tooltip.create(CUSTOM_INPUT_FIELD_TOOLTIP, CUSTOM_INPUT_FIELD_TOOLTIP);
         customInputField.setTooltip(t);

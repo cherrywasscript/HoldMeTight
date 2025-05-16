@@ -1,14 +1,19 @@
 package com.ricardthegreat.holdmetight.carry;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.ricardthegreat.holdmetight.Config;
-import com.ricardthegreat.holdmetight.network.CPlayerMixinSyncPacket;
+import com.ricardthegreat.holdmetight.network.CPlayerCarrySimplePacket;
+import com.ricardthegreat.holdmetight.network.CPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.CPlayerSizeMixinSyncPacket;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
-import com.ricardthegreat.holdmetight.network.SPlayerMixinSyncPacket;
+import com.ricardthegreat.holdmetight.network.SPlayerCarrySimplePacket;
+import com.ricardthegreat.holdmetight.network.SPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.SPlayerSizeMixinSyncPacket;
 import com.ricardthegreat.holdmetight.size.PlayerSize;
 import com.ricardthegreat.holdmetight.utils.constants.PlayerCarryConstants;
@@ -30,84 +35,103 @@ public class PlayerCarry {
      * vertoffset - moves the carried person up and down
     */
 
-    //for if they are being rendered in the size remote so that i can disable the nametag
-    private boolean isMenuGraphic = false;
-
     //if they are being carried
     private boolean isCarried = false;
 
-    //if they are carrying and if it is one of the custom poses
-    private boolean isCarrying = false;
-    private boolean isShoulderCarry = false;
-    private boolean isCustomCarryPosition = false;
-    private boolean headLink = false;
+    //these are just here for initialising stuff
+    private final CarryPosition hand = new CarryPosition("hand", 110, 0.77, 0.65, 0, false);
+    private final CarryPosition shoulder = new CarryPosition("shoulder",90, 0, 0.38, -0.3, false);
+    private CarryPosition custom = new CarryPosition("custom",0, 0, 0, 0, false);
 
-    //xy mult is moving towards and away from the body (smaller number closer to body)
-    //the offsets used if it is hand carry
-    private final int handRotationOffset = 110;
-    private final double handxymult = 0.77;
-    private final double handvertOffset = 0.65;
-    private final double handleftRightMove = 0;
+    private final ArrayList<CarryPosition> defaultCarryPositions = new ArrayList<>(Arrays.asList(hand,shoulder));
+    private ArrayList<CarryPosition> customCarryPositions = new ArrayList<>(Arrays.asList(custom));
 
-    //the offsets used if it is shoulder carry
-    private final int shoulderRotationOffset = 90;
-    private final double shoulderxymult = 0;
-    private final double shouldervertOffset = 0.38;
-    private final double shoulderleftRightMove = -0.3;
-
-    //the offsets used for custom carry position
-    private int rotationOffset = 0;
-    private double xymult = 0;
-    private double vertOffset = 0;
-    private double leftRightMove = 0;
-
-
-    //might replace this with each player having their own size utils class
-    //could be awful? but idk im shit at efficiency
-    private float minScale = 0;
-    private float maxScale = 10000;
-    private float defaultScale = 1;
+    private ArrayList<ArrayList<CarryPosition>> allCarryPositions = new ArrayList<ArrayList<CarryPosition>>(Arrays.asList(defaultCarryPositions,customCarryPositions));
     
+    private boolean isCarrying = false;
+    private int[] currentCarryPos = new int[]{0,0};
+
+
     //if this is true it will sync the values that can change next tick and set to false
     private boolean shouldSync = false;
 
     //if this is true it will sync only the booleans because thats less data
     private boolean shouldSyncSimple = false;
-
-
+    private boolean shouldSyncCustom = false;
+    private boolean shouldSyncAll = false;
+    
     //checks every tick if the player should sync
-    private void tick(Player player){
+    public void tick(Player player){
         if(shouldSync){
-            shouldSync = false;
-            sync();
+            if (shouldSyncSimple) {
+                shouldSyncSimple = false;
+                syncSimple(player);
+            }else if (shouldSyncCustom) {
+                shouldSyncCustom = false;
+                syncCustom(player);
+            }else if (shouldSyncAll) {
+                shouldSyncAll = false;
+                sync(player);
+            }else{
+                shouldSync = false;
+            }
         }
     }
 
-    //sync the changeable values
-    //currently custom carry positions as well as
-    //if they are/aren't carrying
-    private void sync(){
-        if(((Player) (Object) this).level().isClientSide){
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> 
-                PacketHandler.sendToServer(new SPlayerMixinSyncPacket(rotationOffset, xymult, vertOffset, leftRightMove, 
-                    isCarried, isCarrying, isShoulderCarry, isCustomCarryPosition)));
+    //forms of syncing i want
+    // simple - literally just changing if the player is carrying, being carried and positon they are carrying in
+    // updated carrypos - sends the new values for custom carrypos
+    // everything - does both
+    private void sync(Player player){
+        //at some point when i have the ability for multiple custom positions i'll need to iterate through custom carry positions
+        // or maybe just send the list straight so i can iterate on the packet side
+        if(player.level().isClientSide){
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> PacketHandler.sendToServer(new SPlayerCarrySyncPacket(isCarried, isCarrying, currentCarryPos, customCarryPositions.get(0))));
         }else{
             DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> 
-            PacketHandler.sendToAllClients(new CPlayerMixinSyncPacket(rotationOffset, xymult, vertOffset, leftRightMove, 
-                isCarried, isCarrying, isShoulderCarry, isCustomCarryPosition, ((Player) (Object) this).getUUID())));
+            PacketHandler.sendToAllClients(new CPlayerCarrySyncPacket(isCarried, isCarrying, currentCarryPos, customCarryPositions.get(0), player.getUUID())));
+        }
+    }
+
+    private void syncSimple(Player player){
+        if(player.level().isClientSide){
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> 
+                PacketHandler.sendToServer(new SPlayerCarrySimplePacket(isCarried, isCarrying, currentCarryPos,  player.getUUID())));
+        }else{
+            DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> 
+                PacketHandler.sendToAllClients(new CPlayerCarrySimplePacket(isCarried, isCarrying, currentCarryPos,  player.getUUID())));
+        }
+    }
+
+    private void syncCustom(Player player){
+        if(player.level().isClientSide){
+            //DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> 
+                //PacketHandler.sendToServer();
+        }else{
+            //DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> 
+                //PacketHandler.sendToAllClients();
         }
     }
 
     //the sync packets call this to update everything at once
-    public void updateSyncables(int rotationOffset, double xymult, double vertOffset, double leftRightMove, boolean isCarried, boolean isCarrying, boolean isShoulderCarry, boolean isCustomCarryPosition){
-        this.rotationOffset = rotationOffset;
-        this.xymult = xymult;
-        this.vertOffset = vertOffset;
-        this.leftRightMove = leftRightMove;
+    public void updateAllSyncables(boolean isCarried, boolean isCarrying, int[] currentCarryPos, CarryPosition customCarry){
+        updateSimpleSyncables(isCarried, isCarrying, currentCarryPos);
+        updatePositionSyncables(customCarry);
+    }
+
+    public void updateSimpleSyncables(boolean isCarried, boolean isCarrying, int[] currentCarryPos){
         this.isCarried = isCarried;
         this.isCarrying = isCarrying;
-        this.isCustomCarryPosition = isCustomCarryPosition;
-        this.isShoulderCarry = isShoulderCarry;
+        this.currentCarryPos = currentCarryPos;
+    }
+
+    public void updatePositionSyncables(CarryPosition customCarry){
+        this.custom = customCarry;
+
+        int tempSize = customCarryPositions.size();
+        for(int i = 0; i < tempSize; i++){
+            customCarryPositions.set(i, custom);
+        }
     }
 
 
@@ -125,8 +149,6 @@ public class PlayerCarry {
         this.isCarried = isCarried;
     }
 
-
-
     //getters and setters for if it is carrying someone and how
     public boolean getIsCarrying() {
         return isCarrying;
@@ -136,182 +158,116 @@ public class PlayerCarry {
         this.isCarrying = isCarrying;
     }
 
-    public boolean getShoulderCarry(){
-        return isShoulderCarry;
-    }
-
-    public void setShoulderCarry(boolean isShoulderCarry){
-        this.isShoulderCarry = isShoulderCarry;
-        //disable custom carry if shoulder carry is enabled
-        if(isShoulderCarry){
-            isCustomCarryPosition = false;
-        } 
-    }
-
-    public boolean getCustomCarry(){
-        return isCustomCarryPosition;
-    }
-
-    public void setCustomCarry(boolean isCustomCarryPosition){
-        this.isCustomCarryPosition = isCustomCarryPosition;
-        //disable shoulder carry if custom carry is enabled
-        if(isCustomCarryPosition){
-            isShoulderCarry = false;
-        } 
-    }
-
-    public boolean getHeadLink(){
-        return headLink;
-    }
-
-    public void setHeadLink(boolean headLink){
-        this.headLink = headLink;
-    }
-
-
-    //getters and setters for calculating the position of its rider
-    public double getXYMult(){
-        if(isCustomCarryPosition){
-            return xymult;
-        }else if(isShoulderCarry){
-            return shoulderxymult;
+    /**
+     * 
+     * @param default if its a custom or default position
+     * @param pos which position it is in the list - invalid numbers default to the first
+     */
+    public void setCarryPosition(boolean custom, int pos){
+        if (custom) {
+            if (pos < 0 || pos > customCarryPositions.size()-1) {
+                pos = 0;
+            }
+            currentCarryPos[0] = 1;
+            currentCarryPos[1] = pos;
         }else{
-            return handxymult;
+            if (pos < 0 || pos > defaultCarryPositions.size()-1) {
+                pos = 0;
+            }
+            currentCarryPos[0] = 0;
+            currentCarryPos[1] = pos;
         }
     }
 
-    //set custom carry xy position
-    public void setXYMult(double xymult){
-        this.xymult = xymult;
+    public CarryPosition getCarryPosition(){
+        return allCarryPositions.get(currentCarryPos[0]).get(currentCarryPos[1]);
     }
 
-    public int getRotationOffset() {
-        if(isCustomCarryPosition){
-            return rotationOffset;
-        }else if(isShoulderCarry){
-            return shoulderRotationOffset;
-        }else{
-            return handRotationOffset;
+    public void addCustomCarryPos(CarryPosition custom){
+        boolean added = false;
+        for(int i = 0; i < customCarryPositions.size(); i++){
+            if (customCarryPositions.get(i).posName == custom.posName) {
+                customCarryPositions.set(i, custom);
+                added = true;
+            }
+        }
+        if (!added) {
+            customCarryPositions.add(custom);
         }
     }
 
-    //
-    public int getCustomRotOffset(){
-        return rotationOffset;
-    }
-
-    //set custom carry rotation position
-    public void setRotationOffset(int rotationOffset){
-        this.rotationOffset = rotationOffset;
-    }
-
-    public double getVertOffset() {
-        if(isCustomCarryPosition){
-            return vertOffset;
-        }else if(isShoulderCarry){
-            return shouldervertOffset;
-        }else{
-            return handvertOffset;
+    public void removeCustomCarryPos(String name){
+        for(int i = 0; i < customCarryPositions.size(); i++){
+            if (customCarryPositions.get(i).posName == custom.posName) {
+                customCarryPositions.remove(i);
+            }
         }
-    }
-
-    //set custom carry vertical position
-    public void setVertOffset(double vertOffset) {
-        this.vertOffset = vertOffset;
-    }
-
-
-    public double getLeftRightMove() {
-        if(isCustomCarryPosition){
-            return leftRightMove;
-        }else if(isShoulderCarry){
-            return shoulderleftRightMove;
-        }else{
-            return handleftRightMove;
-        }
-    }
-
-    public void setLeftRightMove(double leftRightMove) {
-        this.leftRightMove = leftRightMove;
     }
 
     //setting if it should sync, it probably doesnt need a getter
-    public boolean getShouldSync() {
+    public boolean getShouldSyncSimple() {
         return shouldSync;
     }
 
-    public void setShouldSync(boolean shouldSync) {
-        this.shouldSync = shouldSync;
-    }
- 
-    //getter and setter for if its a menu object
-    public boolean getIsMenu() {
-        return isMenuGraphic;
+    public void setShouldSyncSimple(boolean shouldSyncSimple) {
+        this.shouldSyncSimple = shouldSyncSimple;
+        this.shouldSync = shouldSyncSimple;
     }
 
-    public void setMenu(boolean menu) {
-        isMenuGraphic = menu;
+    //setting if it should sync
+    public boolean getShouldSyncCustom() {
+        return shouldSyncCustom;
     }
 
-    public float getMinScale() {
-        return minScale;
+    public void setShouldSyncCustom(boolean shouldSyncCustom) {
+        this.shouldSyncCustom = shouldSyncCustom;
+        this.shouldSync = shouldSyncCustom;
     }
 
-    public void setMinScale(float minScale) {
-        this.minScale = minScale;
+    //setting if it should sync
+    public boolean getShouldSyncAll() {
+        return shouldSyncAll;
     }
 
-    public float getMaxScale() {
-        return maxScale;
+    public void setShouldSyncAll(boolean shouldSyncAll) {
+        this.shouldSyncAll = shouldSyncAll;
+        this.shouldSync = shouldSyncAll;
     }
-
-    public void setMaxScale(float maxScale) {
-        this.maxScale = maxScale;
-    }
-
-    public float getDefaultScale() {
-        return defaultScale;
-    }
-
-    public void setDefaultScale(float defaultScale) {
-        this.defaultScale = defaultScale;
-    }
-
-
     
+
+
 
     public void copyFrom(PlayerCarry source){
         this.isCarried = source.isCarried;
         this.isCarrying = source.isCarrying;
-        this.isShoulderCarry = source.isShoulderCarry;
-        this.isCustomCarryPosition = source.isCustomCarryPosition;
-        this.rotationOffset = source.rotationOffset;
-        this.xymult = source.xymult;
-        this.vertOffset = source.vertOffset;
-        this.leftRightMove = source.leftRightMove;
+
+        this.custom = source.custom;
+        this.customCarryPositions = source.customCarryPositions;
+        this.allCarryPositions = source.allCarryPositions;
     }
 
     public void saveNBTData(CompoundTag tag){
         tag.putBoolean(PlayerCarryConstants.CARRIED_NBT_TAG, isCarried);
         tag.putBoolean(PlayerCarryConstants.CARRYING_NBT_TAG, isCarrying);
-        tag.putBoolean(PlayerCarryConstants.SHOULDER_CARRY_NBT_TAG, isShoulderCarry);
-        tag.putBoolean(PlayerCarryConstants.CUSTOM_CARRY_NBT_TAG, isCustomCarryPosition);
 
-        tag.putInt(PlayerCarryConstants.ROTATION_NBT_TAG, rotationOffset);
-        tag.putDouble(PlayerCarryConstants.MULT_NBT_TAG, xymult);
-        tag.putDouble(PlayerCarryConstants.VERT_NBT_TAG, vertOffset);
-        tag.putDouble(PlayerCarryConstants.LEFT_RIGHT_NBT_TAG, leftRightMove);
+        CarryPosition carry = customCarryPositions.get(0);
+
+        tag.putString(PlayerCarryConstants.POS_NAME_NBT_TAG, carry.posName);
+        tag.putInt(PlayerCarryConstants.ROTATION_NBT_TAG, carry.RotationOffset);
+        tag.putDouble(PlayerCarryConstants.MULT_NBT_TAG, carry.xymult);
+        tag.putDouble(PlayerCarryConstants.VERT_NBT_TAG, carry.vertOffset);
+        tag.putDouble(PlayerCarryConstants.LEFT_RIGHT_NBT_TAG, carry.leftRightMove);
+        tag.putBoolean(PlayerCarryConstants.HEAD_LINK_NBT_TAG, carry.headLink);
     }
 
     public void loadNBTData(CompoundTag tag){
         isCarried = tag.getBoolean(PlayerCarryConstants.CARRIED_NBT_TAG);
         isCarrying = tag.getBoolean(PlayerCarryConstants.CARRYING_NBT_TAG);
-        isShoulderCarry = tag.getBoolean(PlayerCarryConstants.SHOULDER_CARRY_NBT_TAG);
-        isCustomCarryPosition = tag.getBoolean(PlayerCarryConstants.CUSTOM_CARRY_NBT_TAG);
 
-        rotationOffset = tag.getInt(PlayerCarryConstants.ROTATION_NBT_TAG);
-        xymult = tag.getDouble(PlayerCarryConstants.MULT_NBT_TAG);
-        vertOffset = tag.getDouble(PlayerCarryConstants.VERT_NBT_TAG);
-        leftRightMove = tag.getDouble(PlayerCarryConstants.LEFT_RIGHT_NBT_TAG);
+        custom = new CarryPosition(
+            tag.getString(PlayerCarryConstants.POS_NAME_NBT_TAG), tag.getInt(PlayerCarryConstants.ROTATION_NBT_TAG), tag.getDouble(PlayerCarryConstants.MULT_NBT_TAG), 
+            tag.getDouble(PlayerCarryConstants.VERT_NBT_TAG), tag.getDouble(PlayerCarryConstants.LEFT_RIGHT_NBT_TAG), tag.getBoolean(PlayerCarryConstants.HEAD_LINK_NBT_TAG));
+
+        customCarryPositions.set(0, custom);
     }
 }

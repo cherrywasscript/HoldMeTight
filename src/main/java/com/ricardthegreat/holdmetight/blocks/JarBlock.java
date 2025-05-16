@@ -2,7 +2,8 @@ package com.ricardthegreat.holdmetight.blocks;
 
 import javax.annotation.Nonnull;
 
-import com.ricardthegreat.holdmetight.utils.PlayerCarryExtension;
+import com.ricardthegreat.holdmetight.carry.PlayerCarry;
+import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.core.BlockPos;
@@ -40,11 +41,11 @@ public class JarBlock extends Block {
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
         if (EntitySizeUtils.getSize(player) >= 0.8) {
-            PlayerCarryExtension playerExt = (PlayerCarryExtension) player;
+            PlayerCarry playerCarry = PlayerCarryProvider.getPlayerSizeCapability(player);
 
             System.out.println(level.isClientSide);
 
-            if (playerExt.getIsCarrying() && !playerExt.getCustomCarry() && !playerExt.getShoulderCarry()) {
+            if (playerCarry.getIsCarrying() && playerCarry.getCarryPosition().posName == "hand") {
                 Vec3 center = pos.getCenter();
                 center = center.add(0, -0.4375, 0);
 
