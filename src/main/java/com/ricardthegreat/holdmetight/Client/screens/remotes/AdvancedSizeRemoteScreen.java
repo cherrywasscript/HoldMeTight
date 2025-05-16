@@ -407,7 +407,7 @@ public class AdvancedSizeRemoteScreen extends BasicSizeRemoteScreen{
                         return false;
                     }
 
-                    return false;
+                    return true;
                 }catch (Exception e){ 
                     return false;
                 }      
