@@ -226,7 +226,7 @@ public abstract class EntityMixin {
         }
 
         if (thisEnt instanceof Player && entity instanceof Player && thisEnt != entity) {
-            System.out.println(thisEnt.getName() + "/" + entity.getName());
+            //System.out.println(thisEnt.getName() + "/" + entity.getName());
         }
             
     }
