@@ -41,7 +41,7 @@ public abstract class MultiPlayerGameModeMixin {
                 return;
             }
 
-            if (passenger != null && passenger instanceof Player && playerCarry.getCarryPosition().posName == "head") {
+            if (passenger != null && passenger instanceof Player && playerCarry.getCarryPosition().posName == "hand") {
                 PacketHandler.sendToServer(new SPlayerPutDownPacket(passenger.getUUID(), bp));
                 info.setReturnValue(InteractionResult.SUCCESS);
             }
