@@ -65,8 +65,14 @@ public class PlayerSize {
     
                 clampMaxHitbox(player);
                 fixStepHeight(player);
-                setMiningSpeed(player);
-                //setDefence(player);
+
+                if (Config.miningSpeedScaleLink) {
+                    setMiningSpeed(player);
+                }
+
+                if (Config.damageTakenScaleLink) {
+                    setDefence(player);
+                }
 
                 shouldSync = true;
             }
@@ -75,8 +81,13 @@ public class PlayerSize {
                 baseData.setScale(currentScale*perpetualChangeValue);
                 clampMaxHitbox(player);
                 fixStepHeight(player);
-                setMiningSpeed(player);
-                //setDefence(player);
+                if (Config.miningSpeedScaleLink) {
+                    setMiningSpeed(player);
+                }
+
+                if (Config.damageTakenScaleLink) {
+                    setDefence(player);
+                }
 
                 shouldSync = true;
             }
@@ -158,7 +169,7 @@ public class PlayerSize {
 
         ScaleData defenceData = pEnt.pehkui_getScaleData(ScaleTypes.DEFENSE);
 
-        defenceData.setScale(currentScale);
+        defenceData.setScale((float) Math.sqrt(currentScale));
     }
 
     private void setMiningSpeed(Player player){
