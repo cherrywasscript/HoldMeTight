@@ -241,4 +241,14 @@ public abstract class EntityMixin {
         }
     }
 
+
+
+    @Overwrite
+    public boolean fireImmune() {
+        if (EntitySizeUtils.getSize(((Entity) (Object) this)) >= 4) {
+            return true;
+        }
+        return ((Entity) (Object) this).getType().fireImmune();
+    }
+
 }
