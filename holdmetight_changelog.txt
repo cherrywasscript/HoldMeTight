@@ -12,3 +12,5 @@ version 0.3.0-alpha:
 - fixed a bug where putting down an entity would sometimes result in them just being dropped
 - fixed a bug with remotes that would not allow for custom times to be input
 - various backend changes (i hope i have caught all the issues that were introduced by them but i imagine i will continue to find some as i test)
+
+version next:
