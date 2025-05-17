@@ -14,3 +14,5 @@ version 0.3.0-alpha:
 - various backend changes (i hope i have caught all the issues that were introduced by them but i imagine i will continue to find some as i test)
 
 version next:
+- added config options to allow scaling of damage and mining speed with height
+- large entities are now fire immune
