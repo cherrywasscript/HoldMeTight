@@ -65,6 +65,8 @@ public class PlayerSize {
     
                 clampMaxHitbox(player);
                 fixStepHeight(player);
+                setMiningSpeed(player);
+                //setDefence(player);
 
                 shouldSync = true;
             }
@@ -73,6 +75,8 @@ public class PlayerSize {
                 baseData.setScale(currentScale*perpetualChangeValue);
                 clampMaxHitbox(player);
                 fixStepHeight(player);
+                setMiningSpeed(player);
+                //setDefence(player);
 
                 shouldSync = true;
             }
@@ -147,6 +151,22 @@ public class PlayerSize {
             heightData.setScale(1.0f);
             widthData.setScale(1.0f);
         }
+    }
+
+    private void setDefence(Player player){
+        PehkuiEntityExtensions pEnt = (PehkuiEntityExtensions) player;
+
+        ScaleData defenceData = pEnt.pehkui_getScaleData(ScaleTypes.DEFENSE);
+
+        defenceData.setScale(currentScale);
+    }
+
+    private void setMiningSpeed(Player player){
+        PehkuiEntityExtensions pEnt = (PehkuiEntityExtensions) player;
+
+        ScaleData miningData = pEnt.pehkui_getScaleData(ScaleTypes.MINING_SPEED);
+
+        miningData.setScale(currentScale);
     }
 
     //step height scales weirdly this helps alliviate that a bit
