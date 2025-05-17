@@ -20,11 +20,19 @@ public class Config
 
         private static final ForgeConfigSpec.ConfigValue<Double> PAPER_WINGS_MAX_SCALE = BUILDER
                 .comment("the largest someone can be while wearing the paper wings item (an elytra in all ways that matter)")
-                .define("maxWingsScale", 0.1d);
+                .define("maxWingsScale", 0.05d);
 
         private static final ForgeConfigSpec.ConfigValue<Double> MIN_PARTICLE_SCALE = BUILDER
                 .comment("the scale an entity should be before ambient particles are disabled on them")
                 .define("minParticleScale", 0.5d);
+
+        private static final ForgeConfigSpec.ConfigValue<Boolean> MINING_SPEED_SCALE_LINK = BUILDER
+                .comment("should a players mining speed be linked to their scale (faster for larger folk slower for smaller folk)")
+                .define("miningSpeedScaleLink", true);
+
+        private static final ForgeConfigSpec.ConfigValue<Boolean> DAMAGE_TAKEN_SCALE_LINK = BUILDER
+                .comment("should the damage a player takes be linked to their scale (less for larger folk more for smaller folk)")
+                .define("damageTakenScaleLink", true);
 
         private static final ForgeConfigSpec.ConfigValue<Boolean> PLAYER_CHAT_SCALE = BUILDER
                 //.comment("should player messages be scaled based on their size (this is not properly tested and could cause many issues use at your own risk)")
@@ -52,7 +60,9 @@ public class Config
         public static double maxWingsScale;
         public static double minParticleScale;
         public static boolean playerChatScale;
-
+        public static boolean miningSpeedScaleLink;
+        public static boolean damageTakenScaleLink;
+        
         private static boolean validateItemName(final Object obj)
         {
                 return obj instanceof final String itemName && ForgeRegistries.ITEMS.containsKey(new ResourceLocation(itemName));
@@ -65,5 +75,7 @@ public class Config
                 maxWingsScale = PAPER_WINGS_MAX_SCALE.get();
                 minParticleScale = MIN_PARTICLE_SCALE.get();
                 playerChatScale = PLAYER_CHAT_SCALE.get();
+                miningSpeedScaleLink = MINING_SPEED_SCALE_LINK.get();
+                damageTakenScaleLink = DAMAGE_TAKEN_SCALE_LINK.get();
         }
 }
