@@ -43,8 +43,6 @@ public class JarBlock extends Block {
         if (EntitySizeUtils.getSize(player) >= 0.8) {
             PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
 
-            System.out.println(level.isClientSide);
-
             if (playerCarry.getIsCarrying() && playerCarry.getCarryPosition().posName == "hand") {
                 Vec3 center = pos.getCenter();
                 center = center.add(0, -0.4375, 0);
@@ -52,8 +50,6 @@ public class JarBlock extends Block {
                 Entity passenger = player.getFirstPassenger();
                 passenger.stopRiding();
                 passenger.dismountTo(center.x(), center.y(), center.z());
-
-                System.out.println(center + "/" + passenger.position());
             }
 
             level.setBlock(pos, state.cycle(OPEN), UPDATE_ALL);
