@@ -76,7 +76,29 @@ public class SizePrefsScreen extends Screen{
         graphics.blit(BACKGROUND, this.leftPos, this.topPos, 0, 0, this.imageWidth, this.imageHeight);
         super.render(graphics, mouseX, mouseY, partialTicks);
 
+        renderCircle(50, graphics);
+
+        //graphics.fill(centerHorizonalPos-50, centerVerticalPos-20, centerHorizonalPos+50, centerVerticalPos+20, 0x88FFFFFF);
+
         graphics.drawString(this.font, PlayerSizeProvider.getPlayerSizeCapability(player).getMaxScale().toString(), this.leftPos + 65, topPos +18,0xdddddd,false);
+    }
+
+    
+    private void renderCircle(int radius, GuiGraphics graphics){
+        double tanAngle = Math.toRadians(90);
+        for(int c = 0; c < 360; c++){
+            double angleA = Math.toRadians(c);
+            double angleB = Math.toRadians(180-90-c);
+            double y = (radius*Math.sin(angleA))/Math.sin(tanAngle);
+            double x = (radius*Math.sin(angleB))/Math.sin(tanAngle);
+
+            int yint = (int) y;
+            int xint = (int) x;
+
+            graphics.fill(centerHorizonalPos+yint, centerVerticalPos+xint, centerHorizonalPos+yint+1, centerVerticalPos+xint+1, 0xFFFFFFFF);
+            graphics.fill(centerHorizonalPos+yint, centerVerticalPos+xint, centerHorizonalPos+yint+1, centerVerticalPos+xint+1, 0x00FF0F00);
+            //System.out.println("y:" +yint+"/x:"+xint);
+        }
     }
 
     private void saveEditBox(){
