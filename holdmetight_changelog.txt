@@ -13,6 +13,6 @@ version 0.3.0-alpha:
 - fixed a bug with remotes that would not allow for custom times to be input
 - various backend changes (i hope i have caught all the issues that were introduced by them but i imagine i will continue to find some as i test)
 
-version next:
+version 0.3.1-alpha:
 - added config options to allow scaling of damage and mining speed with height
 - large entities are now fire immune
