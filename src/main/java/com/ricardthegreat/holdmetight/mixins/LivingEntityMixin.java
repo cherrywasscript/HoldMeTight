@@ -11,6 +11,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.ricardthegreat.holdmetight.Config;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
@@ -157,59 +160,14 @@ public abstract class LivingEntityMixin extends Entity{
     @Shadow
     private void updateGlowingStatus() {}
 
-    @Overwrite
-    protected void tickEffects() {
-        Iterator<MobEffect> iterator = this.activeEffects.keySet().iterator();
-  
-        try {
-           while(iterator.hasNext()) {
-                MobEffect mobeffect = iterator.next();
-                MobEffectInstance mobeffectinstance = this.activeEffects.get(mobeffect);
-                if (!mobeffectinstance.tick((LivingEntity) (Object) this, () -> {
-                    this.onEffectUpdated(mobeffectinstance, true, (Entity)null);
-                })) {
-                    if (!this.level().isClientSide && !net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.entity.living.MobEffectEvent.Expired((LivingEntity) (Object) this, mobeffectinstance))) {
-                        iterator.remove();
-                        this.onEffectRemoved(mobeffectinstance);
-                    }
-                } else if (mobeffectinstance.getDuration() % 600 == 0) {
-                    this.onEffectUpdated(mobeffectinstance, false, (Entity)null);
-                }
-           }
-        } catch (ConcurrentModificationException concurrentmodificationexception) {
-        }
-  
-        if (this.effectsDirty) {
-            if (!this.level().isClientSide) {
-                this.updateInvisibilityStatus();
-                this.updateGlowingStatus();
-            }
-    
-            this.effectsDirty = false;
-        }
-  
-        int i = this.entityData.get(DATA_EFFECT_COLOR_ID);
-        boolean flag1 = this.entityData.get(DATA_EFFECT_AMBIENCE_ID);
-        if (i > 0) {
-            boolean flag;
-            if (this.isInvisible()) {
-                flag = this.random.nextInt(15) == 0;
-            } else {
-                flag = this.random.nextBoolean();
-            }
-    
-            if (flag1) {
-                flag &= this.random.nextInt(5) == 0;
-            }
 
-            if (flag && i > 0 && EntitySizeUtils.getSize(this) >= Config.minParticleScale) {
-                double d0 = (double)(i >> 16 & 255) / 255.0D;
-                double d1 = (double)(i >> 8 & 255) / 255.0D;
-                double d2 = (double)(i >> 0 & 255) / 255.0D;
-                this.level().addParticle(flag1 ? ParticleTypes.AMBIENT_ENTITY_EFFECT : ParticleTypes.ENTITY_EFFECT, this.getRandomX(0.5D), this.getRandomY(), this.getRandomZ(0.5D), d0, d1, d2);
-            }
+    //figure out how to make this the most important so that other mods that do this still have their particles removed for small folk
+    @Inject(method = "tickEffects",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V"),cancellable = true)
+    private void holdmetight$disableParticles(CallbackInfo info){
+        if (EntitySizeUtils.getSize(this) <= Config.minParticleScale) {
+            info.cancel();
         }
-     }
+    }
 
     @Shadow
     public abstract void defineSynchedData();
