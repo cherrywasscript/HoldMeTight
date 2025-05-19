@@ -68,8 +68,14 @@ public abstract class EntityMixin {
             
         }else if (!(rider instanceof Player) && vehicle.getMainHandItem() == ItemStack.EMPTY && EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)/4) {
             rider.startRiding(vehicle);
+            PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerCarryCapability(vehicle);
+
+            vehicleCarry.setCarrying(true);
+
+            if(!rider.level().isClientSide()) {
+                vehicleCarry.setShouldSyncSimple(true);
+            }
         }
-        
     }
 
 
