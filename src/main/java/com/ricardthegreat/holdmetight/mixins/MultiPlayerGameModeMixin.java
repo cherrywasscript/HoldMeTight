@@ -10,6 +10,7 @@ import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.init.BlockInit;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
+import com.ricardthegreat.holdmetight.network.SEntityPutDownPacket;
 import com.ricardthegreat.holdmetight.network.SPlayerPutDownPacket;
 
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
@@ -44,6 +45,10 @@ public abstract class MultiPlayerGameModeMixin {
             if (passenger != null && passenger instanceof Player && playerCarry.getCarryPosition().posName == "hand") {
                 passenger.stopRiding();
                 PacketHandler.sendToServer(new SPlayerPutDownPacket(passenger.getUUID(), bp));
+                info.setReturnValue(InteractionResult.SUCCESS);
+            }else if (passenger != null && playerCarry.getCarryPosition().posName == "hand") {
+                passenger.stopRiding();
+                PacketHandler.sendToServer(new SEntityPutDownPacket(passenger.getUUID(), bp));
                 info.setReturnValue(InteractionResult.SUCCESS);
             }
         }
