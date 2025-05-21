@@ -101,6 +101,13 @@ public abstract class EntityMixin {
                 riderCarry.setShouldSyncSimple(true);
                 PacketHandler.sendToAllClients(new CPlayerDismountPlayerPacket(ent.getUUID()));
             }
+        }else if (!(ent instanceof Player) && ent.isPassenger() && vehicle != null && vehicle instanceof Player) {
+            PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerCarryCapability((Player) vehicle);
+            vehicleCarry.setCarrying(false);
+            if(!ent.level().isClientSide()) {
+                vehicleCarry.setShouldSyncSimple(true);
+                //PacketHandler.sendToAllClients(new CPlayerDismountPlayerPacket(ent.getUUID()));
+            }
         }
     }
 
