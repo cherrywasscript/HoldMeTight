@@ -75,6 +75,23 @@ public class PlayerSize {
                 }
 
                 shouldSync = true;
+            }else if(remainingTicks == 0){
+                 if (baseData.getScale() != currentScale) {
+                    currentScale = baseData.getScale();
+                    targetScale = currentScale;
+                    
+                    fixStepHeight(player);
+
+                    if (Config.miningSpeedScaleLink) {
+                        setMiningSpeed(player);
+                    }
+
+                    if (Config.damageTakenScaleLink) {
+                        setDefence(player);
+                    }
+
+                    shouldSync = true;
+                }
             }
     
             if (perpetualChange) {
