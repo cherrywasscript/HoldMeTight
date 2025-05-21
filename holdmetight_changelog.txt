@@ -16,3 +16,10 @@ version 0.3.0-alpha:
 version 0.3.1-alpha:
 - added config options to allow scaling of damage and mining speed with height
 - large entities are now fire immune
+
+version 0.3.2-alpha:
+- fixed some bugs related to carrying non player entities namely you can now actually place them down once you have picked them up
+- fixed a poorly designed method that caused some incompatibilities
+
+version next:
+- added check for if player size has been modified externally to this mod, wont be perfect but should hopefully allow this to be more in sync with other mods that can change your size
