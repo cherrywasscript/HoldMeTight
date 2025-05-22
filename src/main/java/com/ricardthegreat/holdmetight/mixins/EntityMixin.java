@@ -39,10 +39,11 @@ public abstract class EntityMixin {
     @Inject(at = @At("HEAD"), method = "interact(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;")
     public void unnamedsizemod$interact(Player vehicle, InteractionHand hand, CallbackInfoReturnable<InteractionResult> info) {
         Entity rider = (Entity) (Object) this;
+        PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerCarryCapability(vehicle);
         
-        if(rider instanceof Player && vehicle.getMainHandItem() == ItemStack.EMPTY && EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)/4){
-
-            PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerCarryCapability(vehicle);
+        if (vehicleCarry.getIsCarrying()) {
+            
+        }else if(rider instanceof Player && vehicle.getMainHandItem() == ItemStack.EMPTY && EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)/4){
             PlayerCarry riderCarry = PlayerCarryProvider.getPlayerCarryCapability((Player) rider);
 
             rider.startRiding(vehicle);
@@ -68,7 +69,6 @@ public abstract class EntityMixin {
             
         }else if (!(rider instanceof Player) && vehicle.getMainHandItem() == ItemStack.EMPTY && EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)/4) {
             rider.startRiding(vehicle);
-            PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerCarryCapability(vehicle);
 
             vehicleCarry.setCarrying(true);
 
