@@ -63,16 +63,7 @@ public class PlayerSize {
     
                 baseData.setTargetScale(currentScale);
     
-                clampMaxHitbox(player);
-                fixStepHeight(player);
-
-                if (Config.miningSpeedScaleLink) {
-                    setMiningSpeed(player);
-                }
-
-                if (Config.damageTakenScaleLink) {
-                    setDefence(player);
-                }
+                setPeripheralScales(player);
 
                 shouldSync = true;
             }else if(remainingTicks == 0){
@@ -80,15 +71,7 @@ public class PlayerSize {
                     currentScale = baseData.getScale();
                     targetScale = currentScale;
                     
-                    fixStepHeight(player);
-
-                    if (Config.miningSpeedScaleLink) {
-                        setMiningSpeed(player);
-                    }
-
-                    if (Config.damageTakenScaleLink) {
-                        setDefence(player);
-                    }
+                    setPeripheralScales(player);
 
                     shouldSync = true;
                 }
@@ -96,15 +79,8 @@ public class PlayerSize {
     
             if (perpetualChange) {
                 baseData.setScale(currentScale*perpetualChangeValue);
-                clampMaxHitbox(player);
-                fixStepHeight(player);
-                if (Config.miningSpeedScaleLink) {
-                    setMiningSpeed(player);
-                }
 
-                if (Config.damageTakenScaleLink) {
-                    setDefence(player);
-                }
+                setPeripheralScales(player);
 
                 shouldSync = true;
             }
@@ -162,6 +138,17 @@ public class PlayerSize {
         float scaleChange = (targetScale - currentScale)/remainingTicks;
         currentScale += scaleChange;
         remainingTicks--;
+    }
+
+    private void setPeripheralScales(Player player){
+        clampMaxHitbox(player);
+        fixStepHeight(player);
+        if (Config.miningSpeedScaleLink) {
+            setMiningSpeed(player);
+        }
+        if (Config.damageTakenScaleLink) {
+            setDefence(player);
+        }
     }
 
     //ensure that the players hitbox does not go above the maximum and 
