@@ -21,64 +21,29 @@ public class EntitySizeUtils {
 
     private static float maxScale = (float) Config.maxHitboxScale;
 
-    
-    @Deprecated
-    public static void setSizeInstant(Entity entity, Float size) {
-
+    public static void setSize(Entity entity, Float size, int ticks) {
         if (entity instanceof Player) {
-            PlayerSizeUtils.setSize((Player) entity, size, 0);
+            PlayerSizeUtils.setSize((Player) entity, size, ticks);
+        }else {
+            if (ticks < 0) {
+            ticks = 0;
+            }
+
+            checkMaxHitbox(entity, size, ticks);
+            ScaleData data = getScaleData(entity);
+            data.setScaleTickDelay(ticks);
+            data.setTargetScale(size);
         }
-
-        checkMaxHitbox(entity, size, 0);
-        ScaleData data = getScaleData(entity);
-        data.setScale(size);
     }
 
-    @Deprecated
-    public static void multSizeInstant(Entity entity, Float size) {
-        Float targetScale = getScaleData(entity).getTargetScale()*size;
-        setSizeInstant(entity, targetScale);
-    }
-
-    //i should probably grab the actual default from pekhui as if it changes from 20 this wont however a second is a good default i feel
-    //also i should spend some time to encorporate these like 6 similar methods into 1 or 2 methods it should be possible and will make for nicer code
-    @Deprecated
-    public static void setSizeOverTimeDefault(Entity entity, Float size) {
-
+    public static void multSize(Entity entity, Float size, int ticks) {
         if (entity instanceof Player) {
-            PlayerSizeUtils.setSize((Player) entity, size, 0);
+            PlayerSizeUtils.multSize((Player) entity, size, ticks);
+        }else{
+            Float targetScale = getScaleData(entity).getTargetScale()*size;
+            setSize(entity, targetScale, ticks);
         }
-
-        checkMaxHitbox(entity, size, 20);
-        ScaleData data = getScaleData(entity);
-        data.setScaleTickDelay(20);
-        data.setTargetScale(size);
-    }   
-
-    @Deprecated
-    public static void multSizeOverTimeDefault(Entity entity, Float size){
-        Float targetScale = getScaleData(entity).getTargetScale()*size;
-        setSizeOverTimeDefault(entity, targetScale);
-    }
-
-    @Deprecated
-    public static void setSizeOverTimeCustom(Entity entity, Float size, int ticks) {
-
-        if (entity instanceof Player) {
-            PlayerSizeUtils.setSize((Player) entity, size, 0);
-        }
-
-        checkMaxHitbox(entity, size, ticks);
-        ScaleData data = getScaleData(entity);
-        data.setScaleTickDelay(ticks);
-        data.setTargetScale(size);
-    }   
-
-    @Deprecated
-    public static void multSizeOverTimeCustom(Entity entity, Float size, int ticks){
-        Float targetScale = getScaleData(entity).getTargetScale()*size;
-        setSizeOverTimeCustom(entity, targetScale, ticks);
-    }
+    } 
 
     public static float getSize(Entity entity) {
         if (entity instanceof Player) {
