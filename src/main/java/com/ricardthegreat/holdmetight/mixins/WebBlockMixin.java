@@ -14,6 +14,8 @@ import net.minecraft.world.phys.Vec3;
 
 @Mixin(WebBlock.class)
 public class WebBlockMixin {
+
+    //TODO remove overwrite so it is more compatible
     @Overwrite
     public void entityInside(BlockState p_58180_, Level p_58181_, BlockPos p_58182_, Entity entity) {
         if(EntitySizeUtils.getSize(entity) < 2 && EntitySizeUtils.getSize(entity) > 1/16){
