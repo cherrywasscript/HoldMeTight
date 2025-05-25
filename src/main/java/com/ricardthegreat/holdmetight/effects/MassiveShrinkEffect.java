@@ -22,7 +22,7 @@ public class MassiveShrinkEffect extends MobEffect{
         float size = EntitySizeUtils.getSize(livingEntity);
         double target = size*mult;
 
-        EntitySizeUtils.setSizeInstant((Entity) livingEntity, (float) target);
+        EntitySizeUtils.setSize((Entity) livingEntity, (float) target, 0);
     }
 
     @Override
