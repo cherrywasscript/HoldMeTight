@@ -212,6 +212,10 @@ public class PlayerSize {
         this.minScale = minScale;
     }
 
+    public float getDefaultScale(){
+        return defaultScale;
+    }
+
     public Float getTargetScale() {
         return targetScale;
     }
