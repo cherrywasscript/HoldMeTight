@@ -49,6 +49,7 @@ public class PlayerSizeProvider implements ICapabilityProvider, INBTSerializable
         return LazyOptional.empty();
     }
 
+    //TODO make it so the only file that references this is the playersizeutils file
     public static PlayerSize getPlayerSizeCapability(Player player){
         LazyOptional<PlayerSize> optional = player.getCapability(PLAYER_SIZE);
         return optional.orElse(new PlayerSize());
