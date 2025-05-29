@@ -119,8 +119,10 @@ public class BasicSizeRemoteScreen extends AbstractSizeRemoteScreen{
                 float scale = DEFAULT_SCALE;
                 if (tag.getBoolean(AbstractSizeRemoteItem.IS_PLAYER_TAG)) {
                     scale = PlayerSizeProvider.getPlayerSizeCapability((Player) selectedEnt).getDefaultScale();
+                    PacketHandler.sendToServer(new SEntitySetTargetScalePacket(scale, selectedEnt.getUUID(), tag.getInt(AbstractSizeRemoteItem.ENTITY_ID), 0, tag.getBoolean(AbstractSizeRemoteItem.IS_PLAYER_TAG)));
+                }else {
+                    PacketHandler.sendToServer(new SEntitySetTargetScalePacket(scale, selectedEnt.getUUID(), tag.getInt(AbstractSizeRemoteItem.ENTITY_ID), 20, tag.getBoolean(AbstractSizeRemoteItem.IS_PLAYER_TAG)));
                 }
-                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(scale, selectedEnt.getUUID(), tag.getInt(AbstractSizeRemoteItem.ENTITY_ID), 0, tag.getBoolean(AbstractSizeRemoteItem.IS_PLAYER_TAG)));
             }
         }
     }
