@@ -236,12 +236,12 @@ public class AdvancedSizeRemoteScreen extends BasicSizeRemoteScreen{
         }
 
         //this check shouldnt be needed but just in case
-        if (selectedPlayer != null) {
+        if (selectedEnt != null) {
             if (inRange() && customDuration.selected()) {
                 //send the multiplier and playeruuid to the server packet handler
-                PacketHandler.sendToServer(new SEntityMultTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedPlayer.getUUID(), tag.getInt(AbstractSizeRemoteItem.NUM_TICKS_TAG)));
+                PacketHandler.sendToServer(new SEntityMultTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedEnt.getUUID(), tag.getInt(AbstractSizeRemoteItem.ENTITY_ID), tag.getInt(AbstractSizeRemoteItem.NUM_TICKS_TAG), tag.getBoolean(AbstractSizeRemoteItem.IS_PLAYER_TAG)));
             }else if (inRange()) {
-                PacketHandler.sendToServer(new SEntityMultTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedPlayer.getUUID(), AbstractSizeRemoteItem.DEFAULT_TICKS));
+                PacketHandler.sendToServer(new SEntityMultTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedEnt.getUUID(), tag.getInt(AbstractSizeRemoteItem.ENTITY_ID), AbstractSizeRemoteItem.DEFAULT_TICKS, tag.getBoolean(AbstractSizeRemoteItem.IS_PLAYER_TAG)));
             }
         }
     }
@@ -257,11 +257,11 @@ public class AdvancedSizeRemoteScreen extends BasicSizeRemoteScreen{
         }
         
         //this check shouldnt be needed but just in case
-        if (selectedPlayer != null) {
+        if (selectedEnt != null) {
             if (inRange() && customDuration.selected()) {
-                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedPlayer.getUUID(), tag.getInt(AbstractSizeRemoteItem.NUM_TICKS_TAG)));
+                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedEnt.getUUID(), tag.getInt(AbstractSizeRemoteItem.ENTITY_ID), tag.getInt(AbstractSizeRemoteItem.NUM_TICKS_TAG), tag.getBoolean(AbstractSizeRemoteItem.IS_PLAYER_TAG)));
             }else if (inRange()) {
-                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedPlayer.getUUID(), AbstractSizeRemoteItem.DEFAULT_TICKS));
+                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedEnt.getUUID(), tag.getInt(AbstractSizeRemoteItem.ENTITY_ID), AbstractSizeRemoteItem.DEFAULT_TICKS, tag.getBoolean(AbstractSizeRemoteItem.IS_PLAYER_TAG)));
             }
         }
     }
@@ -296,14 +296,14 @@ public class AdvancedSizeRemoteScreen extends BasicSizeRemoteScreen{
         }
 
         //this check shouldnt be needed but just in case
-        if (selectedPlayer != null) {
+        if (selectedEnt != null) {
             Random rand = new Random();
             float randScale = rand.nextFloat(minScale, maxScale);
             if (inRange() && customDuration.selected()) {
                 //send the random scale and playeruuid to the server packet handler
-                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(randScale, selectedPlayer.getUUID(), tag.getInt(AbstractSizeRemoteItem.NUM_TICKS_TAG)));
+                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(randScale, selectedEnt.getUUID(), tag.getInt(AbstractSizeRemoteItem.ENTITY_ID), tag.getInt(AbstractSizeRemoteItem.NUM_TICKS_TAG), tag.getBoolean(AbstractSizeRemoteItem.IS_PLAYER_TAG)));
             }else if (inRange()) {
-                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(randScale, selectedPlayer.getUUID(), AbstractSizeRemoteItem.DEFAULT_TICKS));
+                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(randScale, selectedEnt.getUUID(), tag.getInt(AbstractSizeRemoteItem.ENTITY_ID), AbstractSizeRemoteItem.DEFAULT_TICKS, tag.getBoolean(AbstractSizeRemoteItem.IS_PLAYER_TAG)));
             }
         }
     }

@@ -9,6 +9,8 @@ import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.SEntityMultTargetScalePacket;
 import com.ricardthegreat.holdmetight.network.SEntitySetTargetScalePacket;
+import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
+import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -111,10 +113,14 @@ public class BasicSizeRemoteScreen extends AbstractSizeRemoteScreen{
     // what to do when the reset button is clicked
     protected void handleResetButton(Button button) {
         //this check shouldnt be needed but just in case 
-        if (selectedPlayer != null) {
+        if (selectedEnt != null) {
             if (inRange()) {
                 //send the multiplier and playeruuid to the server packet handler
-                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(DEFAULT_SCALE, selectedPlayer.getUUID(), 0));
+                float scale = DEFAULT_SCALE;
+                if (tag.getBoolean(AbstractSizeRemoteItem.IS_PLAYER_TAG)) {
+                    scale = PlayerSizeProvider.getPlayerSizeCapability((Player) selectedEnt).getDefaultScale();
+                }
+                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(scale, selectedEnt.getUUID(), tag.getInt(AbstractSizeRemoteItem.ENTITY_ID), 0, tag.getBoolean(AbstractSizeRemoteItem.IS_PLAYER_TAG)));
             }
         }
     }
@@ -131,10 +137,10 @@ public class BasicSizeRemoteScreen extends AbstractSizeRemoteScreen{
         }
 
         //this check shouldnt be needed but just in case
-        if (selectedPlayer != null) {
+        if (selectedEnt != null) {
             if (inRange()) {
                 //send the multiplier and playeruuid to the server packet handler
-                PacketHandler.sendToServer(new SEntityMultTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedPlayer.getUUID(), AbstractSizeRemoteItem.DEFAULT_TICKS));
+                PacketHandler.sendToServer(new SEntityMultTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedEnt.getUUID(), tag.getInt(AbstractSizeRemoteItem.ENTITY_ID), AbstractSizeRemoteItem.DEFAULT_TICKS, tag.getBoolean(AbstractSizeRemoteItem.IS_PLAYER_TAG)));
             }
         }
     }
@@ -150,9 +156,9 @@ public class BasicSizeRemoteScreen extends AbstractSizeRemoteScreen{
         }
         
         //this check shouldnt be needed but just in case
-        if (selectedPlayer != null) {
+        if (selectedEnt != null) {
             if (inRange()) {
-                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedPlayer.getUUID(), AbstractSizeRemoteItem.DEFAULT_TICKS));
+                PacketHandler.sendToServer(new SEntitySetTargetScalePacket(tag.getFloat(AbstractSizeRemoteItem.SCALE_TAG), selectedEnt.getUUID(), tag.getInt(AbstractSizeRemoteItem.ENTITY_ID), AbstractSizeRemoteItem.DEFAULT_TICKS, tag.getBoolean(AbstractSizeRemoteItem.IS_PLAYER_TAG)));
             }
         }
     }

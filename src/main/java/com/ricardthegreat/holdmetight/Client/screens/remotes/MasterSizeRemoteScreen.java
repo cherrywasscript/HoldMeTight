@@ -201,11 +201,11 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
         }
 
         //this check shouldnt be needed but just in case
-        if (selectedPlayer != null && selectedPlayer != user) {
+        if (selectedEnt != null && selectedEnt != user) {
             if (inRange()) {
                 PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(user);
 
-                LazyOptional<PlayerSize> optional = selectedPlayer.getCapability(PlayerSizeProvider.PLAYER_SIZE);
+                LazyOptional<PlayerSize> optional = selectedEnt.getCapability(PlayerSizeProvider.PLAYER_SIZE);
                 PlayerSize orElse = optional.orElse(null);
 
                 float current = orElse.getCurrentScale();
@@ -223,7 +223,7 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
                 }
                 //send the multiplier and playeruuid to the server packet handler
                 PacketHandler.sendToServer(new SEntityAddTargetScalePacket(scale, user.getUUID()));
-                PacketHandler.sendToServer(new SEntityAddTargetScalePacket(-scale, selectedPlayer.getUUID()));
+                PacketHandler.sendToServer(new SEntityAddTargetScalePacket(-scale, selectedEnt.getUUID()));
             }
         }
     }
@@ -237,7 +237,7 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
         }
 
         //this check shouldnt be needed but just in case
-        if (selectedPlayer != null && selectedPlayer != user) {
+        if (selectedEnt != null && selectedEnt != user) {
             if (inRange()) {
                 PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(user);
 
@@ -259,7 +259,7 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
                 }
                 //send the multiplier and playeruuid to the server packet handler
                 PacketHandler.sendToServer(new SEntityAddTargetScalePacket(-scale, user.getUUID()));
-                PacketHandler.sendToServer(new SEntityAddTargetScalePacket(scale, selectedPlayer.getUUID()));
+                PacketHandler.sendToServer(new SEntityAddTargetScalePacket(scale, selectedEnt.getUUID()));
             }
         }
     }
