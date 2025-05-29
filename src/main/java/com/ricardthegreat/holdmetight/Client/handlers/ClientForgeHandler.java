@@ -8,14 +8,20 @@ import com.ricardthegreat.holdmetight.Client.screens.CarryPositionScreen;
 import com.ricardthegreat.holdmetight.Commands.TestCommand;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
@@ -77,6 +83,24 @@ public class ClientForgeHandler {
         if(Keybindings.INSTANCE.carryScreenKey.consumeClick() && mcPlayer != null) { 
             if (mcPlayer.level().isClientSide) {
                 DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientHooks.openCarryPositionScreen(mcPlayer));
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void interactLivingEntityEvent(PlayerInteractEvent.EntityInteract event){
+        Item item = event.getEntity().getItemInHand(event.getHand()).getItem();
+
+        if (item instanceof AbstractSizeRemoteItem) {
+            AbstractSizeRemoteItem sizeRemote = (AbstractSizeRemoteItem) item;
+
+            Entity target = event.getTarget();
+            if (target instanceof LivingEntity && !event.getEntity().getCooldowns().isOnCooldown(item)) {
+                sizeRemote.interactLivingEntity(event.getEntity().getItemInHand(event.getHand()), event.getEntity(), (LivingEntity) target, event.getHand());
+                if (event.isCancelable()) {
+                    event.setCancellationResult(InteractionResult.SUCCESS);
+                    event.setCanceled(true);
+                }
             }
         }
     }
