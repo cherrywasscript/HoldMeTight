@@ -10,8 +10,6 @@ import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.SEntityMultTargetScalePacket;
 import com.ricardthegreat.holdmetight.network.SEntitySetTargetScalePacket;
 import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
-import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
-
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;

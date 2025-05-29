@@ -7,7 +7,6 @@ import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.network.NetworkEvent;
