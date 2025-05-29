@@ -62,32 +62,22 @@ public class EntitySizeUtils {
 
         PehkuiEntityExtensions pEnt = (PehkuiEntityExtensions) entity;
 
-        //im adding this here as a temp thing i need to move it to a proper place later
-        fixStepHeight(pEnt, size, ticks);
+        //TODO implement stepheight fix for other entities
+        //fixStepHeight(pEnt, size, ticks);
 
 
         ScaleData heightData = pEnt.pehkui_getScaleData(hitbox_height);
         ScaleData widthData = pEnt.pehkui_getScaleData(hitbox_width);
 
-        if (ticks > 0) {
-            heightData.setScaleTickDelay(ticks);
-            widthData.setScaleTickDelay(ticks);
+        heightData.setScaleTickDelay(ticks);
+        widthData.setScaleTickDelay(ticks);
 
-            if (size > maxScale) {
-                heightData.setTargetScale(maxScale/size);
-                widthData.setTargetScale(maxScale/size);
-            }else if (heightData.getTargetScale() < 1.0f || widthData.getTargetScale() < 1.0f){
-                heightData.setTargetScale(1.0f);
-                widthData.setTargetScale(1.0f);
-            }
-        }else{
-            if (size > maxScale) {
-                heightData.setScale(maxScale/size);
-                widthData.setScale(maxScale/size);
-            }else if (heightData.getTargetScale() < 1.0f || widthData.getTargetScale() < 1.0f){
-                heightData.setScale(1.0f);
-                widthData.setScale(1.0f);
-            }
+        if (size > maxScale) {
+            heightData.setTargetScale(maxScale/size);
+            widthData.setTargetScale(maxScale/size);
+        }else if (heightData.getTargetScale() < 1.0f || widthData.getTargetScale() < 1.0f){
+            heightData.setTargetScale(1.0f);
+            widthData.setTargetScale(1.0f);
         }
 
         
