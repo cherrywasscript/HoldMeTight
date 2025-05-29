@@ -21,7 +21,7 @@ version 0.3.2-alpha:
 - fixed some bugs related to carrying non player entities namely you can now actually place them down once you have picked them up
 - fixed a poorly designed method that caused some incompatibilities
 
-version next:
+version 0.3.3-alpha:
 - added check for if player size has been modified externally to this mod, wont be perfect but should hopefully allow this to be more in sync with other mods that can change your size
 - fixed some interactions with using size remotes on non player entities
 - fixed a bug where web blocks still slowed down players 1/16 and under
