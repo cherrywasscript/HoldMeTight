@@ -103,7 +103,7 @@ public class MushroomTeleporterBlock extends Block implements EntityBlock{
                     targetPos = targetPos.above();
                                
                     //change scale to 1 so the dimensions is normal
-                    EntitySizeUtils.setSizeInstant(player, 1f);
+                    EntitySizeUtils.setSize(player, 1f, 0);
 
 
                     //change the dimension
