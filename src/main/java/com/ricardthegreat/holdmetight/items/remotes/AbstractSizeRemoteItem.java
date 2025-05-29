@@ -7,7 +7,11 @@ import javax.annotation.Nullable;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -22,6 +26,9 @@ public abstract class AbstractSizeRemoteItem extends Item{
     public static final String MAX_SCALE_TAG = "maxscale";
     public static final String NUM_TICKS_TAG = "numticks";
     public static final String TARGET_TAG = "has target";
+
+    public static final String ENTITY_ID = "entity id";
+    public static final String IS_PLAYER_TAG = "is player";
     
 
     public static final Float DEFAULT_SCALE = 1.0f;
@@ -32,6 +39,34 @@ public abstract class AbstractSizeRemoteItem extends Item{
     public AbstractSizeRemoteItem(Properties properties) {
         super(properties);
     }
+
+    //suppressing warnings because tag should never be null as if item as no tags i create them before continuing
+    @SuppressWarnings("null")
+    @Override
+    public InteractionResultHolder<ItemStack> use(@Nonnull Level level, @Nonnull Player player, @Nonnull InteractionHand hand) {
+        ItemStack item = player.getItemInHand(hand);
+        if (!item.hasTag()) {
+            setDefaultTags(item, player);
+        }
+        CompoundTag tag = item.getTag();
+
+        if (player.isShiftKeyDown()){
+            tag.putUUID(UUID_TAG, player.getUUID());
+            tag.putInt(ENTITY_ID, player.getId());
+            tag.putBoolean(IS_PLAYER_TAG, true);
+            item.setTag(tag);
+            return InteractionResultHolder.success(player.getItemInHand(hand));
+        }
+
+        //open item screen client side only
+        if (level.isClientSide()) {
+            openScreen(player, hand);
+        }
+
+        return super.use(level, player, hand);
+    }
+
+    protected abstract void openScreen(Player player, InteractionHand hand);
 
     protected CompoundTag setDefaultTags(ItemStack stack, Player player){
         CompoundTag tag = stack.getOrCreateTag();
@@ -62,18 +97,60 @@ public abstract class AbstractSizeRemoteItem extends Item{
         if (tag != null) {
             String tooltip = target.getString();
             if (level != null) {
-                Player player = level.getPlayerByUUID(tag.getUUID(UUID_TAG));
-                if (player != null) {
-                    if (tag.contains(TARGET_TAG) && !tag.getBoolean(TARGET_TAG)) {
-                        list.add(Component.literal(noTarget.getString()));
-                    }else{
+
+                if (tag.contains(TARGET_TAG) && !tag.getBoolean(TARGET_TAG)) {
+                    list.add(Component.literal(noTarget.getString()));
+                }else if (tag.getBoolean(IS_PLAYER_TAG)) {
+                    Player player = level.getPlayerByUUID(tag.getUUID(UUID_TAG));
+                    if (player != null) {
                         list.add(Component.literal(tooltip + player.getName().getString()));
+                    }
+                }else{
+                    Entity entity = level.getEntity(tag.getInt(ENTITY_ID));
+                    if (entity != null) {
+                        list.add(Component.literal(tooltip + entity.getName().getString()));
                     }
                 }
             }
             //list.add(Component.literal(tooltip));
         }
         super.appendHoverText(stack, level, list, flag);
+    }
+
+    @SuppressWarnings("null")
+    @Override
+    public InteractionResult interactLivingEntity(@Nonnull ItemStack stack, @Nonnull Player player, @Nonnull LivingEntity entity, @Nonnull InteractionHand hand) {
+        //System.out.println("interact"); //TODO remove
+        ItemStack item = player.getItemInHand(hand);
+        if (!item.hasTag()) {
+            setDefaultTags(item, player);
+        }
+        CompoundTag tag = item.getTag();
+
+        // does nothing if the item is on cooldown
+        if (player.getCooldowns().isOnCooldown(this)) {
+            return InteractionResult.PASS;
+        }
+
+        // if the entity clicked is a player save them to the item
+        if (entity instanceof Player) {
+            tag.putUUID(UUID_TAG, entity.getUUID());
+            tag.putInt(ENTITY_ID, entity.getId());
+            tag.putBoolean(IS_PLAYER_TAG, true);
+            item.setTag(tag);
+
+            player.getCooldowns().addCooldown(this, 20);
+            return InteractionResult.SUCCESS;
+        }else{
+            tag.putUUID(UUID_TAG, entity.getUUID());
+            tag.putInt(ENTITY_ID, entity.getId());
+            tag.putBoolean(IS_PLAYER_TAG, false);
+            item.setTag(tag);
+
+            player.getCooldowns().addCooldown(this, 20);
+            return InteractionResult.SUCCESS;
+        }
+        //return InteractionResult.FAIL;
     }
 
     //this is probably how to do the "Size Remote (name)" thing i wanted

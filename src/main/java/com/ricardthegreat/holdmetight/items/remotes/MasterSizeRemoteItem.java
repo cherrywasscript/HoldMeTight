@@ -22,54 +22,8 @@ public class MasterSizeRemoteItem extends AbstractSizeRemoteItem {
         super(properties);
     }
 
-    //suppressing warnings because tag should never be null as if item as no tags i create them before continuing
-    @SuppressWarnings("null")
     @Override
-    public InteractionResultHolder<ItemStack> use(@Nonnull Level level, @Nonnull Player player, @Nonnull InteractionHand hand) {
-        ItemStack item = player.getItemInHand(hand);
-        if (!item.hasTag()) {
-            setDefaultTags(item, player);
-        }
-        CompoundTag tag = item.getTag();
-
-        if (player.isShiftKeyDown()){
-            tag.putUUID(UUID_TAG, player.getUUID());
-            item.setTag(tag);
-            return InteractionResultHolder.success(player.getItemInHand(hand));
-        }
-
-        //open item screen client side only
-        if (level.isClientSide()) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientHooks.openMasterRemoteScreen(player, hand));
-        }
-
-        return super.use(level, player, hand);
+    protected void openScreen(Player player, InteractionHand hand) {
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientHooks.openMasterRemoteScreen(player, hand));
     }
-
-    //suppressing warnings because tag should never be null as if item as no tags i create them before continuing
-    @SuppressWarnings("null")
-    @Override
-    public InteractionResult interactLivingEntity(@Nonnull ItemStack stack, @Nonnull Player player, @Nonnull LivingEntity entity, @Nonnull InteractionHand hand) {
-        ItemStack item = player.getItemInHand(hand);
-        if (!item.hasTag()) {
-            setDefaultTags(item, player);
-        }
-        CompoundTag tag = item.getTag();
-
-        // does nothing if the item is on cooldown
-        if (player.getCooldowns().isOnCooldown(this)) {
-            return InteractionResult.FAIL;
-        }
-
-        // if the entity clicked is a player save them to the item
-        if (entity instanceof Player) {
-            tag.putUUID(UUID_TAG, entity.getUUID());
-            item.setTag(tag);
-
-            player.getCooldowns().addCooldown(this, 20);
-            return InteractionResult.SUCCESS;
-        }
-        return InteractionResult.FAIL;
-    }
-
 }
