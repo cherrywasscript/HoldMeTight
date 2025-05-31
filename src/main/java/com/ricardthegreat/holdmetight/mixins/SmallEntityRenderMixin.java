@@ -25,6 +25,8 @@ import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
+
+//TODO update
 @Mixin(EntityRenderer.class)
 public abstract class SmallEntityRenderMixin<T extends Entity> {
 	
