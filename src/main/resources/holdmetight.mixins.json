@@ -13,6 +13,7 @@
       "WebBlockMixin",
       "VibrationSystemListenerMixin",
       "BottleItemMixin",
+      "PowderSnowBlockMixin",
 
 
       "playerextensions.PlayerMixin",
