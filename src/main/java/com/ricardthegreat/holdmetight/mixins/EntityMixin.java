@@ -1,6 +1,5 @@
 package com.ricardthegreat.holdmetight.mixins;
 
-import org.antlr.v4.parse.ANTLRParser.elementEntry_return;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
@@ -8,16 +7,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.carry.CarryPosition;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
-import com.ricardthegreat.holdmetight.network.CPlayerCarrySimplePacket;
 import com.ricardthegreat.holdmetight.network.CPlayerDismountPlayerPacket;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
