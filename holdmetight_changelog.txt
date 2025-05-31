@@ -27,3 +27,5 @@ version 0.3.3-alpha:
 - fixed a bug where web blocks still slowed down players 1/16 and under
 
 version next:
+- very small folk can walk on powdered snow
+- large folk are not affected by powdered snow's cold
