@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class WebBlockMixin {
 
     @Inject(at = @At("HEAD"), method = "entityInside(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/Entity;)V", cancellable = true)
+    //@Inject(method = "entityInside",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;makeStuckInBlock(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/phys/Vec3;)V"),cancellable = true)
     public void entityInside(BlockState p_58180_, Level p_58181_, BlockPos p_58182_, Entity entity, CallbackInfo info) {
         if (EntitySizeUtils.getSize(entity) >= 2 && EntitySizeUtils.getSize(entity) <= 0.0625f) {
             info.cancel();
