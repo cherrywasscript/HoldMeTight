@@ -14,6 +14,7 @@
       "VibrationSystemListenerMixin",
       "BottleItemMixin",
       "PowderSnowBlockMixin",
+      "BigDripleafBlockMixin",
 
 
       "playerextensions.PlayerMixin",
