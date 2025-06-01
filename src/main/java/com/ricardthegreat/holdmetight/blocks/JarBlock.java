@@ -62,14 +62,11 @@ public class JarBlock extends Block {
     }
 
     public VoxelShape getShape(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos, @Nonnull CollisionContext context) {
-        /* 
         if (state.getOptionalValue(OPEN).get()) {
             return makeShape();
         }else{
             return makeClosedShape();
         }
-        */
-        return Block.box(4, 0, 4, 12, 11, 12);
     }
 
     public VoxelShape getCollisionShape(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos, @Nonnull CollisionContext context) {  
