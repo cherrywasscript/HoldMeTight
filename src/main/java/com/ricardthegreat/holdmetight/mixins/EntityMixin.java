@@ -230,14 +230,9 @@ public abstract class EntityMixin {
         float scaleDif = EntitySizeUtils.getSize(entity)/EntitySizeUtils.getSize(thisEnt);
 
 
-        if (scaleDif < 0.25 || scaleDif > 4) {
+        if (scaleDif <= 0.5 || scaleDif >= 2) {
             info.cancel();
-        }
-
-        if (thisEnt instanceof Player && entity instanceof Player && thisEnt != entity) {
-            //System.out.println(thisEnt.getName() + "/" + entity.getName());
-        }
-            
+        }  
     }
 
     @Inject(at = @At("HEAD"), method = "canCollideWith(Lnet/minecraft/world/entity/Entity;)Z", cancellable = true)
