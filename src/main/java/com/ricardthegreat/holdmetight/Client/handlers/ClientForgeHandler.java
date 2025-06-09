@@ -71,6 +71,12 @@ public class ClientForgeHandler {
             playerCarry.setShouldSyncSimple(true);
         }
 
+        if(Keybindings.INSTANCE.carryWheelKey.consumeClick() && mcPlayer != null){
+            if (mcPlayer.level().isClientSide) {
+                DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientHooks.openCarryPositionWheel(mcPlayer));
+            }
+        }
+
         //key to open size prefs screen
         if(Keybindings.INSTANCE.sizePrefsKey.consumeClick() && mcPlayer != null) {     
             if (mcPlayer.level().isClientSide) {
