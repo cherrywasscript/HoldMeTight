@@ -32,6 +32,8 @@ public class CollarItem extends Item implements Equipable{
     
     @Override
     public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
+        //TODO enable at some point in the future + readd the collar curio slot
+        /* 
         if (HoldMeTight.curiosInstalled) {
             try {
                 Object c = Class.forName("ricardthegreat.holdmetight.items.curiosCompat.CollarItemCurio").getDeclaredConstructor(Integer.class).newInstance(1);
@@ -42,6 +44,8 @@ public class CollarItem extends Item implements Equipable{
 
             }
         }
+        */
+
         return super.initCapabilities(stack, nbt);
     }
 
