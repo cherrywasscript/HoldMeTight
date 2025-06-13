@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
+import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,7 +27,10 @@ public class EntityClimbingMixin {
         Entity ent = (Entity) (Object) this;
         if (ent instanceof Player && holdingClimbingItem((Player) ent)) {
             Player player = (Player) ent;
-            shuntIfInsideHitbox(player);
+            double sizeDif = PlayerSizeUtils.getSize(player) / EntitySizeUtils.getSize(ent);
+            if (sizeDif <= 0.5) {
+                shuntIfInsideHitbox(player);
+            }
         }
     }
     
@@ -41,7 +45,8 @@ public class EntityClimbingMixin {
         
         if (thisEnt instanceof Player) {
             Player player = (Player) thisEnt;
-            if (holdingClimbingItem(player)) {
+            double sizeDif = PlayerSizeUtils.getSize(player) / EntitySizeUtils.getSize(entity);
+            if (holdingClimbingItem(player) && sizeDif <= 0.5) {
                 info.setReturnValue(true);
             }
         }
