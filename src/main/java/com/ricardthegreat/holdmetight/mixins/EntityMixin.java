@@ -235,18 +235,6 @@ public abstract class EntityMixin {
         }  
     }
 
-    @Inject(at = @At("HEAD"), method = "canCollideWith(Lnet/minecraft/world/entity/Entity;)Z", cancellable = true)
-    public void canCollideWith(Entity entity, CallbackInfoReturnable<Boolean> info) {
-        Entity thisEnt = (Entity) (Object) this;
-        float scaleDif = EntitySizeUtils.getSize(entity)/EntitySizeUtils.getSize(thisEnt);
-
-        if (scaleDif < 0.25 || scaleDif > 4) {
-            info.cancel();
-        }
-    }
-
-
-
     @Overwrite
     public boolean fireImmune() {
         if (EntitySizeUtils.getSize(((Entity) (Object) this)) >= 4) {
