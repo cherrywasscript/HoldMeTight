@@ -26,6 +26,7 @@ version 0.3.3-alpha:
 - fixed some interactions with using size remotes on non player entities
 - fixed a bug where web blocks still slowed down players 1/16 and under
 
-version next:
+version 0.4.0-alpha:
 - very small folk can walk on powdered snow
 - large folk are not affected by powdered snow's cold
+- small folk can now climb and stand on larger folk while holding a slimeball
