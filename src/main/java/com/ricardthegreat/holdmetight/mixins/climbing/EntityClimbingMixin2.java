@@ -34,7 +34,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-//TODO cant sprint while standing on entity (this file is fucking awful to read really need to fix at some point)
+//TODO remove?
 @Mixin(LivingEntity.class)
 public abstract class EntityClimbingMixin2 extends Entity{
     
