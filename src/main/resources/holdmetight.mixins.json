@@ -19,8 +19,10 @@
 
       "playerextensions.PlayerMixin",
       "playerextensions.PlayerCapabilityMixin",
-      "playerextensions.EntityClimbingMixin",
-      "playerextensions.EntityCollideMixin",
+
+
+      "climbing.BlockClimbingMixin",
+      "climbing.EntityClimbingMixin",
 
 
       "collisions.BasePressurePlateBlockMixin",
