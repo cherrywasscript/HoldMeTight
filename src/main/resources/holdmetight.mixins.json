@@ -17,7 +17,7 @@
       "BigDripleafBlockMixin",
 
 
-      "playerextensions.PlayerMixin",
+      "playerextensions.PlayerRenderMixin",
       "playerextensions.PlayerCapabilityMixin",
 
 
