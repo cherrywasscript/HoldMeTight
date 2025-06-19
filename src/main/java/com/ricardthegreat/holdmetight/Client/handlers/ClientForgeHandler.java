@@ -8,6 +8,7 @@ import com.ricardthegreat.holdmetight.Commands.TestCommand;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
+import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -88,24 +89,6 @@ public class ClientForgeHandler {
         if(Keybindings.INSTANCE.carryScreenKey.consumeClick() && mcPlayer != null) { 
             if (mcPlayer.level().isClientSide) {
                 DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientHooks.openCarryPositionScreen(mcPlayer));
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public static void interactLivingEntityEvent(PlayerInteractEvent.EntityInteract event){
-        Item item = event.getEntity().getItemInHand(event.getHand()).getItem();
-
-        if (item instanceof AbstractSizeRemoteItem) {
-            AbstractSizeRemoteItem sizeRemote = (AbstractSizeRemoteItem) item;
-
-            Entity target = event.getTarget();
-            if (target instanceof LivingEntity && !event.getEntity().getCooldowns().isOnCooldown(item)) {
-                sizeRemote.interactLivingEntity(event.getEntity().getItemInHand(event.getHand()), event.getEntity(), (LivingEntity) target, event.getHand());
-                if (event.isCancelable()) {
-                    event.setCancellationResult(InteractionResult.SUCCESS);
-                    event.setCanceled(true);
-                }
             }
         }
     }

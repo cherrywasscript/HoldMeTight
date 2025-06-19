@@ -9,18 +9,25 @@ import com.ricardthegreat.holdmetight.init.EntityInit;
 import com.ricardthegreat.holdmetight.init.ItemInit;
 import com.ricardthegreat.holdmetight.init.PotionsInit;
 import com.ricardthegreat.holdmetight.init.RecipeInit;
+import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
 import com.ricardthegreat.holdmetight.network.CPlayerSizeMixinSyncPacket;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.size.PlayerSize;
 import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
+import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -125,5 +132,35 @@ public class HoldMeTight {
         
     }
 
-    
+    @SubscribeEvent
+    public static void interactLivingEntityEvent(PlayerInteractEvent.EntityInteract event){
+        System.out.println("test");
+        Item item = event.getEntity().getItemInHand(event.getHand()).getItem();
+
+        Entity target = event.getTarget();
+
+        if (item instanceof AbstractSizeRemoteItem) {
+            AbstractSizeRemoteItem sizeRemote = (AbstractSizeRemoteItem) item;
+            
+            if (target instanceof LivingEntity && !event.getEntity().getCooldowns().isOnCooldown(item)) {
+                sizeRemote.interactLivingEntity(event.getEntity().getItemInHand(event.getHand()), event.getEntity(), (LivingEntity) target, event.getHand());
+                if (event.isCancelable()) {
+                    event.setCancellationResult(InteractionResult.SUCCESS);
+                    event.setCanceled(true);
+                }
+            }
+        }
+
+        if (EntitySizeUtils.getSize(event.getEntity()) >= EntitySizeUtils.getSize(target)*4) {
+            
+
+            if (target instanceof LivingEntity) {
+                target.interact(event.getEntity(), event.getHand());
+                if (event.isCancelable()) {
+                    event.setCancellationResult(InteractionResult.SUCCESS);
+                    event.setCanceled(true);
+                }
+            }
+        }
+    }
 }
