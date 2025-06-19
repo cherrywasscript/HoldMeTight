@@ -92,4 +92,36 @@ public class ClientForgeHandler {
             }
         }
     }
+
+    @SubscribeEvent
+    public static void interactLivingEntityEvent(PlayerInteractEvent.EntityInteract event){
+        System.out.println("test");
+        Item item = event.getEntity().getItemInHand(event.getHand()).getItem();
+
+        Entity target = event.getTarget();
+
+        if (item instanceof AbstractSizeRemoteItem) {
+            AbstractSizeRemoteItem sizeRemote = (AbstractSizeRemoteItem) item;
+            
+            if (target instanceof LivingEntity && !event.getEntity().getCooldowns().isOnCooldown(item)) {
+                sizeRemote.interactLivingEntity(event.getEntity().getItemInHand(event.getHand()), event.getEntity(), (LivingEntity) target, event.getHand());
+                if (event.isCancelable()) {
+                    event.setCancellationResult(InteractionResult.SUCCESS);
+                    event.setCanceled(true);
+                }
+            }
+        }
+
+        if (EntitySizeUtils.getSize(event.getEntity()) >= EntitySizeUtils.getSize(target)*4) {
+            
+
+            if (target instanceof LivingEntity) {
+                target.interact(event.getEntity(), event.getHand());
+                if (event.isCancelable()) {
+                    event.setCancellationResult(InteractionResult.SUCCESS);
+                    event.setCanceled(true);
+                }
+            }
+        }
+    }
 }
