@@ -29,6 +29,7 @@ public class ClientModHandler {
     public static void registerKeys(RegisterKeyMappingsEvent event) {
         event.register(Keybindings.INSTANCE.shoulderCarryKey);
         event.register(Keybindings.INSTANCE.customCarryKey);
+        event.register(Keybindings.INSTANCE.carryWheelKey);
         event.register(Keybindings.INSTANCE.sizePrefsKey);
         event.register(Keybindings.INSTANCE.carryScreenKey);
     } 

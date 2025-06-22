@@ -26,7 +26,7 @@ public final class Keybindings {
          CATEGORY);
 
     public final KeyMapping carryWheelKey = new KeyMapping(
-        "key." + HoldMeTight.MODID + ".custom_carry_key",
+        "key." + HoldMeTight.MODID + ".carry_wheel_key",
          KeyConflictContext.IN_GAME, 
          InputConstants.getKey(InputConstants.KEY_V, -1),
          CATEGORY);

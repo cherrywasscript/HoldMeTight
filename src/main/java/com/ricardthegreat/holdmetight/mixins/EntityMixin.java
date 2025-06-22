@@ -17,6 +17,7 @@ import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.animal.horse.Horse;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
@@ -32,14 +33,15 @@ public abstract class EntityMixin {
 
     //allows for picking up entities when clicking on them
     //currently only works on players
-    @Inject(at = @At("HEAD"), method = "interact(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;")
+    @Inject(at = @At("HEAD"), method = "interact(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;", cancellable = true)
     public void unnamedsizemod$interact(Player vehicle, InteractionHand hand, CallbackInfoReturnable<InteractionResult> info) {
         Entity rider = (Entity) (Object) this;
         PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerCarryCapability(vehicle);
         
         if (vehicleCarry.getIsCarrying()) {
-            
+
         }else if(rider instanceof Player && vehicle.getMainHandItem() == ItemStack.EMPTY && EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)/4){
+
             PlayerCarry riderCarry = PlayerCarryProvider.getPlayerCarryCapability((Player) rider);
 
             rider.startRiding(vehicle);
@@ -64,6 +66,7 @@ public abstract class EntityMixin {
             */
             
         }else if (!(rider instanceof Player) && vehicle.getMainHandItem() == ItemStack.EMPTY && EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)/4) {
+
             rider.startRiding(vehicle);
 
             vehicleCarry.setCarrying(true);

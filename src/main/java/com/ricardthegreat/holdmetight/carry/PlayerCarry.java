@@ -62,6 +62,13 @@ public class PlayerCarry {
     
     //checks every tick if the player should sync
     public void tick(Player player){
+        //System.out.println(player.getPassengers().size() + "/" + player.level());
+        if (player.getPassengers().size() == 0 && isCarrying) {
+            System.out.println("out of sync");
+            isCarrying = false;
+            setShouldSyncSimple(true);
+        }
+        
         if(shouldSync){
             if (shouldSyncSimple) {
                 shouldSyncSimple = false;
@@ -103,6 +110,7 @@ public class PlayerCarry {
         }
     }
 
+    //TODO add custom carrying syncing
     private void syncCustom(Player player){
         if(player.level().isClientSide){
             //DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> 
@@ -179,8 +187,13 @@ public class PlayerCarry {
         }
     }
 
+    //TODO remove or change
     public CarryPosition getCarryPosition(){
         return allCarryPositions.get(currentCarryPos[0]).get(currentCarryPos[1]);
+    }
+
+    public ArrayList<ArrayList<CarryPosition>> getAllCarryPositions(){
+        return allCarryPositions;
     }
 
     public void addCustomCarryPos(CarryPosition custom){
@@ -246,6 +259,8 @@ public class PlayerCarry {
         this.allCarryPositions = source.allCarryPositions;
     }
 
+
+    //TODO update to iterate through all custom positions
     public void saveNBTData(CompoundTag tag){
         tag.putBoolean(PlayerCarryConstants.CARRIED_NBT_TAG, isCarried);
         tag.putBoolean(PlayerCarryConstants.CARRYING_NBT_TAG, isCarrying);

@@ -143,6 +143,7 @@ public class PlayerSize {
     private void setPeripheralScales(Player player){
         clampMaxHitbox(player);
         fixStepHeight(player);
+        setFallDamage(player);
         if (Config.miningSpeedScaleLink) {
             setMiningSpeed(player);
         }
@@ -165,6 +166,18 @@ public class PlayerSize {
         }else if (heightData.getTargetScale() < 1.0f || widthData.getTargetScale() < 1.0f){
             heightData.setScale(1.0f);
             widthData.setScale(1.0f);
+        }
+    }
+
+    private void setFallDamage(Player player){
+        PehkuiEntityExtensions pEnt = (PehkuiEntityExtensions) player;
+
+        ScaleData fallData = pEnt.pehkui_getScaleData(ScaleTypes.FALLING);
+
+        if (currentScale < 1) {
+            fallData.setScale(currentScale);
+        }else if (fallData.getScale() < 1) {
+            fallData.setScale(1f);
         }
     }
 
