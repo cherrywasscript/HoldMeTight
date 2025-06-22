@@ -1,2 +1,3 @@
 - after placing down a non player mob you cant pick one up again for a few seconds
 - you cannot pick up ridable mobs like horses
+- other player hand doesnt extend when holding (essential only?)
