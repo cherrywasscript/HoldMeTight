@@ -1,17 +1,30 @@
 package com.ricardthegreat.holdmetight.Client.screens;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.annotation.Nonnull;
 
+import com.ricardthegreat.holdmetight.HoldMeTight;
+import com.ricardthegreat.holdmetight.carry.CarryPosition;
+import com.ricardthegreat.holdmetight.carry.PlayerCarry;
+import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 public class CarryPositionWheel extends Screen{
     private static final Component TITLE = Component.literal("Carry selection screen");
+
+    private static final Component CARRY_POS_SELECTED = Component.translatable("message." + HoldMeTight.MODID + ".carry_key_pressed");
 
 
     private final int imageWidth;
@@ -27,6 +40,21 @@ public class CarryPositionWheel extends Screen{
     private int centerHorizonalPos;
     private int centerVerticalPos;
 
+
+    private int internalRadius = 50;
+    private int externalRadius = 100;
+    private int verticalOffset = 30;
+
+
+    private ArrayList<CarryPosition> defaultPositions;
+    private ArrayList<CarryPosition> customPositions;
+    private ArrayList<CarryPosition> currentListedPositions;
+    private int numSlices;
+    private int page = 0;
+    
+    private boolean rightArrowVisible;
+    private boolean leftArrowVisible;
+
     public CarryPositionWheel(Player player) {
         super(TITLE);
         
@@ -34,6 +62,15 @@ public class CarryPositionWheel extends Screen{
         this.imageHeight = 256;
 
         this.player = player;
+        defaultPositions = PlayerCarryProvider.getPlayerCarryCapability(player).getAllCarryPositions().get(0);
+        customPositions = PlayerCarryProvider.getPlayerCarryCapability(player).getAllCarryPositions().get(1);
+        currentListedPositions = defaultPositions;
+        numSlices = currentListedPositions.size();
+
+        leftArrowVisible = false;
+        if (customPositions.size() > 0) {
+            rightArrowVisible = true;
+        }
     }
 
     @Override
@@ -57,27 +94,64 @@ public class CarryPositionWheel extends Screen{
     @Override
     public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         drawRadialSelector(mouseX, mouseY, graphics);
+        drawArrows(mouseX, mouseY, graphics);
+    }
+
+    private void drawArrows(int mouseX, int mouseY, GuiGraphics graphics){
+        if (rightArrowVisible) {
+            if (hoveringRightArrow(mouseX, mouseY)) {
+                drawArrow(7, verticalOffset-2, 17, 9, 6, 0xFFFFFFFF, false, graphics);
+                drawArrow(8, verticalOffset-1, 17, 7, 5, 0xFF000000, false, graphics);
+            }else{
+                drawArrow(8, verticalOffset-1, 15, 7, 4, 0xFFFFFFFF, false, graphics);
+                drawArrow(9, verticalOffset, 15, 5, 3, 0xFF000000, false, graphics);
+            }
+        }
+        
+        if (leftArrowVisible) {
+            if (hoveringLeftArrow(mouseX, mouseY)) {
+                drawArrow(-7, verticalOffset-2, 17, 9, 6, 0xFFFFFFFF, true, graphics);
+                drawArrow(-8, verticalOffset-1, 17, 7, 5, 0xFF000000, true, graphics);
+            }else{
+                drawArrow(-8, verticalOffset-1, 15, 7, 4, 0xFFFFFFFF, true, graphics);
+                drawArrow(-9, verticalOffset, 15, 5, 3, 0xFF000000, true, graphics);
+            }
+        }
+    }
+
+    private void drawArrow(int x, int y, int length, int height, int pointHeight, int colour, boolean backwards, GuiGraphics graphics){
+        int direction = 1;
+        if (backwards) {
+            length = -length;
+            direction = -1;
+        }
+
+        graphics.fill(centerHorizonalPos+x, centerVerticalPos+y, centerHorizonalPos+x+length, centerVerticalPos+height+y, colour);
+        int tip = height/2;
+        for(int i = -pointHeight; i <= tip; i++){
+            graphics.fill(centerHorizonalPos+x+length, centerVerticalPos+y+i, centerHorizonalPos+x+length+1, centerVerticalPos+y+height-i, colour);
+            length += direction;
+        }
     }
 
     private void drawRadialSelector(int mouseX, int mouseY, GuiGraphics graphics){
-        int internalRadius = 50;
-        int externalRadius = 100;
-        int verticalOffset = 30;
+        int relativeMouseY = mouseY-centerVerticalPos-verticalOffset;
+        int relativeMouseX = mouseX-centerHorizonalPos;
 
-        if (inCirclePerimeter(mouseY-centerVerticalPos-verticalOffset, mouseX-centerHorizonalPos, externalRadius) && !inCirclePerimeter(mouseY-centerVerticalPos-verticalOffset, mouseX-centerHorizonalPos, internalRadius)) {
-            System.out.println((mouseY-centerVerticalPos-verticalOffset) + "/" + (mouseX-centerHorizonalPos));
-            fillCircleSection(internalRadius, externalRadius, verticalOffset, graphics, 0x55FF0000);
+
+        if (findSlice(relativeMouseY, relativeMouseX) >= 0) {
+            fillCircleSection(graphics, 0xFFFF0000, findSlice(relativeMouseY, relativeMouseX));
         }else{
-            System.out.println((mouseY-centerVerticalPos-verticalOffset) + "/" + (mouseX-centerHorizonalPos));
-            fillCircleSection(internalRadius, externalRadius, verticalOffset, graphics, 0xFFFF0000);
+            fillCircleSection(graphics, 0xFFFF0000);
         }
         
         
-        renderHemisphere(internalRadius, verticalOffset, graphics, 0xFFFFFFFF);
-        renderHemisphere(externalRadius, verticalOffset, graphics, 0xFFFFFFFF);
+        renderHemisphere(internalRadius, graphics, 0xFFFFFFFF);
+        renderHemisphere(externalRadius, graphics, 0xFFFFFFFF);
 
         //generate the seperation lines
-        genLineSeperations(internalRadius, externalRadius, verticalOffset, graphics);
+        genLineSeperations(graphics);
+        findTextPositions(graphics);
 
         graphics.fill(centerHorizonalPos+internalRadius, centerVerticalPos+verticalOffset, centerHorizonalPos+externalRadius, centerVerticalPos+1+verticalOffset, 0xFFFFFFFF);
         graphics.fill(centerHorizonalPos-internalRadius, centerVerticalPos+verticalOffset, centerHorizonalPos-externalRadius, centerVerticalPos+1+verticalOffset, 0xFFFFFFFF);
@@ -85,19 +159,30 @@ public class CarryPositionWheel extends Screen{
         //midPointLineGeneration(centerHorizonalPos-50, centerVerticalPos, centerHorizonalPos-100, centerVerticalPos, graphics); 
     }
 
-    private void genLineSeperations(int internalRadius, int externalRadius, int verticalOffset, GuiGraphics graphics){
-        int number = 3;
-        for(int i = 1; i < number; i++){
-            double angle = 180/number;
+    private void findTextPositions(GuiGraphics graphics){
+        for(int i = 0; i < numSlices; i++){
+            double angle = 180/numSlices;
+            angle = (angle/2) + (angle*i);
+            int[] firstCoords = genAngles(externalRadius, angle);
+            ArrayList<int[]> coords = midPointLineGeneration(0, 0, -firstCoords[1], firstCoords[0]);
+            
+            int half = coords.size()/2;
+            
+            graphics.drawCenteredString(font, currentListedPositions.get(i).posName, centerHorizonalPos+coords.get(half)[0], centerVerticalPos+coords.get(half)[1]+verticalOffset, 0xdddddd);
+        }
+    }
+
+    private void genLineSeperations(GuiGraphics graphics){
+        for(int i = 1; i < numSlices; i++){
+            double angle = 180/numSlices;
             angle *= i;
             int[] firstCoords = genAngles(externalRadius, angle);
-            midPointLineGeneration(0, 0, -firstCoords[1], firstCoords[0], internalRadius, externalRadius, verticalOffset, graphics);
+            ArrayList<int[]> coords = midPointLineGeneration(0, 0, -firstCoords[1], firstCoords[0]);
+
+            for(int j = 0; j < coords.size(); j++){
+                graphics.fill(centerHorizonalPos+coords.get(j)[0], centerVerticalPos+coords.get(j)[1]+verticalOffset, centerHorizonalPos+1+coords.get(j)[0], centerVerticalPos+1+coords.get(j)[1]+verticalOffset, 0xFFFFFFFF);
+            }
         }
-
-        
-
-        //midPointLineGeneration(0, 0, firstCoords[1], -firstCoords[0], verticalOffset, graphics);
-        //midPointLineGeneration(0, 0, -externalRadius, externalRadius, verticalOffset, graphics);
     }
 
     private int[] genAngles(int radius, double angle){
@@ -109,7 +194,7 @@ public class CarryPositionWheel extends Screen{
         return new int[]{(int)x, (int)y};
     }
 
-    private void midPointLineGeneration(int y1, int x1, int y2, int x2, int internalRadius, int externalRadius, int verticalOffset, GuiGraphics graphics){
+    private ArrayList<int[]> midPointLineGeneration(int y1, int x1, int y2, int x2){
         boolean negX = false;
         boolean negY = false;
         boolean swapped = false;
@@ -150,7 +235,9 @@ public class CarryPositionWheel extends Screen{
         int d = dy - (dx/2);
         int x = x1;
         int y = y1;
-
+        
+        ArrayList<int[]> coords = new ArrayList<int[]>();
+        
         // iterate through value of X
         while (x < x2) {
             x++;
@@ -184,45 +271,93 @@ public class CarryPositionWheel extends Screen{
             }
 
             if (inCirclePerimeter(tempY, tempX, externalRadius) && !inCirclePerimeter(tempY, tempX, internalRadius)) {
-                graphics.fill(centerHorizonalPos+tempX, centerVerticalPos+tempY+verticalOffset, centerHorizonalPos+1+tempX, centerVerticalPos+1+tempY+verticalOffset, 0xFFFFFFFF);
+                coords.add(new int[]{tempX, tempY});
             }
-            //System.out.print(x +"," + y + "\n");
         }
+
+        return coords;
     }
 
-    private void renderHemisphere(int radius, int verticalOffset, GuiGraphics graphics, int colour){
+    private void renderHemisphere(int radius, GuiGraphics graphics, int colour){
         int x = 0;
         int y = radius;
 
-        fillTopSemicirclePixels(y, x, verticalOffset, graphics, colour);
-        fillTopSemicirclePixels(x, y, verticalOffset, graphics, colour);
+        fillTopSemicirclePixels(y, x, graphics, colour);
+        fillTopSemicirclePixels(x, y, graphics, colour);
         while (y > x) {
             if (!inCirclePerimeter(y-0.5, x+1, radius)) {
                 y--;
             }
             x++;
             //System.out.println("y:" + y +"/x:" + x);
-            fillTopSemicirclePixels(y, x, verticalOffset, graphics, colour);
-            fillTopSemicirclePixels(x, y, verticalOffset, graphics, colour);
+            fillTopSemicirclePixels(y, x, graphics, colour);
+            fillTopSemicirclePixels(x, y, graphics, colour);
         }
     }
 
-    private void fillCircleSection(int radiusInternal, int radiusExternal, int verticalOffset, GuiGraphics graphics, int colour){
-        for(int x = -radiusExternal; x < radiusExternal; x++){
+    private void fillCircleSection(GuiGraphics graphics, int colour){
+        for(int x = -externalRadius; x < externalRadius; x++){
             int y = 1;
             int min = 0;
-            while (inCirclePerimeter(y, x, radiusInternal)) {
+            while (inCirclePerimeter(y, x, internalRadius)) {
                 min++;
                 y++;
             }
             int max = min;
-            while (inCirclePerimeter(y, x, radiusExternal)) {
+            while (inCirclePerimeter(y, x, externalRadius)) {
                 max++;
                 y++;
             }
             
             //System.out.println(centerHorizonalPos+radius);
-            graphics.fill(centerHorizonalPos+x, centerVerticalPos-min+verticalOffset, centerHorizonalPos+x+1, centerVerticalPos-max+verticalOffset, colour);
+            graphics.fill(centerHorizonalPos+x, centerVerticalPos-min+verticalOffset, centerHorizonalPos+x+1, centerVerticalPos-max+verticalOffset, 0x55FF0000);
+        }
+    }
+
+    private void fillCircleSection(GuiGraphics graphics, int colour, int slice){
+        for(int x = -externalRadius; x < externalRadius; x++){
+            int y = 1;
+            int min = 0;
+            while (inCirclePerimeter(y, x, internalRadius)) {
+                min++;
+                y++;
+            }
+
+            int max = min;
+
+            int sliceMin = min;
+            int sliceMax = max;
+
+            while (inCirclePerimeter(y, x, externalRadius)) {
+                
+                if (inSlice(-y, x, slice)) {
+                    if (sliceMax < max) {
+                        sliceMax = max;
+                    }
+                    if (sliceMin <= min) {
+                        min++;
+                        max++;
+                    }
+
+                    sliceMax++;
+                }else{
+                    if (max < sliceMax) {
+                        max = sliceMax;
+                    }
+
+                    if (min <= sliceMin) {
+                        sliceMin++;
+                        sliceMax++;
+                    }
+
+                    max++;   
+                } 
+
+                y++;
+            }
+            
+            graphics.fill(centerHorizonalPos+x, centerVerticalPos-min+verticalOffset, centerHorizonalPos+x+1, centerVerticalPos-max+verticalOffset, 0x55FF0000);
+            graphics.fill(centerHorizonalPos+x, centerVerticalPos-sliceMin+verticalOffset, centerHorizonalPos+x+1, centerVerticalPos-sliceMax+verticalOffset, 0xFFFF0000);
         }
     }
 
@@ -243,7 +378,7 @@ public class CarryPositionWheel extends Screen{
         }
     }
 
-    private void fillTopSemicirclePixels(int y, int x, int verticalOffset, GuiGraphics graphics, int colour){
+    private void fillTopSemicirclePixels(int y, int x, GuiGraphics graphics, int colour){
         graphics.fill(centerHorizonalPos+x, centerVerticalPos-y+verticalOffset, centerHorizonalPos+x+1, centerVerticalPos-y+1+verticalOffset, colour);
         graphics.fill(centerHorizonalPos-x, centerVerticalPos-y+verticalOffset, centerHorizonalPos-x+1, centerVerticalPos-y+1+verticalOffset, colour);
     }
@@ -261,5 +396,134 @@ public class CarryPositionWheel extends Screen{
             return false;
         }
         return true;
+    }
+
+    private int findSlice(double y, double x){
+        int slice = -1;
+        if (inCirclePerimeter(y, x, externalRadius) && !inCirclePerimeter(y, x, internalRadius)) {
+            for(int i = 0; i < numSlices; i++){
+                if (inSlice(y, x, i)) {
+                    slice = i;
+                }
+            }
+            
+        }
+        return slice;
+    }
+
+    private boolean inSlice(double y, double x, int slice){
+        double angle = 180/numSlices;
+        angle = Math.toRadians(angle);
+
+        double A = Math.atan2(y-0, x-0);
+        double startingAngle = 0 - angle*slice;
+        double endingAngle = -angle - angle*slice;
+
+        if (A < startingAngle && A > endingAngle) {
+            return true;
+        }
+        return false;
+    }
+
+    private void updateListedPositions(){
+        if (page == 0) {
+            currentListedPositions = defaultPositions;
+        }else{
+            ArrayList<CarryPosition> positions = new ArrayList<>();
+            for(int i = 0; i<5 && i<customPositions.size(); i++){
+                int selectionOffset = i + (page-1)*5;
+                positions.add(customPositions.get(selectionOffset));
+            }
+            currentListedPositions = positions;
+        }
+        updateNumSlices();
+        updateArrows();
+    }
+
+    private void updateNumSlices(){
+        numSlices = currentListedPositions.size();
+    }
+
+    private void updateArrows(){
+        if (page == 0) {
+            leftArrowVisible = false;
+            rightArrowVisible = true;
+        }else{
+            leftArrowVisible = true;
+            if (customPositions.size() > page*5) {
+                rightArrowVisible = true;
+            }else{
+                rightArrowVisible = false;
+            }
+        }
+    }
+
+    private boolean hoveringLeftArrow(double x, double y){
+        int y1 = centerVerticalPos + verticalOffset - 2;
+        int y2 = centerVerticalPos + verticalOffset - 2 + 9;
+
+        int x1 = centerHorizonalPos-7;
+        int x2 = centerHorizonalPos-7-22;
+
+        if (y > y1 && y < y2 && x < x1 && x > x2) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean hoveringRightArrow(double x, double y){
+        int y1 = centerVerticalPos + verticalOffset - 2;
+        int y2 = centerVerticalPos + verticalOffset - 2 + 9;
+
+        int x1 = centerHorizonalPos+7;
+        int x2 = centerHorizonalPos+7+22;
+
+        if (y > y1 && y < y2 && x > x1 && x < x2) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isPauseScreen() {
+        return false;
+    }
+
+    @Override
+    public boolean mouseClicked(double x, double y, int p_94697_) {
+        int posSelection = findSlice(y-centerVerticalPos-verticalOffset, x-centerHorizonalPos);
+        if(posSelection >= 0){
+            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+
+            CarryPosition selectedPos = currentListedPositions.get(posSelection);
+
+            PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
+
+            if (page == 0) {
+                playerCarry.setCarryPosition(false, posSelection);
+            }else{
+                playerCarry.setCarryPosition(true, posSelection);
+            }
+            
+            player.displayClientMessage(Component.literal(CARRY_POS_SELECTED.getString() + selectedPos.posName), true);
+
+            playerCarry.setShouldSyncSimple(true);
+        }
+
+        if (rightArrowVisible && hoveringRightArrow(x, y)) {
+            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+            
+            page++;
+            updateListedPositions();
+        }
+
+        if (leftArrowVisible && hoveringLeftArrow(x, y)) {
+            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+
+            page--;
+            updateListedPositions();
+        }
+
+        return super.mouseClicked(x, y, p_94697_);
     }
 }
