@@ -32,3 +32,6 @@ version 0.4.0-alpha:
 - small folk can now climb and stand on larger folk while holding a slimeball
 
 version next:
+- when carrying a player they will not take damage from being within blocks (only works for players not other mobs)
+- fixed bug where to not be restricted by cobweb you had to be both big and small not big or small
+- smaller players take less fall damage to make movement more bareable
