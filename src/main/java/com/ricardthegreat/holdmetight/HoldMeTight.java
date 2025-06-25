@@ -1,6 +1,8 @@
 package com.ricardthegreat.holdmetight;
 
 import com.mojang.logging.LogUtils;
+import com.ricardthegreat.holdmetight.carry.PlayerCarry;
+import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.init.BlockEntityInit;
 import com.ricardthegreat.holdmetight.init.BlockInit;
 import com.ricardthegreat.holdmetight.init.CreativeTabInit;
@@ -111,6 +113,17 @@ public class HoldMeTight {
                 LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
                 if (optional.isPresent()) {
                     PlayerSize orElse = optional.orElse(new PlayerSize());
+
+                    if (player == serverJoiner) {
+                        PacketHandler.sendToAllClients(orElse.getSyncPacket(player));
+                    }else{
+                        PacketHandler.sendToPlayer(orElse.getSyncPacket(player), supplier);
+                    }
+                }
+
+                LazyOptional<PlayerCarry> CarryOptional = player.getCapability(PlayerCarryProvider.PLAYER_CARRY);
+                if (CarryOptional.isPresent()) {
+                    PlayerCarry orElse = CarryOptional.orElse(new PlayerCarry());
 
                     if (player == serverJoiner) {
                         PacketHandler.sendToAllClients(orElse.getSyncPacket(player));
