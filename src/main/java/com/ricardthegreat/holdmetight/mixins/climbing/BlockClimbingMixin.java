@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.core.BlockPos;
@@ -31,6 +32,11 @@ public class BlockClimbingMixin {
         LivingEntity ent = (LivingEntity) (Object) this;
         
         if (original) {
+            if ((LivingEntity) (Object) this instanceof Player) {
+                if(PlayerCarryProvider.getPlayerCarryCapability((Player) (Object) this).getIsCarried()){
+                    return false;
+                }
+            }
             return original;
         }
 
