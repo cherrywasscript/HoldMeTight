@@ -4,7 +4,8 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.Client.ClientHooks;
 import com.ricardthegreat.holdmetight.Client.Keybindings;
-import com.ricardthegreat.holdmetight.Commands.TestCommand;
+import com.ricardthegreat.holdmetight.Commands.CustomCarryCommand;
+import com.ricardthegreat.holdmetight.Commands.TestingCommand;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
@@ -36,7 +37,8 @@ public class ClientForgeHandler {
     public static void RegisterClientCommandsEvent(RegisterClientCommandsEvent event){
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
 
-        TestCommand.register(dispatcher);
+        TestingCommand.register(dispatcher);
+        CustomCarryCommand.register(dispatcher);
         //ChatScaleCommand.register(dispatcher);
     } 
 
