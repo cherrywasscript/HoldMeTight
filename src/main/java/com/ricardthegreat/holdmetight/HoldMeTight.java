@@ -1,6 +1,8 @@
 package com.ricardthegreat.holdmetight;
 
+import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.logging.LogUtils;
+import com.ricardthegreat.holdmetight.Commands.TestingCommand;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.init.BlockEntityInit;
@@ -16,12 +18,15 @@ import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.size.PlayerSize;
 import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
 
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -135,7 +140,17 @@ public class HoldMeTight {
         }
         
         //System.out.println("event " + event.getEntity().getUUID());
-        
+    }
+
+    
+    @SubscribeEvent
+    public void playerChangedDimensionEvent(PlayerChangedDimensionEvent event){
+    }
+
+    @SubscribeEvent
+    public void registerServerCommands(RegisterCommandsEvent event){
+        CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
+        TestingCommand.register(dispatcher);
     }
 
     
