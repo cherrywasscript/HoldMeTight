@@ -1,17 +1,26 @@
 package com.ricardthegreat.holdmetight.events;
 
+import java.util.function.Supplier;
+
 import com.ricardthegreat.holdmetight.HoldMeTight;
+import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.size.PlayerSize;
 import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerRespawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -58,15 +67,47 @@ public class ForgeModEvents {
     @SubscribeEvent
     public static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
         event.register(PlayerSize.class);
+        event.register(PlayerCarry.class);
     }
 
     @SubscribeEvent
     public static void onPlayerRespawn(PlayerRespawnEvent event){
-        event.getEntity().getCapability(PlayerSizeProvider.PLAYER_SIZE).ifPresent(capability -> {
-            if (!event.getEntity().level().isClientSide) {
-                PacketHandler.sendToAllClients(capability.getSyncPacket(event.getEntity()));
+        Player respawnPlayer = event.getEntity();
+        Level level = respawnPlayer.level();
+        MinecraftServer server = level.getServer();
+        
+        if (server != null) {
+            ServerPlayer serverJoiner = server.getPlayerList().getPlayer(respawnPlayer.getUUID());
+            syncPlayerCapabilities(serverJoiner, server);
+        }
+    }
+
+    public static void syncPlayerCapabilities(ServerPlayer serverJoiner, MinecraftServer server){
+            Supplier<ServerPlayer> supplier = () -> serverJoiner;
+
+            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+                LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
+                if (optional.isPresent()) {
+                    PlayerSize orElse = optional.orElse(new PlayerSize());
+
+                    if (player == serverJoiner) {
+                        PacketHandler.sendToAllClients(orElse.getSyncPacket(player));
+                    }else{
+                        PacketHandler.sendToPlayer(orElse.getSyncPacket(player), supplier);
+                    }
+                }
+
+                LazyOptional<PlayerCarry> CarryOptional = player.getCapability(PlayerCarryProvider.PLAYER_CARRY);
+                if (CarryOptional.isPresent()) {
+                    PlayerCarry orElse = CarryOptional.orElse(new PlayerCarry());
+
+                    if (player == serverJoiner) {
+                        PacketHandler.sendToAllClients(orElse.getSyncPacket(player));
+                    }else{
+                        PacketHandler.sendToPlayer(orElse.getSyncPacket(player), supplier);
+                    }
+                }
             }
-        });
     }
 
 }

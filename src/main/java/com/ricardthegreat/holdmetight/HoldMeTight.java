@@ -5,6 +5,7 @@ import com.mojang.logging.LogUtils;
 import com.ricardthegreat.holdmetight.Commands.TestingCommand;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.events.ForgeModEvents;
 import com.ricardthegreat.holdmetight.init.BlockEntityInit;
 import com.ricardthegreat.holdmetight.init.BlockInit;
 import com.ricardthegreat.holdmetight.init.CreativeTabInit;
@@ -101,47 +102,18 @@ public class HoldMeTight {
     }
         */
 
-    //TODO move subscribe events to forge or comment event files
+    //TODO figure out why these work here but not in forge or common events
 
     @SubscribeEvent
     public void playerLoggedInEvent(PlayerLoggedInEvent event){
-
         Player joiner = event.getEntity();
         Level level = joiner.level();
         MinecraftServer server = level.getServer();
         
         if (server != null) {
-
             ServerPlayer serverJoiner = server.getPlayerList().getPlayer(joiner.getUUID());
-
-            Supplier<ServerPlayer> supplier = () -> serverJoiner;
-
-            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-                LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
-                if (optional.isPresent()) {
-                    PlayerSize orElse = optional.orElse(new PlayerSize());
-
-                    if (player == serverJoiner) {
-                        PacketHandler.sendToAllClients(orElse.getSyncPacket(player));
-                    }else{
-                        PacketHandler.sendToPlayer(orElse.getSyncPacket(player), supplier);
-                    }
-                }
-
-                LazyOptional<PlayerCarry> CarryOptional = player.getCapability(PlayerCarryProvider.PLAYER_CARRY);
-                if (CarryOptional.isPresent()) {
-                    PlayerCarry orElse = CarryOptional.orElse(new PlayerCarry());
-
-                    if (player == serverJoiner) {
-                        PacketHandler.sendToAllClients(orElse.getSyncPacket(player));
-                    }else{
-                        PacketHandler.sendToPlayer(orElse.getSyncPacket(player), supplier);
-                    }
-                }
-            }
+            ForgeModEvents.syncPlayerCapabilities(serverJoiner, server);
         }
-        
-        //System.out.println("event " + event.getEntity().getUUID());
     }
 
 
@@ -152,34 +124,8 @@ public class HoldMeTight {
         MinecraftServer server = level.getServer();
         
         if (server != null) {
-
             ServerPlayer serverJoiner = server.getPlayerList().getPlayer(dimChangePlayer.getUUID());
-
-            Supplier<ServerPlayer> supplier = () -> serverJoiner;
-
-            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-                LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
-                if (optional.isPresent()) {
-                    PlayerSize orElse = optional.orElse(new PlayerSize());
-
-                    if (player == serverJoiner) {
-                        PacketHandler.sendToAllClients(orElse.getSyncPacket(player));
-                    }else{
-                        PacketHandler.sendToPlayer(orElse.getSyncPacket(player), supplier);
-                    }
-                }
-
-                LazyOptional<PlayerCarry> CarryOptional = player.getCapability(PlayerCarryProvider.PLAYER_CARRY);
-                if (CarryOptional.isPresent()) {
-                    PlayerCarry orElse = CarryOptional.orElse(new PlayerCarry());
-
-                    if (player == serverJoiner) {
-                        PacketHandler.sendToAllClients(orElse.getSyncPacket(player));
-                    }else{
-                        PacketHandler.sendToPlayer(orElse.getSyncPacket(player), supplier);
-                    }
-                }
-            }
+            ForgeModEvents.syncPlayerCapabilities(serverJoiner, server);
         }
     }
 
