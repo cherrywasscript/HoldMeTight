@@ -61,14 +61,7 @@ public class PlayerCarry {
     private boolean shouldSyncAll = false;
     
     //checks every tick if the player should sync
-    public void tick(Player player){
-        //System.out.println(player.getPassengers().size() + "/" + player.level());
-        if (player.getPassengers().size() == 0 && isCarrying) {
-            System.out.println("out of sync");
-            isCarrying = false;
-            setShouldSyncSimple(true);
-        }
-        
+    public void tick(Player player){    
         if(shouldSync){
             if (shouldSyncSimple) {
                 shouldSyncSimple = false;
@@ -198,6 +191,10 @@ public class PlayerCarry {
 
     public void addCustomCarryPos(CarryPosition custom){
         boolean added = false;
+        customCarryPositions.set(0, custom);
+        
+        //TODO use this when i have more than 1 custom carry
+        /* 
         for(int i = 0; i < customCarryPositions.size(); i++){
             if (customCarryPositions.get(i).posName == custom.posName) {
                 customCarryPositions.set(i, custom);
@@ -207,6 +204,7 @@ public class PlayerCarry {
         if (!added) {
             customCarryPositions.add(custom);
         }
+        */
     }
 
     public void removeCustomCarryPos(String name){
@@ -284,5 +282,9 @@ public class PlayerCarry {
             tag.getDouble(PlayerCarryConstants.VERT_NBT_TAG), tag.getDouble(PlayerCarryConstants.LEFT_RIGHT_NBT_TAG), tag.getBoolean(PlayerCarryConstants.HEAD_LINK_NBT_TAG));
 
         customCarryPositions.set(0, custom);
+    }
+
+    public CPlayerCarrySyncPacket getSyncPacket(Player player){
+        return new CPlayerCarrySyncPacket(isCarried, isCarrying, currentCarryPos, customCarryPositions.get(0), player.getUUID());
     }
 }
