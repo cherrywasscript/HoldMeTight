@@ -142,9 +142,45 @@ public class HoldMeTight {
         //System.out.println("event " + event.getEntity().getUUID());
     }
 
-    
+
     @SubscribeEvent
     public void playerChangedDimensionEvent(PlayerChangedDimensionEvent event){
+        System.out.println(event.getEntity().getName());
+        
+        Player dimChangePlayer = event.getEntity();
+        Level level = dimChangePlayer.level();
+        MinecraftServer server = level.getServer();
+        
+        if (server != null) {
+
+            ServerPlayer serverJoiner = server.getPlayerList().getPlayer(dimChangePlayer.getUUID());
+
+            Supplier<ServerPlayer> supplier = () -> serverJoiner;
+
+            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+                LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
+                if (optional.isPresent()) {
+                    PlayerSize orElse = optional.orElse(new PlayerSize());
+
+                    if (player == serverJoiner) {
+                        PacketHandler.sendToAllClients(orElse.getSyncPacket(player));
+                    }else{
+                        PacketHandler.sendToPlayer(orElse.getSyncPacket(player), supplier);
+                    }
+                }
+
+                LazyOptional<PlayerCarry> CarryOptional = player.getCapability(PlayerCarryProvider.PLAYER_CARRY);
+                if (CarryOptional.isPresent()) {
+                    PlayerCarry orElse = CarryOptional.orElse(new PlayerCarry());
+
+                    if (player == serverJoiner) {
+                        PacketHandler.sendToAllClients(orElse.getSyncPacket(player));
+                    }else{
+                        PacketHandler.sendToPlayer(orElse.getSyncPacket(player), supplier);
+                    }
+                }
+            }
+        }
     }
 
     @SubscribeEvent
