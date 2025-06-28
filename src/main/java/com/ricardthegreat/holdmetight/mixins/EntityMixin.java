@@ -14,6 +14,7 @@ import com.ricardthegreat.holdmetight.network.CPlayerDismountPlayerPacket;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -39,7 +40,9 @@ public abstract class EntityMixin {
         PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerCarryCapability(vehicle);
         
         if (vehicleCarry.getIsCarrying()) {
-
+            if (vehicle.getPassengers().size() == 0) {
+                vehicleCarry.setCarrying(false);
+            }
         }else if(rider instanceof Player && vehicle.getMainHandItem() == ItemStack.EMPTY && EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)/4){
 
             PlayerCarry riderCarry = PlayerCarryProvider.getPlayerCarryCapability((Player) rider);
