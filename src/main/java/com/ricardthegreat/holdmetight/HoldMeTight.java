@@ -101,6 +101,8 @@ public class HoldMeTight {
     }
         */
 
+    //TODO move subscribe events to forge or comment event files
+
     @SubscribeEvent
     public void playerLoggedInEvent(PlayerLoggedInEvent event){
 
@@ -145,8 +147,6 @@ public class HoldMeTight {
 
     @SubscribeEvent
     public void playerChangedDimensionEvent(PlayerChangedDimensionEvent event){
-        System.out.println(event.getEntity().getName());
-        
         Player dimChangePlayer = event.getEntity();
         Level level = dimChangePlayer.level();
         MinecraftServer server = level.getServer();
