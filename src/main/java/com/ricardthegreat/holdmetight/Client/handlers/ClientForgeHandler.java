@@ -5,6 +5,8 @@ import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.Client.ClientHooks;
 import com.ricardthegreat.holdmetight.Client.Keybindings;
 import com.ricardthegreat.holdmetight.Commands.CustomCarryCommand;
+import com.ricardthegreat.holdmetight.Commands.ResetCarriedCommand;
+import com.ricardthegreat.holdmetight.Commands.ResetCarryingCommand;
 import com.ricardthegreat.holdmetight.Commands.TestingCommand;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
@@ -37,8 +39,10 @@ public class ClientForgeHandler {
     public static void RegisterClientCommandsEvent(RegisterClientCommandsEvent event){
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
 
-        TestingCommand.register(dispatcher);
         CustomCarryCommand.register(dispatcher);
+
+        ResetCarriedCommand.register(dispatcher);
+        ResetCarryingCommand.register(dispatcher);
         //ChatScaleCommand.register(dispatcher);
     } 
 
