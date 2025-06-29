@@ -79,6 +79,10 @@ public class ForgeModEvents {
         if (server != null) {
             ServerPlayer serverJoiner = server.getPlayerList().getPlayer(respawnPlayer.getUUID());
             syncPlayerCapabilities(serverJoiner, server);
+        }else{
+            for(Player player : level.players()){
+                System.out.println(player.getName());
+            }
         }
     }
 
