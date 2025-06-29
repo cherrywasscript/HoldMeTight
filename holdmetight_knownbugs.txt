@@ -1,15 +1,9 @@
 - after placing down a non player mob you cant pick one up again for a few seconds
 - you cannot pick up ridable mobs like horses
 
-- other player carry positions not saved through death (need to look at the ondeath event to send the new info probably)
-
-- changing dimensions is buggy
-
-
 
 bugs i cant replicate:
 - carry desync(not showing on one end essential only?)
-- pickup desync (not sure of the cause possibly also because of crouching)
 - sometimes you are kicked off of someone while being carried (crouching near climbable blocks?)
 - various bugs with not being able to pick up people put down (essential only?)
 - other player hand doesnt extend when holding (essential only?)
