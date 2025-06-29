@@ -33,7 +33,7 @@ public abstract class SmallEntityRenderMixin<T extends Entity> {
 	//currently just makes players always render
 	@Inject(at = @At("RETURN"), method = "shouldRender(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/client/renderer/culling/Frustum;DDD)Z")
 	public boolean shouldRender(T entity, Frustum frustum, double x, double y, double z, CallbackInfoReturnable<Dimensions> cir){
-
+		
 		if(FMLEnvironment.dist == Dist.CLIENT && entity instanceof Player){
 			double scale = EntitySizeUtils.getSize(entity);
 			AABB aabb = entity.getBoundingBoxForCulling().inflate(0.5D);
