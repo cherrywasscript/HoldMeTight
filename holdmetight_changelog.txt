@@ -36,7 +36,9 @@ version 0.4.1-alpha:
 - fixed bug where to not be restricted by cobweb you had to be both big and small not big or small
 - smaller players take less fall damage to make movement more bareable
 
-
-version next:
+version 0.4.2-alpha:
 - fixed issue where size was not properly saved when crossing dimensions for carrying purposes
 - fixed issue where when dying a players client would forget the size of all other players for carrying purposes
+
+
+version next:
