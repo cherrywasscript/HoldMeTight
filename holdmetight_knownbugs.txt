@@ -2,6 +2,9 @@
 - you cannot pick up ridable mobs like horses
 
 
+- (debug for carry command sends carry data to server to be synced and also downloads all carry data to sync)
+
+
 bugs i cant replicate:
 - carry desync(not showing on one end essential only?)
 - sometimes you are kicked off of someone while being carried (crouching near climbable blocks?)

@@ -41,4 +41,6 @@ version 0.4.2-alpha:
 - fixed issue where when dying a players client would forget the size of all other players for carrying purposes
 
 
-version next:
+version 0.5.0-alpha:
+(i am kind of just winging it with these version numbers but i think i fiddled with enough stuff to get the swimming to work to warrent an increase to ensure compatability)
+- imperfect but you can now swim inside of cauldrons, i intend to add other blocks you can swim withing 
