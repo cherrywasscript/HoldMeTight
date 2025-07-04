@@ -25,6 +25,12 @@
       "climbing.EntityClimbingMixin",
 
 
+      "swimming.SwimmingMixin",
+      "swimming.CauldronMixin",
+      "swimming.BlockSwimmingMixin",
+      "swimming.LocalPlayerMixin",
+
+
       "collisions.BasePressurePlateBlockMixin",
       "collisions.CrossCollisionBlockMixin",
       "collisions.FenceGateBlockMixin",
