@@ -1,0 +1,10 @@
+{
+	"variants": {
+	  "open=false": {
+		"model": "holdmetight:block/jars/water_jar_full_closed"
+	  },
+	  "open=true": {
+		"model": "holdmetight:block/jars/water_jar_full"
+	  }
+	}
+  }

@@ -1,0 +1,8 @@
+{
+  "parent": "holdmetight:block/jars/template_jar_liquid_full",
+  "textures": {
+    "bottom": "holdmetight:block/tiny_jar",
+    "particle": "holdmetight:block/tiny_jar",
+    "content": "minecraft:block/water_still"
+  }
+}

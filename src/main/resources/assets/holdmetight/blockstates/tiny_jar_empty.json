@@ -1,0 +1,13 @@
+{
+	"variants": {
+	  "open=false": {
+		"model": "holdmetight:block/tiny_jar_closed"
+	  },
+	  "open=true": {
+		"model": "holdmetight:block/tiny_jar"
+	  }
+	}
+  }
+
+
+  
