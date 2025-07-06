@@ -38,7 +38,7 @@ public abstract class MultiPlayerGameModeMixin {
                 System.out.println("block is air");
             }
             
-            if (player.level().getBlockState(blockHit.getBlockPos()).is(BlockInit.TINY_JAR.get())) {
+            if (player.level().getBlockState(blockHit.getBlockPos()).is(BlockInit.TINY_JAR_EMPTY.get())) {
                 return;
             }
 
