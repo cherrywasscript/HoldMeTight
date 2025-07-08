@@ -57,8 +57,9 @@ public class SPlayerSizeMixinSyncPacket {
             LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
 
             if (optional.isPresent()) {
-                PlayerSize orElse = optional.orElse(null);
+                PlayerSize orElse = optional.orElse(new PlayerSize());
                 orElse.updateSyncables(maxScale, minScale, defaultScale, currentScale, targetScale, remainingTicks);
+                PacketHandler.sendToAllClients(orElse.getSyncPacket(player));
             }
         }
     }
