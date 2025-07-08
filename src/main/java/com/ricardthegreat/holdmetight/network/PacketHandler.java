@@ -78,6 +78,11 @@ public class PacketHandler {
         SSizeRaySync::new, 
         SSizeRaySync::handle);
 
+        INSTANCE.registerMessage(id++, SPlayerSizeMixinSyncPacket.class, 
+        SPlayerSizeMixinSyncPacket::encode, 
+        SPlayerSizeMixinSyncPacket::new, 
+        SPlayerSizeMixinSyncPacket::handle);
+
         INSTANCE.registerMessage(id++, CPlayerSizeMixinSyncPacket.class, 
         CPlayerSizeMixinSyncPacket::encode, 
         CPlayerSizeMixinSyncPacket::new, 
