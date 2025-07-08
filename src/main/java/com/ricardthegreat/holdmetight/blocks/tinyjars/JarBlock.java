@@ -13,7 +13,11 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -47,8 +51,13 @@ public class JarBlock extends AbstractJarBlock {
                 Entity passenger = player.getFirstPassenger();
                 passenger.stopRiding();
                 passenger.dismountTo(center.x(), center.y(), center.z());
-            }else if (player.getItemInHand(hand).is(Items.WATER_BUCKET)) {
-               level.setBlockAndUpdate(pos, BlockInit.TINY_JAR_FULL.get().defaultBlockState().setValue(LiquidJarBlock.OPEN, state.getOptionalValue(OPEN).get()));
+            }else if (player.getItemInHand(hand).is(Items.POTION)) {
+                ItemStack item = player.getItemInHand(hand);
+                Potion potion = PotionUtils.getPotion(item);
+
+                if (potion.getName("").equals("water")) {
+                    level.setBlockAndUpdate(pos, BlockInit.TINY_JAR_FULL.get().defaultBlockState().setValue(LiquidJarBlock.OPEN, state.getOptionalValue(OPEN).get()));
+                }  
             }else{
                 level.setBlock(pos, state.cycle(OPEN), UPDATE_ALL);
             }
