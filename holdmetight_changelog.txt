@@ -43,4 +43,4 @@ version 0.4.2-alpha:
 
 version 0.5.0-alpha:
 (i am kind of just winging it with these version numbers but i think i fiddled with enough stuff to get the swimming to work to warrent an increase to ensure compatability)
-- imperfect but you can now swim inside of cauldrons, i intend to add other blocks you can swim withing 
+- imperfect but you can now swim inside of cauldrons, i intend to add other blocks you can swim within if they make sense namely when i get around to making the bottles capable of holding water and potion types
