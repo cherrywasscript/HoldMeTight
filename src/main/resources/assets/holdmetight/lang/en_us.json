@@ -1,7 +1,7 @@
 {
     "item.holdmetight.remotes.iron_size_remote":"Basic Size Remote",
     "item.holdmetight.remotes.gold_size_remote":"Advanced Size Remote",
-    "item.holdmetight.remotes.netherite_size_remote":"Master Remote",
+    "item.holdmetight.remotes.netherite_size_remote":"Master Remote (unfinished)",
 
     "tooltip.holdmetight.abstract_size_remote_target.tooltip":"Current target: ",
     "tooltip.holdmetight.abstract_size_remote_no_target.tooltip":"No target selected",
