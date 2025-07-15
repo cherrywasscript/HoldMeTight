@@ -1,6 +1,7 @@
 - after placing down a non player mob you cant pick one up again for a few seconds
 - you cannot pick up ridable mobs like horses
-
+- crash when size stealing from mobs (possibly other issues with non player size change)
+- desync of size between clients
 
 - (debug for carry command sends carry data to server to be synced and also downloads all carry data to sync)
 
