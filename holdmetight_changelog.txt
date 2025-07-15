@@ -43,5 +43,6 @@ version 0.4.2-alpha:
 
 
 
-version 0.5.0-alpha:
+version 0.4.3-alpha:
 -added a screen (default key "]") to allow you to set your size preferences, currently you can set your maximum height, for those who dont like being too big, your minimum heigh, for those who dont like being too small, as well as your default height which is the height that you will be set to when someone clicks the "reset" button on a size remote targeting you
+- hopefully fixed size desyncing for carrying
