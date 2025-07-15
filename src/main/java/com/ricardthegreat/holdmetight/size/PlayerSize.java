@@ -52,12 +52,22 @@ public class PlayerSize {
     public void tick(Player player){
         PehkuiEntityExtensions pEnt = (PehkuiEntityExtensions) player;
         ScaleData baseData = pEnt.pehkui_getScaleData(ScaleTypes.BASE);
+
+        if (baseData.getScale() != currentScale) {
+            currentScale = baseData.getScale();
+            targetScale = currentScale;
+            
+            setPeripheralScales(player);
+
+            shouldSync = true;
+        }
         
         if (!player.level().isClientSide) {
             if (remainingTicks > 0) {
                 nextScaleStep();
     
-                if (baseData.getScaleTickDelay() != 1) {
+                int tempScaleDelay = baseData.getScaleTickDelay();
+                if (tempScaleDelay != 1) {
                     baseData.setScaleTickDelay(1);
                 }
     
@@ -66,15 +76,8 @@ public class PlayerSize {
                 setPeripheralScales(player);
 
                 shouldSync = true;
-            }else if(remainingTicks == 0){
-                if (baseData.getScale() != currentScale) {
-                    currentScale = baseData.getScale();
-                    targetScale = currentScale;
-                    
-                    setPeripheralScales(player);
 
-                    shouldSync = true;
-                }
+                baseData.setScaleTickDelay(tempScaleDelay);
             }
     
             if (perpetualChange) {
@@ -346,5 +349,9 @@ public class PlayerSize {
         perpetualChange = tag.getBoolean("perpetualChange");
         perpetualChangeValue = tag.getFloat("perpetualChangeValue");
         remainingTicks = tag.getInt("remainingTicks");
+    }
+
+    private void ensureSizeSynced(){
+
     }
 }
