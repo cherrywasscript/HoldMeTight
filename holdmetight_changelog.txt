@@ -48,4 +48,6 @@ version 0.4.3-alpha:
 - hopefully fixed size desyncing for carrying
 - clarified that the netherite size remote is unfinished
 
-version next:
+
+version 0.4.3.1-alpha:
+- fixed issue with custom size potions
