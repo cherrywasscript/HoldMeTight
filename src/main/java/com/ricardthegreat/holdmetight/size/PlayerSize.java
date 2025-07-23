@@ -53,11 +53,14 @@ public class PlayerSize {
         PehkuiEntityExtensions pEnt = (PehkuiEntityExtensions) player;
         ScaleData baseData = pEnt.pehkui_getScaleData(ScaleTypes.BASE);
 
-        if (baseData.getScale() != currentScale) {
+        if (baseData.getScale() != currentScale && remainingTicks == 0) {
             currentScale = baseData.getScale();
             targetScale = currentScale;
             
-            setPeripheralScales(player);
+            if (!player.level().isClientSide){
+                setPeripheralScales(player);
+            }
+            
 
             shouldSync = true;
         }
