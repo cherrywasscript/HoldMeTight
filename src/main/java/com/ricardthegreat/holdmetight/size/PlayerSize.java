@@ -1,5 +1,6 @@
 package com.ricardthegreat.holdmetight.size;
 
+import org.checkerframework.checker.units.qual.min;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -48,16 +49,26 @@ public class PlayerSize {
 
     boolean shouldSync = false;
 
-
     public void tick(Player player){
         PehkuiEntityExtensions pEnt = (PehkuiEntityExtensions) player;
         ScaleData baseData = pEnt.pehkui_getScaleData(ScaleTypes.BASE);
+
+        if (baseData.getScale() != currentScale && remainingTicks == 0) {
+            currentScale = baseData.getScale();
+            targetScale = currentScale;
+            
+            if (!player.level().isClientSide){
+                setPeripheralScales(player);
+                shouldSync = true;
+            }
+        }
         
         if (!player.level().isClientSide) {
             if (remainingTicks > 0) {
                 nextScaleStep();
     
-                if (baseData.getScaleTickDelay() != 1) {
+                int tempScaleDelay = baseData.getScaleTickDelay();
+                if (tempScaleDelay != 1) {
                     baseData.setScaleTickDelay(1);
                 }
     
@@ -66,15 +77,8 @@ public class PlayerSize {
                 setPeripheralScales(player);
 
                 shouldSync = true;
-            }else if(remainingTicks == 0){
-                 if (baseData.getScale() != currentScale) {
-                    currentScale = baseData.getScale();
-                    targetScale = currentScale;
-                    
-                    setPeripheralScales(player);
 
-                    shouldSync = true;
-                }
+                baseData.setScaleTickDelay(tempScaleDelay);
             }
     
             if (perpetualChange) {
@@ -94,11 +98,11 @@ public class PlayerSize {
     }
     
     private void sync(Player player){
-        
+        shouldSync = false;
         if (player.level().isClientSide) {
-            //DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> 
-            //    PacketHandler.sendToServer(new SPlayerSizeMixinSyncPacket(maxScale, minScale, defaultScale, currentScale, 
-            //    targetScale, remainingTicks, player.getUUID())));
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> 
+                PacketHandler.sendToServer(new SPlayerSizeMixinSyncPacket(maxScale, minScale, defaultScale, currentScale, 
+                targetScale, remainingTicks, player.getUUID())));
         }else {
             if (!player.getServer().isDedicatedServer()) {
                 DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> 
@@ -110,8 +114,6 @@ public class PlayerSize {
                 targetScale, remainingTicks, player.getUUID())));
             }
         }
-            
-        shouldSync = false;
     }
 
     public void updateSyncables(float maxScale, float minScale, float defaultScale, float currentScale, float targetScale, int remainingTicks){
@@ -135,6 +137,7 @@ public class PlayerSize {
     //step the players size by 1 stage
     //
     private void nextScaleStep(){
+        clampToPreferences();
         float scaleChange = (targetScale - currentScale)/remainingTicks;
         currentScale += scaleChange;
         remainingTicks--;
@@ -209,24 +212,55 @@ public class PlayerSize {
         stepData.setScale(stepHeight);
     }
 
-    public Float getMaxScale() {
+    private void clampToPreferences(){
+        if (targetScale < minScale) {
+            targetScale = minScale;
+        }
+        if (targetScale > maxScale) {
+            targetScale = maxScale;
+        }
+    }
+
+    public float getMaxScale() {
         return maxScale;
     }
 
     public void setMaxScale(Float maxScale) {
+        if (maxScale < minScale) {
+            maxScale = minScale;
+        }
+        if (maxScale < defaultScale) {
+            defaultScale = maxScale;
+        }
         this.maxScale = maxScale;
     }
 
-    public Float getMinScale() {
+    public float getMinScale() {
         return minScale;
     }
 
     public void setMinScale(Float minScale) {
+        if (minScale > maxScale) {
+            minScale = maxScale;
+        }
+        if (minScale > defaultScale) {
+            defaultScale = minScale;
+        }
         this.minScale = minScale;
     }
 
     public float getDefaultScale(){
         return defaultScale;
+    }
+
+    public void setDefaultScale(Float defaultScale){
+        if (defaultScale > maxScale) {
+            this.defaultScale = maxScale;
+        }else if (defaultScale < minScale) {
+            this.defaultScale = minScale;
+        }else{
+            this.defaultScale = defaultScale;
+        }  
     }
 
     public Float getTargetScale() {
@@ -316,5 +350,9 @@ public class PlayerSize {
         perpetualChange = tag.getBoolean("perpetualChange");
         perpetualChangeValue = tag.getFloat("perpetualChangeValue");
         remainingTicks = tag.getInt("remainingTicks");
+    }
+
+    private void ensureSizeSynced(){
+
     }
 }
