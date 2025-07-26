@@ -41,6 +41,21 @@ version 0.4.2-alpha:
 - fixed issue where when dying a players client would forget the size of all other players for carrying purposes
 
 
+
+version 0.4.3-alpha:
+-added a screen (default key "]") to allow you to set your size preferences, currently you can set your maximum height, for those who dont like being too big, your minimum heigh, for those who dont like being too small, as well as your default height which is the height that you will be set to when someone clicks the "reset" button on a size remote targeting you
+- hopefully fixed size desyncing for carrying
+- clarified that the netherite size remote is unfinished
+
+
+version 0.4.3.1-alpha:
+- fixed issue with custom size potions
+
+version 0.4.3.2-alpha:
+- fixed silly issue i should've caught before that stopped size potions and remotes from working
+
+
+
 version 0.5.0-alpha:
 (i am kind of just winging it with these version numbers but i think i fiddled with enough stuff to get the swimming to work to warrent an increase to ensure compatability)
 - imperfect but you can now swim inside of cauldrons, i intend to add other blocks you can swim within if they make sense namely when i get around to making the bottles capable of holding water and potion types
