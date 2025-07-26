@@ -78,7 +78,7 @@ public class SizePrefsScreen extends Screen{
 
         //graphics.fill(centerHorizonalPos-50, centerVerticalPos-20, centerHorizonalPos+50, centerVerticalPos+20, 0x88FFFFFF);
 
-        graphics.drawString(this.font, PlayerSizeProvider.getPlayerSizeCapability(player).getMaxScale().toString(), this.leftPos + 65, topPos +18,0xdddddd,false);
+        graphics.drawString(this.font, Float.toString(PlayerSizeProvider.getPlayerSizeCapability(player).getMaxScale()), this.leftPos + 65, topPos +18,0xdddddd,false);
     }
 
     private void saveEditBox(){
