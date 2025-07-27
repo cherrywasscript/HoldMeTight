@@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CrossCollisionBlock;
 import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -40,6 +41,7 @@ public class CrossCollisionBlockMixin {
             if ((Object) this instanceof FenceBlock) {
                return Block.box(6, 0.0D, 6, 10, 16, 10);
             }
+            //TODO make this not work for glass panes
             return this.collisionShapeByIndex[0];
          }
       }
