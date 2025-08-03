@@ -91,8 +91,10 @@ public class PlayerSizeUtils {
     //get a players size
     public static float getSize(Player player) {
         PlayerSize playerSize = PlayerSizeProvider.getPlayerSizeCapability(player);
-        return playerSize.getCurrentScale();
-        //return getScaleData(player).getScale();
+
+        //TODO check this, currently returns pehkui scale data which might be more reliable than mine
+        //return playerSize.getCurrentScale();
+        return getScaleData(player).getScale();
     }
 
     public static int getRemainingTicks(Player player) {
