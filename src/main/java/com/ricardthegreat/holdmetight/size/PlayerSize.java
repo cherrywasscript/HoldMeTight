@@ -46,8 +46,7 @@ public class PlayerSize {
 
 
     //private ScaleData data = ((PehkuiEntityExtensions) (Player) (Object) this).pehkui_getScaleData(ScaleTypes.BASE);
-
-    boolean shouldSync = false;
+    private boolean shouldSync = false;
 
     public void tick(Player player){
         PehkuiEntityExtensions pEnt = (PehkuiEntityExtensions) player;
