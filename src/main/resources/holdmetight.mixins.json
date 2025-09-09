@@ -15,6 +15,7 @@
       "BottleItemMixin",
       "PowderSnowBlockMixin",
       "BigDripleafBlockMixin",
+      "PlayerCarryPickupMixin",
 
 
       "playerextensions.PlayerRenderMixin",
