@@ -1,5 +1,6 @@
 package com.ricardthegreat.holdmetight.utils.sizeutils;
 
+import com.ricardthegreat.holdmetight.Config;
 import com.ricardthegreat.holdmetight.size.PlayerSize;
 import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
 
@@ -21,8 +22,11 @@ public class PlayerSizeUtils {
      * @param size - the value the players size should become
      * @param ticks - the time it should take for the player to reach the given size in ticks (1/20 seconds)
      */
-    public static void setSize(Player player, Float size, int ticks){
+    public static void setSize(Player player, float size, int ticks){
         PlayerSize playerSize = PlayerSizeProvider.getPlayerSizeCapability(player);
+
+        //ensure the size is not greater than the maximum allowed by the config
+        size = lockSizeCap(size);
 
         //check if it is perpetual, instant, or over time change
         if (ticks < 0) {
@@ -78,8 +82,9 @@ public class PlayerSizeUtils {
         Float currentScale = playerSize.getCurrentScale();
         Float targetScale = playerSize.getTargetScale();
 
-        playerSize.setCurrentScale(currentScale + size);
-        playerSize.setTargetScale(targetScale + size);
+        //TODO make this better currently just locks the cap at the moment of applying should probably do this before
+        playerSize.setCurrentScale(lockSizeCap(currentScale + size));
+        playerSize.setTargetScale(lockSizeCap(targetScale + size));
 
         if (playerSize.getRemainingTicks() == 0) {
             playerSize.setRemainingTicks(1);
@@ -113,5 +118,15 @@ public class PlayerSizeUtils {
         PehkuiEntityExtensions pEnt = (PehkuiEntityExtensions) player;
         ScaleData data = pEnt.pehkui_getScaleData(base);
         return data;
+    }
+
+    private static Float lockSizeCap(float size){
+        System.out.println(size);
+        System.out.println(Config.maxEntityScale);
+        if (size > Config.maxEntityScale) {
+            return (float) Config.maxEntityScale;
+        }
+        
+        return size;
     }
 }

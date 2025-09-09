@@ -21,7 +21,8 @@ public class EntitySizeUtils {
 
     private static float maxScale = (float) Config.maxHitboxScale;
 
-    public static void setSize(Entity entity, Float size, int ticks) {
+    public static void setSize(Entity entity, float size, int ticks) {
+        size = lockSizeCap(size);
         if (entity instanceof Player) {
             PlayerSizeUtils.setSize((Player) entity, size, ticks);
         }else {
@@ -97,5 +98,13 @@ public class EntitySizeUtils {
         }else{
             stepData.setScale(stepHeight);
         }
+    }
+
+    private static Float lockSizeCap(float size){
+        if (size > Config.maxEntityScale) {
+            return (float) Config.maxEntityScale;
+        }
+        
+        return size;
     }
 }
