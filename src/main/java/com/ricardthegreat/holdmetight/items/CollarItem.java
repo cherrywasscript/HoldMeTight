@@ -7,11 +7,9 @@ import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.Client.renderers.ArmorRenderer;
 import com.ricardthegreat.holdmetight.Client.renderers.layers.CollarModelLayers;
 
-import java.lang.reflect.*;
 import java.util.function.Consumer;
 
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;

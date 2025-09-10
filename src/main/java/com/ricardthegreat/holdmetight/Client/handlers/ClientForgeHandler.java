@@ -7,12 +7,9 @@ import com.ricardthegreat.holdmetight.Client.Keybindings;
 import com.ricardthegreat.holdmetight.Commands.CustomCarryCommand;
 import com.ricardthegreat.holdmetight.Commands.ResetCarriedCommand;
 import com.ricardthegreat.holdmetight.Commands.ResetCarryingCommand;
-import com.ricardthegreat.holdmetight.Commands.TestingCommand;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
-import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.commands.CommandSourceStack;

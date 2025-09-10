@@ -17,7 +17,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import oshi.driver.mac.net.NetStat.IFdata;
 
 @Mixin(Entity.class)
 public class EntityClimbingMixin {

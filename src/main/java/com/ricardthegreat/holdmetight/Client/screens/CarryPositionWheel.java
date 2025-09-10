@@ -1,17 +1,12 @@
 package com.ricardthegreat.holdmetight.Client.screens;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import javax.annotation.Nonnull;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.carry.CarryPosition;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
-import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;

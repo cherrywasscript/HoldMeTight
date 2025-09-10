@@ -3,29 +3,16 @@ package com.ricardthegreat.holdmetight.carry;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import com.ricardthegreat.holdmetight.Config;
 import com.ricardthegreat.holdmetight.network.CPlayerCarrySimplePacket;
 import com.ricardthegreat.holdmetight.network.CPlayerCarrySyncPacket;
-import com.ricardthegreat.holdmetight.network.CPlayerSizeMixinSyncPacket;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.SPlayerCarrySimplePacket;
 import com.ricardthegreat.holdmetight.network.SPlayerCarrySyncPacket;
-import com.ricardthegreat.holdmetight.network.SPlayerSizeMixinSyncPacket;
-import com.ricardthegreat.holdmetight.size.PlayerSize;
 import com.ricardthegreat.holdmetight.utils.constants.PlayerCarryConstants;
-import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
-
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import virtuoel.pehkui.api.ScaleData;
-import virtuoel.pehkui.api.ScaleTypes;
-import virtuoel.pehkui.util.PehkuiEntityExtensions;
 
 public class PlayerCarry {
     /*

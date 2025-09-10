@@ -6,7 +6,6 @@ import java.util.function.Supplier;
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
-import com.ricardthegreat.holdmetight.network.CPlayerCarrySimplePacket;
 import com.ricardthegreat.holdmetight.network.CPlayerDismountPlayerPacket;
 import com.ricardthegreat.holdmetight.network.CPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.CPlayerSizeMixinSyncPacket;

@@ -1,6 +1,5 @@
 package com.ricardthegreat.holdmetight.mixins.climbing;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,7 +13,6 @@ import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;

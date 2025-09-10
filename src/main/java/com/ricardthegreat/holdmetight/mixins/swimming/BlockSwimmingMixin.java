@@ -8,14 +8,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.ricardthegreat.holdmetight.utils.IBlockSwimming;
-import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
-import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
 
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
+
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.extensions.IForgeEntity;
 import net.minecraftforge.fluids.FluidType;
 
