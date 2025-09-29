@@ -61,10 +61,6 @@ public class ItemInit {
         public static final RegistryObject<Item> PAPER_WINGS_ITEM = addToTab(
                 ITEMS.register("paper_wings_item", () -> new PaperWingsItem(new Item.Properties().durability(432).rarity(Rarity.COMMON))));
 
-                
-        public static final RegistryObject<BlockItem> MUSHROOM_HOUSE_ITEM = addToTab(ITEMS.register("mushroom_house", 
-                () -> new BlockItem(BlockInit.MUSHROOM_HOUSE.get(), new Item.Properties())));
-
                 /* 
         public static final RegistryObject<BlockItem> JAR_ITEM = addToTab(ITEMS.register("tiny_jar", 
                 () -> new BlockItem(BlockInit.TINY_JAR.get(), new Item.Properties())));
