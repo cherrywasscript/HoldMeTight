@@ -16,32 +16,23 @@ public class SPlayerSizeMixinSyncPacket {
     private final float maxScale;
     private final float minScale;
     private final float defaultScale;
-    private final float currentScale;
-    private final float targetScale;
-    private final int remainingTicks;
     private final UUID uuid;
 
-    public SPlayerSizeMixinSyncPacket(float maxScale, float minScale, float defaultScale, float currentScale, float targetScale, int remainingTicks, UUID uuid){
+    public SPlayerSizeMixinSyncPacket(float maxScale, float minScale, float defaultScale, UUID uuid){
         this.maxScale = maxScale;
         this.minScale = minScale;
         this.defaultScale = defaultScale;
-        this.currentScale = currentScale;
-        this.targetScale = targetScale;
-        this.remainingTicks = remainingTicks;
         this.uuid = uuid;
     }
 
     public SPlayerSizeMixinSyncPacket(FriendlyByteBuf buffer){
-        this(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readInt(), buffer.readUUID());
+        this(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readUUID());
     }
 
     public void encode(FriendlyByteBuf buffer){
         buffer.writeFloat(maxScale);
         buffer.writeFloat(minScale);
         buffer.writeFloat(defaultScale);
-        buffer.writeFloat(currentScale);
-        buffer.writeFloat(targetScale);
-        buffer.writeInt(remainingTicks);
         buffer.writeUUID(uuid);
     }
 
@@ -55,7 +46,7 @@ public class SPlayerSizeMixinSyncPacket {
 
             if (optional.isPresent()) {
                 PlayerSize orElse = optional.orElse(new PlayerSize());
-                orElse.updateSyncables(maxScale, minScale, defaultScale, currentScale, targetScale, remainingTicks);
+                orElse.updateSyncables(maxScale, minScale, defaultScale);
                 PacketHandler.sendToAllClients(orElse.getSyncPacket(player));
             }
         }

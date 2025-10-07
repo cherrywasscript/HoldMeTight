@@ -7,6 +7,8 @@ import javax.annotation.Nonnull;
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.size.PlayerSize;
 import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
+import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
+
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
@@ -109,7 +111,7 @@ public class SizePrefsScreen extends Screen{
 
         //graphics.fill(centerHorizonalPos-50, centerVerticalPos-20, centerHorizonalPos+50, centerVerticalPos+20, 0x88FFFFFF);
 
-        graphics.drawString(this.font, String.valueOf(playerSize.getCurrentScale()), leftPos + 8 + font.width("Current scale: "), topPos +18,0xdddddd,false);
+        graphics.drawString(this.font, String.valueOf(PlayerSizeUtils.getSize(player)), leftPos + 8 + font.width("Current scale: "), topPos +18,0xdddddd,false);
         graphics.drawString(this.font, String.valueOf(playerSize.getMaxScale()), leftPos + 8 + font.width("Max scale: "), topPos +30,0xdddddd,false);
         graphics.drawString(this.font, String.valueOf(playerSize.getMinScale()), leftPos + 8 + font.width("Min scale: "), topPos +40,0xdddddd,false);
         graphics.drawString(this.font, String.valueOf(playerSize.getDefaultScale()), leftPos + 8 + font.width("Default scale: "), topPos +50,0xdddddd,false);

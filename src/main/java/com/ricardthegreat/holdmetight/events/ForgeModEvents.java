@@ -46,11 +46,7 @@ public class ForgeModEvents {
             event.getOriginal().reviveCaps(); //need this as death removes caps from what i've read
             event.getOriginal().getCapability(PlayerSizeProvider.PLAYER_SIZE).ifPresent(oldStore -> {
                 event.getEntity().getCapability(PlayerSizeProvider.PLAYER_SIZE).ifPresent(newStore -> {
-                    if (PehkuiConfig.COMMON.keepAllScalesOnRespawn.get()) {
-                        newStore.copyAll(oldStore);
-                    }else{
-                        newStore.copyBasic(oldStore);
-                    }
+                    newStore.copy(oldStore);
                 });
             });
             event.getOriginal().getCapability(PlayerCarryProvider.PLAYER_CARRY).ifPresent(oldStore -> {

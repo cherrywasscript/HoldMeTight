@@ -46,11 +46,33 @@ public class EntitySizeUtils {
         }
     } 
 
+    public static void addSize(Entity entity, Float size){
+
+        if (entity instanceof Player) {
+            PlayerSizeUtils.addSize((Player) entity, size);
+        }else{
+            ScaleData data = getScaleData(entity);
+            
+            Float currentScale = data.getScale();
+
+            currentScale = lockSizeCap(currentScale + size);
+
+            data.setScale(currentScale);
+        } 
+    }
+
     public static float getSize(Entity entity) {
         if (entity instanceof Player) {
             return PlayerSizeUtils.getSize((Player) entity);
         }
         return getScaleData(entity).getScale();
+    }
+
+    public static float getTargetSize(Entity entity){
+        if (entity instanceof Player) {
+            return PlayerSizeUtils.getSize((Player) entity);
+        }
+        return getScaleData(entity).getTargetScale();
     }
 
     private static ScaleData getScaleData(Entity entity) {
