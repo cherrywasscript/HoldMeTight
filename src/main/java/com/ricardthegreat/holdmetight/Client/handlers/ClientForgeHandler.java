@@ -19,13 +19,16 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Pig;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.client.event.RenderNameTagEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 
@@ -118,12 +121,12 @@ public class ClientForgeHandler {
         }
     }
 
+    //TODO figure out if this should actually be done on rendernametag even or not? it seems like i could probably change a players name or something idk
     @SubscribeEvent
-    public void registerItemColors(RegisterColorHandlersEvent.Item event){
-        HoldMeTight.LOGGER.info("ITEM COLOUR EVENT");
-
-        CollarItem collar = (CollarItem) ItemInit.COLLAR_ITEM.get();
-        
-        event.register(((itemStack, i) -> i == 0 ? collar.getColor(itemStack) : -1), collar);
+    public static void renderNameTag(RenderNameTagEvent event){
+        if (event.getEntity() instanceof Pig) {
+            event.setResult(Result.ALLOW);
+        }
     }
+
 }
