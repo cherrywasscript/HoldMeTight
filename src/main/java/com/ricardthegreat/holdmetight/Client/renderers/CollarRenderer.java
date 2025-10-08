@@ -20,6 +20,10 @@ import net.minecraftforge.common.Tags;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.client.ICurioRenderer;
 
+/*
+Class is mostly unchanged from the same class in https://github.com/jlortiz0/PlayerCollars/tree/forge-1.20.1
+ */
+
 public class CollarRenderer implements ICurioRenderer{
 
     private final BakedModel model;

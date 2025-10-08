@@ -66,22 +66,20 @@ public class ClientModHandler {
 
     @SubscribeEvent
     public static void onModelBakeEvent(ModelEvent.BakingCompleted event) {
-        if (HoldMeTight.curiosInstalled) {
-            ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(HoldMeTight.MODID, "collar_item"), "inventory");
+        HoldMeTight.LOGGER.info("MODEL_BAKE_EVENT");
 
-            Object renderer = Class.forName("ricardthegreat.holdmetight.Client.renderers.CollarRenderer").getDeclaredConstructor(BakedModel.class).newInstance(event.getModels().get(location));
-            //CollarRenderer renderer = new CollarRenderer(event.getModels().get(location));
+        ModelResourceLocation location = new ModelResourceLocation(new ResourceLocation(HoldMeTight.MODID, "collar_item"), "inventory");
 
-            CuriosRendererRegistry.register(ItemInit.COLLAR_ITEM.get(), () -> (CollarRenderer) renderer);
-        }
+        CollarRenderer renderer = new CollarRenderer(event.getModels().get(location));
+
+        CuriosRendererRegistry.register(ItemInit.COLLAR_ITEM.get(), () -> renderer);
     }
 
     @SubscribeEvent
-    public void registerItemColors(RegisterColorHandlersEvent.Item event){
+    public static void registerItemColors(RegisterColorHandlersEvent.Item event){
         CollarItem collar = (CollarItem) ItemInit.COLLAR_ITEM.get();
         
         event.register(((itemStack, i) -> i == 0 ? collar.getColor(itemStack) : -1), collar);
-        
     }
 
     

@@ -80,6 +80,7 @@ public class CollarItem extends Item implements Equipable, DyeableLeatherItem{
     @Override
     public int getColor(ItemStack stack) {
         CompoundTag tag = stack.getTagElement("display");
+
         return tag != null && tag.contains("color", 99) ? tag.getInt("color") : MapColor.COLOR_RED.col;
     }
 }

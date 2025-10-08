@@ -9,6 +9,8 @@ import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.client.ClientHooks;
 import com.ricardthegreat.holdmetight.client.Keybindings;
+import com.ricardthegreat.holdmetight.init.ItemInit;
+import com.ricardthegreat.holdmetight.items.CollarItem;
 import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -20,6 +22,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterClientCommandsEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -113,5 +116,14 @@ public class ClientForgeHandler {
                 }
             }
         }
+    }
+
+    @SubscribeEvent
+    public void registerItemColors(RegisterColorHandlersEvent.Item event){
+        HoldMeTight.LOGGER.info("ITEM COLOUR EVENT");
+
+        CollarItem collar = (CollarItem) ItemInit.COLLAR_ITEM.get();
+        
+        event.register(((itemStack, i) -> i == 0 ? collar.getColor(itemStack) : -1), collar);
     }
 }
