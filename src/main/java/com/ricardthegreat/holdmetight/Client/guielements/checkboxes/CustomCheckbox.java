@@ -1,4 +1,4 @@
-package com.ricardthegreat.holdmetight.Client.guielements.checkboxes;
+package com.ricardthegreat.holdmetight.client.guielements.checkboxes;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.ricardthegreat.holdmetight.HoldMeTight;

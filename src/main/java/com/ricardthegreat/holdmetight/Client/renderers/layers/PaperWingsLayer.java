@@ -1,4 +1,4 @@
-package com.ricardthegreat.holdmetight.Client.renderers.layers;
+package com.ricardthegreat.holdmetight.client.renderers.layers;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

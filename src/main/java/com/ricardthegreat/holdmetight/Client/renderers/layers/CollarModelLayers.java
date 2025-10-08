@@ -1,10 +1,10 @@
 // Made with Blockbench 4.12.4
 // Exported for Minecraft version 1.17 or later with Mojang mappings
 // Paste this class into your mod and generate all required imports
-package com.ricardthegreat.holdmetight.Client.renderers.layers;
+package com.ricardthegreat.holdmetight.client.renderers.layers;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.Client.models.ArmorModel;
+import com.ricardthegreat.holdmetight.client.models.ArmorModel;
 
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;

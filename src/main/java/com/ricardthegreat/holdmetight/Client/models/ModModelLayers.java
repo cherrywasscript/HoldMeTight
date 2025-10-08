@@ -1,4 +1,4 @@
-package com.ricardthegreat.holdmetight.Client.models;
+package com.ricardthegreat.holdmetight.client.models;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
 

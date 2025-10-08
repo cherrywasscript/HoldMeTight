@@ -2,7 +2,7 @@
  * file from https://www.youtube.com/watch?v=M5fpFoD26hU
  */
 
-package com.ricardthegreat.holdmetight.Client.models;
+package com.ricardthegreat.holdmetight.client.models;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;

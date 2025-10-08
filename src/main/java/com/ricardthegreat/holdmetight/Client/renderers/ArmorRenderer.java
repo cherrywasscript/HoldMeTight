@@ -3,7 +3,7 @@
  */
 
 
-package com.ricardthegreat.holdmetight.Client.renderers;
+package com.ricardthegreat.holdmetight.client.renderers;
 
 import java.util.Collections;
 import java.util.Map;
@@ -13,7 +13,7 @@ import java.util.function.Supplier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.ricardthegreat.holdmetight.Client.models.ArmorModel;
+import com.ricardthegreat.holdmetight.client.models.ArmorModel;
 
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.builders.LayerDefinition;

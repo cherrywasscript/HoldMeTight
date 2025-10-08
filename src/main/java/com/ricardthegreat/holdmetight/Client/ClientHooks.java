@@ -1,14 +1,14 @@
-package com.ricardthegreat.holdmetight.Client;
+package com.ricardthegreat.holdmetight.client;
 
 
 
-import com.ricardthegreat.holdmetight.Client.screens.CarryPositionScreen;
-import com.ricardthegreat.holdmetight.Client.screens.CarryPositionWheel;
-import com.ricardthegreat.holdmetight.Client.screens.SizePrefsScreen;
-import com.ricardthegreat.holdmetight.Client.screens.SizeRayScreen;
-import com.ricardthegreat.holdmetight.Client.screens.remotes.AdvancedSizeRemoteScreen;
-import com.ricardthegreat.holdmetight.Client.screens.remotes.BasicSizeRemoteScreen;
-import com.ricardthegreat.holdmetight.Client.screens.remotes.MasterSizeRemoteScreen;
+import com.ricardthegreat.holdmetight.client.screens.CarryPositionScreen;
+import com.ricardthegreat.holdmetight.client.screens.CarryPositionWheel;
+import com.ricardthegreat.holdmetight.client.screens.SizePrefsScreen;
+import com.ricardthegreat.holdmetight.client.screens.SizeRayScreen;
+import com.ricardthegreat.holdmetight.client.screens.remotes.AdvancedSizeRemoteScreen;
+import com.ricardthegreat.holdmetight.client.screens.remotes.BasicSizeRemoteScreen;
+import com.ricardthegreat.holdmetight.client.screens.remotes.MasterSizeRemoteScreen;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;

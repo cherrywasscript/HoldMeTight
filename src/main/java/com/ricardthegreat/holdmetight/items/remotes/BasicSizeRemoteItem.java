@@ -1,6 +1,6 @@
 package com.ricardthegreat.holdmetight.items.remotes;
 
-import com.ricardthegreat.holdmetight.Client.ClientHooks;
+import com.ricardthegreat.holdmetight.client.ClientHooks;
 
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;

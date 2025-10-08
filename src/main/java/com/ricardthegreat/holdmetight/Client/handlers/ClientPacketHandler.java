@@ -1,4 +1,4 @@
-package com.ricardthegreat.holdmetight.Client.handlers;
+package com.ricardthegreat.holdmetight.client.handlers;
 
 import java.util.UUID;
 import java.util.function.Supplier;
