@@ -1,6 +1,18 @@
 {
-	"parent": "minecraft:item/handheld",
-    "textures": {
-        "layer0": "holdmetight:item/collar_item"
+  "parent": "minecraft:item/handheld",
+  "loader": "forge:separate_transforms",
+  "base": {
+    "parent": "holdmetight:item/collar_item_3d"
+  },
+  "perspectives": {
+    "gui": {
+      "parent": "holdmetight:item/collar_item_2d"
+    },
+    "ground": {
+      "parent": "holdmetight:item/collar_item_2d"
+    },
+    "fixed": {
+      "parent": "holdmetight:item/collar_item_2d"
     }
+  }
 }
