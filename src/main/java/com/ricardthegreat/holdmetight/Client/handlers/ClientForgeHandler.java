@@ -20,17 +20,22 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Pig;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RenderNameTagEvent;
+import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 
 @Mod.EventBusSubscriber(modid = HoldMeTight.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientForgeHandler {
@@ -41,7 +46,7 @@ public class ClientForgeHandler {
     @SubscribeEvent
     public static void RegisterClientCommandsEvent(RegisterClientCommandsEvent event){
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
-
+        
         CustomCarryCommand.register(dispatcher);
 
         ResetCarriedCommand.register(dispatcher);
@@ -121,11 +126,23 @@ public class ClientForgeHandler {
         }
     }
 
-    //TODO figure out if this should actually be done on rendernametag even or not? it seems like i could probably change a players name or something idk
+    //TODO figure out if this should actually be done on rendernametag event or not? it seems like i could probably change a players name or something idk
     @SubscribeEvent
     public static void renderNameTag(RenderNameTagEvent event){
-        if (event.getEntity() instanceof Pig) {
-            event.setResult(Result.ALLOW);
+        if (event.getEntity() instanceof Player player) {
+            CuriosApi.getCuriosInventory(player).ifPresent(handler -> handler.getStacksHandler("collar").ifPresent(stacksHandler -> {
+                        IDynamicStackHandler stackHandler = stacksHandler.getStacks();
+                        IDynamicStackHandler cosmeticStacksHandler = stacksHandler.getCosmeticStacks();
+
+                        for (int i = 0; i < stackHandler.getSlots(); i++) {
+                            ItemStack stack = stackHandler.getStackInSlot(i);
+                            if (stack.getItem() instanceof CollarItem) {
+                                //TODO implement 
+                                //event.setContent(Component.literal("test"));
+                            }
+                        }
+
+                    }));
         }
     }
 
