@@ -11,6 +11,14 @@
 
     "item.holdmetight.size_ray":"Size ray (experimental)",
 
+    "item.holdmetight.collar_item":"Collar",
+    "item.holdmetight.collar.owner":"Owner: %s",
+    "item.holdmetight.collar.owners":"Owners: %s",
+    "item.holdmetight.collar.locked":"Locked",
+    "item.holdmetight.collar.unlocked":"Unlocked",
+
+    "item.holdmetight.collar_key_item":"Collar",
+
 
     "gui.holdmetight.size_remote_title":"Test Screen",
     "gui.holdmetight.size_remote.button.mult_button":"Multiply",
