@@ -16,7 +16,6 @@
       "PowderSnowBlockMixin",
       "BigDripleafBlockMixin",
       "PlayerCarryPickupMixin",
-      "NameTagMixin",
 
 
       "playerextensions.PlayerRenderMixin",
