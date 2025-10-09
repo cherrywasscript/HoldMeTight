@@ -94,7 +94,7 @@ public class CollarKeyItem extends Item{
     private InteractionResult unlockCollar(ItemStack key, ItemStack collarStack){
         CollarItem collar = (CollarItem) collarStack.getItem();
 
-        Pair<UUID, String> owner = collar.getOwner(collarStack);
+        Pair<UUID, String> owner = collar.getFirstOwner(collarStack);
         if (owner != null && owner.getFirst().compareTo(getOwner(key).getFirst()) == 0) {
             collar.setLocked(collarStack);
 
