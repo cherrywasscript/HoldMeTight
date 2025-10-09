@@ -3,12 +3,14 @@ package com.ricardthegreat.holdmetight.items;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.client.renderers.ArmorRenderer;
 import com.ricardthegreat.holdmetight.client.renderers.layers.CollarModelLayers;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -22,7 +24,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -75,7 +79,7 @@ public class CollarItem extends Item implements DyeableLeatherItem, ICurioItem {
 
     @Override
     public void curioTick(SlotContext slotContext, ItemStack stack) {
-        List<MobEffectInstance> effects = getEffect(stack).getEffects();
+        List<MobEffectInstance> effects = getEffect(stack);
         for(int i = 0; i < effects.size(); i++){
             slotContext.entity().addEffect(effects.get(i));
         }
@@ -103,7 +107,7 @@ public class CollarItem extends Item implements DyeableLeatherItem, ICurioItem {
     @Override
     public void appendHoverText(ItemStack stack, @javax.annotation.Nullable Level level, List<Component> components, TooltipFlag flag) {
         super.appendHoverText(stack, level, components, flag);
-        Pair<UUID, String> owner = getOwner(stack);
+        Pair<UUID, String> owner = getFirstOwner(stack);
         if (owner != null) {
             components.add(Component.translatable("item.holdmetight.collar.owner", owner.getSecond()));
         }
@@ -125,24 +129,25 @@ public class CollarItem extends Item implements DyeableLeatherItem, ICurioItem {
     @Override
     public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack stack2, Slot slot, ClickAction action, Player player, SlotAccess access) {
         if (action == ClickAction.SECONDARY) {
-            if (!(PotionUtils.getPotion(stack2) == Potions.EMPTY)) {
-                setEffect(stack, PotionUtils.getPotion(stack2));
-                Potion effect = getEffect(stack);
-                System.out.println(effect.getName(""));
-                return true;
-            }
-
             if (!(slot instanceof CurioSlot)) {
+
+                if (!(PotionUtils.getPotion(stack2) == Potions.EMPTY)) {
+                    setEffect(stack, PotionUtils.getPotion(stack2));
+                    return true;
+                }
+
                 setLocked(stack);
                 if (player.level().isClientSide) {
-                    playSound();
+                    playSound(stack);
                 }
                 return true;
             }else if (stack2.getItem() instanceof CollarKeyItem key) {
-                if (key.getOwner(stack2).getFirst().compareTo(getOwner(stack).getFirst()) == 0) {
+                Pair<UUID, String> pair = key.getOwner(stack2);
+
+                if (pair != null && pair.getFirst().compareTo(getFirstOwner(stack).getFirst()) == 0) {
                     setLocked(stack);
                     if (player.level().isClientSide) {
-                       playSound();
+                       playSound(stack);
                     }
                     return true;
                 }
@@ -152,10 +157,26 @@ public class CollarItem extends Item implements DyeableLeatherItem, ICurioItem {
     }
     
     //TODO get more than 1 owner
-    public Pair<UUID, String> getOwner(ItemStack stack){
+    public Pair<UUID, String> getFirstOwner(ItemStack stack){
         CompoundTag tag = stack.getTagElement("owners");
-        if (tag != null && tag.contains("uuid") && tag.contains("name")) {
-            return new Pair<UUID,String>(tag.getUUID("uuid"), tag.getString("name"));
+        if (tag != null && tag.contains("uuid"+0) && tag.contains("name"+0)) {
+            return new Pair<UUID,String>(tag.getUUID("uuid"+1), tag.getString("name"+1));
+        }
+        return null;
+    }
+
+    public List<Pair<UUID, String>> getOwners(ItemStack stack){
+        CompoundTag tag = stack.getTagElement("owners");
+
+        List<Pair<UUID, String>> owners = new ArrayList<>();
+
+        if (tag != null && tag.contains("numOwners")) {
+            
+            for(int i = 0; i < tag.getInt("numOwners"); i++){
+                owners.add(new Pair<UUID,String>(tag.getUUID("uuid"+i), tag.getString("name"+i)));
+            }
+
+            return owners;
         }
         return null;
     }
@@ -163,9 +184,9 @@ public class CollarItem extends Item implements DyeableLeatherItem, ICurioItem {
     public void addOwner(ItemStack stack, @NotNull UUID uuid, @NotNull String name){
         CompoundTag tag = stack.getOrCreateTagElement("owners");
 
-        tag.putInt("numOwners", tag.getInt("numOwners") + 1);
         tag.putUUID("uuid" + tag.getInt("numOwners"), uuid);
         tag.putString("name" + tag.getInt("numOwners"), name);
+        tag.putInt("numOwners", tag.getInt("numOwners") + 1);
     }
 
     public void removeOwner(ItemStack stack, UUID uuid, String name){
@@ -183,14 +204,25 @@ public class CollarItem extends Item implements DyeableLeatherItem, ICurioItem {
     }
 
     public void setEffect(ItemStack stack, Potion potion){
+        stack.removeTagKey("potion");
         CompoundTag tag = stack.getOrCreateTagElement("potion");
-        tag.putString("effect", potion.getName(""));
+
+        List<MobEffectInstance> effects = potion.getEffects();
+
+        tag.putInt("numEffects", effects.size());
+
+        for(int i = 0; i < effects.size(); i++){
+            tag.putInt("effectId" + i, MobEffect.getId(effects.get(i).getEffect()));
+        }
     }
 
-    public Potion getEffect(ItemStack stack){
+    public List<MobEffectInstance> getEffect(ItemStack stack){
         CompoundTag tag = stack.getOrCreateTagElement("potion");
-        Potion potion = Potion.byName(tag.getString("effect"));
-        return potion;
+        List<MobEffectInstance> effects = new ArrayList<>();
+        for(int i = 0; i < tag.getInt("numEffects"); i++){
+            effects.add(new MobEffectInstance(MobEffect.byId(tag.getInt("effectId" + i)), 20));
+        }
+        return effects;
     }
 
     private void setupNbt(ItemStack stack, Player player){
@@ -201,7 +233,11 @@ public class CollarItem extends Item implements DyeableLeatherItem, ICurioItem {
     }
 
     @OnlyIn(Dist.CLIENT)
-    private void playSound(){
-        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+    private void playSound(ItemStack stack){
+        if (getIsLocked(stack)) {
+            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.WOODEN_PRESSURE_PLATE_CLICK_OFF, 1.0F));
+        }else{
+            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+        }
     }
 }
