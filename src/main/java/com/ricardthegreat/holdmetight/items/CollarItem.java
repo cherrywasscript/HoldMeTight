@@ -3,41 +3,29 @@ package com.ricardthegreat.holdmetight.items;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Pair;
-import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.client.renderers.ArmorRenderer;
-import com.ricardthegreat.holdmetight.client.renderers.layers.CollarModelLayers;
+import com.ricardthegreat.holdmetight.client.ClientHooks;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Consumer;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ClickAction;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.BundleItem;
 import net.minecraft.world.item.DyeableLeatherItem;
-import net.minecraft.world.item.Equipable;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -48,14 +36,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import top.theillusivec4.curios.api.SlotContext;
-import top.theillusivec4.curios.api.type.capability.ICurio;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 import top.theillusivec4.curios.common.inventory.CurioSlot;
 
@@ -109,13 +92,13 @@ public class CollarItem extends Item implements DyeableLeatherItem, ICurioItem {
         super.appendHoverText(stack, level, components, flag);
         Pair<UUID, String> owner = getFirstOwner(stack);
         if (owner != null) {
-            components.add(Component.translatable("item.holdmetight.collar.owner", owner.getSecond()));
+            components.add(Component.translatable("item.holdmetight.collar_item.owner", owner.getSecond()));
         }
         boolean locked = getIsLocked(stack);
         if (locked) {
-            components.add(Component.translatable("item.holdmetight.collar.locked").withStyle(ChatFormatting.YELLOW));
+            components.add(Component.translatable("item.holdmetight.collar_item.locked").withStyle(ChatFormatting.YELLOW));
         }else{
-            components.add(Component.translatable("item.holdmetight.collar.unlocked").withStyle(ChatFormatting.BLUE));
+            components.add(Component.translatable("item.holdmetight.collar_item.unlocked").withStyle(ChatFormatting.BLUE));
         }
         
     }
@@ -155,12 +138,20 @@ public class CollarItem extends Item implements DyeableLeatherItem, ICurioItem {
         }
         return super.overrideOtherStackedOnMe(stack, stack, slot, action, player, access);
     }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        if (level.isClientSide()) {
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientHooks.openCollarScreen(player, hand));
+        }
+        return InteractionResultHolder.success(player.getItemInHand(hand));
+    }
     
     //TODO get more than 1 owner
     public Pair<UUID, String> getFirstOwner(ItemStack stack){
         CompoundTag tag = stack.getTagElement("owners");
         if (tag != null && tag.contains("uuid"+0) && tag.contains("name"+0)) {
-            return new Pair<UUID,String>(tag.getUUID("uuid"+1), tag.getString("name"+1));
+            return new Pair<UUID,String>(tag.getUUID("uuid"+0), tag.getString("name"+0));
         }
         return null;
     }
