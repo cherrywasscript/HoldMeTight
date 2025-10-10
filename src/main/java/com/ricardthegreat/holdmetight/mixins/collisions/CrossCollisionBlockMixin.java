@@ -40,6 +40,7 @@ public class CrossCollisionBlockMixin {
             if ((Object) this instanceof FenceBlock) {
                return Block.box(6, 0.0D, 6, 10, 16, 10);
             }
+            //TODO make this not work for glass panes
             return this.collisionShapeByIndex[0];
          }
       }

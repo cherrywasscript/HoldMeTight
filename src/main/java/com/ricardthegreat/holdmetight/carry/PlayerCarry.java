@@ -3,29 +3,16 @@ package com.ricardthegreat.holdmetight.carry;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import com.ricardthegreat.holdmetight.Config;
 import com.ricardthegreat.holdmetight.network.CPlayerCarrySimplePacket;
 import com.ricardthegreat.holdmetight.network.CPlayerCarrySyncPacket;
-import com.ricardthegreat.holdmetight.network.CPlayerSizeMixinSyncPacket;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.SPlayerCarrySimplePacket;
 import com.ricardthegreat.holdmetight.network.SPlayerCarrySyncPacket;
-import com.ricardthegreat.holdmetight.network.SPlayerSizeMixinSyncPacket;
-import com.ricardthegreat.holdmetight.size.PlayerSize;
 import com.ricardthegreat.holdmetight.utils.constants.PlayerCarryConstants;
-import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
-
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-import virtuoel.pehkui.api.ScaleData;
-import virtuoel.pehkui.api.ScaleTypes;
-import virtuoel.pehkui.util.PehkuiEntityExtensions;
 
 public class PlayerCarry {
     /*
@@ -61,7 +48,7 @@ public class PlayerCarry {
     private boolean shouldSyncAll = false;
     
     //checks every tick if the player should sync
-    public void tick(Player player){
+    public void tick(Player player){    
         if(shouldSync){
             if (shouldSyncSimple) {
                 shouldSyncSimple = false;
@@ -103,6 +90,7 @@ public class PlayerCarry {
         }
     }
 
+    //TODO add custom carrying syncing
     private void syncCustom(Player player){
         if(player.level().isClientSide){
             //DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> 
@@ -179,12 +167,21 @@ public class PlayerCarry {
         }
     }
 
+    //TODO remove or change
     public CarryPosition getCarryPosition(){
         return allCarryPositions.get(currentCarryPos[0]).get(currentCarryPos[1]);
     }
 
+    public ArrayList<ArrayList<CarryPosition>> getAllCarryPositions(){
+        return allCarryPositions;
+    }
+
     public void addCustomCarryPos(CarryPosition custom){
         boolean added = false;
+        customCarryPositions.set(0, custom);
+        
+        //TODO use this when i have more than 1 custom carry
+        /* 
         for(int i = 0; i < customCarryPositions.size(); i++){
             if (customCarryPositions.get(i).posName == custom.posName) {
                 customCarryPositions.set(i, custom);
@@ -194,6 +191,7 @@ public class PlayerCarry {
         if (!added) {
             customCarryPositions.add(custom);
         }
+        */
     }
 
     public void removeCustomCarryPos(String name){
@@ -246,6 +244,8 @@ public class PlayerCarry {
         this.allCarryPositions = source.allCarryPositions;
     }
 
+
+    //TODO update to iterate through all custom positions
     public void saveNBTData(CompoundTag tag){
         tag.putBoolean(PlayerCarryConstants.CARRIED_NBT_TAG, isCarried);
         tag.putBoolean(PlayerCarryConstants.CARRYING_NBT_TAG, isCarrying);
@@ -269,5 +269,9 @@ public class PlayerCarry {
             tag.getDouble(PlayerCarryConstants.VERT_NBT_TAG), tag.getDouble(PlayerCarryConstants.LEFT_RIGHT_NBT_TAG), tag.getBoolean(PlayerCarryConstants.HEAD_LINK_NBT_TAG));
 
         customCarryPositions.set(0, custom);
+    }
+
+    public CPlayerCarrySyncPacket getSyncPacket(Player player){
+        return new CPlayerCarrySyncPacket(isCarried, isCarrying, currentCarryPos, customCarryPositions.get(0), player.getUUID());
     }
 }

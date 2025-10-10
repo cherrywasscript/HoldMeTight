@@ -3,8 +3,6 @@ package com.ricardthegreat.holdmetight.carry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.ricardthegreat.holdmetight.size.PlayerSize;
-
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;

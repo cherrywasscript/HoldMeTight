@@ -3,7 +3,6 @@ package com.ricardthegreat.holdmetight.network;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 
@@ -51,14 +50,6 @@ public class SPlayerPutDownPacket {
             playerCarry.setShouldSyncSimple(true);
             targetCarry.setCarried(false);
             targetCarry.setShouldSyncSimple(true);
-
-            //log if it isnt 1 for error checking
-            //wont always be an error as if theyre on the side of a block or a non full block but it should help
-            if (pos.y%1 != 0) {
-                HoldMeTight.LOGGER.info("SPlayerPutDownPacket.java line 46: " + pos);
-            }
-
-            System.out.println(pos);
 
             target.dismountTo(pos.x, pos.y, pos.z);
         }

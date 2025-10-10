@@ -21,63 +21,44 @@ public class EntitySizeUtils {
 
     private static float maxScale = (float) Config.maxHitboxScale;
 
-    
-    @Deprecated
-    public static void setSizeInstant(Entity entity, Float size) {
-
+    public static void setSize(Entity entity, float size, int ticks) {
+        size = lockSizeCap(size);
         if (entity instanceof Player) {
-            PlayerSizeUtils.setSize((Player) entity, size, 0);
-        }
+            PlayerSizeUtils.setSize((Player) entity, size, ticks);
+        }else {
+            if (ticks < 0) {
+            ticks = 0;
+            }
 
-        checkMaxHitbox(entity, size, 0);
-        ScaleData data = getScaleData(entity);
-        data.setScale(size);
+            checkMaxHitbox(entity, size, ticks);
+            ScaleData data = getScaleData(entity);
+            data.setScaleTickDelay(ticks);
+            data.setTargetScale(size);
+        }
     }
 
-    @Deprecated
-    public static void multSizeInstant(Entity entity, Float size) {
-        Float targetScale = getScaleData(entity).getTargetScale()*size;
-        setSizeInstant(entity, targetScale);
-    }
+    public static void multSize(Entity entity, Float size, int ticks) {
+        if (entity instanceof Player) {
+            PlayerSizeUtils.multSize((Player) entity, size, ticks);
+        }else{
+            Float targetScale = getScaleData(entity).getTargetScale()*size;
+            setSize(entity, targetScale, ticks);
+        }
+    } 
 
-    //i should probably grab the actual default from pekhui as if it changes from 20 this wont however a second is a good default i feel
-    //also i should spend some time to encorporate these like 6 similar methods into 1 or 2 methods it should be possible and will make for nicer code
-    @Deprecated
-    public static void setSizeOverTimeDefault(Entity entity, Float size) {
+    public static void addSize(Entity entity, Float size){
 
         if (entity instanceof Player) {
-            PlayerSizeUtils.setSize((Player) entity, size, 0);
-        }
+            PlayerSizeUtils.addSize((Player) entity, size);
+        }else{
+            ScaleData data = getScaleData(entity);
+            
+            Float currentScale = data.getScale();
 
-        checkMaxHitbox(entity, size, 20);
-        ScaleData data = getScaleData(entity);
-        data.setScaleTickDelay(20);
-        data.setTargetScale(size);
-    }   
+            currentScale = lockSizeCap(currentScale + size);
 
-    @Deprecated
-    public static void multSizeOverTimeDefault(Entity entity, Float size){
-        Float targetScale = getScaleData(entity).getTargetScale()*size;
-        setSizeOverTimeDefault(entity, targetScale);
-    }
-
-    @Deprecated
-    public static void setSizeOverTimeCustom(Entity entity, Float size, int ticks) {
-
-        if (entity instanceof Player) {
-            PlayerSizeUtils.setSize((Player) entity, size, 0);
-        }
-
-        checkMaxHitbox(entity, size, ticks);
-        ScaleData data = getScaleData(entity);
-        data.setScaleTickDelay(ticks);
-        data.setTargetScale(size);
-    }   
-
-    @Deprecated
-    public static void multSizeOverTimeCustom(Entity entity, Float size, int ticks){
-        Float targetScale = getScaleData(entity).getTargetScale()*size;
-        setSizeOverTimeCustom(entity, targetScale, ticks);
+            data.setScale(currentScale);
+        } 
     }
 
     public static float getSize(Entity entity) {
@@ -85,6 +66,13 @@ public class EntitySizeUtils {
             return PlayerSizeUtils.getSize((Player) entity);
         }
         return getScaleData(entity).getScale();
+    }
+
+    public static float getTargetSize(Entity entity){
+        if (entity instanceof Player) {
+            return PlayerSizeUtils.getSize((Player) entity);
+        }
+        return getScaleData(entity).getTargetScale();
     }
 
     private static ScaleData getScaleData(Entity entity) {
@@ -97,32 +85,22 @@ public class EntitySizeUtils {
 
         PehkuiEntityExtensions pEnt = (PehkuiEntityExtensions) entity;
 
-        //im adding this here as a temp thing i need to move it to a proper place later
-        fixStepHeight(pEnt, size, ticks);
+        //TODO implement stepheight fix for other entities
+        //fixStepHeight(pEnt, size, ticks);
 
 
         ScaleData heightData = pEnt.pehkui_getScaleData(hitbox_height);
         ScaleData widthData = pEnt.pehkui_getScaleData(hitbox_width);
 
-        if (ticks > 0) {
-            heightData.setScaleTickDelay(ticks);
-            widthData.setScaleTickDelay(ticks);
+        heightData.setScaleTickDelay(ticks);
+        widthData.setScaleTickDelay(ticks);
 
-            if (size > maxScale) {
-                heightData.setTargetScale(maxScale/size);
-                widthData.setTargetScale(maxScale/size);
-            }else if (heightData.getTargetScale() < 1.0f || widthData.getTargetScale() < 1.0f){
-                heightData.setTargetScale(1.0f);
-                widthData.setTargetScale(1.0f);
-            }
-        }else{
-            if (size > maxScale) {
-                heightData.setScale(maxScale/size);
-                widthData.setScale(maxScale/size);
-            }else if (heightData.getTargetScale() < 1.0f || widthData.getTargetScale() < 1.0f){
-                heightData.setScale(1.0f);
-                widthData.setScale(1.0f);
-            }
+        if (size > maxScale) {
+            heightData.setTargetScale(maxScale/size);
+            widthData.setTargetScale(maxScale/size);
+        }else if (heightData.getTargetScale() < 1.0f || widthData.getTargetScale() < 1.0f){
+            heightData.setTargetScale(1.0f);
+            widthData.setTargetScale(1.0f);
         }
 
         
@@ -142,5 +120,13 @@ public class EntitySizeUtils {
         }else{
             stepData.setScale(stepHeight);
         }
+    }
+
+    private static Float lockSizeCap(float size){
+        if (size > Config.maxEntityScale) {
+            return (float) Config.maxEntityScale;
+        }
+        
+        return size;
     }
 }

@@ -13,13 +13,26 @@
       "WebBlockMixin",
       "VibrationSystemListenerMixin",
       "BottleItemMixin",
+      "PowderSnowBlockMixin",
+      "BigDripleafBlockMixin",
+      "PlayerCarryPickupMixin",
 
 
       "rendering.FrustumMixin",
 
 
-      "playerextensions.PlayerMixin",
+      "playerextensions.PlayerRenderMixin",
       "playerextensions.PlayerCapabilityMixin",
+
+
+      "climbing.BlockClimbingMixin",
+      "climbing.EntityClimbingMixin",
+
+
+      "swimming.SwimmingMixin",
+      "swimming.CauldronMixin",
+      "swimming.BlockSwimmingMixin",
+      "swimming.LocalPlayerMixin",
 
 
       "collisions.BasePressurePlateBlockMixin",

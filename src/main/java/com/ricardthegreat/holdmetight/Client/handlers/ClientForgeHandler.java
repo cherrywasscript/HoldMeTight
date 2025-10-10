@@ -2,23 +2,40 @@ package com.ricardthegreat.holdmetight.client.handlers;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.Commands.TestCommand;
+import com.ricardthegreat.holdmetight.Commands.CustomCarryCommand;
+import com.ricardthegreat.holdmetight.Commands.ResetCarriedCommand;
+import com.ricardthegreat.holdmetight.Commands.ResetCarryingCommand;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.client.ClientHooks;
 import com.ricardthegreat.holdmetight.client.Keybindings;
-import com.ricardthegreat.holdmetight.client.screens.CarryPositionScreen;
-
+import com.ricardthegreat.holdmetight.init.ItemInit;
+import com.ricardthegreat.holdmetight.items.CollarItem;
+import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Pig;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterClientCommandsEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.client.event.RenderNameTagEvent;
+import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 
 @Mod.EventBusSubscriber(modid = HoldMeTight.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ClientForgeHandler {
@@ -29,8 +46,11 @@ public class ClientForgeHandler {
     @SubscribeEvent
     public static void RegisterClientCommandsEvent(RegisterClientCommandsEvent event){
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
+        
+        CustomCarryCommand.register(dispatcher);
 
-        TestCommand.register(dispatcher);
+        ResetCarriedCommand.register(dispatcher);
+        ResetCarryingCommand.register(dispatcher);
         //ChatScaleCommand.register(dispatcher);
     } 
 
@@ -66,6 +86,12 @@ public class ClientForgeHandler {
             playerCarry.setShouldSyncSimple(true);
         }
 
+        if(Keybindings.INSTANCE.carryWheelKey.consumeClick() && mcPlayer != null){
+            if (mcPlayer.level().isClientSide) {
+                DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientHooks.openCarryPositionWheel(mcPlayer));
+            }
+        }
+
         //key to open size prefs screen
         if(Keybindings.INSTANCE.sizePrefsKey.consumeClick() && mcPlayer != null) {     
             if (mcPlayer.level().isClientSide) {
@@ -80,4 +106,44 @@ public class ClientForgeHandler {
             }
         }
     }
+
+    @SubscribeEvent
+    public static void interactLivingEntityEvent(PlayerInteractEvent.EntityInteract event){
+        Item item = event.getEntity().getItemInHand(event.getHand()).getItem();
+
+        Entity target = event.getTarget();
+
+        if (item instanceof AbstractSizeRemoteItem) {
+            AbstractSizeRemoteItem sizeRemote = (AbstractSizeRemoteItem) item;
+            
+            if (target instanceof LivingEntity && !event.getEntity().getCooldowns().isOnCooldown(item)) {
+                sizeRemote.interactLivingEntity(event.getEntity().getItemInHand(event.getHand()), event.getEntity(), (LivingEntity) target, event.getHand());
+                if (event.isCancelable()) {
+                    event.setCancellationResult(InteractionResult.SUCCESS);
+                    event.setCanceled(true);
+                }
+            }
+        }
+    }
+
+    //TODO figure out if this should actually be done on rendernametag event or not? it seems like i could probably change a players name or something idk
+    @SubscribeEvent
+    public static void renderNameTag(RenderNameTagEvent event){
+        if (event.getEntity() instanceof Player player) {
+            CuriosApi.getCuriosInventory(player).ifPresent(handler -> handler.getStacksHandler("collar").ifPresent(stacksHandler -> {
+                        IDynamicStackHandler stackHandler = stacksHandler.getStacks();
+                        IDynamicStackHandler cosmeticStacksHandler = stacksHandler.getCosmeticStacks();
+
+                        for (int i = 0; i < stackHandler.getSlots(); i++) {
+                            ItemStack stack = stackHandler.getStackInSlot(i);
+                            if (stack.getItem() instanceof CollarItem) {
+                                //TODO implement 
+                                //event.setContent(Component.literal("test"));
+                            }
+                        }
+
+                    }));
+        }
+    }
+
 }

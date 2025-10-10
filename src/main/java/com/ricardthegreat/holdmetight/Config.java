@@ -18,6 +18,10 @@ public class Config
                 .comment("The maximum scale a hitbox can be (8 or lower recommended for performance sake when larger)")
                 .define("maxHitboxScale", 8d);
 
+        private static final ForgeConfigSpec.ConfigValue<Double> MAX_ENTITY_SIZE = BUILDER
+                .comment("The maximum scale an entity can become, set to 0 for no cap (cannot be below 1)")
+                .define("maxEntityScale", 0d);
+
         private static final ForgeConfigSpec.ConfigValue<Double> PAPER_WINGS_MAX_SCALE = BUILDER
                 .comment("the largest someone can be while wearing the paper wings item (an elytra in all ways that matter)")
                 .define("maxWingsScale", 0.05d);
@@ -57,6 +61,7 @@ public class Config
         static final ForgeConfigSpec SPEC = BUILDER.build();
 
         public static double maxHitboxScale;
+        public static double maxEntityScale;
         public static double maxWingsScale;
         public static double minParticleScale;
         public static boolean playerChatScale;
@@ -72,6 +77,13 @@ public class Config
         static void onLoad(final ModConfigEvent event)
         {
                 maxHitboxScale = MAX_HITBOX_SIZE.get();
+                if (MAX_ENTITY_SIZE.get() <= 0) {
+                        maxEntityScale = Float.POSITIVE_INFINITY;
+                }else if (MAX_ENTITY_SIZE.get() < 1) {
+                        maxEntityScale = 1;
+                }else{
+                        maxEntityScale = MAX_ENTITY_SIZE.get();
+                }
                 maxWingsScale = PAPER_WINGS_MAX_SCALE.get();
                 minParticleScale = MIN_PARTICLE_SCALE.get();
                 playerChatScale = PLAYER_CHAT_SCALE.get();

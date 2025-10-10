@@ -1,7 +1,7 @@
 {
     "item.holdmetight.remotes.iron_size_remote":"Basic Size Remote",
     "item.holdmetight.remotes.gold_size_remote":"Advanced Size Remote",
-    "item.holdmetight.remotes.netherite_size_remote":"Master Remote",
+    "item.holdmetight.remotes.netherite_size_remote":"Master Remote (unfinished)",
 
     "tooltip.holdmetight.abstract_size_remote_target.tooltip":"Current target: ",
     "tooltip.holdmetight.abstract_size_remote_no_target.tooltip":"No target selected",
@@ -10,6 +10,15 @@
     "item.holdmetight.paper_wings_item":"Paper Wings",
 
     "item.holdmetight.size_ray":"Size ray (experimental)",
+
+    "item.holdmetight.collar_item":"Collar",
+    "item.holdmetight.collar_item.owner":"Owner: %s",
+    "item.holdmetight.collar_item.owners":"Owners: %s",
+    "item.holdmetight.collar_item.locked":"Locked",
+    "item.holdmetight.collar_item.unlocked":"Unlocked",
+
+    "item.holdmetight.collar_key_item":"Collar Key",
+    "item.holdmetight.collar_key_item.owner":"Key belongs to: %s",
 
 
     "gui.holdmetight.size_remote_title":"Test Screen",
@@ -81,6 +90,7 @@
     "message.holdmetight.shoulder_key_pressed":"Set carry position to shoulder",
     "message.holdmetight.custom_key_pressed":"Set carry position to custom",
     "message.holdmetight.default_key_pressed":"Set carry position to hand",
+    "message.holdmetight.carry_key_pressed": "Set carry position to ",
 
 
 

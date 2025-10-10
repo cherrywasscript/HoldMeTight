@@ -35,7 +35,6 @@ public class CPlayerCarrySyncPacket {
     public void encode(FriendlyByteBuf buffer){
         buffer.writeBoolean(carried);
         buffer.writeBoolean(carrying);
-        buffer.writeUUID(uuid);
 
         buffer.writeInt(carryPos[0]);
         buffer.writeInt(carryPos[1]);
@@ -46,6 +45,8 @@ public class CPlayerCarrySyncPacket {
         buffer.writeDouble(custom.vertOffset);
         buffer.writeDouble(custom.xymult);
         buffer.writeBoolean(custom.headLink);
+
+        buffer.writeUUID(uuid);
     }
 
     public void handle(Supplier<NetworkEvent.Context> context){

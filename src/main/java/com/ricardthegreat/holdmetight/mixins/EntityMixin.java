@@ -1,6 +1,5 @@
 package com.ricardthegreat.holdmetight.mixins;
 
-import org.antlr.v4.parse.ANTLRParser.elementEntry_return;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
@@ -8,16 +7,13 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.carry.CarryPosition;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
-import com.ricardthegreat.holdmetight.network.CPlayerCarrySimplePacket;
 import com.ricardthegreat.holdmetight.network.CPlayerDismountPlayerPacket;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
-import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -26,7 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
 
-
+//TODO make not pushed by fluids when big (IFORGEENTITY)
 @Mixin(Entity.class)
 public abstract class EntityMixin {
 
@@ -36,13 +32,17 @@ public abstract class EntityMixin {
 
     //allows for picking up entities when clicking on them
     //currently only works on players
-    @Inject(at = @At("HEAD"), method = "interact(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;")
+    @Inject(at = @At("HEAD"), method = "interact(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;", cancellable = true)
     public void unnamedsizemod$interact(Player vehicle, InteractionHand hand, CallbackInfoReturnable<InteractionResult> info) {
         Entity rider = (Entity) (Object) this;
+        PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerCarryCapability(vehicle);
         
-        if(rider instanceof Player && vehicle.getMainHandItem() == ItemStack.EMPTY && EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)/4){
+        if (vehicleCarry.getIsCarrying()) {
+            if (vehicle.getPassengers().size() == 0) {
+                vehicleCarry.setCarrying(false);
+            }
+        }else if(rider instanceof Player && vehicle.getMainHandItem() == ItemStack.EMPTY && EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)/4){
 
-            PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerCarryCapability(vehicle);
             PlayerCarry riderCarry = PlayerCarryProvider.getPlayerCarryCapability((Player) rider);
 
             rider.startRiding(vehicle);
@@ -67,9 +67,15 @@ public abstract class EntityMixin {
             */
             
         }else if (!(rider instanceof Player) && vehicle.getMainHandItem() == ItemStack.EMPTY && EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)/4) {
+
             rider.startRiding(vehicle);
+
+            vehicleCarry.setCarrying(true);
+
+            if(!rider.level().isClientSide()) {
+                vehicleCarry.setShouldSyncSimple(true);
+            }
         }
-        
     }
 
 
@@ -94,6 +100,13 @@ public abstract class EntityMixin {
                 vehicleCarry.setShouldSyncSimple(true);
                 riderCarry.setShouldSyncSimple(true);
                 PacketHandler.sendToAllClients(new CPlayerDismountPlayerPacket(ent.getUUID()));
+            }
+        }else if (!(ent instanceof Player) && ent.isPassenger() && vehicle != null && vehicle instanceof Player) {
+            PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerCarryCapability((Player) vehicle);
+            vehicleCarry.setCarrying(false);
+            if(!ent.level().isClientSide()) {
+                vehicleCarry.setShouldSyncSimple(true);
+                //PacketHandler.sendToAllClients(new CPlayerDismountPlayerPacket(ent.getUUID()));
             }
         }
     }
@@ -221,27 +234,10 @@ public abstract class EntityMixin {
         float scaleDif = EntitySizeUtils.getSize(entity)/EntitySizeUtils.getSize(thisEnt);
 
 
-        if (scaleDif < 0.25 || scaleDif > 4) {
+        if (scaleDif <= 0.5 || scaleDif >= 2) {
             info.cancel();
-        }
-
-        if (thisEnt instanceof Player && entity instanceof Player && thisEnt != entity) {
-            //System.out.println(thisEnt.getName() + "/" + entity.getName());
-        }
-            
+        }  
     }
-
-    @Inject(at = @At("HEAD"), method = "canCollideWith(Lnet/minecraft/world/entity/Entity;)Z", cancellable = true)
-    public void canCollideWith(Entity entity, CallbackInfoReturnable<Boolean> info) {
-        Entity thisEnt = (Entity) (Object) this;
-        float scaleDif = EntitySizeUtils.getSize(entity)/EntitySizeUtils.getSize(thisEnt);
-
-        if (scaleDif < 0.25 || scaleDif > 4) {
-            info.cancel();
-        }
-    }
-
-
 
     @Overwrite
     public boolean fireImmune() {

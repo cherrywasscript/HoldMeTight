@@ -1,0 +1,15 @@
+- after placing down a non player mob you cant pick one up again for a few seconds
+- you cannot pick up ridable mobs like horses
+- crash when size stealing from mobs (possibly other issues with non player size change)
+- desync of size between clients
+- tinies can walk through glass panes
+
+- (debug for carry command sends carry data to server to be synced and also downloads all carry data to sync)
+
+
+bugs i cant replicate:
+- carry desync(not showing on one end essential only?)
+- sometimes you are kicked off of someone while being carried (crouching near climbable blocks?)
+- various bugs with not being able to pick up people put down (essential only?)
+- other player hand doesnt extend when holding (essential only?)
+- crouching off while being held causes issues (essential only?)

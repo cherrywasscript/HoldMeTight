@@ -63,6 +63,11 @@ public class PacketHandler {
         CPlayerCarrySimplePacket::new, 
         CPlayerCarrySimplePacket::handle);
 
+        INSTANCE.registerMessage(id++, SEntityPutDownPacket.class, 
+        SEntityPutDownPacket::encode, 
+        SEntityPutDownPacket::new, 
+        SEntityPutDownPacket::handle);
+
         INSTANCE.registerMessage(id++, SPlayerPutDownPacket.class, 
         SPlayerPutDownPacket::encode, 
         SPlayerPutDownPacket::new, 
@@ -72,6 +77,11 @@ public class PacketHandler {
         SSizeRaySync::encode, 
         SSizeRaySync::new, 
         SSizeRaySync::handle);
+
+        INSTANCE.registerMessage(id++, SPlayerSizeMixinSyncPacket.class, 
+        SPlayerSizeMixinSyncPacket::encode, 
+        SPlayerSizeMixinSyncPacket::new, 
+        SPlayerSizeMixinSyncPacket::handle);
 
         INSTANCE.registerMessage(id++, CPlayerSizeMixinSyncPacket.class, 
         CPlayerSizeMixinSyncPacket::encode, 

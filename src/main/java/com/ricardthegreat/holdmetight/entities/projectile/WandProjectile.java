@@ -46,9 +46,9 @@ public class WandProjectile extends Projectile {
         }
         
         if (isMult) {
-            EntitySizeUtils.multSizeOverTimeDefault(hitEntity.getEntity(), scale);
+            EntitySizeUtils.multSize(hitEntity.getEntity(), scale, 20);
         }else{
-            EntitySizeUtils.setSizeOverTimeDefault(hitEntity.getEntity(), scale);
+            EntitySizeUtils.setSize(hitEntity.getEntity(), scale, 20);
         }
     }
 

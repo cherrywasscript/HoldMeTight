@@ -15,6 +15,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -30,9 +32,9 @@ public abstract class AbstractSizeRemoteScreen extends Screen{
     protected static final String CURRENT_SCALE = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.strings.current_scale_string").getString() + ":";
     protected static final String TARGET_SCALE = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.strings.target_scale_string").getString() + ":";
     protected static final String SCALE_TIME = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.strings.scale_time_string").getString() + ":";
-    protected static final String NOT_APPLICABLE = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.strings.not_applicable_string").getString() + ":";
-    protected static final String OUT_OF_RANGE = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.strings.out_of_range_string").getString() + ":";
-    protected static final String NO_TARGET = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.strings.no_target_string").getString() + ":";
+    protected static final String NOT_APPLICABLE = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.strings.not_applicable_string").getString();
+    protected static final String OUT_OF_RANGE = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.strings.out_of_range_string").getString();
+    protected static final String NO_TARGET = Component.translatable("gui." + HoldMeTight.MODID + ".size_remote.strings.no_target_string").getString();
     
 
     protected final int imageWidth;
@@ -40,7 +42,8 @@ public abstract class AbstractSizeRemoteScreen extends Screen{
 
     //the item user and the player the item has selected
     protected Player user;
-    protected Player selectedPlayer;
+    protected Entity selectedEnt;
+    //protected Player selectedPlayer;
 
     // the held item and its tags to perform stuff with
     protected ItemStack stack;
@@ -90,14 +93,16 @@ public abstract class AbstractSizeRemoteScreen extends Screen{
         if(level == null) return;
         
         if (tag.contains(AbstractSizeRemoteItem.TARGET_TAG) && !tag.getBoolean(AbstractSizeRemoteItem.TARGET_TAG)) {
-            selectedPlayer = null;
-        }else {
-            selectedPlayer = level.getPlayerByUUID(tag.getUUID(AbstractSizeRemoteItem.UUID_TAG));
-            if(selectedPlayer == null){
-                selectedPlayer = user;
-                tag.putUUID(AbstractSizeRemoteItem.UUID_TAG, selectedPlayer.getUUID());
+            selectedEnt = null;
+        }else if (tag.getBoolean(AbstractSizeRemoteItem.IS_PLAYER_TAG)) {
+            selectedEnt = level.getPlayerByUUID(tag.getUUID(AbstractSizeRemoteItem.UUID_TAG));
+            if(selectedEnt == null){
+                selectedEnt = user;
+                tag.putUUID(AbstractSizeRemoteItem.UUID_TAG, selectedEnt.getUUID());
                 stack.setTag(tag);
             }
+        }else{
+            selectedEnt = level.getEntity(tag.getInt(AbstractSizeRemoteItem.ENTITY_ID));
         }
     }
 
@@ -117,18 +122,21 @@ public abstract class AbstractSizeRemoteScreen extends Screen{
 
         graphics.drawString(font, TARGET, screenLeft + 2, screenTop + 2,0xdddddd,false);
         graphics.drawString(font, CURRENT_SCALE, screenLeft + 2, screenTop + verTextSep,0xdddddd,false);
-        graphics.drawString(font, TARGET_SCALE, screenLeft + 2, screenTop + verTextSep*2,0xdddddd,false);
-        graphics.drawString(font, SCALE_TIME, screenLeft + 2, screenTop + verTextSep*3,0xdddddd,false);
         
-        if (selectedPlayer != null) {
+        if (selectedEnt != null && selectedEnt instanceof Player) {
+            Player selectedPlayer = (Player) selectedEnt;
+
+            graphics.drawString(font, TARGET_SCALE, screenLeft + 2, screenTop + verTextSep*2,0xdddddd,false);
+            graphics.drawString(font, SCALE_TIME, screenLeft + 2, screenTop + verTextSep*3,0xdddddd,false);
+
             if (inRange()) {
                 graphics.drawString(font, selectedPlayer.getName().getString(), screenLeft + font.width(TARGET) + 5, screenTop + 2, 0xadd8e6,false);
                 graphics.drawString(font, Float.toString(PlayerSizeUtils.getSize(selectedPlayer)), screenLeft + font.width(CURRENT_SCALE) + 5, screenTop + verTextSep, 0xadd8e6,false);
                 graphics.drawString(font, Float.toString(PlayerSizeUtils.getTargetSize(selectedPlayer)), screenLeft + font.width(TARGET_SCALE) + 5, screenTop + verTextSep*2, 0xadd8e6,false);
                 graphics.drawString(font, ticksToTime(PlayerSizeUtils.getRemainingTicks(selectedPlayer)), screenLeft + font.width(SCALE_TIME) + 5, screenTop + verTextSep*3, 0xadd8e6,false);
             }else{
-                graphics.drawString(font, OUT_OF_RANGE, screenLeft + font.width(TARGET) + 2, screenTop + 2, 0xffff00, false);
-                graphics.drawString(font, NOT_APPLICABLE, screenLeft + font.width(CURRENT_SCALE) + 2, screenTop + verTextSep, 0xffff00, false);
+                graphics.drawString(font, OUT_OF_RANGE, screenLeft + font.width(TARGET) + 5, screenTop + 2, 0xffff00, false);
+                graphics.drawString(font, NOT_APPLICABLE, screenLeft + font.width(CURRENT_SCALE) + 5, screenTop + verTextSep, 0xffff00, false);
             }
 
             PlayerRenderExtension rend = (PlayerRenderExtension) selectedPlayer;
@@ -138,11 +146,26 @@ public abstract class AbstractSizeRemoteScreen extends Screen{
                 InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, centerHorizonalPos, centerVerticalPos, 30, (float)centerHorizonalPos - mouseX, (float)(centerVerticalPos - 80) -mouseY, (Player) rend);
                 rend.setMenu(false);
             }
+        }else if (selectedEnt != null && selectedEnt instanceof LivingEntity) {
+            LivingEntity ent = (LivingEntity) selectedEnt;
+
+            if (inRange()) {
+                graphics.drawString(font, ent.getName().getString(), screenLeft + font.width(TARGET) + 5, screenTop + 2, 0xadd8e6,false);
+                graphics.drawString(font, Float.toString(EntitySizeUtils.getSize(ent)), screenLeft + font.width(CURRENT_SCALE) + 5, screenTop + verTextSep, 0xadd8e6,false);
+            }else{
+                graphics.drawString(font, OUT_OF_RANGE, screenLeft + font.width(TARGET) + 5, screenTop + 2, 0xffff00, false);
+                graphics.drawString(font, NOT_APPLICABLE, screenLeft + font.width(CURRENT_SCALE) + 5, screenTop + verTextSep, 0xffff00, false);
+            }
+
+            InventoryScreen.renderEntityInInventoryFollowsMouse(graphics, centerHorizonalPos, centerVerticalPos, 30, (float)centerHorizonalPos - mouseX, (float)(centerVerticalPos - 80) -mouseY, ent);
         }else{
-            graphics.drawString(font, NOT_APPLICABLE, screenLeft + font.width(TARGET) + 2, screenTop + 2, 0xff0000, false);
-            graphics.drawString(font, NO_TARGET, screenLeft + font.width(CURRENT_SCALE) + 2, screenTop + verTextSep, 0xff0000, false);
-            graphics.drawString(font, NOT_APPLICABLE, screenLeft + font.width(TARGET) + 2, screenTop + verTextSep*2, 0xff0000, false);
-            graphics.drawString(font, NOT_APPLICABLE, screenLeft + font.width(TARGET) + 2, screenTop + verTextSep*3, 0xff0000, false);
+            graphics.drawString(font, TARGET_SCALE, screenLeft + 2, screenTop + verTextSep*2,0xdddddd,false);
+            graphics.drawString(font, SCALE_TIME, screenLeft + 2, screenTop + verTextSep*3,0xdddddd,false);
+
+            graphics.drawString(font, NOT_APPLICABLE, screenLeft + font.width(TARGET) + 5, screenTop + 2, 0xff0000, false);
+            graphics.drawString(font, NO_TARGET, screenLeft + font.width(CURRENT_SCALE) + 5, screenTop + verTextSep, 0xff0000, false);
+            graphics.drawString(font, NOT_APPLICABLE, screenLeft + font.width(TARGET_SCALE) + 5, screenTop + verTextSep*2, 0xff0000, false);
+            graphics.drawString(font, NOT_APPLICABLE, screenLeft + font.width(SCALE_TIME) + 5, screenTop + verTextSep*3, 0xff0000, false);
         }
     }
 
@@ -187,7 +210,7 @@ public abstract class AbstractSizeRemoteScreen extends Screen{
     }
 
     protected boolean inRange(){
-        double distance =  user.position().distanceTo(selectedPlayer.position());
+        double distance =  user.position().distanceTo(selectedEnt.position());
         if (distance <= range) {
             return true;
         }

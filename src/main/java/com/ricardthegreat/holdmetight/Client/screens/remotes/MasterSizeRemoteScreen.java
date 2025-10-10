@@ -10,24 +10,23 @@ import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.SEntityAddTargetScalePacket;
-import com.ricardthegreat.holdmetight.network.SEntityMultTargetScalePacket;
 import com.ricardthegreat.holdmetight.size.PlayerSize;
 import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
-import com.ricardthegreat.holdmetight.utils.PlayerRenderExtension;
+import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.components.Tooltip;
-import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.util.LazyOptional;
+import virtuoel.pehkui.api.ScaleData;
+import virtuoel.pehkui.util.PehkuiEntityExtensions;
 
 public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
 
@@ -201,29 +200,22 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
         }
 
         //this check shouldnt be needed but just in case
-        if (selectedPlayer != null && selectedPlayer != user) {
+        if (selectedEnt != null && selectedEnt != user) {
             if (inRange()) {
-                PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(user);
-
-                LazyOptional<PlayerSize> optional = selectedPlayer.getCapability(PlayerSizeProvider.PLAYER_SIZE);
-                PlayerSize orElse = optional.orElse(null);
-
-                float current = orElse.getCurrentScale();
-                float target = orElse.getTargetScale();
+                float current = EntitySizeUtils.getSize(selectedEnt);
+                float target = EntitySizeUtils.getTargetSize(selectedEnt);
                 
                 current -= scale;
                 target -= scale;
 
-
-                if (current < 0) {
-                    scale = 0f;
+                if (current >= 0 && target >= 0) {
+                    //send the multiplier and playeruuid to the server packet handler
+                    PacketHandler.sendToServer(new SEntityAddTargetScalePacket(scale, user.getUUID(), user.getId(), true));
+                    PacketHandler.sendToServer(new SEntityAddTargetScalePacket(-scale, selectedEnt.getUUID(), tag.getInt(AbstractSizeRemoteItem.ENTITY_ID), tag.getBoolean(AbstractSizeRemoteItem.IS_PLAYER_TAG)));
+                }else{
+                    //TODO add error, something like "you dont have that much size to give";
                 }
-                if (target < 0) {
-                    scale = 0f;
-                }
-                //send the multiplier and playeruuid to the server packet handler
-                PacketHandler.sendToServer(new SEntityAddTargetScalePacket(scale, user.getUUID()));
-                PacketHandler.sendToServer(new SEntityAddTargetScalePacket(-scale, selectedPlayer.getUUID()));
+                
             }
         }
     }
@@ -237,29 +229,21 @@ public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
         }
 
         //this check shouldnt be needed but just in case
-        if (selectedPlayer != null && selectedPlayer != user) {
+        if (selectedEnt != null && selectedEnt != user) {
             if (inRange()) {
-                PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(user);
-
-                LazyOptional<PlayerSize> optional = user.getCapability(PlayerSizeProvider.PLAYER_SIZE);
-                PlayerSize orElse = optional.orElse(new PlayerSize());
-
-                float current = orElse.getCurrentScale();
-                float target = orElse.getTargetScale();
+                float current = PlayerSizeUtils.getSize(user);
+                float target = PlayerSizeUtils.getTargetSize(user);
                 
                 current -= scale;
                 target -= scale;
 
-
-                if (current < 0) {
-                    scale = 0f;
-                }
-                if (target < 0) {
-                    scale = 0f;
-                }
                 //send the multiplier and playeruuid to the server packet handler
-                PacketHandler.sendToServer(new SEntityAddTargetScalePacket(-scale, user.getUUID()));
-                PacketHandler.sendToServer(new SEntityAddTargetScalePacket(scale, selectedPlayer.getUUID()));
+                if (current >= 0 && target >= 0) {
+                    PacketHandler.sendToServer(new SEntityAddTargetScalePacket(-scale, user.getUUID(), user.getId(), true));
+                    PacketHandler.sendToServer(new SEntityAddTargetScalePacket(scale, selectedEnt.getUUID(), tag.getInt(AbstractSizeRemoteItem.ENTITY_ID), tag.getBoolean(AbstractSizeRemoteItem.IS_PLAYER_TAG)));
+                }else{
+                    //TODO add error, something like "you dont have that much size to give";
+                }
             }
         }
     }
