@@ -18,7 +18,7 @@ public class FrustumMixin{
    private static int maxcount = 0;
 
    //@Shadow int OFFSET_STEP;
-   @Shadow FrustumIntersection intersection;
+   @Shadow private final FrustumIntersection intersection = new FrustumIntersectionCustom();
    @Shadow Matrix4f matrix;
    @Shadow Vector4f viewVector;
    @Shadow double camX;
@@ -55,17 +55,10 @@ public class FrustumMixin{
    @Overwrite
    private void calculateFrustum(Matrix4f p_253909_, Matrix4f p_254521_) {
       p_254521_.mul(p_253909_, this.matrix);
-      this.intersection.set(this.matrix);
+      FrustumIntersectionCustom custom = new FrustumIntersectionCustom();
+      //custom.set(this.matrix);
+      ((FrustumIntersectionCustom) intersection).set(this.matrix);
 
-      FrustumIntersectionCustom temp = new FrustumIntersectionCustom();
-      temp.set(this.matrix);
-      float[] list = temp.getZ();
-      
-      //System.out.println(this.matrix.m33());
-
-      custom = temp;
-      //search:-0.99993694/0.004597814/0.010249268/-5.000001E-6
-      //System.out.println("search:"+list[0]+"/"+list[1]+"/"+list[2]+"/"+list[3]);
 
       this.viewVector = this.matrix.transformTranspose(new Vector4f(0.0F, 0.0F, 1.0F, 0.0F));
    }

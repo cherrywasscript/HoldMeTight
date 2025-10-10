@@ -249,6 +249,10 @@ public class FrustumIntersectionCustom extends FrustumIntersection{
 
         if (allowTestSpheres) {
             invl = org.joml.Math.invsqrt(pzX * pzX + pzY * pzY + pzZ * pzZ);
+            //TODO FIGURE SHIT OUT WITH THIS LIKE???????
+            if (invl == Float.POSITIVE_INFINITY) {
+                invl = 417000000;
+            }
             pzX *= invl; pzY *= invl; pzZ *= invl; pzW *= invl;
 
             //System.out.println(pzX+"/"+pzY+"/"+pzZ+"/"+pzW+"/"+invl);
