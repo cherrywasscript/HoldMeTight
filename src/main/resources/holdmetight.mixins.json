@@ -15,9 +15,7 @@
       "BottleItemMixin",
 
 
-      "rendering.ScaleRendererUtilsMixin",
       "rendering.FrustumMixin",
-      "rendering.GameRendererMixin",
 
 
       "playerextensions.PlayerMixin",
