@@ -1,15 +1,18 @@
 package com.ricardthegreat.holdmetight.items;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.jetbrains.annotations.NotNull;
 
 import com.mojang.datafixers.util.Pair;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -20,6 +23,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
@@ -33,6 +37,15 @@ public class CollarKeyItem extends Item{
 
     public CollarKeyItem(Properties p_41383_) {
         super(p_41383_);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @javax.annotation.Nullable Level level, List<Component> components, TooltipFlag flag) {
+        super.appendHoverText(stack, level, components, flag);
+        Pair<UUID, String> owner = getOwner(stack);
+        if (owner != null) {
+            components.add(Component.translatable("item.holdmetight.collar_key_item.owner", owner.getSecond()));
+        }
     }
 
     @Override

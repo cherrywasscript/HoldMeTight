@@ -4,6 +4,7 @@ package com.ricardthegreat.holdmetight.client;
 
 import com.ricardthegreat.holdmetight.client.screens.CarryPositionScreen;
 import com.ricardthegreat.holdmetight.client.screens.CarryPositionWheel;
+import com.ricardthegreat.holdmetight.client.screens.CollarScreen;
 import com.ricardthegreat.holdmetight.client.screens.SizePrefsScreen;
 import com.ricardthegreat.holdmetight.client.screens.SizeRayScreen;
 import com.ricardthegreat.holdmetight.client.screens.remotes.AdvancedSizeRemoteScreen;
@@ -18,6 +19,8 @@ import net.minecraft.world.entity.player.Player;
 public class ClientHooks {
 
     //remote screens
+    //hand is sent so i can grab the item in the players hand if needed, writing this because i forgot that once. 
+    //TODO maybe just send the item itself? not sure
     public static void openBasicSizeRemoteScreen(Player player, InteractionHand hand){
         Minecraft.getInstance().setScreen(new BasicSizeRemoteScreen(player, hand));
     }
@@ -47,6 +50,11 @@ public class ClientHooks {
 
     public static void openSizePrefsScreen(Player player){
         Minecraft.getInstance().setScreen(new SizePrefsScreen(player));
+    }
+
+
+    public static void openCollarScreen(Player player, InteractionHand hand){
+        Minecraft.getInstance().setScreen(new CollarScreen(player, hand));
     }
     
 }
