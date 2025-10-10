@@ -4,8 +4,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.Client.renderers.ArmorRenderer;
-import com.ricardthegreat.holdmetight.Client.renderers.layers.CollarModelLayers;
+import com.ricardthegreat.holdmetight.client.renderers.ArmorRenderer;
+import com.ricardthegreat.holdmetight.client.renderers.layers.CollarModelLayers;
 
 import java.lang.reflect.*;
 import java.util.function.Consumer;

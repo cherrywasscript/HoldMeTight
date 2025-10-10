@@ -1,4 +1,4 @@
-package com.ricardthegreat.holdmetight.Client.screens.remotes;
+package com.ricardthegreat.holdmetight.client.screens.remotes;
 
 import java.util.Random;
 import java.util.function.Predicate;
@@ -6,7 +6,7 @@ import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.Client.guielements.checkboxes.CustomCheckbox;
+import com.ricardthegreat.holdmetight.client.guielements.checkboxes.CustomCheckbox;
 import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.SEntityMultTargetScalePacket;

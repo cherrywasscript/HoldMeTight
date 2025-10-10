@@ -1,4 +1,4 @@
-package com.ricardthegreat.holdmetight.Client.screens.remotes;
+package com.ricardthegreat.holdmetight.client.screens.remotes;
 
 import java.util.function.Predicate;
 

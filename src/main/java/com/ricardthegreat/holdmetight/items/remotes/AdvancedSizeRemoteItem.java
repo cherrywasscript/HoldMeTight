@@ -2,7 +2,8 @@ package com.ricardthegreat.holdmetight.items.remotes;
 
 import javax.annotation.Nonnull;
 
-import com.ricardthegreat.holdmetight.Client.ClientHooks;
+import com.ricardthegreat.holdmetight.client.ClientHooks;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;

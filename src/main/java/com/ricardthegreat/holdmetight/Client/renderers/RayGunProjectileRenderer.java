@@ -1,4 +1,4 @@
-package com.ricardthegreat.holdmetight.Client.renderers;
+package com.ricardthegreat.holdmetight.client.renderers;
 
 import javax.annotation.Nonnull;
 
@@ -6,8 +6,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.Client.models.ModModelLayers;
-import com.ricardthegreat.holdmetight.Client.models.RayGunProjectileModel;
+import com.ricardthegreat.holdmetight.client.models.ModModelLayers;
+import com.ricardthegreat.holdmetight.client.models.RayGunProjectileModel;
 import com.ricardthegreat.holdmetight.entities.projectile.RayGunProjectile;
 
 import net.minecraft.client.renderer.MultiBufferSource;

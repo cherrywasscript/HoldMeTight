@@ -1,4 +1,4 @@
-package com.ricardthegreat.holdmetight.Client;
+package com.ricardthegreat.holdmetight.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.ricardthegreat.holdmetight.HoldMeTight;

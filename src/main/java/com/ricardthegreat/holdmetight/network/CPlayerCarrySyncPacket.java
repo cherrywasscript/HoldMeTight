@@ -3,9 +3,9 @@ package com.ricardthegreat.holdmetight.network;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import com.ricardthegreat.holdmetight.Client.handlers.ClientPacketHandler;
 import com.ricardthegreat.holdmetight.carry.CarryPosition;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
+import com.ricardthegreat.holdmetight.client.handlers.ClientPacketHandler;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;

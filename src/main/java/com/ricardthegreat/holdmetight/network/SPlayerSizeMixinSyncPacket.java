@@ -3,7 +3,7 @@ package com.ricardthegreat.holdmetight.network;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import com.ricardthegreat.holdmetight.Client.handlers.ClientPacketHandler;
+import com.ricardthegreat.holdmetight.client.handlers.ClientPacketHandler;
 import com.ricardthegreat.holdmetight.size.PlayerSize;
 import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
 

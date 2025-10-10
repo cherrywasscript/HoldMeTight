@@ -1,13 +1,13 @@
-package com.ricardthegreat.holdmetight.Client.handlers;
+package com.ricardthegreat.holdmetight.client.handlers;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.Client.ClientHooks;
-import com.ricardthegreat.holdmetight.Client.Keybindings;
-import com.ricardthegreat.holdmetight.Client.screens.CarryPositionScreen;
 import com.ricardthegreat.holdmetight.Commands.TestCommand;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.client.ClientHooks;
+import com.ricardthegreat.holdmetight.client.Keybindings;
+import com.ricardthegreat.holdmetight.client.screens.CarryPositionScreen;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;

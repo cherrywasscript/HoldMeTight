@@ -1,4 +1,4 @@
-package com.ricardthegreat.holdmetight.Client.handlers;
+package com.ricardthegreat.holdmetight.client.handlers;
 
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraft.client.model.EntityModel;
@@ -9,12 +9,12 @@ import net.minecraft.world.entity.player.Player;
 import java.util.Set;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.Client.Keybindings;
-import com.ricardthegreat.holdmetight.Client.models.ModModelLayers;
-import com.ricardthegreat.holdmetight.Client.models.RayGunProjectileModel;
-import com.ricardthegreat.holdmetight.Client.renderers.RayGunProjectileRenderer;
-import com.ricardthegreat.holdmetight.Client.renderers.WandProjectileRenderer;
-import com.ricardthegreat.holdmetight.Client.renderers.layers.PaperWingsLayer;
+import com.ricardthegreat.holdmetight.client.Keybindings;
+import com.ricardthegreat.holdmetight.client.models.ModModelLayers;
+import com.ricardthegreat.holdmetight.client.models.RayGunProjectileModel;
+import com.ricardthegreat.holdmetight.client.renderers.RayGunProjectileRenderer;
+import com.ricardthegreat.holdmetight.client.renderers.WandProjectileRenderer;
+import com.ricardthegreat.holdmetight.client.renderers.layers.PaperWingsLayer;
 import com.ricardthegreat.holdmetight.init.EntityInit;
 
 import net.minecraftforge.api.distmarker.Dist;

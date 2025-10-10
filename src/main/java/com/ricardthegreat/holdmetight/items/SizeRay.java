@@ -2,7 +2,7 @@ package com.ricardthegreat.holdmetight.items;
 
 import javax.annotation.Nonnull;
 
-import com.ricardthegreat.holdmetight.Client.ClientHooks;
+import com.ricardthegreat.holdmetight.client.ClientHooks;
 import com.ricardthegreat.holdmetight.entities.projectile.RayGunProjectile;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
