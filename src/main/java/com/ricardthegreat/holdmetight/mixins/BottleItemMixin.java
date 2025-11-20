@@ -39,7 +39,7 @@ public class BottleItemMixin extends Item{
             return super.useOn(context);
         }
 
-        if (level.getBlockState(targetBlock).canBeReplaced() && (!shouldFill(level, player) || player.isShiftKeyDown())) {
+        if (level.getBlockState(targetBlock).canBeReplaced() && player.isShiftKeyDown()) {
             level.setBlock(targetBlock, BlockInit.TINY_JAR_EMPTY.get().defaultBlockState(), Block.UPDATE_ALL);
             if (!player.getAbilities().instabuild) {
                 if (player.getMainHandItem().is(Items.GLASS_BOTTLE)) {
