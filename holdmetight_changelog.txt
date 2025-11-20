@@ -62,3 +62,7 @@ version 0.5.0-alpha:
 - hopefully fixed a desync issue on essential hosted servers
 - added a config option to limit the max size of an entity not just the size of their hitbox
 - fixed bug where carried player would pickup items instead of the carrier
+
+version 0.5.1-alpha:
+- added a patch fix to how rendering works so that the game no longer crashes if minimumCameraDepth is set below 3.051850947599719E-5 in pehkui-client config allowing your character model to stay visible at much smaller sizes (you will still need to change the config manually currently)
+- made it so glass bottles are now placed when shift-right clicking to prevent annoyance when doing things such as getting dragons breath and water bottles

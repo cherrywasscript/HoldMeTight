@@ -13,9 +13,7 @@ import net.minecraft.client.renderer.culling.Frustum;
 
 @Mixin(Frustum.class)
 public class FrustumMixin{
-
-   private static int maxcount = 0;
-
+   
    //@Shadow int OFFSET_STEP;
    @Shadow private final FrustumIntersection intersection = new FrustumIntersectionCustom();
    @Shadow Matrix4f matrix;
