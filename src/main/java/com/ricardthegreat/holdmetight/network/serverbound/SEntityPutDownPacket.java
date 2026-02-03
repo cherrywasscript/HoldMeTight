@@ -1,4 +1,4 @@
-package com.ricardthegreat.holdmetight.network;
+package com.ricardthegreat.holdmetight.network.serverbound;
 
 import java.util.UUID;
 import java.util.function.Supplier;

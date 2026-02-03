@@ -1,9 +1,10 @@
 package com.ricardthegreat.holdmetight.size;
 
 import com.ricardthegreat.holdmetight.Config;
-import com.ricardthegreat.holdmetight.network.CPlayerSizeMixinSyncPacket;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
-import com.ricardthegreat.holdmetight.network.SPlayerSizeMixinSyncPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.CPlayerSizeMixinSyncPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.SPlayerSizeMixinSyncPacket;
+
 import net.minecraft.nbt.CompoundTag;
 
 import net.minecraft.world.entity.player.Player;

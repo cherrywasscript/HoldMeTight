@@ -9,7 +9,8 @@ import javax.annotation.Nonnull;
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.items.SizeRay;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
-import com.ricardthegreat.holdmetight.network.SSizeRaySync;
+import com.ricardthegreat.holdmetight.network.serverbound.SSizeRaySync;
+
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;

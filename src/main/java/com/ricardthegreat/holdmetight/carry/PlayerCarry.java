@@ -3,11 +3,11 @@ package com.ricardthegreat.holdmetight.carry;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import com.ricardthegreat.holdmetight.network.CPlayerCarrySimplePacket;
-import com.ricardthegreat.holdmetight.network.CPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
-import com.ricardthegreat.holdmetight.network.SPlayerCarrySimplePacket;
-import com.ricardthegreat.holdmetight.network.SPlayerCarrySyncPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.CPlayerCarrySimplePacket;
+import com.ricardthegreat.holdmetight.network.clientbound.CPlayerCarrySyncPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.SPlayerCarrySimplePacket;
+import com.ricardthegreat.holdmetight.network.serverbound.SPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.utils.constants.PlayerCarryConstants;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;

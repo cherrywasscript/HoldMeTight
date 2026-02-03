@@ -9,8 +9,8 @@ import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.client.guielements.checkboxes.CustomCheckbox;
 import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
-import com.ricardthegreat.holdmetight.network.SEntityMultTargetScalePacket;
-import com.ricardthegreat.holdmetight.network.SEntitySetTargetScalePacket;
+import com.ricardthegreat.holdmetight.network.serverbound.SEntityMultTargetScalePacket;
+import com.ricardthegreat.holdmetight.network.serverbound.SEntitySetTargetScalePacket;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;

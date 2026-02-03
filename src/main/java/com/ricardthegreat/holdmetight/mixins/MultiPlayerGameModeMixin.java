@@ -10,8 +10,8 @@ import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.init.BlockInit;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
-import com.ricardthegreat.holdmetight.network.SEntityPutDownPacket;
-import com.ricardthegreat.holdmetight.network.SPlayerPutDownPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.SEntityPutDownPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.SPlayerPutDownPacket;
 
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.player.LocalPlayer;
