@@ -16,6 +16,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -82,8 +83,12 @@ public class PlayerStandinItem extends Item {
         //    passenger.dismountTo(context.getClickLocation().x, context.getClickLocation().y, context.getClickLocation().z);
         //}
         
-        passenger.stopRiding();
-        passenger.dismountTo(context.getClickLocation().x, context.getClickLocation().y, context.getClickLocation().z);
+        
+        if (!context.getLevel().isClientSide) {
+            passenger.dismountTo(context.getClickLocation().x, context.getClickLocation().y, context.getClickLocation().z);
+        }else{
+            passenger.stopRiding();
+        }
             
         if (vehicle.getMainHandItem().is(this)) {
             vehicle.getMainHandItem().shrink(1);
@@ -92,6 +97,32 @@ public class PlayerStandinItem extends Item {
         }
             
         return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int index, boolean selected) {
+        //get the tag from the item and fail if it has no tag, really shouldnt need this? but like idk better than having accidental null pointer crashes
+        if (stack.hasTag()) {
+            CompoundTag tag = stack.getTag();
+            //get all passengers from the player, this should be temporary as ill probably at some point have "passengers" that are not in the same dimension
+            List<Entity> passengers = entity.getPassengers();
+            if (passengers.size() == 0) {
+                //check if item entity is a passenger
+                UUID id = tag.getUUID(PLAYER_UUID);
+                Entity passenger = null;
+                
+                for(Entity pass : passengers){
+                    if (pass.getUUID().equals(id)) {
+                        passenger = pass;
+                    }
+                }
+                
+                if (passenger == null) {
+                    stack.shrink(1);
+                }
+            }
+        }
+        super.inventoryTick(stack, level, entity, index, selected);
     }
 
     @Override
