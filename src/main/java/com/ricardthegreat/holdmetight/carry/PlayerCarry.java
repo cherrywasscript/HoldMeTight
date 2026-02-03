@@ -137,15 +137,6 @@ public class PlayerCarry {
         this.isCarried = isCarried;
     }
 
-    //getters and setters for if it is carrying someone and how
-    public boolean getIsCarrying() {
-        return isCarrying;
-    }
-
-    public void setCarrying(boolean isCarrying) {
-        this.isCarrying = isCarrying;
-    }
-
     /**
      * 
      * @param default if its a custom or default position
