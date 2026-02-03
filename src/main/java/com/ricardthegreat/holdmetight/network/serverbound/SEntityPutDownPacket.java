@@ -53,7 +53,6 @@ public class SEntityPutDownPacket {
         if (target != null) {
             PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
 
-            playerCarry.setCarrying(false);
             playerCarry.setShouldSyncSimple(true);
 
             target.stopRiding();

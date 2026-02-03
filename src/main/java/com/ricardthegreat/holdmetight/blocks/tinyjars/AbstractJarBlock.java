@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.init.ItemInit;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.core.BlockPos;
@@ -42,22 +43,14 @@ public abstract class AbstractJarBlock extends Block{
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
         if (EntitySizeUtils.getSize(player) >= 0.8) {
-            PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
 
-            if (playerCarry.getIsCarrying() && playerCarry.getCarryPosition().posName == "hand") {
-                Vec3 center = pos.getCenter();
-                center = center.add(0, -0.4375, 0);
-
-                Entity passenger = player.getFirstPassenger();
-                passenger.stopRiding();
-                passenger.dismountTo(center.x(), center.y(), center.z());
+            if (player.getItemInHand(hand).is(ItemInit.PLAYER_ITEM.get())) {
+                placePlayerInside(pos, player);
             }else if (player.getItemInHand(hand).is(Items.WATER_BUCKET)) {
                
             }else{
                 level.setBlock(pos, state.cycle(OPEN), UPDATE_ALL);
             }
-
-            
 
             return InteractionResult.SUCCESS;
         }else{
@@ -89,6 +82,15 @@ public abstract class AbstractJarBlock extends Block{
             }
         }
         return makeShape();
+    }
+
+    protected void placePlayerInside(BlockPos pos, Player player){
+        Vec3 center = pos.getCenter();
+        center = center.add(0, -0.4375, 0);
+
+        Entity passenger = player.getFirstPassenger();
+        passenger.stopRiding();
+        passenger.dismountTo(center.x(), center.y(), center.z());
     }
 
     private VoxelShape makeClosedShape(){

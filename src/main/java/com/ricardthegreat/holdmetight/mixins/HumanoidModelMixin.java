@@ -8,9 +8,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.init.ItemInit;
 
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 
@@ -28,8 +30,7 @@ public abstract class HumanoidModelMixin<T extends LivingEntity>{
     //@Overwrite
     private void poseRightArm(T ent, CallbackInfo info){
         if(ent instanceof Player){
-            PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability((Player) ent);
-            if(playerCarry.getIsCarrying() && playerCarry.getCarryPosition().posName == "hand"){
+            if(ent.getItemInHand(InteractionHand.MAIN_HAND).is(ItemInit.PLAYER_ITEM.get())){
                 //rightArm.xRot = rightArm.xRot-1.4f;
                 //System.out.println(rightArm.xRot);
                 rightArm.xRot = -1.4f;

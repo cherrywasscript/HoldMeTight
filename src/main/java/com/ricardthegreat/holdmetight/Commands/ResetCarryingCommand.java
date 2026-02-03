@@ -21,7 +21,6 @@ public class ResetCarryingCommand {
         if (ent instanceof Player) {
             PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability((Player) ent);
 
-            playerCarry.setCarrying(false);
             playerCarry.setCarryPosition(false, 0);
 
             playerCarry.setShouldSyncSimple(true);
