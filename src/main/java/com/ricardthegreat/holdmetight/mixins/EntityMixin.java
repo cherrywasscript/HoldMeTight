@@ -10,10 +10,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.ricardthegreat.holdmetight.carry.CarryPosition;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
-import com.ricardthegreat.holdmetight.network.CPlayerDismountPlayerPacket;
+import com.ricardthegreat.holdmetight.init.ItemInit;
+import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
+import com.ricardthegreat.holdmetight.network.clientbound.CPlayerDismountPlayerPacket;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -35,46 +38,29 @@ public abstract class EntityMixin {
     @Inject(at = @At("HEAD"), method = "interact(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;", cancellable = true)
     public void unnamedsizemod$interact(Player vehicle, InteractionHand hand, CallbackInfoReturnable<InteractionResult> info) {
         Entity rider = (Entity) (Object) this;
-        PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerCarryCapability(vehicle);
         
-        if (vehicleCarry.getIsCarrying()) {
-            if (vehicle.getPassengers().size() == 0) {
-                vehicleCarry.setCarrying(false);
-            }
-        }else if(rider instanceof Player && vehicle.getMainHandItem() == ItemStack.EMPTY && EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)/4){
+        if(rider instanceof Player && vehicle.getMainHandItem() == ItemStack.EMPTY && EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)/4){
 
             PlayerCarry riderCarry = PlayerCarryProvider.getPlayerCarryCapability((Player) rider);
 
             rider.startRiding(vehicle);
             
             riderCarry.setCarried(true);
-            vehicleCarry.setCarrying(true);
 
             if(!rider.level().isClientSide()) {
                 riderCarry.setShouldSyncSimple(true);
-                vehicleCarry.setShouldSyncSimple(true);
-
-                //PacketHandler.sendToAllClients(new CPlayerCarryPositionPacket(true, rider.getUUID(), (byte) 0));
-                //PacketHandler.sendToAllClients(new CPlayerCarryPositionPacket(true, vehicle.getUUID(), (byte) 1));
             }
             
+
+
+
 
             //when i get round to doing item holding this works im pretty sure
-            /* 
-            ItemStack item = new ItemStack(ItemInit.PLAYER_ITEM.get());
-            item.setHoverName(Component.literal("hello"));
+            ItemStack item = PlayerStandinItem.createPlayerItem((Player) rider);
             vehicle.getInventory().add(vehicle.getInventory().selected, item);
-            */
             
         }else if (!(rider instanceof Player) && vehicle.getMainHandItem() == ItemStack.EMPTY && EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)/4) {
-
             rider.startRiding(vehicle);
-
-            vehicleCarry.setCarrying(true);
-
-            if(!rider.level().isClientSide()) {
-                vehicleCarry.setShouldSyncSimple(true);
-            }
         }
     }
 
@@ -86,27 +72,16 @@ public abstract class EntityMixin {
         Entity ent = (Entity) (Object) this;
         Entity vehicle = ent.getVehicle();
         if(ent instanceof Player && ent.isPassenger() && vehicle != null && vehicle instanceof Player){
-            PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerCarryCapability((Player) vehicle);
             PlayerCarry riderCarry = PlayerCarryProvider.getPlayerCarryCapability((Player) ent);
 
 
-            vehicleCarry.setCarrying(false);
             riderCarry.setCarried(false);
 
             if(!ent.level().isClientSide()) {
                 //PacketHandler.sendToAllClients(new CPlayerCarryPositionPacket(false, ent.getUUID(), (byte) 0));
                 //PacketHandler.sendToAllClients(new CPlayerCarryPositionPacket(false, vehicle.getUUID(), (byte) 1));
-
-                vehicleCarry.setShouldSyncSimple(true);
                 riderCarry.setShouldSyncSimple(true);
                 PacketHandler.sendToAllClients(new CPlayerDismountPlayerPacket(ent.getUUID()));
-            }
-        }else if (!(ent instanceof Player) && ent.isPassenger() && vehicle != null && vehicle instanceof Player) {
-            PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerCarryCapability((Player) vehicle);
-            vehicleCarry.setCarrying(false);
-            if(!ent.level().isClientSide()) {
-                vehicleCarry.setShouldSyncSimple(true);
-                //PacketHandler.sendToAllClients(new CPlayerDismountPlayerPacket(ent.getUUID()));
             }
         }
     }
