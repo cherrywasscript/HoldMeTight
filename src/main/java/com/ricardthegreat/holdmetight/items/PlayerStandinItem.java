@@ -13,12 +13,15 @@ import com.ricardthegreat.holdmetight.network.clientbound.CUsePlayerItemPacket;
 import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.controls.KeyBindsList;
+import net.minecraft.client.gui.screens.controls.KeyBindsScreen;
 import net.minecraft.client.resources.SkinManager;
 import net.minecraft.client.resources.SkinManager.SkinTextureCallback;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
@@ -27,9 +30,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.enchantment.KnockbackEnchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.entity.item.ItemTossEvent;
+import virtuoel.pehkui.mixin.ItemEntityMixin;
 
 public class PlayerStandinItem extends Item {
 
@@ -113,6 +119,7 @@ public class PlayerStandinItem extends Item {
             List<Entity> passengers = entity.getPassengers();
             if (passengers.size() == 0) {
                 //check if item entity is a passenger
+                @SuppressWarnings("null") //ive already checked if it is null or not with if stack.hasTag()
                 UUID id = tag.getUUID(PLAYER_UUID);
                 Entity passenger = null;
                 
@@ -124,17 +131,27 @@ public class PlayerStandinItem extends Item {
                 
                 if (passenger == null) {
                     stack.shrink(1);
+                }else if(passenger instanceof Player playerPass){
+                    checkCorrectCarryPos(playerPass);
                 }
             }
+            
         }
         super.inventoryTick(stack, level, entity, index, selected);
+    }
+
+    @Override
+    public boolean onEntityItemUpdate(ItemStack stack, ItemEntity entity) {
+        entity.discard();
+
+        return false;
     }
 
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> list, TooltipFlag flag) {
         CompoundTag tag = stack.getTag();
 
-        if (level != null) {
+        if (level != null && tag != null) {
             Player player = level.getPlayerByUUID(tag.getUUID(PLAYER_UUID));
 
             if (player != null) {
@@ -142,6 +159,10 @@ public class PlayerStandinItem extends Item {
             }
         }
         super.appendHoverText(stack, level, list, flag);
+    }
+
+    private void checkCorrectCarryPos(Player player){
+
     }
 
     public static ItemStack createPlayerItem(Player player){
