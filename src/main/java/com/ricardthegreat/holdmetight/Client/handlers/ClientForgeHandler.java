@@ -60,7 +60,7 @@ public class ClientForgeHandler {
         LocalPlayer mcPlayer = minecraft.player;
         if(Keybindings.INSTANCE.shoulderCarryKey.consumeClick() && mcPlayer != null) {
             PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(mcPlayer);
-
+            /* 
             if (playerCarry.getCarryPosition().posName != "shoulder") {
                 playerCarry.setCarryPosition(false, 1);
                 mcPlayer.displayClientMessage(SHOULDER_KEY_PRESSED, true);
@@ -68,13 +68,13 @@ public class ClientForgeHandler {
                 playerCarry.setCarryPosition(false, 0);
                 mcPlayer.displayClientMessage(DEFAULT_KEY_PRESSED, true);
             }
-
+            */
             playerCarry.setShouldSyncSimple(true);
         }
 
         if(Keybindings.INSTANCE.customCarryKey.consumeClick() && mcPlayer != null) {
             PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(mcPlayer);
-
+            /* 
             if (playerCarry.getCarryPosition().posName == "shoulder" || playerCarry.getCarryPosition().posName == "hand" ) {
                 playerCarry.setCarryPosition(true, 0);
                 mcPlayer.displayClientMessage(CUSTOM_KEY_PRESSED, true);
@@ -82,7 +82,7 @@ public class ClientForgeHandler {
                 playerCarry.setCarryPosition(false, 0);
                 mcPlayer.displayClientMessage(DEFAULT_KEY_PRESSED, true);
             }
-
+            */
             playerCarry.setShouldSyncSimple(true);
         }
 

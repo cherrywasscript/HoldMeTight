@@ -12,12 +12,16 @@ import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.CUsePlayerItemPacket;
 import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.SkinManager;
+import net.minecraft.client.resources.SkinManager.SkinTextureCallback;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -29,7 +33,7 @@ import net.minecraft.world.phys.Vec3;
 
 public class PlayerStandinItem extends Item {
 
-    private static String PLAYER_UUID = "LINKED_PLAYER_UUID";
+    public static String PLAYER_UUID = "LINKED_PLAYER_UUID";
 
     public PlayerStandinItem(Properties properties) {
         super(properties);
@@ -44,7 +48,7 @@ public class PlayerStandinItem extends Item {
         }
 
         //get the item the player is holding
-        ItemStack item = vehicle.getItemInHand(context.getHand()); 
+        ItemStack item = context.getItemInHand(); 
 
         //get the tag from the item and fail if it has no tag
         if (!item.hasTag()) {
@@ -89,11 +93,12 @@ public class PlayerStandinItem extends Item {
         }else{
             passenger.stopRiding();
         }
+        
             
         if (vehicle.getMainHandItem().is(this)) {
-            vehicle.getMainHandItem().shrink(1);
+            item.shrink(1);
         }else if (vehicle.getOffhandItem().is(this)) {
-            vehicle.getOffhandItem().shrink(1);
+            item.shrink(1);
         }
             
         return InteractionResult.SUCCESS;
@@ -149,7 +154,7 @@ public class PlayerStandinItem extends Item {
         tag.putUUID(PLAYER_UUID, player.getUUID());
 
         item.setTag(tag);
-
+        
         return item;
     }
 }
