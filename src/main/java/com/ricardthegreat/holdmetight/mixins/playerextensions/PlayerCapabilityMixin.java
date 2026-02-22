@@ -31,8 +31,8 @@ public abstract class PlayerCapabilityMixin {
             scale.tick(player);
         });
 
-        (player).getCapability(PlayerCarryProvider.PLAYER_CARRY).ifPresent(scale -> {
-            scale.tick(player);
+        (player).getCapability(PlayerCarryProvider.PLAYER_CARRY).ifPresent(carry -> {
+            carry.tick(player);
         });
 
         if (!player.level().isClientSide()) {
