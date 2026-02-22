@@ -10,6 +10,7 @@ import com.ricardthegreat.holdmetight.network.serverbound.SPlayerCarrySimplePack
 import com.ricardthegreat.holdmetight.network.serverbound.SPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.utils.constants.PlayerCarryConstants;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
@@ -159,8 +160,15 @@ public class PlayerCarry {
     }
 
     //TODO remove or change
-    public CarryPosition getCarryPosition(){
-        return allCarryPositions.get(currentCarryPos[0]).get(currentCarryPos[1]);
+    public CarryPosition getCarryPosition(int invPos, int selected){
+        System.out.println(invPos);
+        if (!Inventory.isHotbarSlot(invPos)) {
+            return custom;
+        }else if (selected == invPos) {
+            return hand;
+        }else{
+            return shoulder;
+        }
     }
 
     public ArrayList<ArrayList<CarryPosition>> getAllCarryPositions(){
