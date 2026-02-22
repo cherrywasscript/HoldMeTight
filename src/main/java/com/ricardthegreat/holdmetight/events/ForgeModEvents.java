@@ -1,23 +1,34 @@
 package com.ricardthegreat.holdmetight.events;
 
+import java.util.UUID;
 import java.util.function.Supplier;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.client.handlers.ClientPacketHandler;
+import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.size.PlayerSize;
 import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.Entity.RemovalReason;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerRespawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -76,6 +87,28 @@ public class ForgeModEvents {
         }else{
             for(Player player : level.players()){
                 System.out.println(player.getName());
+            }
+        }
+    }
+
+    //when item is thrown check if it is player item, if it is then remove it and put the player it represents there with the same momentum
+    @SubscribeEvent
+    public static void onItemTossEvent(ItemTossEvent event){
+        ItemEntity entity = event.getEntity();
+        
+        if (entity.getItem().getItem() instanceof PlayerStandinItem) {
+            Player thrower = event.getPlayer();
+
+            ItemStack stack = entity.getItem();
+
+            if (stack.hasTag()) {
+                CompoundTag tag = stack.getTag(); 
+                UUID id = tag.getUUID(PlayerStandinItem.PLAYER_UUID);
+                Player player = thrower.level().getPlayerByUUID(id);
+
+                player.stopRiding();
+                player.setDeltaMovement(entity.getDeltaMovement()); 
+                player.hurtMarked = true;
             }
         }
     }
