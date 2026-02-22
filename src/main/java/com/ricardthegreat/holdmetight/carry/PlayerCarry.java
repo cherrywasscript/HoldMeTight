@@ -161,7 +161,7 @@ public class PlayerCarry {
 
     //TODO remove or change
     public CarryPosition getCarryPosition(int invPos, int selected){
-        System.out.println(invPos);
+        //System.out.println(invPos);
         if (!Inventory.isHotbarSlot(invPos)) {
             return custom;
         }else if (selected == invPos) {
