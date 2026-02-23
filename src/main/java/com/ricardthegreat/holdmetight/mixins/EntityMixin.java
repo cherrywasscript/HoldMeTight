@@ -56,13 +56,6 @@ public abstract class EntityMixin {
 
             rider.startRiding(vehicle);
             
-            riderCarry.setCarried(true);
-
-            if(!rider.level().isClientSide()) {
-                riderCarry.setShouldSyncSimple(true);
-            }
-            
-
 
 
 
@@ -78,6 +71,7 @@ public abstract class EntityMixin {
 
     //dismounting players is desynced so this sends a packet from the server to all clients which should sync it up
     //it works in my testing but idk about at scale
+    /* 
     @Inject(at = @At("HEAD"), method = "stopRiding()V")
     public void unnamedsizemod$dismount(CallbackInfo info){
         Entity ent = (Entity) (Object) this;
@@ -89,13 +83,11 @@ public abstract class EntityMixin {
             riderCarry.setCarried(false);
 
             if(!ent.level().isClientSide()) {
-                //PacketHandler.sendToAllClients(new CPlayerCarryPositionPacket(false, ent.getUUID(), (byte) 0));
-                //PacketHandler.sendToAllClients(new CPlayerCarryPositionPacket(false, vehicle.getUUID(), (byte) 1));
                 riderCarry.setShouldSyncSimple(true);
                 PacketHandler.sendToAllClients(new CPlayerDismountPlayerPacket(ent.getUUID()));
             }
         }
-    }
+    }   */
 
     //@Inject(at = @At("RETURN"), method = "positionRider(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity/MoveFunction;)V")
     @Overwrite
@@ -148,7 +140,7 @@ public abstract class EntityMixin {
         CarryPosition carryPos = vehicleCarry.getCarryPosition(rider, checkHands(vehicle, rider));
         
 
-        
+
         vertOffset = vehicle.getY() + vehicle.getPassengersRidingOffset() + rider.getMyRidingOffset() - (carryPos.vertOffset*EntitySizeUtils.getSize(vehicle));
 
         double degrees = vehicle.yBodyRotO + carryPos.RotationOffset;
