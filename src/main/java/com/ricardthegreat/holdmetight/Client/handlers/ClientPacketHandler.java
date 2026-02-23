@@ -38,9 +38,6 @@ public class ClientPacketHandler {
             if(player != null) {
                 PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
                 msg.playerSyncablesUpdate(playerCarry);
-                //playerCarry.setRotationOffset(msg.getRotation());
-                //playerCarry.setXYMult(msg.getDistance());
-                //playerCarry.setVertOffset(msg.getHeight());
             }
         }   
     }
