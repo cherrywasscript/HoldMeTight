@@ -43,11 +43,6 @@ public class SPlayerPutDownPacket {
         ServerPlayer target = player.server.getPlayerList().getPlayer(uuid);
 
         if (target != null) {
-            PlayerCarry targetCarry = PlayerCarryProvider.getPlayerCarryCapability(target);
-
-            targetCarry.setCarried(false);
-            targetCarry.setShouldSyncSimple(true);
-
             target.dismountTo(pos.x, pos.y, pos.z);
         }
     }

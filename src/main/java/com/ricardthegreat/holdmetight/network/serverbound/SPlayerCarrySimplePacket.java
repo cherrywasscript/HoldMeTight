@@ -44,8 +44,6 @@ public class SPlayerCarrySimplePacket {
         PlayerCarry carry = PlayerCarryProvider.getPlayerCarryCapability(player);
 
         if(carry != null){
-            carry.updateSimpleSyncables(carried, carrying, carryPos);
-
             PacketHandler.sendToAllClients(new CPlayerCarrySimplePacket(carried, carrying, carryPos, player.getUUID()));
         }
 
