@@ -13,4 +13,7 @@ public class PlayerCarryConstants{
     public static final String VERT_NBT_TAG = "vertOffset";
     public static final String LEFT_RIGHT_NBT_TAG = "leftRightMove";
     public static final String HEAD_LINK_NBT_TAG = "headLink";
+
+    public static final String CARRIED_PLAYERS_LIST_SIZE = "carriedlistsize";
+    public static final String CARRIED_PLAYERS_LIST = "carriedlist";
 }
