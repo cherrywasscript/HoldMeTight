@@ -1,5 +1,7 @@
 package com.ricardthegreat.holdmetight.network.serverbound;
 
+import java.util.ArrayList;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 import com.ricardthegreat.holdmetight.carry.CarryPosition;
@@ -8,41 +10,48 @@ import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerCarrySyncPacket;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 public class SPlayerCarrySyncPacket {
 
-    private final boolean carried;
-    private final boolean carrying;
-    private final int[] carryPos;
-    private final CarryPosition custom;
+    private final ArrayList<CompoundTag> carriedPlayers;
+    private final CarryPosition customPos;
 
-    public SPlayerCarrySyncPacket(boolean carried, boolean carrying, int[] carryPos, CarryPosition custom){
-        this.carried = carried;
-        this.carrying = carrying;
-        this.carryPos = carryPos;
-        this.custom = custom;
+    public SPlayerCarrySyncPacket(ArrayList<CompoundTag> carriedPlayers, CarryPosition customPos){
+        this.carriedPlayers = carriedPlayers;
+        this.customPos = customPos;
     }
     
     public SPlayerCarrySyncPacket(FriendlyByteBuf buffer){
-        this(buffer.readBoolean(), buffer.readBoolean(), new int[]{buffer.readInt(), buffer.readInt()}, new CarryPosition(buffer.readUtf(), buffer.readInt(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readBoolean()));
+        int listSize = buffer.readInt();
+
+        ArrayList<CompoundTag> temp = new ArrayList<CompoundTag>();
+        for(int i = 0; i < listSize; i++){
+            temp.add(buffer.readNbt());
+        }
+
+        this.carriedPlayers = temp;
+        this.customPos = new CarryPosition(buffer.readUtf(), buffer.readInt(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readBoolean());
     }
 
     public void encode(FriendlyByteBuf buffer){
-        buffer.writeBoolean(carried);
-        buffer.writeBoolean(carrying);
+        buffer.writeInt(carriedPlayers.size());
 
-        buffer.writeInt(carryPos[0]);
-        buffer.writeInt(carryPos[1]);
+        for (CompoundTag compoundTag : carriedPlayers) {
+            buffer.writeNbt(compoundTag);
+        }
 
-        buffer.writeUtf(custom.posName);
-        buffer.writeInt(custom.RotationOffset);
-        buffer.writeDouble(custom.leftRightMove);
-        buffer.writeDouble(custom.vertOffset);
-        buffer.writeDouble(custom.xymult);
-        buffer.writeBoolean(custom.headLink);
+        buffer.writeUtf(customPos.posName);
+        buffer.writeInt(customPos.RotationOffset);
+        buffer.writeDouble(customPos.leftRightMove);
+        buffer.writeDouble(customPos.vertOffset);
+        buffer.writeDouble(customPos.xymult);
+        buffer.writeBoolean(customPos.headLink);
     }
 
     public void handle(Supplier<NetworkEvent.Context> context){
@@ -51,11 +60,10 @@ public class SPlayerCarrySyncPacket {
         PlayerCarry carry = PlayerCarryProvider.getPlayerCarryCapability(player);
 
         if(carry != null){
-            carry.updateAllSyncables(carried, carrying, carryPos, custom);
+            carry.updateAllSyncables(carriedPlayers, customPos);
 
-            PacketHandler.sendToAllClients(new CPlayerCarrySyncPacket(carried, carrying, carryPos, custom, player.getUUID()));
+            PacketHandler.sendToAllClients(new CPlayerCarrySyncPacket(carriedPlayers, customPos, player.getUUID()));
         }
 
     }
-    
 }
