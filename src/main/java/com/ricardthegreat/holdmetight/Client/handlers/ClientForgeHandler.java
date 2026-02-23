@@ -3,8 +3,6 @@ package com.ricardthegreat.holdmetight.client.handlers;
 import com.mojang.brigadier.CommandDispatcher;
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.Commands.CustomCarryCommand;
-import com.ricardthegreat.holdmetight.Commands.ResetCarriedCommand;
-import com.ricardthegreat.holdmetight.Commands.ResetCarryingCommand;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.client.ClientHooks;
@@ -51,33 +49,6 @@ public class ClientForgeHandler {
     public static void clientTick(TickEvent.ClientTickEvent event) {
         Minecraft minecraft = Minecraft.getInstance();
         LocalPlayer mcPlayer = minecraft.player;
-        if(Keybindings.INSTANCE.shoulderCarryKey.consumeClick() && mcPlayer != null) {
-            PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(mcPlayer);
-            /* 
-            if (playerCarry.getCarryPosition().posName != "shoulder") {
-                playerCarry.setCarryPosition(false, 1);
-                mcPlayer.displayClientMessage(SHOULDER_KEY_PRESSED, true);
-            }else{
-                playerCarry.setCarryPosition(false, 0);
-                mcPlayer.displayClientMessage(DEFAULT_KEY_PRESSED, true);
-            }
-            */
-            playerCarry.setShouldSyncSimple(true);
-        }
-
-        if(Keybindings.INSTANCE.customCarryKey.consumeClick() && mcPlayer != null) {
-            PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(mcPlayer);
-            /* 
-            if (playerCarry.getCarryPosition().posName == "shoulder" || playerCarry.getCarryPosition().posName == "hand" ) {
-                playerCarry.setCarryPosition(true, 0);
-                mcPlayer.displayClientMessage(CUSTOM_KEY_PRESSED, true);
-            }else{
-                playerCarry.setCarryPosition(false, 0);
-                mcPlayer.displayClientMessage(DEFAULT_KEY_PRESSED, true);
-            }
-            */
-            playerCarry.setShouldSyncSimple(true);
-        }
 
         //key to open size prefs screen
         if(Keybindings.INSTANCE.sizePrefsKey.consumeClick() && mcPlayer != null) {     
