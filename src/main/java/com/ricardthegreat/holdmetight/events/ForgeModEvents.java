@@ -113,9 +113,9 @@ public class ForgeModEvents {
                 player.hurtMarked = true;
 
                 
-                PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
+                PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(thrower);
                 playerCarry.removeCarriedPlayer(id);
-                PacketHandler.sendToAllClients(new CRemovePlayerCarrySyncPacket(id, player.getUUID()));
+                PacketHandler.sendToAllClients(new CRemovePlayerCarrySyncPacket(id, thrower.getUUID()));
             }
         }
     }

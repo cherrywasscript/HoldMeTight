@@ -117,9 +117,12 @@ public class PlayerStandinItem extends Item {
             item.shrink(1);
         }
 
-        PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(vehicle);
-        playerCarry.removeCarriedPlayer(id);
-        PacketHandler.sendToAllClients(new CRemovePlayerCarrySyncPacket(id, vehicle.getUUID()));
+        if (!context.getLevel().isClientSide) {
+            PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(vehicle);
+            playerCarry.removeCarriedPlayer(id);
+            PacketHandler.sendToAllClients(new CRemovePlayerCarrySyncPacket(id, vehicle.getUUID()));
+        }
+        
             
         return InteractionResult.SUCCESS;
     }
@@ -131,23 +134,22 @@ public class PlayerStandinItem extends Item {
             CompoundTag tag = stack.getTag();
             //get all passengers from the player, this should be temporary as ill probably at some point have "passengers" that are not in the same dimension
             List<Entity> passengers = entity.getPassengers();
-            if (passengers.size() == 0) {
-                //check if item entity is a passenger
-                @SuppressWarnings("null") //ive already checked if it is null or not with if stack.hasTag()
-                UUID id = tag.getUUID(PLAYER_UUID);
-                Entity passenger = null;
-                
-                for(Entity pass : passengers){
-                    if (pass.getUUID().equals(id)) {
-                        passenger = pass;
-                    }
+
+            //check if item entity is a passenger
+            @SuppressWarnings("null") //ive already checked if it is null or not with if stack.hasTag()
+            UUID id = tag.getUUID(PLAYER_UUID);
+            Entity passenger = null;
+            
+            for(Entity pass : passengers){
+                if (pass.getUUID().equals(id)) {
+                    passenger = pass;
                 }
-                
-                if (passenger == null) {
-                    stack.shrink(1);
-                }else if(passenger instanceof Player playerPass){
-                    checkCorrectCarryPos(playerPass, index, selected);
-                }
+            }
+            
+            if (passenger == null) {
+                stack.shrink(1);
+            }else if(passenger instanceof Player carried && entity instanceof Player player){
+                checkCorrectCarryPos(carried, player, index, selected);
             }
             
         }
@@ -175,13 +177,13 @@ public class PlayerStandinItem extends Item {
         super.appendHoverText(stack, level, list, flag);
     }
 
-    private void checkCorrectCarryPos(Player player, int index, boolean selected){
+    private void checkCorrectCarryPos(Player carried, Player player, int index, boolean selected){
         if (!player.level().isClientSide && index != prevSlot) {
             prevSlot = index;
             PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
 
             CompoundTag tag = new CompoundTag();
-            tag.putUUID(PLAYER_UUID, BASE_ATTACK_DAMAGE_UUID);
+            tag.putUUID(PLAYER_UUID, carried.getUUID());
             tag.putInt(INV_ID, index);
             
             playerCarry.addOrUpdateCarriedPlayer(tag);
