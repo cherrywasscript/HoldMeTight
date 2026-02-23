@@ -3,6 +3,7 @@ package com.ricardthegreat.holdmetight.carry;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerCarrySimplePacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerCarrySyncPacket;
@@ -10,6 +11,7 @@ import com.ricardthegreat.holdmetight.network.serverbound.SPlayerCarrySimplePack
 import com.ricardthegreat.holdmetight.network.serverbound.SPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.utils.constants.PlayerCarryConstants;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
@@ -23,9 +25,6 @@ public class PlayerCarry {
      * vertoffset - moves the carried person up and down
     */
 
-    //if they are being carried
-    private boolean isCarried = false;
-
     //these are just here for initialising stuff
     private final CarryPosition hand = new CarryPosition("hand", 110, 0.77, 0.65, 0, false);
     private final CarryPosition shoulder = new CarryPosition("shoulder",90, 0, 0.38, -0.3, false);
@@ -36,28 +35,20 @@ public class PlayerCarry {
 
     private ArrayList<ArrayList<CarryPosition>> allCarryPositions = new ArrayList<ArrayList<CarryPosition>>(Arrays.asList(defaultCarryPositions,customCarryPositions));
     
-    private boolean isCarrying = false;
-    private int[] currentCarryPos = new int[]{0,0};
+
+    private ArrayList<CompoundTag> carriedPlayers = new ArrayList<>();
 
 
     //if this is true it will sync the values that can change next tick and set to false
     private boolean shouldSync = false;
 
     //if this is true it will sync only the booleans because thats less data
-    private boolean shouldSyncSimple = false;
-    private boolean shouldSyncCustom = false;
     private boolean shouldSyncAll = false;
     
     //checks every tick if the player should sync
     public void tick(Player player){    
         if(shouldSync){
-            if (shouldSyncSimple) {
-                shouldSyncSimple = false;
-                syncSimple(player);
-            }else if (shouldSyncCustom) {
-                shouldSyncCustom = false;
-                syncCustom(player);
-            }else if (shouldSyncAll) {
+            if (shouldSyncAll) {
                 shouldSyncAll = false;
                 sync(player);
             }else{
@@ -71,50 +62,26 @@ public class PlayerCarry {
     // updated carrypos - sends the new values for custom carrypos
     // everything - does both
     private void sync(Player player){
-        //at some point when i have the ability for multiple custom positions i'll need to iterate through custom carry positions
-        // or maybe just send the list straight so i can iterate on the packet side
-        if(player.level().isClientSide){
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> PacketHandler.sendToServer(new SPlayerCarrySyncPacket(isCarried, isCarrying, currentCarryPos, customCarryPositions.get(0))));
-        }else{
+        //should only be updated server side so should only be called when on server
+        if(!player.level().isClientSide){
             DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> 
-            PacketHandler.sendToAllClients(new CPlayerCarrySyncPacket(isCarried, isCarrying, currentCarryPos, customCarryPositions.get(0), player.getUUID())));
+            PacketHandler.sendToAllClients(new CPlayerCarrySyncPacket(carriedPlayers, customCarryPositions.get(0), player.getUUID())));
         }
     }
 
-    private void syncSimple(Player player){
-        if(player.level().isClientSide){
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> 
-                PacketHandler.sendToServer(new SPlayerCarrySimplePacket(isCarried, isCarrying, currentCarryPos,  player.getUUID())));
-        }else{
-            DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> 
-                PacketHandler.sendToAllClients(new CPlayerCarrySimplePacket(isCarried, isCarrying, currentCarryPos,  player.getUUID())));
-        }
+    private void addPlayerSync(Player player){
+
     }
 
-    //TODO add custom carrying syncing
-    private void syncCustom(Player player){
-        if(player.level().isClientSide){
-            //DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> 
-                //PacketHandler.sendToServer();
-        }else{
-            //DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> 
-                //PacketHandler.sendToAllClients();
-        }
+    private void removePlayerSync(Player player){
+
     }
 
     //the sync packets call this to update everything at once
-    public void updateAllSyncables(boolean isCarried, boolean isCarrying, int[] currentCarryPos, CarryPosition customCarry){
-        updateSimpleSyncables(isCarried, isCarrying, currentCarryPos);
-        updatePositionSyncables(customCarry);
-    }
+    public void updateAllSyncables(ArrayList<CompoundTag> carriedPlayers, CarryPosition customCarry){
+        this.carriedPlayers = carriedPlayers;
 
-    public void updateSimpleSyncables(boolean isCarried, boolean isCarrying, int[] currentCarryPos){
-        this.isCarried = isCarried;
-        this.isCarrying = isCarrying;
-        this.currentCarryPos = currentCarryPos;
-    }
-
-    public void updatePositionSyncables(CarryPosition customCarry){
+        //TODO choose if i want to allow multiple custom carry spots or just one, leaning towards just one
         this.custom = customCarry;
 
         int tempSize = customCarryPositions.size();
@@ -123,52 +90,54 @@ public class PlayerCarry {
         }
     }
 
-
-//    public CPlayerSizeMixinSyncPacket getSyncPacket(Player player){
-//        return new CPlayerSizeMixinSyncPacket(maxScale, minScale, defaultScale, currentScale, targetScale, remainingTicks, player.getUUID());
-//    }
-
-
-    //getter and setter for if it is carried
-    public boolean getIsCarried() {
-        return isCarried;
-    }
-
-    public void setCarried(boolean isCarried) {
-        this.isCarried = isCarried;
+    /**
+     * add a tag to the list of players this person is holding, needs to call a sync after to ensure everything works
+     * @param tag tag with the players id and the slot it is held in
+     */
+    public void addOrUpdateCarriedPlayer(CompoundTag tag){
+        for (int i = 0; i < carriedPlayers.size(); i++){
+            if (carriedPlayers.get(i).getUUID(PlayerStandinItem.PLAYER_UUID).equals(tag.getUUID(PlayerStandinItem.PLAYER_UUID))) {
+                carriedPlayers.remove(i);
+                carriedPlayers.add(tag);
+            }
+        }
     }
 
     /**
-     * 
-     * @param default if its a custom or default position
-     * @param pos which position it is in the list - invalid numbers default to the first
+     * remove a tag from the list of players this person is holding, needs to call a sync after to ensure everything works
+     * @param tag tag with the players id
      */
-    public void setCarryPosition(boolean custom, int pos){
-        if (custom) {
-            if (pos < 0 || pos > customCarryPositions.size()-1) {
-                pos = 0;
+    public void removeCarriedPlayer(CompoundTag tag){
+        for (int i = 0; i < carriedPlayers.size(); i++){
+            if (carriedPlayers.get(i).getUUID(PlayerStandinItem.PLAYER_UUID).equals(tag.getUUID(PlayerStandinItem.PLAYER_UUID))) {
+                carriedPlayers.remove(i);
             }
-            currentCarryPos[0] = 1;
-            currentCarryPos[1] = pos;
-        }else{
-            if (pos < 0 || pos > defaultCarryPositions.size()-1) {
-                pos = 0;
-            }
-            currentCarryPos[0] = 0;
-            currentCarryPos[1] = pos;
         }
     }
 
     //TODO remove or change
-    public CarryPosition getCarryPosition(int invPos, int selected){
-        //System.out.println(invPos);
-        if (!Inventory.isHotbarSlot(invPos)) {
-            return custom;
-        }else if (selected == invPos) {
+    public CarryPosition getCarryPosition(Entity entity, boolean selected){
+        if (selected) {
             return hand;
         }else{
-            return shoulder;
+            for (CompoundTag tag : carriedPlayers) {
+                if (tag.getUUID(PlayerStandinItem.PLAYER_UUID).equals(entity.getUUID())) {
+                    int invPos = tag.getInt(PlayerStandinItem.INV_ID);
+                    if (!Inventory.isHotbarSlot(invPos)) {
+                        //TODO make 9 carry positions to simulate having them on belt
+                        return custom;
+                    }else if (Inventory.SLOT_OFFHAND == invPos) {
+                        //TODO make a carry pos that is the same as hand but mirrored for offhand
+                        return shoulder;
+                    }else{
+                        return shoulder;
+                    }
+                }
+            }  
         }
+
+        //maybe want some form of error here not sure
+        return custom;
     }
 
     public ArrayList<ArrayList<CarryPosition>> getAllCarryPositions(){
@@ -201,26 +170,6 @@ public class PlayerCarry {
         }
     }
 
-    //setting if it should sync, it probably doesnt need a getter
-    public boolean getShouldSyncSimple() {
-        return shouldSync;
-    }
-
-    public void setShouldSyncSimple(boolean shouldSyncSimple) {
-        this.shouldSyncSimple = shouldSyncSimple;
-        this.shouldSync = shouldSyncSimple;
-    }
-
-    //setting if it should sync
-    public boolean getShouldSyncCustom() {
-        return shouldSyncCustom;
-    }
-
-    public void setShouldSyncCustom(boolean shouldSyncCustom) {
-        this.shouldSyncCustom = shouldSyncCustom;
-        this.shouldSync = shouldSyncCustom;
-    }
-
     //setting if it should sync
     public boolean getShouldSyncAll() {
         return shouldSyncAll;
@@ -235,20 +184,15 @@ public class PlayerCarry {
 
 
     public void copyFrom(PlayerCarry source){
-        this.isCarried = source.isCarried;
-        this.isCarrying = source.isCarrying;
-
         this.custom = source.custom;
         this.customCarryPositions = source.customCarryPositions;
         this.allCarryPositions = source.allCarryPositions;
+        this.carriedPlayers = source.carriedPlayers;
     }
 
 
     //TODO update to iterate through all custom positions
     public void saveNBTData(CompoundTag tag){
-        tag.putBoolean(PlayerCarryConstants.CARRIED_NBT_TAG, isCarried);
-        tag.putBoolean(PlayerCarryConstants.CARRYING_NBT_TAG, isCarrying);
-
         CarryPosition carry = customCarryPositions.get(0);
 
         tag.putString(PlayerCarryConstants.POS_NAME_NBT_TAG, carry.posName);
@@ -257,20 +201,32 @@ public class PlayerCarry {
         tag.putDouble(PlayerCarryConstants.VERT_NBT_TAG, carry.vertOffset);
         tag.putDouble(PlayerCarryConstants.LEFT_RIGHT_NBT_TAG, carry.leftRightMove);
         tag.putBoolean(PlayerCarryConstants.HEAD_LINK_NBT_TAG, carry.headLink);
+
+        tag.putInt(PlayerCarryConstants.CARRIED_PLAYERS_LIST_SIZE, carriedPlayers.size());
+
+        for (int i = 0; i < carriedPlayers.size(); i++) {
+            tag.putUUID(PlayerStandinItem.PLAYER_UUID + i, carriedPlayers.get(i).getUUID(PlayerStandinItem.PLAYER_UUID));
+            tag.putInt(PlayerStandinItem.INV_ID + i, carriedPlayers.get(i).getInt(PlayerStandinItem.INV_ID));
+        }
     }
 
     public void loadNBTData(CompoundTag tag){
-        isCarried = tag.getBoolean(PlayerCarryConstants.CARRIED_NBT_TAG);
-        isCarrying = tag.getBoolean(PlayerCarryConstants.CARRYING_NBT_TAG);
-
         custom = new CarryPosition(
             tag.getString(PlayerCarryConstants.POS_NAME_NBT_TAG), tag.getInt(PlayerCarryConstants.ROTATION_NBT_TAG), tag.getDouble(PlayerCarryConstants.MULT_NBT_TAG), 
             tag.getDouble(PlayerCarryConstants.VERT_NBT_TAG), tag.getDouble(PlayerCarryConstants.LEFT_RIGHT_NBT_TAG), tag.getBoolean(PlayerCarryConstants.HEAD_LINK_NBT_TAG));
 
         customCarryPositions.set(0, custom);
+
+        for (int i = 0; i < tag.getInt(PlayerCarryConstants.CARRIED_PLAYERS_LIST_SIZE); i++) {
+            CompoundTag tmp = new CompoundTag();
+            tmp.putUUID(PlayerStandinItem.PLAYER_UUID, tag.getUUID(PlayerStandinItem.PLAYER_UUID+i));
+            tmp.putInt(PlayerStandinItem.INV_ID, tag.getInt(PlayerStandinItem.INV_ID+i));
+
+            carriedPlayers.add(tmp);
+        }
     }
 
     public CPlayerCarrySyncPacket getSyncPacket(Player player){
-        return new CPlayerCarrySyncPacket(isCarried, isCarrying, currentCarryPos, customCarryPositions.get(0), player.getUUID());
+        return new CPlayerCarrySyncPacket(carriedPlayers, customCarryPositions.get(0), player.getUUID());
     }
 }
