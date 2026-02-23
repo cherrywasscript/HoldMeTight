@@ -124,18 +124,16 @@ public abstract class EntityMixin {
          }
     }
 
-    private int iterateThroughInventory(Player vehicle, Entity rider){
-        Inventory inv = vehicle.getInventory();
-        for (int i = 0; i < inv.getContainerSize(); i++) {
-            ItemStack item = inv.getItem(i);
-            if (item.is(ItemInit.PLAYER_ITEM.get())) {
-                UUID id = item.getTag().getUUID(PlayerStandinItem.PLAYER_UUID);
-                if (rider.getUUID().equals(id)) {
-                    return i;
-                }
+    private boolean checkHands(Player vehicle, Entity rider){
+        ItemStack item = vehicle.getItemInHand(InteractionHand.MAIN_HAND);
+
+        if (item.is(ItemInit.PLAYER_ITEM.get())) {
+            UUID id = item.getTag().getUUID(PlayerStandinItem.PLAYER_UUID);
+            if (rider.getUUID().equals(id)) {
+                return true;
             }
         }
-        return -1;
+        return false;
     }
 
     //need to check the scale of the rider and the vehicle and move accordingly
@@ -147,27 +145,10 @@ public abstract class EntityMixin {
 
         PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerCarryCapability(vehicle);
 
-        if (!Inventory.isHotbarSlot(iterateThroughInventory(vehicle, rider))) {
-            hidden = true;
-            rider.setInvisible(hidden);
-        }else{
-            hidden = false;
-            rider.setInvisible(hidden);
-        }
-
-        //System.out.println(vehicle.canBeHitByProjectile());
+        CarryPosition carryPos = vehicleCarry.getCarryPosition(rider, checkHands(vehicle, rider));
         
-        CarryPosition carryPos = vehicleCarry.getCarryPosition(iterateThroughInventory(vehicle, rider), vehicle.getInventory().selected);
+
         
-        if(vehicle.getMainHandItem() != ItemStack.EMPTY && carryPos.posName == "hand"){
-            vehicleCarry.setCarryPosition(false, 1);
-
-            if(!vehicle.level().isClientSide){
-                vehicleCarry.setShouldSyncSimple(true);
-                //PacketHandler.sendToAllClients(new CPlayerCarryPositionPacket(true, vehicle.getUUID(), (byte) 2));
-            }
-        }
-
         vertOffset = vehicle.getY() + vehicle.getPassengersRidingOffset() + rider.getMyRidingOffset() - (carryPos.vertOffset*EntitySizeUtils.getSize(vehicle));
 
         double degrees = vehicle.yBodyRotO + carryPos.RotationOffset;
