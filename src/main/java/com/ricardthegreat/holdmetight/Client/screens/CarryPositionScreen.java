@@ -224,7 +224,7 @@ public class CarryPositionScreen extends Screen{
 
 
         //grab existing rotation from user
-        customInputField.setValue(Integer.toString(userCarry.getCarryPosition(1, 1).RotationOffset));
+        //customInputField.setValue(0);
         
         Tooltip t = Tooltip.create(CUSTOM_INPUT_FIELD_TOOLTIP, CUSTOM_INPUT_FIELD_TOOLTIP);
         customInputField.setTooltip(t);

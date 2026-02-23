@@ -37,12 +37,6 @@ public class ClientHooks {
         Minecraft.getInstance().setScreen(new SizeRayScreen(player, hand));
     }
 
-
-    public static void openCarryPositionWheel(Player player){
-        Minecraft.getInstance().setScreen(new CarryPositionWheel(player));
-    }
-    
-
     //carry pos screen
     public static void openCarryPositionScreen(Player player){
         Minecraft.getInstance().setScreen(new CarryPositionScreen(player));
