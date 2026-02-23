@@ -36,7 +36,7 @@ public abstract class LivingEntityMixin extends Entity{
         if (info.getReturnValue()) {
             if ((Entity) (Object) this instanceof Player) {
                 Player player = (Player) (Object) this;
-                if (PlayerCarryProvider.getPlayerCarryCapability(player).getIsCarried()) {
+                if (player.getVehicle() instanceof Player) {
                     info.setReturnValue(false);
                 }         
             }

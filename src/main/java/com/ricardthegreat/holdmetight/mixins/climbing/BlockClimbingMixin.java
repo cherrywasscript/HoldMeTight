@@ -31,7 +31,7 @@ public class BlockClimbingMixin {
         
         if (original) {
             if ((LivingEntity) (Object) this instanceof Player) {
-                if(PlayerCarryProvider.getPlayerCarryCapability((Player) (Object) this).getIsCarried()){
+                if(((Player) (Object) this).getVehicle() instanceof Player){
                     return false;
                 }
             }
