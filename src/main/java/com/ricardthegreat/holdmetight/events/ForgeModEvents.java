@@ -46,7 +46,7 @@ public class ForgeModEvents {
             if(!event.getObject().getCapability(PlayerSizeProvider.PLAYER_SIZE).isPresent()) {
                 event.addCapability(new ResourceLocation(HoldMeTight.MODID, "size"), new PlayerSizeProvider());
             }
-
+            
             if(!event.getObject().getCapability(PlayerCarryProvider.PLAYER_CARRY).isPresent()) {
                 event.addCapability(new ResourceLocation(HoldMeTight.MODID, "carry"), new PlayerCarryProvider());
             }

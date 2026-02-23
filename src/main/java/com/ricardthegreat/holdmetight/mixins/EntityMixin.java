@@ -51,15 +51,10 @@ public abstract class EntityMixin {
         Entity rider = (Entity) (Object) this;
         
         if(rider instanceof Player && vehicle.getMainHandItem().isEmpty() && EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)/4){
-            
-            PlayerCarry riderCarry = PlayerCarryProvider.getPlayerCarryCapability((Player) rider);
-
             rider.startRiding(vehicle);
             
+            
 
-
-
-            //when i get round to doing item holding this works im pretty sure
             ItemStack item = PlayerStandinItem.createPlayerItem((Player) rider);
             vehicle.getInventory().add(vehicle.getInventory().selected, item);
             
@@ -70,24 +65,17 @@ public abstract class EntityMixin {
 
 
     //dismounting players is desynced so this sends a packet from the server to all clients which should sync it up
-    //it works in my testing but idk about at scale
-    /* 
+    //it works in my testing but idk about at scale 
     @Inject(at = @At("HEAD"), method = "stopRiding()V")
     public void unnamedsizemod$dismount(CallbackInfo info){
         Entity ent = (Entity) (Object) this;
         Entity vehicle = ent.getVehicle();
         if(ent instanceof Player && ent.isPassenger() && vehicle != null && vehicle instanceof Player){
-            PlayerCarry riderCarry = PlayerCarryProvider.getPlayerCarryCapability((Player) ent);
-
-
-            riderCarry.setCarried(false);
-
             if(!ent.level().isClientSide()) {
-                riderCarry.setShouldSyncSimple(true);
                 PacketHandler.sendToAllClients(new CPlayerDismountPlayerPacket(ent.getUUID()));
             }
         }
-    }   */
+    }   
 
     //@Inject(at = @At("RETURN"), method = "positionRider(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity/MoveFunction;)V")
     @Overwrite

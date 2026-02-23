@@ -123,10 +123,8 @@ public class PlayerCarry {
             return hand;
         }else{
             for (CompoundTag tag : carriedPlayers) {
-                System.out.println(tag.getUUID(PlayerStandinItem.PLAYER_UUID) + "/" + entity.getUUID());
                 if (tag.getUUID(PlayerStandinItem.PLAYER_UUID).equals(entity.getUUID())) {
                     int invPos = tag.getInt(PlayerStandinItem.INV_ID);
-                    System.out.println("pcarry: "+invPos);
                     if (!Inventory.isHotbarSlot(invPos)) {
                         //TODO make 9 carry positions to simulate having them on belt
                         return custom;

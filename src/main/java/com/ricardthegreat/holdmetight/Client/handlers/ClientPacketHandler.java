@@ -28,7 +28,6 @@ public class ClientPacketHandler {
             Player player = level.getPlayerByUUID(msg.getUuid());
             if(player != null) {
                 player.stopRiding();
-                HoldMeTight.LOGGER.info("ClientPacketHandler 23: " + player.position());
             }
         }   
     }
