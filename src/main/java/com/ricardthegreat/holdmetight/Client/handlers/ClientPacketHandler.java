@@ -54,8 +54,9 @@ public class ClientPacketHandler {
         }  
     }
 
+    @Deprecated
     public static void handleCarryPositionPacket(boolean carried, boolean carrying, int[] carryPos, UUID uuid, Supplier<NetworkEvent.Context> context){
-        
+
     }
 
 }
