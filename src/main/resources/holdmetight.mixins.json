@@ -23,6 +23,7 @@
 
       "playerextensions.PlayerRenderMixin",
       "playerextensions.PlayerCapabilityMixin",
+      "playerextensions.AllowMultiplePassengersOnPlayerMixin",
 
 
       "climbing.BlockClimbingMixin",
