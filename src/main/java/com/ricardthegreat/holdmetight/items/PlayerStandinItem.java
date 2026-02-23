@@ -5,7 +5,10 @@ import java.util.UUID;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.imageio.plugins.tiff.TIFFDirectory;
 
+import com.ricardthegreat.holdmetight.carry.PlayerCarry;
+import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.init.BlockInit;
 import com.ricardthegreat.holdmetight.init.ItemInit;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
@@ -40,6 +43,10 @@ import virtuoel.pehkui.mixin.ItemEntityMixin;
 public class PlayerStandinItem extends Item {
 
     public static String PLAYER_UUID = "LINKED_PLAYER_UUID";
+    public static String INV_ID = "INVENTORY_ID";
+    public static String SELECTED = "IS_SELECTED";
+
+    private int prevSlot = -1;
 
     public PlayerStandinItem(Properties properties) {
         super(properties);
@@ -132,7 +139,7 @@ public class PlayerStandinItem extends Item {
                 if (passenger == null) {
                     stack.shrink(1);
                 }else if(passenger instanceof Player playerPass){
-                    checkCorrectCarryPos(playerPass);
+                    checkCorrectCarryPos(playerPass, index, selected);
                 }
             }
             
@@ -161,8 +168,15 @@ public class PlayerStandinItem extends Item {
         super.appendHoverText(stack, level, list, flag);
     }
 
-    private void checkCorrectCarryPos(Player player){
+    private void checkCorrectCarryPos(Player player, int index, boolean selected){
+        if (!player.level().isClientSide && index != prevSlot) {
+            prevSlot = index;
+            PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
 
+            CompoundTag tag = new CompoundTag();
+            tag.putUUID(PLAYER_UUID, BASE_ATTACK_DAMAGE_UUID);
+            tag.putInt(INV_ID, index);
+        }
     }
 
     public static ItemStack createPlayerItem(Player player){
