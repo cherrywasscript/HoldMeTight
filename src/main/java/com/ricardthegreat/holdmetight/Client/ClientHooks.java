@@ -3,7 +3,6 @@ package com.ricardthegreat.holdmetight.client;
 
 
 import com.ricardthegreat.holdmetight.client.screens.CarryPositionScreen;
-import com.ricardthegreat.holdmetight.client.screens.CarryPositionWheel;
 import com.ricardthegreat.holdmetight.client.screens.CollarScreen;
 import com.ricardthegreat.holdmetight.client.screens.SizePrefsScreen;
 import com.ricardthegreat.holdmetight.client.screens.SizeRayScreen;
