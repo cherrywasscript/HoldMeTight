@@ -12,6 +12,9 @@ import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.init.BlockInit;
 import com.ricardthegreat.holdmetight.init.ItemInit;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
+import com.ricardthegreat.holdmetight.network.clientbound.CAddPlayerCarrySyncPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.CPlayerCarrySyncPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.CRemovePlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CUsePlayerItemPacket;
 import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
 
@@ -113,6 +116,10 @@ public class PlayerStandinItem extends Item {
         }else if (vehicle.getOffhandItem().is(this)) {
             item.shrink(1);
         }
+
+        PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(vehicle);
+        playerCarry.removeCarriedPlayer(id);
+        PacketHandler.sendToAllClients(new CRemovePlayerCarrySyncPacket(id, vehicle.getUUID()));
             
         return InteractionResult.SUCCESS;
     }
@@ -176,6 +183,10 @@ public class PlayerStandinItem extends Item {
             CompoundTag tag = new CompoundTag();
             tag.putUUID(PLAYER_UUID, BASE_ATTACK_DAMAGE_UUID);
             tag.putInt(INV_ID, index);
+            
+            playerCarry.addOrUpdateCarriedPlayer(tag);
+
+            PacketHandler.sendToAllClients(new CAddPlayerCarrySyncPacket(tag, player.getUUID()));
         }
     }
 

@@ -2,6 +2,7 @@ package com.ricardthegreat.holdmetight.carry;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.UUID;
 
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
@@ -107,9 +108,9 @@ public class PlayerCarry {
      * remove a tag from the list of players this person is holding, needs to call a sync after to ensure everything works
      * @param tag tag with the players id
      */
-    public void removeCarriedPlayer(CompoundTag tag){
+    public void removeCarriedPlayer(UUID id){
         for (int i = 0; i < carriedPlayers.size(); i++){
-            if (carriedPlayers.get(i).getUUID(PlayerStandinItem.PLAYER_UUID).equals(tag.getUUID(PlayerStandinItem.PLAYER_UUID))) {
+            if (carriedPlayers.get(i).getUUID(PlayerStandinItem.PLAYER_UUID).equals(id)) {
                 carriedPlayers.remove(i);
             }
         }

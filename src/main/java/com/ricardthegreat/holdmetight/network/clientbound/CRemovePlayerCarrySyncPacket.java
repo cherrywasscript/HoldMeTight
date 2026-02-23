@@ -13,20 +13,20 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 public class CRemovePlayerCarrySyncPacket {
-    private final CompoundTag player;
+    private final UUID player;
     private final UUID uuid;
 
-    public CRemovePlayerCarrySyncPacket(CompoundTag player, UUID uuid){
+    public CRemovePlayerCarrySyncPacket(UUID player, UUID uuid){
         this.player = player;
         this.uuid = uuid;
     }
 
     public CRemovePlayerCarrySyncPacket(FriendlyByteBuf buffer){
-        this(buffer.readNbt(), buffer.readUUID());
+        this(buffer.readUUID(), buffer.readUUID());
     }
 
     public void encode(FriendlyByteBuf buffer){
-        buffer.writeNbt(player);
+        buffer.writeUUID(player);
         buffer.writeUUID(uuid);
     }
 

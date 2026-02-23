@@ -9,6 +9,8 @@ import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.client.handlers.ClientPacketHandler;
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
+import com.ricardthegreat.holdmetight.network.clientbound.CAddPlayerCarrySyncPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.CRemovePlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.size.PlayerSize;
 import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
 
@@ -109,6 +111,11 @@ public class ForgeModEvents {
                 player.stopRiding();
                 player.setDeltaMovement(entity.getDeltaMovement()); 
                 player.hurtMarked = true;
+
+                
+                PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
+                playerCarry.removeCarriedPlayer(id);
+                PacketHandler.sendToAllClients(new CRemovePlayerCarrySyncPacket(id, player.getUUID()));
             }
         }
     }
