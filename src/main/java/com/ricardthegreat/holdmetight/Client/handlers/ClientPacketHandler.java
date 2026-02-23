@@ -6,9 +6,11 @@ import java.util.function.Supplier;
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.network.clientbound.CAddPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerDismountPlayerPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerSizeMixinSyncPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.CRemovePlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.size.PlayerSize;
 import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
 
@@ -57,6 +59,28 @@ public class ClientPacketHandler {
     @Deprecated
     public static void handleCarryPositionPacket(boolean carried, boolean carrying, int[] carryPos, UUID uuid, Supplier<NetworkEvent.Context> context){
 
+    }
+
+    public static void handleAddPlayerPacket(CAddPlayerCarrySyncPacket msg, Supplier<NetworkEvent.Context> context){
+        ClientLevel level = Minecraft.getInstance().level;
+        if(level != null){
+            Player player = level.getPlayerByUUID(msg.getUuid());
+            if(player != null) {
+                PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
+                msg.playerSyncablesUpdate(playerCarry);
+            }
+        }   
+    }
+
+    public static void handleRemovePlayerPacket(CRemovePlayerCarrySyncPacket msg, Supplier<NetworkEvent.Context> context){
+        ClientLevel level = Minecraft.getInstance().level;
+        if(level != null){
+            Player player = level.getPlayerByUUID(msg.getUuid());
+            if(player != null) {
+                PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
+                msg.playerSyncablesUpdate(playerCarry);
+            }
+        }   
     }
 
 }

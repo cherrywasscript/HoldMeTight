@@ -3,10 +3,12 @@ package com.ricardthegreat.holdmetight.network;
 import java.util.function.Supplier;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
+import com.ricardthegreat.holdmetight.network.clientbound.CAddPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerCarrySimplePacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerDismountPlayerPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerSizeMixinSyncPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.CRemovePlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SEntityAddTargetScalePacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SEntityMultTargetScalePacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SEntityPutDownPacket;
@@ -105,6 +107,16 @@ public class PacketHandler {
         SPlayerCarrySimplePacket::encode, 
         SPlayerCarrySimplePacket::new, 
         SPlayerCarrySimplePacket::handle);
+
+        INSTANCE.registerMessage(id++, CAddPlayerCarrySyncPacket.class, 
+        CAddPlayerCarrySyncPacket::encode, 
+        CAddPlayerCarrySyncPacket::new, 
+        CAddPlayerCarrySyncPacket::handle);
+
+        INSTANCE.registerMessage(id++, CRemovePlayerCarrySyncPacket.class, 
+        CRemovePlayerCarrySyncPacket::encode, 
+        CRemovePlayerCarrySyncPacket::new, 
+        CRemovePlayerCarrySyncPacket::handle);
     }
 
     public static void sendToServer(Object msg){
