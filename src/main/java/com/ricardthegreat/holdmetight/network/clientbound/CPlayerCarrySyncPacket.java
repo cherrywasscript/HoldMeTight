@@ -1,5 +1,6 @@
 package com.ricardthegreat.holdmetight.network.clientbound;
 
+import java.util.ArrayList;
 import java.util.UUID;
 import java.util.function.Supplier;
 
@@ -7,6 +8,7 @@ import com.ricardthegreat.holdmetight.carry.CarryPosition;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.client.handlers.ClientPacketHandler;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
@@ -14,37 +16,42 @@ import net.minecraftforge.network.NetworkEvent;
 
 public class CPlayerCarrySyncPacket {
 
-    private final boolean carried;
-    private final boolean carrying;
-    private final int[] carryPos;
-    private final CarryPosition custom;
+    private final ArrayList<CompoundTag> carriedPlayers;
+    private final CarryPosition customPos;
     private final UUID uuid;
 
-    public CPlayerCarrySyncPacket(boolean carried, boolean carrying, int[] carryPos, CarryPosition custom, UUID uuid){
-        this.carried = carried;
-        this.carrying = carrying;
-        this.carryPos = carryPos;
-        this.custom = custom;
+    public CPlayerCarrySyncPacket(ArrayList<CompoundTag> carriedPlayers, CarryPosition customPos,UUID uuid){
+        this.carriedPlayers = carriedPlayers;
+        this.customPos = customPos;
         this.uuid = uuid;
     }
 
     public CPlayerCarrySyncPacket(FriendlyByteBuf buffer){
-        this(buffer.readBoolean(), buffer.readBoolean(), new int[]{buffer.readInt(), buffer.readInt()}, new CarryPosition(buffer.readUtf(), buffer.readInt(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readBoolean()), buffer.readUUID());
+        int listSize = buffer.readInt();
+
+        ArrayList<CompoundTag> temp = new ArrayList<CompoundTag>();
+        for(int i = 0; i < listSize; i++){
+            temp.add(buffer.readNbt());
+        }
+
+        this.carriedPlayers = temp;
+        this.customPos = new CarryPosition(buffer.readUtf(), buffer.readInt(), buffer.readDouble(), buffer.readDouble(), buffer.readDouble(), buffer.readBoolean());
+        this.uuid = buffer.readUUID();
     }
 
     public void encode(FriendlyByteBuf buffer){
-        buffer.writeBoolean(carried);
-        buffer.writeBoolean(carrying);
+        buffer.writeInt(carriedPlayers.size());
 
-        buffer.writeInt(carryPos[0]);
-        buffer.writeInt(carryPos[1]);
+        for (CompoundTag compoundTag : carriedPlayers) {
+            buffer.writeNbt(compoundTag);
+        }
 
-        buffer.writeUtf(custom.posName);
-        buffer.writeInt(custom.RotationOffset);
-        buffer.writeDouble(custom.leftRightMove);
-        buffer.writeDouble(custom.vertOffset);
-        buffer.writeDouble(custom.xymult);
-        buffer.writeBoolean(custom.headLink);
+        buffer.writeUtf(customPos.posName);
+        buffer.writeInt(customPos.RotationOffset);
+        buffer.writeDouble(customPos.leftRightMove);
+        buffer.writeDouble(customPos.vertOffset);
+        buffer.writeDouble(customPos.xymult);
+        buffer.writeBoolean(customPos.headLink);
 
         buffer.writeUUID(uuid);
     }
@@ -58,7 +65,7 @@ public class CPlayerCarrySyncPacket {
     }
 
     public void playerSyncablesUpdate(PlayerCarry playerCarry){
-        playerCarry.updateAllSyncables(carried, carrying, carryPos, custom);
+        playerCarry.updateAllSyncables(carriedPlayers, customPos);
     }
 
     public UUID getUuid() {
