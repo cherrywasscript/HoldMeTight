@@ -55,16 +55,7 @@ public class ClientPacketHandler {
     }
 
     public static void handleCarryPositionPacket(boolean carried, boolean carrying, int[] carryPos, UUID uuid, Supplier<NetworkEvent.Context> context){
-        ClientLevel level = Minecraft.getInstance().level;
-
-        if(level != null){
-            Player player = level.getPlayerByUUID(uuid);
-            if(player != null) {
-                PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
-
-                playerCarry.updateSimpleSyncables(carried, carrying, carryPos);
-            }
-        }
+        
     }
 
 }
