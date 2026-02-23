@@ -38,7 +38,7 @@ public class BlockClimbingMixin {
             return original;
         }
 
-        //checks if entity is .5 or less and is player
+        //checks if entity is .8 or less and is player
         if (ent.isSpectator() || EntitySizeUtils.getSize(ent) >= 0.8 || !(ent instanceof Player)) {
             return false;
         }else{
