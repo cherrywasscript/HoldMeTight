@@ -10,6 +10,7 @@ import com.ricardthegreat.holdmetight.client.handlers.ClientPacketHandler;
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.CAddPlayerCarrySyncPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.CPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CRemovePlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.size.PlayerSize;
 import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
@@ -27,6 +28,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -34,6 +36,7 @@ import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerRespawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import virtuoel.pehkui.api.PehkuiConfig;
 
@@ -112,10 +115,12 @@ public class ForgeModEvents {
                 player.setDeltaMovement(entity.getDeltaMovement()); 
                 player.hurtMarked = true;
 
-                
-                PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(thrower);
-                playerCarry.removeCarriedPlayer(id);
-                PacketHandler.sendToAllClients(new CRemovePlayerCarrySyncPacket(id, thrower.getUUID()));
+                if (!player.level().isClientSide) {
+                    PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(thrower);
+                    playerCarry.removeCarriedPlayer(id);
+                    DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> 
+                    PacketHandler.sendToAllClients(new CRemovePlayerCarrySyncPacket(id, thrower.getUUID())));
+                }
             }
         }
     }
