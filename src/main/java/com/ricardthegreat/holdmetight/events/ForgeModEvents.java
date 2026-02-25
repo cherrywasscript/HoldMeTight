@@ -145,9 +145,9 @@ public class ForgeModEvents {
                     PlayerCarry orElse = CarryOptional.orElse(new PlayerCarry());
 
                     if (player == serverJoiner) {
-                        PacketHandler.sendToAllClients(orElse.getSyncPacket(player));
+                        PacketHandler.sendToAllClients(orElse.getClientSyncPacket(player));
                     }else{
-                        PacketHandler.sendToPlayer(orElse.getSyncPacket(player), supplier);
+                        PacketHandler.sendToPlayer(orElse.getClientSyncPacket(player), supplier);
                     }
                 }
             }

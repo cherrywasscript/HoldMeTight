@@ -228,7 +228,11 @@ public class PlayerCarry {
         }
     }
 
-    public CPlayerCarrySyncPacket getSyncPacket(Player player){
+    public CPlayerCarrySyncPacket getClientSyncPacket(Player player){
         return new CPlayerCarrySyncPacket(carriedPlayers, customCarryPositions.get(0), player.getUUID());
+    }
+
+    public SPlayerCarrySyncPacket getServerSyncPacket(){
+        return new SPlayerCarrySyncPacket(carriedPlayers, customCarryPositions.get(0));
     }
 }
