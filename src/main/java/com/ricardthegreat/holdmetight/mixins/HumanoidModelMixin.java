@@ -21,19 +21,19 @@ public abstract class HumanoidModelMixin<T extends LivingEntity>{
 
     @Shadow
     ModelPart rightArm;
-
     @Shadow
-    HumanoidModel.ArmPose rightArmPose;
+    ModelPart leftArm;
 
     //sets arm position while carrying an entity so it looks natural
     @Inject(at = @At("RETURN"), method = "poseRightArm(Lnet/minecraft/world/entity/LivingEntity;)V")
-    //@Overwrite
     private void poseRightArm(T ent, CallbackInfo info){
         if(ent instanceof Player){
             if(ent.getItemInHand(InteractionHand.MAIN_HAND).is(ItemInit.PLAYER_ITEM.get())){
-                //rightArm.xRot = rightArm.xRot-1.4f;
-                //System.out.println(rightArm.xRot);
                 rightArm.xRot = -1.4f;
+            }
+            
+            if(ent.getItemInHand(InteractionHand.OFF_HAND).is(ItemInit.PLAYER_ITEM.get())){
+                leftArm.xRot = -1.4f;
             } 
         }
     }
