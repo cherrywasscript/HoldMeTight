@@ -104,16 +104,24 @@ public abstract class EntityMixin {
          }
     }
 
-    private boolean checkHands(Player vehicle, Entity rider){
+    //TODO figure out if getorcreatetag is the correct method, might be better to use gettag and have a null check to ensure the item actually has a tag instead
+    private InteractionHand checkHands(Player vehicle, Entity rider){
         ItemStack item = vehicle.getItemInHand(InteractionHand.MAIN_HAND);
-
         if (item.is(ItemInit.PLAYER_ITEM.get())) {
-            UUID id = item.getTag().getUUID(PlayerStandinItem.PLAYER_UUID);
+            UUID id = item.getOrCreateTag().getUUID(PlayerStandinItem.PLAYER_UUID);
             if (rider.getUUID().equals(id)) {
-                return true;
+                return InteractionHand.MAIN_HAND;
             }
         }
-        return false;
+
+        item = vehicle.getItemInHand(InteractionHand.OFF_HAND);
+        if (item.is(ItemInit.PLAYER_ITEM.get())) {
+            UUID id = item.getOrCreateTag().getUUID(PlayerStandinItem.PLAYER_UUID);
+            if (rider.getUUID().equals(id)) {
+                return InteractionHand.OFF_HAND;
+            }
+        }
+        return null;
     }
 
     //need to check the scale of the rider and the vehicle and move accordingly
