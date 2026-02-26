@@ -21,8 +21,11 @@ public class CommonModEvents {
 
     @SubscribeEvent
     public static void gatherData(GatherDataEvent event) {
+        //exists for if i want to generate curios stuff in the future
+        /* 
         event.getGenerator().addProvider(
             event.includeServer(), 
             new HMTCurioDataProvider(HoldMeTight.MODID, event.getGenerator().getPackOutput(), event.getExistingFileHelper(), event.getLookupProvider()));
+            */
     }
 }

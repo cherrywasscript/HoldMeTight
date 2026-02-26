@@ -15,9 +15,11 @@ public class HMTCurioDataProvider extends CuriosDataProvider{
 
     @Override
     public void generate(Provider registries, ExistingFileHelper fileHelper) {
-        this.createSlot("shoulderleft").size(1);
+         this.createSlot("collar").size(1);
+          this.createSlot("left_shoulder").size(1);
+        this.createSlot("right_shoulder").size(1);
 
-        this.createEntities("test").addPlayer().addSlots("shoulderLeft");
+        this.createEntities("hmt_slots").addPlayer().addSlots("collar", "left_shoulder", "right_shoulder");
     }
     
 }
