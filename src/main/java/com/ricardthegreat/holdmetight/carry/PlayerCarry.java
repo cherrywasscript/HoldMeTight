@@ -7,11 +7,13 @@ import java.util.UUID;
 import org.jline.utils.Log;
 
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
+import com.ricardthegreat.holdmetight.mixins.EntityMixin;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerCarrySimplePacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SPlayerCarrySimplePacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SPlayerCarrySyncPacket;
+import com.ricardthegreat.holdmetight.utils.constants.CarryPosConstants;
 import com.ricardthegreat.holdmetight.utils.constants.PlayerCarryConstants;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
@@ -32,7 +34,8 @@ public class PlayerCarry {
     //these are just here for initialising stuff
     private final CarryPosition mainHand = new CarryPosition("mainHand", 110, 0.77, 0.65, 0, false);
     private final CarryPosition offHand = new CarryPosition("offHand", 70, 0.77, 0.65, 0, false);
-    private final CarryPosition shoulder = new CarryPosition("shoulder",90, 0, 0.38, -0.3, false);
+    private final CarryPosition leftshoulder = new CarryPosition("leftshoulder",90, 0, 0.38, -0.3, false);
+    private final CarryPosition rightshoulder = new CarryPosition("rightshoulder",270, 0, 0.38, -0.3, false);
 
     // this feels clunky and wrong, im not entirely sure on a "right" way to do these though, maybe have them exist in a seperate static class? or possibly in a superclass to this, either way this works currently
     private final CarryPosition hotbarSlot0 = new CarryPosition("hotbarSlot0", 0, 0.3, 1, 0, false);
@@ -135,26 +138,36 @@ public class PlayerCarry {
     }
 
     //TODO remove or change
-    public CarryPosition getCarryPosition(Entity entity, InteractionHand hand){
-        if (hand == InteractionHand.MAIN_HAND) {
-            return mainHand;
-        }else if (hand == InteractionHand.OFF_HAND) {
-            return offHand;
-        }else{
-            for (CompoundTag tag : carriedPlayers) {
-                if (tag.getUUID(PlayerStandinItem.PLAYER_UUID).equals(entity.getUUID())) {
-                    int invPos = tag.getInt(PlayerStandinItem.INV_ID);
-                    if (!Inventory.isHotbarSlot(invPos)) {
-                        return custom;
-                    }else{
-                        if (invPos < 0 || hotbarCarryPositions.size() <= invPos) {
-                            Log.error("invPos: " + invPos + " is a number that is either greater than 8 or less than 0 but still registerd as a hotbar slot, setting to shoulder as a failsafe");
-                            return shoulder;
+    public CarryPosition getCarryPosition(Entity entity, String hand){
+        switch (hand) {
+            case CarryPosConstants.MAIN_HAND:
+                return mainHand;
+
+            case CarryPosConstants.OFF_HAND:
+                return offHand;
+
+            case CarryPosConstants.LEFT_SHOULDER:
+                return leftshoulder;
+            
+            case CarryPosConstants.RIGHT_SHOULDER:
+                return rightshoulder;
+            
+            default:
+                for (CompoundTag tag : carriedPlayers) {
+                    if (tag.getUUID(PlayerStandinItem.PLAYER_UUID).equals(entity.getUUID())) {
+                        int invPos = tag.getInt(PlayerStandinItem.INV_ID);
+                        if (!Inventory.isHotbarSlot(invPos)) {
+                            return custom;
+                        }else{
+                            if (invPos < 0 || hotbarCarryPositions.size() <= invPos) {
+                                Log.error("invPos: " + invPos + " is a number that is either greater than 8 or less than 0 but still registerd as a hotbar slot, setting to custom as a failsafe");
+                                return custom;
+                            }
+                            return hotbarCarryPositions.get(invPos);
                         }
-                        return hotbarCarryPositions.get(invPos);
                     }
-                }
-            }  
+                }  
+                break;
         }
 
         //maybe want some form of error here not sure
