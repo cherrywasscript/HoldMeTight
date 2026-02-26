@@ -10,6 +10,8 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.ricardthegreat.holdmetight.carry.CarryPosition;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.network.PacketHandler;
+import com.ricardthegreat.holdmetight.network.serverbound.SPlayerCarrySyncPacket;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -45,7 +47,8 @@ public class CustomCarryCommand {
             CarryPosition pos = new CarryPosition("custom", rotation, distance, height, sideways, headlink);
 
             playerCarry.addCustomCarryPos(pos);
-            playerCarry.setShouldSyncAll(true);
+
+            PacketHandler.sendToServer(playerCarry.getServerSyncPacket());
         }
         return 1;
     }
