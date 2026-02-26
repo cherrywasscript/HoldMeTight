@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
 
+import org.jline.utils.Log;
+
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerCarrySimplePacket;
@@ -12,6 +14,7 @@ import com.ricardthegreat.holdmetight.network.serverbound.SPlayerCarrySimplePack
 import com.ricardthegreat.holdmetight.network.serverbound.SPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.utils.constants.PlayerCarryConstants;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -27,14 +30,28 @@ public class PlayerCarry {
     */
 
     //these are just here for initialising stuff
-    private final CarryPosition hand = new CarryPosition("hand", 110, 0.77, 0.65, 0, false);
+    private final CarryPosition mainHand = new CarryPosition("mainHand", 110, 0.77, 0.65, 0, false);
+    private final CarryPosition offHand = new CarryPosition("offHand", 70, 0.77, 0.65, 0, false);
     private final CarryPosition shoulder = new CarryPosition("shoulder",90, 0, 0.38, -0.3, false);
+
+    // this feels clunky and wrong, im not entirely sure on a "right" way to do these though, maybe have them exist in a seperate static class? or possibly in a superclass to this, either way this works currently
+    private final CarryPosition hotbarSlot0 = new CarryPosition("hotbarSlot0", 0, 0.3, 1, 0, false);
+    private final CarryPosition hotbarSlot1 = new CarryPosition("hotbarSlot1", 0, 0.2, 1, 0.15, false);
+    private final CarryPosition hotbarSlot2 = new CarryPosition("hotbarSlot2", 0, 0.1, 1, 0.15, false);
+    private final CarryPosition hotbarSlot3 = new CarryPosition("hotbarSlot3", 0, 0, 1, 0.15, false);
+    private final CarryPosition hotbarSlot4 = new CarryPosition("hotbarSlot4", 0, -0.1, 1, 0.15, false);
+    private final CarryPosition hotbarSlot5 = new CarryPosition("hotbarSlot5", 0, -0.2, 1, 0.15, false);
+    private final CarryPosition hotbarSlot6 = new CarryPosition("hotbarSlot6", 0, -0.3, 1, 0, false);
+    private final CarryPosition hotbarSlot7 = new CarryPosition("hotbarSlot7", 0, 0.15, 1, -0.15, false);
+    private final CarryPosition hotbarSlot8 = new CarryPosition("hotbarSlot8", 0, -0.15, 1, -0.15, false);
+
+    private final ArrayList<CarryPosition> hotbarCarryPositions = new ArrayList<>(Arrays.asList(hotbarSlot0, hotbarSlot1, hotbarSlot2, hotbarSlot3, hotbarSlot4, hotbarSlot5, hotbarSlot6, hotbarSlot7, hotbarSlot8));
+
     private CarryPosition custom = new CarryPosition("custom",0, 0, 0, 0, false);
 
-    private final ArrayList<CarryPosition> defaultCarryPositions = new ArrayList<>(Arrays.asList(hand,shoulder));
     private ArrayList<CarryPosition> customCarryPositions = new ArrayList<>(Arrays.asList(custom));
 
-    private ArrayList<ArrayList<CarryPosition>> allCarryPositions = new ArrayList<ArrayList<CarryPosition>>(Arrays.asList(defaultCarryPositions,customCarryPositions));
+
     
 
     private ArrayList<CompoundTag> carriedPlayers = new ArrayList<>();
@@ -118,21 +135,23 @@ public class PlayerCarry {
     }
 
     //TODO remove or change
-    public CarryPosition getCarryPosition(Entity entity, boolean selected){
-        if (selected) {
-            return hand;
+    public CarryPosition getCarryPosition(Entity entity, InteractionHand hand){
+        if (hand == InteractionHand.MAIN_HAND) {
+            return mainHand;
+        }else if (hand == InteractionHand.OFF_HAND) {
+            return offHand;
         }else{
             for (CompoundTag tag : carriedPlayers) {
                 if (tag.getUUID(PlayerStandinItem.PLAYER_UUID).equals(entity.getUUID())) {
                     int invPos = tag.getInt(PlayerStandinItem.INV_ID);
                     if (!Inventory.isHotbarSlot(invPos)) {
-                        //TODO make 9 carry positions to simulate having them on belt
                         return custom;
-                    }else if (Inventory.SLOT_OFFHAND == invPos) {
-                        //TODO make a carry pos that is the same as hand but mirrored for offhand
-                        return shoulder;
                     }else{
-                        return shoulder;
+                        if (invPos < 0 || hotbarCarryPositions.size() <= invPos) {
+                            Log.error("invPos: " + invPos + " is a number that is either greater than 8 or less than 0 but still registerd as a hotbar slot, setting to shoulder as a failsafe");
+                            return shoulder;
+                        }
+                        return hotbarCarryPositions.get(invPos);
                     }
                 }
             }  
@@ -140,10 +159,6 @@ public class PlayerCarry {
 
         //maybe want some form of error here not sure
         return custom;
-    }
-
-    public ArrayList<ArrayList<CarryPosition>> getAllCarryPositions(){
-        return allCarryPositions;
     }
 
     public void addCustomCarryPos(CarryPosition custom){
@@ -188,7 +203,6 @@ public class PlayerCarry {
     public void copyFrom(PlayerCarry source){
         this.custom = source.custom;
         this.customCarryPositions = source.customCarryPositions;
-        this.allCarryPositions = source.allCarryPositions;
         this.carriedPlayers = source.carriedPlayers;
     }
 
