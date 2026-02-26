@@ -1,5 +1,6 @@
 {
     "operation": "SET",
     "size": 1,
-    "icon": "holdmetight:slot/right_shoulder"
+    "icon": "holdmetight:slot/right_shoulder",
+    "render_toggle": false
 }
