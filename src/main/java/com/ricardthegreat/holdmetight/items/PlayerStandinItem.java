@@ -41,13 +41,17 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
+import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.type.capability.ICurioItem;
 import virtuoel.pehkui.mixin.ItemEntityMixin;
 
-public class PlayerStandinItem extends Item {
+public class PlayerStandinItem extends Item implements ICurioItem{
 
     public static String PLAYER_UUID = "LINKED_PLAYER_UUID";
     public static String INV_ID = "INVENTORY_ID";
     public static String SELECTED = "IS_SELECTED";
+
+    private boolean after = false;
 
     private int prevSlot = -1;
 
@@ -128,7 +132,15 @@ public class PlayerStandinItem extends Item {
     }
 
     @Override
+    public void curioTick(SlotContext slotContext, ItemStack stack) {
+        after = !after;
+        ICurioItem.super.curioTick(slotContext, stack);
+    }
+
+    @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int index, boolean selected) {
+        System.out.println("curio index:" + index);
+        after = !after;
         //get the tag from the item and fail if it has no tag, really shouldnt need this? but like idk better than having accidental null pointer crashes
         if (stack.hasTag()) {
             CompoundTag tag = stack.getTag();
