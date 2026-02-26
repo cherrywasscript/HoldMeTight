@@ -16,8 +16,11 @@ import com.ricardthegreat.holdmetight.init.ItemInit;
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerDismountPlayerPacket;
+import com.ricardthegreat.holdmetight.utils.CheckNonInvSlotUtil;
+import com.ricardthegreat.holdmetight.utils.constants.CarryPosConstants;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.commands.GameModeCommand;
 import net.minecraft.server.commands.SpectateCommand;
@@ -32,6 +35,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
+import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
+import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
+import top.theillusivec4.curios.common.capability.CurioInventoryCapability;
+import top.theillusivec4.curios.common.data.CuriosSlotManager;
 
 
 //TODO make not pushed by fluids when big (IFORGEENTITY)
@@ -104,26 +114,6 @@ public abstract class EntityMixin {
          }
     }
 
-    //TODO figure out if getorcreatetag is the correct method, might be better to use gettag and have a null check to ensure the item actually has a tag instead
-    private InteractionHand checkHands(Player vehicle, Entity rider){
-        ItemStack item = vehicle.getItemInHand(InteractionHand.MAIN_HAND);
-        if (item.is(ItemInit.PLAYER_ITEM.get())) {
-            UUID id = item.getOrCreateTag().getUUID(PlayerStandinItem.PLAYER_UUID);
-            if (rider.getUUID().equals(id)) {
-                return InteractionHand.MAIN_HAND;
-            }
-        }
-
-        item = vehicle.getItemInHand(InteractionHand.OFF_HAND);
-        if (item.is(ItemInit.PLAYER_ITEM.get())) {
-            UUID id = item.getOrCreateTag().getUUID(PlayerStandinItem.PLAYER_UUID);
-            if (rider.getUUID().equals(id)) {
-                return InteractionHand.OFF_HAND;
-            }
-        }
-        return null;
-    }
-
     //need to check the scale of the rider and the vehicle and move accordingly
     // if rider is above 0.25 set them to just being on head like normal probably
     //on shoulder rider should get lower e.g. 0.125 should have a larger vertical offset tho im not sure by how much yet
@@ -133,7 +123,7 @@ public abstract class EntityMixin {
 
         PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerCarryCapability(vehicle);
 
-        CarryPosition carryPos = vehicleCarry.getCarryPosition(rider, checkHands(vehicle, rider));
+        CarryPosition carryPos = vehicleCarry.getCarryPosition(rider, CheckNonInvSlotUtil.checkIfNonInvSlot(vehicle, rider));
         
 
 
