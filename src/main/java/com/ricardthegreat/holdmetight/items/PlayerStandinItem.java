@@ -139,7 +139,6 @@ public class PlayerStandinItem extends Item implements ICurioItem{
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int index, boolean selected) {
-        System.out.println("curio index:" + index);
         after = !after;
         //get the tag from the item and fail if it has no tag, really shouldnt need this? but like idk better than having accidental null pointer crashes
         if (stack.hasTag()) {
