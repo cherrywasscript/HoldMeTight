@@ -18,37 +18,41 @@ public class CheckNonInvSlotUtil {
 
     //TODO figure out if getorcreatetag is the correct method, might be better to use gettag and have a null check to ensure the item actually has a tag instead
     public static String checkIfNonInvSlot(Player vehicle, Entity rider){
-        var wrapper = new Object(){ boolean curiosCheckPassed = false; String curioReturn = null; };
+        var wrapper = new Object(){ boolean checkPassed = false; String strReturn = null; int count = 0;};
 
         CuriosApi.getCuriosInventory(vehicle)
         .ifPresent(handler -> handler.findCurios(ItemInit.PLAYER_ITEM.get()).forEach((slotResult) -> {
             UUID id = slotResult.stack().getOrCreateTag().getUUID(PlayerStandinItem.PLAYER_UUID);
             if (rider.getUUID().equals(id)) {
-                wrapper.curiosCheckPassed = true;
+                wrapper.checkPassed = true;
                 System.out.println(slotResult.slotContext().identifier());
-                wrapper.curioReturn = slotResult.slotContext().identifier();
+                wrapper.strReturn = slotResult.slotContext().identifier();
             }
         }));
 
-        if (wrapper.curiosCheckPassed) {
-            return wrapper.curioReturn;
+        if (wrapper.checkPassed) {
+            return wrapper.strReturn;
         }
 
-        ItemStack item = vehicle.getItemInHand(InteractionHand.MAIN_HAND);
-        if (item.is(ItemInit.PLAYER_ITEM.get())) {
-            UUID id = item.getOrCreateTag().getUUID(PlayerStandinItem.PLAYER_UUID);
-            if (rider.getUUID().equals(id)) {
-                return CarryPosConstants.MAIN_HAND;
+        vehicle.getHandSlots().forEach((stack) -> {
+            if (stack.is(ItemInit.PLAYER_ITEM.get())) {
+                UUID id = stack.getOrCreateTag().getUUID(PlayerStandinItem.PLAYER_UUID);
+                if (rider.getUUID().equals(id)) {
+                    wrapper.checkPassed = true;
+                    if (wrapper.count == 0) {
+                        wrapper.strReturn = CarryPosConstants.MAIN_HAND;
+                    }else{
+                        wrapper.strReturn = CarryPosConstants.OFF_HAND;
+                    }
+                }
+                wrapper.count++;
             }
-        }
+        });
 
-        item = vehicle.getItemInHand(InteractionHand.OFF_HAND);
-        if (item.is(ItemInit.PLAYER_ITEM.get())) {
-            UUID id = item.getOrCreateTag().getUUID(PlayerStandinItem.PLAYER_UUID);
-            if (rider.getUUID().equals(id)) {
-                return CarryPosConstants.OFF_HAND;
-            }
+        if (wrapper.checkPassed) {
+            return wrapper.strReturn;
+        }else {
+            return "none";
         }
-        return "none";
     }
 }
