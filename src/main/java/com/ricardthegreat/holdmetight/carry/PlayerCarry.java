@@ -59,6 +59,7 @@ public class PlayerCarry {
 
     private ArrayList<CompoundTag> carriedPlayers = new ArrayList<>();
 
+    private boolean turnWhileCarried = false;
 
     //if this is true it will sync the values that can change next tick and set to false
     private boolean shouldSync = false;
@@ -210,7 +211,13 @@ public class PlayerCarry {
         this.shouldSync = shouldSyncAll;
     }
     
+    public boolean getTurnWhileCarried(){
+        return turnWhileCarried;
+    }
 
+    public void setTurnWhileCarried(boolean turnWhileCarried){
+        this.turnWhileCarried = turnWhileCarried;
+    }
 
 
     public void copyFrom(PlayerCarry source){
