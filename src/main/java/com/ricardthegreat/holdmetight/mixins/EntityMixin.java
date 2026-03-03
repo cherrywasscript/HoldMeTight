@@ -24,6 +24,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.commands.GameModeCommand;
 import net.minecraft.server.commands.SpectateCommand;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -125,7 +126,13 @@ public abstract class EntityMixin {
 
         CarryPosition carryPos = vehicleCarry.getCarryPosition(rider, CheckNonInvSlotUtil.checkIfNonInvSlot(vehicle, rider));
         
-
+        if (rider instanceof ServerPlayer ride) {
+            if (carryPos.posName.equals("custom")) {
+                ride.setCamera(vehicle);
+            }else{
+                ride.setCamera(ride);
+            }
+        }
 
         vertOffset = vehicle.getY() + vehicle.getPassengersRidingOffset() + rider.getMyRidingOffset() - (carryPos.vertOffset*EntitySizeUtils.getSize(vehicle));
 

@@ -25,6 +25,7 @@
       "playerextensions.PlayerCapabilityMixin",
       "playerextensions.AllowMultiplePassengersOnPlayerMixin",
       "playerextensions.PlayerTurnWhileHeldExtension",
+      "playerextensions.InvulnerableWhileCarried",
 
 
       "climbing.BlockClimbingMixin",
