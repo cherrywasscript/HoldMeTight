@@ -2,48 +2,29 @@ package com.ricardthegreat.holdmetight.items;
 
 import java.util.List;
 import java.util.UUID;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import javax.imageio.plugins.tiff.TIFFDirectory;
-
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
-import com.ricardthegreat.holdmetight.init.BlockInit;
 import com.ricardthegreat.holdmetight.init.ItemInit;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.CAddPlayerCarrySyncPacket;
-import com.ricardthegreat.holdmetight.network.clientbound.CPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CRemovePlayerCarrySyncPacket;
-import com.ricardthegreat.holdmetight.network.clientbound.CUsePlayerItemPacket;
 import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.controls.KeyBindsList;
-import net.minecraft.client.gui.screens.controls.KeyBindsScreen;
-import net.minecraft.client.resources.SkinManager;
-import net.minecraft.client.resources.SkinManager.SkinTextureCallback;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.item.enchantment.KnockbackEnchantment;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.entity.item.ItemTossEvent;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
-import virtuoel.pehkui.mixin.ItemEntityMixin;
 
 public class PlayerStandinItem extends Item implements ICurioItem{
 
@@ -66,7 +47,6 @@ public class PlayerStandinItem extends Item implements ICurioItem{
             System.out.println("no vehicle");
             return InteractionResult.FAIL;
         }
-
         //get the item the player is holding
         ItemStack item = context.getItemInHand(); 
 
