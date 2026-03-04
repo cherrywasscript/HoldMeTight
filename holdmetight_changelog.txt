@@ -71,3 +71,4 @@ version 0.6.0-beta:
 With the changes I have made to carrying that i've been looking at for over a year since I started this project i think its reasonable enough to say the mod is no longer in alpha though like ive mentioned before I am more or less just winging these version numbers
 - reworked how carrying works, now instead of only being able to pick up a single player and choosing between a few carrying positions they instead become an item in your inventory with their position in your inventory dictating what position they are carried at
 - to go along with the reworked carrying there are now curio slots that can hold "player items" to allow for both keeping your inventory clear and having carry positions that do not suit the main inventory
+- made it so that players being carried are immune to damage
