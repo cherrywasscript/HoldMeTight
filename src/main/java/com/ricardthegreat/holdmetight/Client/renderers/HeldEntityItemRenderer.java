@@ -1,0 +1,97 @@
+package com.ricardthegreat.holdmetight.client.renderers;
+
+import com.mojang.authlib.GameProfile;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.vertex.VertexMultiConsumer;
+import com.mojang.math.Axis;
+import com.ricardthegreat.holdmetight.HoldMeTight;
+import com.ricardthegreat.holdmetight.items.EntityStandinItem;
+import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.SkullModel;
+import net.minecraft.client.model.geom.EntityModelSet;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
+import net.minecraft.client.renderer.blockentity.SkullBlockRenderer;
+import net.minecraft.client.resources.DefaultPlayerSkin;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemDisplayContext;
+import net.minecraft.world.item.ItemStack;
+
+public class HeldEntityItemRenderer extends BlockEntityWithoutLevelRenderer{
+
+    private final SkullModel model;
+
+    public static final HeldEntityItemRenderer INSTANCE = new HeldEntityItemRenderer(Minecraft.getInstance().getBlockEntityRenderDispatcher(), Minecraft.getInstance().getEntityModels());
+
+    public HeldEntityItemRenderer(BlockEntityRenderDispatcher dispatcher, EntityModelSet set) {
+        super(dispatcher, set);
+        model = new SkullModel(set.bakeLayer(ModelLayers.PLAYER_HEAD));
+    }
+
+    @Override
+    public void renderByItem(ItemStack itemStack, ItemDisplayContext context, PoseStack poseStack, MultiBufferSource source, int int0, int int1) {
+        //run through checks ensuring that the item exists, is the correct item and that the entity attached to the item exists
+        if (itemStack.getCount() <= 0) {
+            return;
+        }
+        
+        if (!(itemStack.getItem() instanceof EntityStandinItem)) {
+            return;
+        }
+
+        CompoundTag tag = itemStack.getTag();
+        if (tag == null) {
+            return;
+        }
+
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) {
+            return;
+        }
+
+        Entity entity = null;
+        if (itemStack.getItem() instanceof PlayerStandinItem) {
+            if (Minecraft.getInstance().getConnection() == null) {
+                return;
+            }
+            PlayerInfo info = Minecraft.getInstance().getConnection().getPlayerInfo(tag.getUUID(PlayerStandinItem.PLAYER_UUID));
+            if (info == null) {
+                return;
+            }
+
+            switch (context) {
+                case GUI:
+                    poseStack.pushPose();
+                    poseStack.translate(0.5, 0, 0);
+                    poseStack.mulPose(Axis.YP.rotationDegrees(180));
+                    poseStack.mulPose(Axis.ZP.rotationDegrees(180));
+                    poseStack.scale(2, 2, 2);
+                    VertexConsumer consumer = source.getBuffer(model.renderType(info.getSkinLocation()));
+                    model.renderToBuffer(poseStack, consumer, int0, int1, 1, 1, 1, 1);
+                    poseStack.popPose();
+                    break;
+
+                default:
+                    break;
+            }
+            
+        }else{
+
+        }
+
+        
+        // TODO Auto-generated method stub
+        super.renderByItem(itemStack, context, poseStack, source, int0, int1);
+    }
+    
+}
