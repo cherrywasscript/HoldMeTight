@@ -1,0 +1,18 @@
+{
+    "parent": "minecraft:item/handheld",
+    "loader": "forge:separate_transforms",
+    "base": {
+      "parent": "holdmetight:item/player_item_3d"
+    },
+    "perspectives": {
+      "gui": {
+        "parent": "holdmetight:item/player_item_2d"
+      },
+      "ground": {
+        "parent": "holdmetight:item/player_item_2d"
+      },
+      "fixed": {
+        "parent": "holdmetight:item/player_item_2d"
+      }
+    }
+  }
