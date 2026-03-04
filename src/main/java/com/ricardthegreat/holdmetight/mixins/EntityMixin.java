@@ -126,6 +126,7 @@ public abstract class EntityMixin {
 
         CarryPosition carryPos = vehicleCarry.getCarryPosition(rider, CheckNonInvSlotUtil.checkIfNonInvSlot(vehicle, rider));
         
+        /* 
         if (rider instanceof ServerPlayer ride) {
             if (carryPos.posName.equals("custom")) {
                 ride.setCamera(vehicle);
@@ -133,6 +134,7 @@ public abstract class EntityMixin {
                 ride.setCamera(ride);
             }
         }
+            */
 
         vertOffset = vehicle.getY() + vehicle.getPassengersRidingOffset() + rider.getMyRidingOffset() - (carryPos.vertOffset*EntitySizeUtils.getSize(vehicle));
 
