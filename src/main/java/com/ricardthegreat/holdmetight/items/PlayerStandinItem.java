@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.init.ItemInit;
@@ -18,15 +19,12 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import top.theillusivec4.curios.api.SlotContext;
-import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
-public class PlayerStandinItem extends Item implements ICurioItem{
+public class PlayerStandinItem extends EntityStandinItem{
 
     public static String PLAYER_UUID = "LINKED_PLAYER_UUID";
     public static String INV_ID = "INVENTORY_ID";
@@ -112,14 +110,7 @@ public class PlayerStandinItem extends Item implements ICurioItem{
     }
 
     @Override
-    public void curioTick(SlotContext slotContext, ItemStack stack) {
-        after = !after;
-        ICurioItem.super.curioTick(slotContext, stack);
-    }
-
-    @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int index, boolean selected) {
-        after = !after;
         //get the tag from the item and fail if it has no tag, really shouldnt need this? but like idk better than having accidental null pointer crashes
         if (stack.hasTag()) {
             CompoundTag tag = stack.getTag();
@@ -142,7 +133,6 @@ public class PlayerStandinItem extends Item implements ICurioItem{
             }else if(passenger instanceof Player carried && entity instanceof Player player){
                 checkCorrectCarryPos(carried, player, index, selected);
             }
-            
         }
         super.inventoryTick(stack, level, entity, index, selected);
     }
