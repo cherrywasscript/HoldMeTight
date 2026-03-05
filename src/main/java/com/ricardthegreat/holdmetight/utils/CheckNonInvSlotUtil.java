@@ -34,25 +34,24 @@ public class CheckNonInvSlotUtil {
             return wrapper.strReturn;
         }
 
-        vehicle.getHandSlots().forEach((stack) -> {
-            if (stack.is(ItemInit.PLAYER_ITEM.get())) {
-                UUID id = stack.getOrCreateTag().getUUID(PlayerStandinItem.PLAYER_UUID);
-                if (rider.getUUID().equals(id)) {
-                    wrapper.checkPassed = true;
-                    if (wrapper.count == 0) {
-                        wrapper.strReturn = CarryPosConstants.MAIN_HAND;
-                    }else{
-                        wrapper.strReturn = CarryPosConstants.OFF_HAND;
-                    }
-                }
-                wrapper.count++;
-            }
-        });
+        
 
-        if (wrapper.checkPassed) {
-            return wrapper.strReturn;
+        if (checkCorrectItem(vehicle.getOffhandItem(), rider)) {
+            return CarryPosConstants.OFF_HAND;
+        }else if (checkCorrectItem(vehicle.getMainHandItem(), rider)) {
+            return CarryPosConstants.MAIN_HAND;
         }else {
             return "none";
         }
+    }
+
+    public static boolean checkCorrectItem(ItemStack stack, Entity rider){
+        if (stack.is(ItemInit.PLAYER_ITEM.get())) {
+            UUID id = stack.getOrCreateTag().getUUID(PlayerStandinItem.PLAYER_UUID);
+            if (rider.getUUID().equals(id)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
