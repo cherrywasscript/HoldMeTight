@@ -70,8 +70,9 @@ public abstract class EntityMixin {
         }
     }   
 
-    @Inject(at = @At("HEAD"), method = "positionRider(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity/MoveFunction;)V", cancellable = true)
+    
     //@Overwrite
+    @Inject(at = @At("HEAD"), method = "positionRider(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity$MoveFunction;)V", cancellable = true)
     protected void positionRider(Entity rider, Entity.MoveFunction func, CallbackInfo info) {
         Entity vehicle = (Entity) (Object) this;
         if (vehicle.hasPassenger(rider)) {
