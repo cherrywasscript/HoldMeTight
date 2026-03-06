@@ -19,6 +19,7 @@
 
 
       "rendering.FrustumMixin",
+      "rendering.DontRenderInvisibleCarriedPlayers",
 
 
       "playerextensions.PlayerRenderMixin",
