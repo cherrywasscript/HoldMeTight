@@ -7,6 +7,7 @@ import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.client.handlers.ClientPacketHandler;
+import com.ricardthegreat.holdmetight.items.EntityStandinItem;
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.CAddPlayerCarrySyncPacket;
@@ -108,18 +109,29 @@ public class ForgeModEvents {
 
             if (stack.hasTag()) {
                 CompoundTag tag = stack.getTag(); 
-                UUID id = tag.getUUID(PlayerStandinItem.PLAYER_UUID);
-                Player player = thrower.level().getPlayerByUUID(id);
+                UUID id = tag.getUUID(EntityStandinItem.ENTITY_UUID);
 
-                player.stopRiding();
-                player.setDeltaMovement(entity.getDeltaMovement()); 
-                player.hurtMarked = true;
+                Level level = thrower.level();
 
-                if (!player.level().isClientSide) {
-                    PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(thrower);
-                    playerCarry.removeCarriedPlayer(id);
-                    DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> 
-                    PacketHandler.sendToAllClients(new CRemovePlayerCarrySyncPacket(id, thrower.getUUID())));
+                Entity thrown;
+                if (tag.getBoolean(EntityStandinItem.IS_PLAYER)) {
+                    thrown = level.getPlayerByUUID(id);
+                }else{
+                    thrown = level.getEntity(tag.getInt(EntityStandinItem.ENTITY_ID));
+                }
+                //Player player = thrower.level().getPlayerByUUID(id);
+
+                if (thrown != null) {
+                    thrown.stopRiding();
+                    thrown.setDeltaMovement(entity.getDeltaMovement()); 
+                    thrown.hurtMarked = true;
+
+                    if (!thrower.level().isClientSide) {
+                        PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(thrower);
+                        playerCarry.removeCarriedEntity(id);
+                        DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> 
+                        PacketHandler.sendToAllClients(new CRemovePlayerCarrySyncPacket(id, thrower.getUUID())));
+                    }
                 }
             }
         }
