@@ -1,7 +1,5 @@
 package com.ricardthegreat.holdmetight.mixins;
 
-import java.util.UUID;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
@@ -12,38 +10,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.ricardthegreat.holdmetight.carry.CarryPosition;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
-import com.ricardthegreat.holdmetight.init.ItemInit;
 import com.ricardthegreat.holdmetight.items.EntityStandinItem;
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerDismountPlayerPacket;
 import com.ricardthegreat.holdmetight.utils.CheckNonInvSlotUtil;
-import com.ricardthegreat.holdmetight.utils.constants.CarryPosConstants;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
-import net.minecraft.core.NonNullList;
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.commands.GameModeCommand;
-import net.minecraft.server.commands.SpectateCommand;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.Arrow;
-import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.alchemy.Potions;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
-import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.SlotContext;
-import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
-import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
-import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
-import top.theillusivec4.curios.common.capability.CurioInventoryCapability;
-import top.theillusivec4.curios.common.data.CuriosSlotManager;
 
 
 //TODO make not pushed by fluids when big (IFORGEENTITY)

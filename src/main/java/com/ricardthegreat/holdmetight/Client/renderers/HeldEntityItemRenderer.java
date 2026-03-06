@@ -1,11 +1,8 @@
 package com.ricardthegreat.holdmetight.client.renderers;
 
-import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.blaze3d.vertex.VertexMultiConsumer;
 import com.mojang.math.Axis;
-import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.items.EntityStandinItem;
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 
@@ -17,21 +14,12 @@ import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
-import net.minecraft.client.renderer.blockentity.SkullBlockRenderer;
-import net.minecraft.client.renderer.entity.CowRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.client.resources.DefaultPlayerSkin;
-import net.minecraft.client.resources.model.Material;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.Tags.EntityTypes;
 
 public class HeldEntityItemRenderer extends BlockEntityWithoutLevelRenderer{
 

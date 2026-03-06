@@ -16,10 +16,7 @@ import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.CAddPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CRemovePlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
-import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
-
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
-import net.minecraft.client.renderer.blockentity.SkullBlockRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
