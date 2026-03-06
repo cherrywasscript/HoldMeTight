@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.jline.utils.Log;
 
+import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.items.EntityStandinItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerCarrySyncPacket;
@@ -245,18 +246,23 @@ public class PlayerCarry {
     }
 
     public void loadNBTData(CompoundTag tag){
-        custom = new CarryPosition(
+        try {
+            custom = new CarryPosition(
             tag.getString(PlayerCarryConstants.POS_NAME_NBT_TAG), tag.getInt(PlayerCarryConstants.ROTATION_NBT_TAG), tag.getDouble(PlayerCarryConstants.MULT_NBT_TAG), 
             tag.getDouble(PlayerCarryConstants.VERT_NBT_TAG), tag.getDouble(PlayerCarryConstants.LEFT_RIGHT_NBT_TAG), tag.getBoolean(PlayerCarryConstants.HEAD_LINK_NBT_TAG));
 
-        customCarryPositions.set(0, custom);
+            customCarryPositions.set(0, custom);
 
-        for (int i = 0; i < tag.getInt(PlayerCarryConstants.CARRIED_PLAYERS_LIST_SIZE); i++) {
-            CompoundTag tmp = new CompoundTag();
-            tmp.putUUID(EntityStandinItem.ENTITY_UUID, tag.getUUID(EntityStandinItem.ENTITY_UUID+i));
-            tmp.putInt(EntityStandinItem.INV_ID, tag.getInt(EntityStandinItem.INV_ID+i));
 
-            carriedEntities.add(tmp);
+            for (int i = 0; i < tag.getInt(PlayerCarryConstants.CARRIED_PLAYERS_LIST_SIZE); i++) {
+                CompoundTag tmp = new CompoundTag();
+                tmp.putUUID(EntityStandinItem.ENTITY_UUID, tag.getUUID(EntityStandinItem.ENTITY_UUID+i));
+                tmp.putInt(EntityStandinItem.INV_ID, tag.getInt(EntityStandinItem.INV_ID+i));
+
+                carriedEntities.add(tmp);
+            }
+        } catch (Exception e) {
+            HoldMeTight.LOGGER.error(e.getMessage());
         }
     }
 
