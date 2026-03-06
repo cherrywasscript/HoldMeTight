@@ -6,17 +6,13 @@ import java.util.UUID;
 
 import org.jline.utils.Log;
 
-import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
-import com.ricardthegreat.holdmetight.mixins.EntityMixin;
+import com.ricardthegreat.holdmetight.items.EntityStandinItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
-import com.ricardthegreat.holdmetight.network.clientbound.CPlayerCarrySimplePacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerCarrySyncPacket;
-import com.ricardthegreat.holdmetight.network.serverbound.SPlayerCarrySimplePacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.utils.constants.CarryPosConstants;
 import com.ricardthegreat.holdmetight.utils.constants.PlayerCarryConstants;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -59,7 +55,7 @@ public class PlayerCarry {
 
     
 
-    private ArrayList<CompoundTag> carriedPlayers = new ArrayList<>();
+    private ArrayList<CompoundTag> carriedEntities = new ArrayList<>();
 
     private boolean turnWhileCarried = true;
 
@@ -89,7 +85,7 @@ public class PlayerCarry {
         //should only be updated server side so should only be called when on server
         if(!player.level().isClientSide){
             DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> 
-            PacketHandler.sendToAllClients(new CPlayerCarrySyncPacket(carriedPlayers, customCarryPositions.get(0), player.getUUID())));
+            PacketHandler.sendToAllClients(new CPlayerCarrySyncPacket(carriedEntities, customCarryPositions.get(0), player.getUUID())));
         }
     }
 
@@ -102,8 +98,8 @@ public class PlayerCarry {
     }
 
     //the sync packets call this to update everything at once
-    public void updateAllSyncables(ArrayList<CompoundTag> carriedPlayers, CarryPosition customCarry){
-        this.carriedPlayers = carriedPlayers;
+    public void updateAllSyncables(ArrayList<CompoundTag> carriedEntities, CarryPosition customCarry){
+        this.carriedEntities = carriedEntities;
 
         //TODO choose if i want to allow multiple custom carry spots or just one, leaning towards just one
         this.custom = customCarry;
@@ -118,24 +114,24 @@ public class PlayerCarry {
      * add a tag to the list of players this person is holding, needs to call a sync after to ensure everything works
      * @param tag tag with the players id and the slot it is held in
      */
-    public void addOrUpdateCarriedPlayer(CompoundTag tag){
-        for (int i = 0; i < carriedPlayers.size(); i++){
-            if (carriedPlayers.get(i).getUUID(PlayerStandinItem.PLAYER_UUID).equals(tag.getUUID(PlayerStandinItem.PLAYER_UUID))) {
-                carriedPlayers.remove(i);
+    public void addOrUpdateCarriedEntity(CompoundTag tag){
+        for (int i = 0; i < carriedEntities.size(); i++){
+            if (carriedEntities.get(i).getUUID(EntityStandinItem.ENTITY_UUID).equals(tag.getUUID(EntityStandinItem.ENTITY_UUID))) {
+                carriedEntities.remove(i);
             }
         }
         
-        carriedPlayers.add(tag);
+        carriedEntities.add(tag);
     }
 
     /**
      * remove a tag from the list of players this person is holding, needs to call a sync after to ensure everything works
      * @param tag tag with the players id
      */
-    public void removeCarriedPlayer(UUID id){
-        for (int i = 0; i < carriedPlayers.size(); i++){
-            if (carriedPlayers.get(i).getUUID(PlayerStandinItem.PLAYER_UUID).equals(id)) {
-                carriedPlayers.remove(i);
+    public void removeCarriedEntity(UUID id){
+        for (int i = 0; i < carriedEntities.size(); i++){
+            if (carriedEntities.get(i).getUUID(EntityStandinItem.ENTITY_UUID).equals(id)) {
+                carriedEntities.remove(i);
             }
         }
     }
@@ -156,9 +152,9 @@ public class PlayerCarry {
                 return rightshoulder;
             
             default:
-                for (CompoundTag tag : carriedPlayers) {
-                    if (tag.getUUID(PlayerStandinItem.PLAYER_UUID).equals(entity.getUUID())) {
-                        int invPos = tag.getInt(PlayerStandinItem.INV_ID);
+                for (CompoundTag tag : carriedEntities) {
+                    if (tag.getUUID(EntityStandinItem.ENTITY_UUID).equals(entity.getUUID())) {
+                        int invPos = tag.getInt(EntityStandinItem.INV_ID);
                         if (!Inventory.isHotbarSlot(invPos)) {
                             return torso;
                         }else{
@@ -225,7 +221,7 @@ public class PlayerCarry {
     public void copyFrom(PlayerCarry source){
         this.custom = source.custom;
         this.customCarryPositions = source.customCarryPositions;
-        this.carriedPlayers = source.carriedPlayers;
+        this.carriedEntities = source.carriedEntities;
     }
 
 
@@ -240,11 +236,11 @@ public class PlayerCarry {
         tag.putDouble(PlayerCarryConstants.LEFT_RIGHT_NBT_TAG, carry.leftRightMove);
         tag.putBoolean(PlayerCarryConstants.HEAD_LINK_NBT_TAG, carry.headLink);
 
-        tag.putInt(PlayerCarryConstants.CARRIED_PLAYERS_LIST_SIZE, carriedPlayers.size());
+        tag.putInt(PlayerCarryConstants.CARRIED_PLAYERS_LIST_SIZE, carriedEntities.size());
 
-        for (int i = 0; i < carriedPlayers.size(); i++) {
-            tag.putUUID(PlayerStandinItem.PLAYER_UUID + i, carriedPlayers.get(i).getUUID(PlayerStandinItem.PLAYER_UUID));
-            tag.putInt(PlayerStandinItem.INV_ID + i, carriedPlayers.get(i).getInt(PlayerStandinItem.INV_ID));
+        for (int i = 0; i < carriedEntities.size(); i++) {
+            tag.putUUID(EntityStandinItem.ENTITY_UUID + i, carriedEntities.get(i).getUUID(EntityStandinItem.ENTITY_UUID));
+            tag.putInt(EntityStandinItem.INV_ID + i, carriedEntities.get(i).getInt(EntityStandinItem.INV_ID));
         }
     }
 
@@ -257,18 +253,18 @@ public class PlayerCarry {
 
         for (int i = 0; i < tag.getInt(PlayerCarryConstants.CARRIED_PLAYERS_LIST_SIZE); i++) {
             CompoundTag tmp = new CompoundTag();
-            tmp.putUUID(PlayerStandinItem.PLAYER_UUID, tag.getUUID(PlayerStandinItem.PLAYER_UUID+i));
-            tmp.putInt(PlayerStandinItem.INV_ID, tag.getInt(PlayerStandinItem.INV_ID+i));
+            tmp.putUUID(EntityStandinItem.ENTITY_UUID, tag.getUUID(EntityStandinItem.ENTITY_UUID+i));
+            tmp.putInt(EntityStandinItem.INV_ID, tag.getInt(EntityStandinItem.INV_ID+i));
 
-            carriedPlayers.add(tmp);
+            carriedEntities.add(tmp);
         }
     }
 
     public CPlayerCarrySyncPacket getClientSyncPacket(Player player){
-        return new CPlayerCarrySyncPacket(carriedPlayers, customCarryPositions.get(0), player.getUUID());
+        return new CPlayerCarrySyncPacket(carriedEntities, customCarryPositions.get(0), player.getUUID());
     }
 
     public SPlayerCarrySyncPacket getServerSyncPacket(){
-        return new SPlayerCarrySyncPacket(carriedPlayers, customCarryPositions.get(0));
+        return new SPlayerCarrySyncPacket(carriedEntities, customCarryPositions.get(0));
     }
 }

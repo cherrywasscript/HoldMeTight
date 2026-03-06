@@ -112,7 +112,7 @@ public class EntityStandinItem extends Item implements ICurioItem{
 
         if (!context.getLevel().isClientSide) {
             PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(vehicle);
-            playerCarry.removeCarriedPlayer(id);
+            playerCarry.removeCarriedEntity(id);
             PacketHandler.sendToAllClients(new CRemovePlayerCarrySyncPacket(id, vehicle.getUUID()));
         }
         
@@ -203,7 +203,7 @@ public class EntityStandinItem extends Item implements ICurioItem{
             tag.putUUID(ENTITY_UUID, carried.getUUID());
             tag.putInt(INV_ID, index);
             
-            playerCarry.addOrUpdateCarriedPlayer(tag);
+            playerCarry.addOrUpdateCarriedEntity(tag);
 
             PacketHandler.sendToAllClients(new CAddPlayerCarrySyncPacket(tag, player.getUUID()));
         }
