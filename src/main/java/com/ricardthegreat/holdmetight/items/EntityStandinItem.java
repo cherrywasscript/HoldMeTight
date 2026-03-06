@@ -94,9 +94,12 @@ public class EntityStandinItem extends Item implements ICurioItem{
         //}
         
         
-        if (!context.getLevel().isClientSide) {
+        if (!context.getLevel().isClientSide ) {
             passenger.dismountTo(context.getClickLocation().x, context.getClickLocation().y, context.getClickLocation().z);
-        }else{
+        }else if (!(passenger instanceof Player)) {
+            passenger.stopRiding();
+            passenger.moveTo(context.getClickLocation().x, context.getClickLocation().y, context.getClickLocation().z);
+        }else {
             passenger.stopRiding();
         }
         

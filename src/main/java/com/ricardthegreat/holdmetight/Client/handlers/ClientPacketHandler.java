@@ -60,7 +60,7 @@ public class ClientPacketHandler {
 
     }
 
-    public static void handleAddPlayerPacket(CAddPlayerCarrySyncPacket msg, Supplier<NetworkEvent.Context> context){
+    public static void handleAddEntityPacket(CAddPlayerCarrySyncPacket msg, Supplier<NetworkEvent.Context> context){
         ClientLevel level = Minecraft.getInstance().level;
         if(level != null){
             Player player = level.getPlayerByUUID(msg.getUuid());
