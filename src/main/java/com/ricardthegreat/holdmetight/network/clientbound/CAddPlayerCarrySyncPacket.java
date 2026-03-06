@@ -15,11 +15,11 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 public class CAddPlayerCarrySyncPacket {
-    private final CompoundTag player;
+    private final CompoundTag entity;
     private final UUID uuid;
 
-    public CAddPlayerCarrySyncPacket(CompoundTag player, UUID uuid){
-        this.player = player;
+    public CAddPlayerCarrySyncPacket(CompoundTag entity, UUID uuid){
+        this.entity = entity;
         this.uuid = uuid;
     }
 
@@ -28,20 +28,20 @@ public class CAddPlayerCarrySyncPacket {
     }
 
     public void encode(FriendlyByteBuf buffer){
-        buffer.writeNbt(player);
+        buffer.writeNbt(entity);
         buffer.writeUUID(uuid);
     }
 
     public void handle(Supplier<NetworkEvent.Context> context){
         context.get().enqueueWork(() -> 
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientPacketHandler.handleAddPlayerPacket(this, context))
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientPacketHandler.handleAddEntityPacket(this, context))
         );
         
         context.get().setPacketHandled(true);
     }
 
     public void playerSyncablesUpdate(PlayerCarry playerCarry){
-        playerCarry.addOrUpdateCarriedEntity(player);
+        playerCarry.addOrUpdateCarriedEntity(entity);
     }
 
     public UUID getUuid() {
