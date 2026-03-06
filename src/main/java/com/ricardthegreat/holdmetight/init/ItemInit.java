@@ -5,6 +5,7 @@ import static com.ricardthegreat.holdmetight.init.CreativeTabInit.addToTab;
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.items.CollarItem;
 import com.ricardthegreat.holdmetight.items.CollarKeyItem;
+import com.ricardthegreat.holdmetight.items.EntityStandinItem;
 import com.ricardthegreat.holdmetight.items.PaperWingsItem;
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.items.SizeRay;
@@ -58,6 +59,9 @@ public class ItemInit {
 
         public static final RegistryObject<Item> PLAYER_ITEM = addToTab(
                 ITEMS.register("player_item", () -> new PlayerStandinItem(new Item.Properties().stacksTo(1))));
+
+        public static final RegistryObject<Item> ENTITY_ITEM = addToTab(
+                ITEMS.register("entity_item", () -> new EntityStandinItem(new Item.Properties().stacksTo(1))));
 
         public static final RegistryObject<Item> PAPER_WINGS_ITEM = addToTab(
                 ITEMS.register("paper_wings_item", () -> new PaperWingsItem(new Item.Properties().durability(432).rarity(Rarity.COMMON))));

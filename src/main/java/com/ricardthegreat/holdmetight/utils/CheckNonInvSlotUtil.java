@@ -3,6 +3,7 @@ package com.ricardthegreat.holdmetight.utils;
 import java.util.UUID;
 
 import com.ricardthegreat.holdmetight.init.ItemInit;
+import com.ricardthegreat.holdmetight.items.EntityStandinItem;
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.utils.constants.CarryPosConstants;
 
@@ -21,8 +22,8 @@ public class CheckNonInvSlotUtil {
         var wrapper = new Object(){ boolean checkPassed = false; String strReturn = null; int count = 0;};
 
         CuriosApi.getCuriosInventory(vehicle)
-        .ifPresent(handler -> handler.findCurios(ItemInit.PLAYER_ITEM.get()).forEach((slotResult) -> {
-            UUID id = slotResult.stack().getOrCreateTag().getUUID(PlayerStandinItem.PLAYER_UUID);
+        .ifPresent(handler -> handler.findCurios((stack) -> stack.getItem() == ItemInit.PLAYER_ITEM.get() || stack.getItem() == ItemInit.ENTITY_ITEM.get()).forEach((slotResult) -> {
+            UUID id = slotResult.stack().getOrCreateTag().getUUID(EntityStandinItem.ENTITY_UUID);
             if (rider.getUUID().equals(id)) {
                 wrapper.checkPassed = true;
                 System.out.println(slotResult.slotContext().identifier());
@@ -46,8 +47,8 @@ public class CheckNonInvSlotUtil {
     }
 
     public static boolean checkCorrectItem(ItemStack stack, Entity rider){
-        if (stack.is(ItemInit.PLAYER_ITEM.get())) {
-            UUID id = stack.getOrCreateTag().getUUID(PlayerStandinItem.PLAYER_UUID);
+        if (stack.getItem() instanceof EntityStandinItem) {
+            UUID id = stack.getOrCreateTag().getUUID(EntityStandinItem.ENTITY_UUID);
             if (rider.getUUID().equals(id)) {
                 return true;
             }

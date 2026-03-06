@@ -20,12 +20,18 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.client.renderer.blockentity.SkullBlockRenderer;
+import net.minecraft.client.renderer.entity.CowRenderer;
+import net.minecraft.client.renderer.entity.EntityRenderer;
+import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.Tags.EntityTypes;
 
 public class HeldEntityItemRenderer extends BlockEntityWithoutLevelRenderer{
 
@@ -59,12 +65,11 @@ public class HeldEntityItemRenderer extends BlockEntityWithoutLevelRenderer{
             return;
         }
 
-        Entity entity = null;
         if (itemStack.getItem() instanceof PlayerStandinItem) {
             if (Minecraft.getInstance().getConnection() == null) {
                 return;
             }
-            PlayerInfo info = Minecraft.getInstance().getConnection().getPlayerInfo(tag.getUUID(PlayerStandinItem.PLAYER_UUID));
+            PlayerInfo info = Minecraft.getInstance().getConnection().getPlayerInfo(tag.getUUID(EntityStandinItem.ENTITY_UUID));
             if (info == null) {
                 return;
             }
@@ -86,7 +91,29 @@ public class HeldEntityItemRenderer extends BlockEntityWithoutLevelRenderer{
             }
             
         }else{
+            Entity entity = player.level().getEntity(tag.getInt(EntityStandinItem.ENTITY_ID));
 
+            if (entity == null) {
+                return;
+            }
+            
+            EntityRenderer<? super Entity> render = Minecraft.getInstance().getEntityRenderDispatcher().getRenderer(entity);
+            
+            switch (context) {
+                case GUI:
+                    poseStack.pushPose();
+                    poseStack.translate(0.5, 0, 0);
+                    poseStack.mulPose(Axis.YP.rotationDegrees(180));
+                    poseStack.mulPose(Axis.ZP.rotationDegrees(180));
+                    poseStack.scale(2, 2, 2);
+                    VertexConsumer consumer = source.getBuffer(model.renderType(render.getTextureLocation(entity)));
+                    model.renderToBuffer(poseStack, consumer, int0, int1, 1, 1, 1, 1);
+                    poseStack.popPose();
+                    break;
+
+                default:
+                    break;
+            }
         }
 
         

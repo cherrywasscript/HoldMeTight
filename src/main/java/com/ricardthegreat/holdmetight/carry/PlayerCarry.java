@@ -38,15 +38,17 @@ public class PlayerCarry {
     private final CarryPosition rightshoulder = new CarryPosition("rightshoulder",270, 0, 0.38, -0.3, false);
 
     // this feels clunky and wrong, im not entirely sure on a "right" way to do these though, maybe have them exist in a seperate static class? or possibly in a superclass to this, either way this works currently
-    private final CarryPosition hotbarSlot0 = new CarryPosition("hotbarSlot0", 0, 0.3, 1, 0, false);
-    private final CarryPosition hotbarSlot1 = new CarryPosition("hotbarSlot1", 0, 0.2, 1, 0.15, false);
-    private final CarryPosition hotbarSlot2 = new CarryPosition("hotbarSlot2", 0, 0.1, 1, 0.15, false);
-    private final CarryPosition hotbarSlot3 = new CarryPosition("hotbarSlot3", 0, 0, 1, 0.15, false);
-    private final CarryPosition hotbarSlot4 = new CarryPosition("hotbarSlot4", 0, -0.1, 1, 0.15, false);
-    private final CarryPosition hotbarSlot5 = new CarryPosition("hotbarSlot5", 0, -0.2, 1, 0.15, false);
-    private final CarryPosition hotbarSlot6 = new CarryPosition("hotbarSlot6", 0, -0.3, 1, 0, false);
-    private final CarryPosition hotbarSlot7 = new CarryPosition("hotbarSlot7", 0, 0.15, 1, -0.15, false);
+    private final CarryPosition hotbarSlot0 = new CarryPosition("hotbarSlot7", 0, 0.15, 1, -0.15, false);
+    private final CarryPosition hotbarSlot1 = new CarryPosition("hotbarSlot0", 0, 0.3, 1, 0, false);
+    private final CarryPosition hotbarSlot2 = new CarryPosition("hotbarSlot1", 0, 0.2, 1, 0.15, false);
+    private final CarryPosition hotbarSlot3 = new CarryPosition("hotbarSlot2", 0, 0.1, 1, 0.15, false);
+    private final CarryPosition hotbarSlot4 = new CarryPosition("hotbarSlot3", 0, 0, 1, 0.15, false);
+    private final CarryPosition hotbarSlot5 = new CarryPosition("hotbarSlot4", 0, -0.1, 1, 0.15, false);
+    private final CarryPosition hotbarSlot6 = new CarryPosition("hotbarSlot5", 0, -0.2, 1, 0.15, false);
+    private final CarryPosition hotbarSlot7 = new CarryPosition("hotbarSlot6", 0, -0.3, 1, 0, false);
     private final CarryPosition hotbarSlot8 = new CarryPosition("hotbarSlot8", 0, -0.15, 1, -0.15, false);
+
+    private final CarryPosition torso = new CarryPosition("torso", 0, 0, 0.75, 0, false);
 
     private final ArrayList<CarryPosition> hotbarCarryPositions = new ArrayList<>(Arrays.asList(hotbarSlot0, hotbarSlot1, hotbarSlot2, hotbarSlot3, hotbarSlot4, hotbarSlot5, hotbarSlot6, hotbarSlot7, hotbarSlot8));
 
@@ -158,7 +160,7 @@ public class PlayerCarry {
                     if (tag.getUUID(PlayerStandinItem.PLAYER_UUID).equals(entity.getUUID())) {
                         int invPos = tag.getInt(PlayerStandinItem.INV_ID);
                         if (!Inventory.isHotbarSlot(invPos)) {
-                            return custom;
+                            return torso;
                         }else{
                             if (invPos < 0 || hotbarCarryPositions.size() <= invPos) {
                                 Log.error("invPos: " + invPos + " is a number that is either greater than 8 or less than 0 but still registerd as a hotbar slot, setting to custom as a failsafe");

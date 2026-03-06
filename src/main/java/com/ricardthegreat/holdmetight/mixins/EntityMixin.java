@@ -13,6 +13,7 @@ import com.ricardthegreat.holdmetight.carry.CarryPosition;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.init.ItemInit;
+import com.ricardthegreat.holdmetight.items.EntityStandinItem;
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerDismountPlayerPacket;
@@ -66,11 +67,14 @@ public abstract class EntityMixin {
             
             
 
-            ItemStack item = PlayerStandinItem.createPlayerItem((Player) rider);
+            ItemStack item = PlayerStandinItem.createEntityItem((Player) rider);
             vehicle.getInventory().add(vehicle.getInventory().selected, item);
             
         }else if (!(rider instanceof Player) && vehicle.getMainHandItem().isEmpty() && EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)/4) {
             rider.startRiding(vehicle);
+
+            ItemStack item = EntityStandinItem.createEntityItem(rider);
+            vehicle.getInventory().add(vehicle.getInventory().selected, item);
         }
     }
 
@@ -88,29 +92,21 @@ public abstract class EntityMixin {
         }
     }   
 
-    //@Inject(at = @At("RETURN"), method = "positionRider(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity/MoveFunction;)V")
-    @Overwrite
-    protected void positionRider(Entity rider, Entity.MoveFunction func) {
+    @Inject(at = @At("HEAD"), method = "positionRider(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity/MoveFunction;)V", cancellable = true)
+    //@Overwrite
+    protected void positionRider(Entity rider, Entity.MoveFunction func, CallbackInfo info) {
         Entity vehicle = (Entity) (Object) this;
         if (vehicle.hasPassenger(rider)) {
             if(vehicle instanceof Player playerV){
                 double scaleDif =  EntitySizeUtils.getSize(vehicle)/EntitySizeUtils.getSize(rider);
-                
-                PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerCarryCapability(playerV);
-
-                //find the riders position
                 if(scaleDif<4){
                     rider.stopRiding();
-                // && pExt.getCustomCarry()
-                }else{
-                    calcBodyPosition(playerV, rider);
-                    func.accept(rider, vehicle.getX()+xOffset, vertOffset, vehicle.getZ()+yOffset);
                 }
-            }else{
+                
+                calcBodyPosition(playerV, rider);
+                func.accept(rider, vehicle.getX()+xOffset, vertOffset, vehicle.getZ()+yOffset);
 
-                vertOffset = vehicle.getY() + vehicle.getPassengersRidingOffset() + rider.getMyRidingOffset();
-                func.accept(rider, vehicle.getX(), vertOffset, vehicle.getZ());
-
+                info.cancel();
             }
          }
     }
@@ -125,16 +121,7 @@ public abstract class EntityMixin {
         PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerCarryCapability(vehicle);
 
         CarryPosition carryPos = vehicleCarry.getCarryPosition(rider, CheckNonInvSlotUtil.checkIfNonInvSlot(vehicle, rider));
-        
-        /* 
-        if (rider instanceof ServerPlayer ride) {
-            if (carryPos.posName.equals("custom")) {
-                ride.setCamera(vehicle);
-            }else{
-                ride.setCamera(ride);
-            }
-        }
-            */
+            
 
         vertOffset = vehicle.getY() + vehicle.getPassengersRidingOffset() + rider.getMyRidingOffset() - (carryPos.vertOffset*EntitySizeUtils.getSize(vehicle));
 
