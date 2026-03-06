@@ -39,7 +39,7 @@ public class CRemovePlayerCarrySyncPacket {
     }
 
     public void playerSyncablesUpdate(PlayerCarry playerCarry){
-        playerCarry.removeCarriedPlayer(player);
+        playerCarry.removeCarriedEntity(player);
     }
 
     public UUID getUuid() {

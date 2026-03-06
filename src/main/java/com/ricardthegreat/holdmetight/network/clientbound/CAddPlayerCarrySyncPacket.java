@@ -41,7 +41,7 @@ public class CAddPlayerCarrySyncPacket {
     }
 
     public void playerSyncablesUpdate(PlayerCarry playerCarry){
-        playerCarry.addOrUpdateCarriedPlayer(player);
+        playerCarry.addOrUpdateCarriedEntity(player);
     }
 
     public UUID getUuid() {
