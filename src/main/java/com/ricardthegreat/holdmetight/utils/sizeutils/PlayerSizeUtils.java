@@ -103,6 +103,14 @@ public class PlayerSizeUtils {
         return getScaleData(player).getTargetScale();
     }
 
+    public static float getHitboxScalingFactor(Player player){
+        PehkuiEntityExtensions pEnt = (PehkuiEntityExtensions) player;
+        ScaleData base = getScaleData(player);
+        ScaleData heightData = pEnt.pehkui_getScaleData(ScaleTypes.HITBOX_HEIGHT);
+
+        return heightData.getScale()/base.getScale();
+    }
+
     private static ScaleData getScaleData(Player player) {
         PehkuiEntityExtensions pEnt = (PehkuiEntityExtensions) player;
         ScaleData data = pEnt.pehkui_getScaleData(base);

@@ -16,6 +16,7 @@ import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerDismountPlayerPacket;
 import com.ricardthegreat.holdmetight.utils.CheckNonInvSlotUtil;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
+import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
 
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -102,8 +103,9 @@ public abstract class EntityMixin {
         CarryPosition carryPos = vehicleCarry.getCarryPosition(rider, CheckNonInvSlotUtil.checkIfNonInvSlot(vehicle, rider));
             
 
-        vertOffset = vehicle.getY() + vehicle.getPassengersRidingOffset() + rider.getMyRidingOffset() - (carryPos.vertOffset*EntitySizeUtils.getSize(vehicle));
-
+        vertOffset = vehicle.getY() + ((vehicle.getPassengersRidingOffset() + rider.getMyRidingOffset())/PlayerSizeUtils.getHitboxScalingFactor(vehicle)) - (carryPos.vertOffset*EntitySizeUtils.getSize(vehicle));
+        
+        
         double degrees = vehicle.yBodyRotO + carryPos.RotationOffset;
         
 
