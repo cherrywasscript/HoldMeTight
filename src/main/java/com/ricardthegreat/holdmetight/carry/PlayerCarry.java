@@ -152,6 +152,9 @@ public class PlayerCarry {
             case CarryPosConstants.RIGHT_SHOULDER:
                 return rightshoulder;
             
+            case CarryPosConstants.CUSTOM:
+                return customCarryPositions.get(0);
+            
             default:
                 for (CompoundTag tag : carriedEntities) {
                     if (tag.getUUID(EntityStandinItem.ENTITY_UUID).equals(entity.getUUID())) {
