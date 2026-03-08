@@ -26,7 +26,6 @@ public class CheckNonInvSlotUtil {
             UUID id = slotResult.stack().getOrCreateTag().getUUID(EntityStandinItem.ENTITY_UUID);
             if (rider.getUUID().equals(id)) {
                 wrapper.checkPassed = true;
-                System.out.println(slotResult.slotContext().identifier());
                 wrapper.strReturn = slotResult.slotContext().identifier();
             }
         }));
