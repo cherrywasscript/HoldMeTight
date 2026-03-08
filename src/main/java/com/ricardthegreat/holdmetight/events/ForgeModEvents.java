@@ -117,8 +117,9 @@ public class ForgeModEvents {
                     thrown.stopRiding();
                     thrown.setDeltaMovement(entity.getDeltaMovement()); 
                     thrown.hurtMarked = true;
-
+                    System.out.println("itemtossevent(server+client)/" + thrown.getVehicle());
                     if (!thrower.level().isClientSide) {
+                        System.out.println("itemtosseventserver/" + thrown.getVehicle());
                         PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(thrower);
                         playerCarry.removeCarriedEntity(id);
                         DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> 
