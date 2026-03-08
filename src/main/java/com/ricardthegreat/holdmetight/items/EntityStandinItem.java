@@ -15,6 +15,7 @@ import com.ricardthegreat.holdmetight.init.ItemInit;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.CAddPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CRemovePlayerCarrySyncPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.SEntityPutDownPacket;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
@@ -98,7 +99,7 @@ public class EntityStandinItem extends Item implements ICurioItem{
             passenger.dismountTo(context.getClickLocation().x, context.getClickLocation().y, context.getClickLocation().z);
         }else if (!(passenger instanceof Player)) {
             passenger.stopRiding();
-            passenger.moveTo(context.getClickLocation().x, context.getClickLocation().y, context.getClickLocation().z);
+            PacketHandler.sendToServer(new SEntityPutDownPacket(passenger.getUUID(), context.getClickLocation()));
         }else {
             passenger.stopRiding();
         }
