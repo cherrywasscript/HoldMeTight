@@ -159,8 +159,15 @@ public class PlayerSizeUtils {
         float maxHitboxScale = (float) HMTConfig.SERVER_CONFIG.maxHitboxScale.get();
 
         if (currentScale > maxHitboxScale) {
-            heightData.setScale(maxHitboxScale/currentScale);
-            widthData.setScale(maxHitboxScale/currentScale);
+            float hitboxScale = maxHitboxScale/currentScale;
+            if (heightData.getScale() != hitboxScale) {
+                heightData.setScale(hitboxScale);
+            }
+            
+            if (widthData.getScale() != hitboxScale) {
+                widthData.setScale(hitboxScale);
+            }
+            
         }else if (heightData.getTargetScale() < 1.0f || widthData.getTargetScale() < 1.0f){
             heightData.setScale(1.0f);
             widthData.setScale(1.0f);
