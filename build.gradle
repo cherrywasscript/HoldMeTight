@@ -222,9 +222,6 @@ dependencies {
     compileOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api"))
     // Use the full Curios API jar at runtime
     implementation(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}"))
-
-    implementation fg.deobf("maven.modrinth:custom-player-models:1.20v0.6.24a-forge")
-
 }
 
 mixin {
