@@ -43,10 +43,10 @@ public class HMTConfig {
 
         public static class ServerConfig {
 
-                public final ForgeConfigSpec.ConfigValue<Double> maxHitboxScale;
-                public final ForgeConfigSpec.ConfigValue<Double> maxEntityScale;
-                public final ForgeConfigSpec.ConfigValue<Double> maxWingsScale;
-                public final ForgeConfigSpec.ConfigValue<Double> minParticleScale;
+                public final ForgeConfigSpec.ConfigValue<Float> maxHitboxScale;
+                private final ForgeConfigSpec.ConfigValue<Float> maxEntityScale;
+                public final ForgeConfigSpec.ConfigValue<Float> maxWingsScale;
+                public final ForgeConfigSpec.ConfigValue<Float> minParticleScale;
                 public final ForgeConfigSpec.BooleanValue miningSpeedScaleLink;
                 public final ForgeConfigSpec.BooleanValue damageTakenScaleLink;
                 public final ForgeConfigSpec.BooleanValue canPickupEntities;
@@ -55,17 +55,22 @@ public class HMTConfig {
 
 
                 ServerConfig(ForgeConfigSpec.Builder builder){
-                        builder.comment("Serverside Config Settings").push("Server");
+                        builder.comment("Serverside Config Settings").push("Scale Limits");
 
                         //TODO make these translations
                         this.maxHitboxScale = builder.comment("The maximum scale a hitbox can be (8 or lower recommended for performance sake when larger)")
-                                .define("maxHitboxScale", 8d);
+                                .define("maxHitboxScale", 8f);
                         this.maxEntityScale = builder.comment("The maximum scale an entity can become, set to 0 for no cap (cannot be below 1)")
-                                .define("maxEntityScale", 0d);
+                                .define("maxEntityScale", 0f);
                         this.maxWingsScale = builder.comment("the largest someone can be while wearing the paper wings item (an elytra in all ways that matter)")
-                                .define("maxWingsScale", 0.05d);
+                                .define("maxWingsScale", 0.05f);
                         this.minParticleScale = builder.comment("the scale an entity should be before ambient particles are disabled on them")
-                                .define("minParticleScale", 0.5d);
+                                .define("minParticleScale", 0.5f);
+
+                        builder.pop();
+
+                        builder.push("Optional Features");
+
                         this.miningSpeedScaleLink = builder.comment("should a players mining speed be linked to their scale (faster for larger folk slower for smaller folk)")
                                 .define("miningSpeedScaleLink", true);
                         this.damageTakenScaleLink = builder.comment("should the damage a player takes be linked to their scale (less for larger folk more for smaller folk)")
@@ -80,6 +85,15 @@ public class HMTConfig {
                                 .define("playerChatScale", false);
 
                         builder.pop();
+                }
+
+                public float getMaxEntityScale(){
+                        if (this.maxEntityScale.get() <= 0) {
+                                return Float.POSITIVE_INFINITY;
+                        }else if (this.maxEntityScale.get() < 1) {
+                                maxEntityScale.set(1f);;
+                        }
+                        return maxEntityScale.get();
                 }
         }
 }
