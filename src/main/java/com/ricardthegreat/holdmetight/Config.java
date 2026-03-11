@@ -38,6 +38,14 @@ public class Config
                 .comment("should the damage a player takes be linked to their scale (less for larger folk more for smaller folk)")
                 .define("damageTakenScaleLink", true);
 
+        private static final ForgeConfigSpec.ConfigValue<Boolean> CAN_PICKUP_ENTITIES = BUILDER
+                .comment("enable or disable the ability to pickup non player mobs")
+                .define("canPickupMobs", true);
+
+        private static final ForgeConfigSpec.ConfigValue<Boolean> CAN_PICKUP_PLAYERS = BUILDER
+                .comment("enable or disable the ability to pickup players")
+                .define("canPickupPlayers", true);
+
         private static final ForgeConfigSpec.ConfigValue<Boolean> PLAYER_CHAT_SCALE = BUILDER
                 //.comment("should player messages be scaled based on their size (this is not properly tested and could cause many issues use at your own risk)")
                 .comment("this isnt used currently")
@@ -67,6 +75,8 @@ public class Config
         public static boolean playerChatScale;
         public static boolean miningSpeedScaleLink;
         public static boolean damageTakenScaleLink;
+        public static boolean canPickupEntities;
+        public static boolean canPickupPlayers;
         
         private static boolean validateItemName(final Object obj)
         {
@@ -89,5 +99,7 @@ public class Config
                 playerChatScale = PLAYER_CHAT_SCALE.get();
                 miningSpeedScaleLink = MINING_SPEED_SCALE_LINK.get();
                 damageTakenScaleLink = DAMAGE_TAKEN_SCALE_LINK.get();
+                canPickupEntities = CAN_PICKUP_ENTITIES.get();
+                canPickupPlayers = CAN_PICKUP_PLAYERS.get();
         }
 }
