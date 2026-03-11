@@ -12,6 +12,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CrossCollisionBlock;
 import net.minecraft.world.level.block.FenceBlock;
+import net.minecraft.world.level.block.IronBarsBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
@@ -38,13 +39,21 @@ public class CrossCollisionBlockMixin {
          Entity ent = entContext.getEntity();
          if(ent != null && EntitySizeUtils.getSize(ent) < 0.21){
             if ((Object) this instanceof FenceBlock) {
-               return Block.box(6, 0.0D, 6, 10, 16, 10);
+               return fenceShape();
+            }else if ((Object) this instanceof IronBarsBlock) {
+               return ironBarShape();
             }
-            //TODO make this not work for glass panes
-            return this.collisionShapeByIndex[0];
          }
       }
 
       return this.collisionShapeByIndex[this.getAABBIndex(p_52357_)];
+   }
+
+   private VoxelShape fenceShape(){
+      return Block.box(6, 0.0D, 6, 10, 16, 10);
+   }
+
+   private VoxelShape ironBarShape(){
+      return this.collisionShapeByIndex[0];
    }
 }
