@@ -76,3 +76,6 @@ With the changes I have made to carrying that i've been looking at for over a ye
 
 version 0.6.1-beta:
 - Fixed major issue with CPM custom scaling and size potions that causes sizes to be calculated drastically wrong to the point of sometimes causing crashes (there are still however major incompatabilities between what i do and how CPM does custom scaling so many features do not work like they should, hopefully however they wont break so bad they crash)
+- reworked the config files to move the config options from the common config to server config
+- added config options to disable picking up non player entities or to disable picking up players
+- added config options to increase the maximum movement speed before the "entity moved too fast error" for servers that want to allow big folk to move without getting impeded

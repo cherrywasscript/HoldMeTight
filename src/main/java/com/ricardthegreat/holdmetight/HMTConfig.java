@@ -52,6 +52,8 @@ public class HMTConfig {
                 public final ForgeConfigSpec.BooleanValue canPickupEntities;
                 public final ForgeConfigSpec.BooleanValue canPickupPlayers;
                 public final ForgeConfigSpec.BooleanValue playerChatScale;
+                public final ForgeConfigSpec.ConfigValue<Float> maximumMovespeed;
+                public final ForgeConfigSpec.ConfigValue<Float> maximumElytraspeed;
 
 
                 ServerConfig(ForgeConfigSpec.Builder builder){
@@ -83,6 +85,16 @@ public class HMTConfig {
                         this.playerChatScale = builder//.comment("should player messages be scaled based on their size (this is not properly tested and could cause many issues use at your own risk)")
                                 .comment("this isnt used currently")
                                 .define("playerChatScale", false);
+
+                        builder.pop();
+
+                        builder.push("Maximum movespeed");
+
+                        this.maximumMovespeed = builder.comment("the maximum movement speed before it starts giving the 'moved too fast' error. i hightly recommend not increasing this unless you are okay with people potentially moving way too quickly while big (default 100)")
+                                .define("miningSpeedScaleLink", 100f);
+
+                        this.maximumElytraspeed = builder.comment("the maximum movement speed when using an elytra before it starts giving the 'moved too fast' error. i hightly recommend not increasing this unless you are okay with people potentially moving way too quickly while big (default 100)")
+                                .define("miningSpeedScaleLink", 300f);
 
                         builder.pop();
                 }
