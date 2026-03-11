@@ -1,6 +1,7 @@
 package com.ricardthegreat.holdmetight.utils.sizeutils;
 
 import com.ricardthegreat.holdmetight.Config;
+import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.size.PlayerSize;
 import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
 
@@ -25,7 +26,7 @@ public class PlayerSizeUtils {
         //ensure the size is not greater than the maximum allowed by the config
         size = clampToPreferences(player, size);
         size = lockSizeCap(size);
-        System.out.println(size);
+        //System.out.println(size);
         ScaleData data = getScaleData(player);
 
         if (ticks < 0) {
@@ -36,6 +37,14 @@ public class PlayerSizeUtils {
             
             data.setScale(size);
             data.setTargetScale(prevTargScale*mult);
+            
+            if (data.getScale() != size) {
+                float errorScaleDifference = size/data.getScale();
+                data.setScale(size*errorScaleDifference);
+                //data.setTargetScale(prevTargScale*mult*errorScaleDifference);
+                //HoldMeTight.LOGGER.error("unexpected change in scale hopefully correcting");
+            }
+
         }else{
             data.setScaleTickDelay(ticks);
             data.setTargetScale(size);
