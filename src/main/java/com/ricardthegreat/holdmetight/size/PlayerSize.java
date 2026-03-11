@@ -1,6 +1,5 @@
 package com.ricardthegreat.holdmetight.size;
 
-import com.ricardthegreat.holdmetight.Config;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerSizeMixinSyncPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SPlayerSizeMixinSyncPacket;
@@ -10,10 +9,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
-
-import virtuoel.pehkui.api.ScaleData;
-import virtuoel.pehkui.api.ScaleTypes;
-import virtuoel.pehkui.util.PehkuiEntityExtensions;
 
 public class PlayerSize {
 
