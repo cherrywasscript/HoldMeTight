@@ -1,6 +1,6 @@
 package com.ricardthegreat.holdmetight.utils.sizeutils;
 
-import com.ricardthegreat.holdmetight.Config;
+import com.ricardthegreat.holdmetight.HMTConfig;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -19,7 +19,7 @@ public class EntitySizeUtils {
     private static final ScaleType hitbox_width = ScaleTypes.HITBOX_WIDTH;
     private static final ScaleType step_height = ScaleTypes.STEP_HEIGHT;
 
-    private static float maxScale = (float) Config.maxHitboxScale;
+    private static float maxScale = (float) HMTConfig.SERVER_CONFIG.maxHitboxScale.get();
 
     public static void setSize(Entity entity, float size, int ticks) {
         size = lockSizeCap(size);
@@ -123,8 +123,8 @@ public class EntitySizeUtils {
     }
 
     private static Float lockSizeCap(float size){
-        if (size > Config.maxEntityScale) {
-            return (float) Config.maxEntityScale;
+        if (size > HMTConfig.SERVER_CONFIG.getMaxEntityScale()) {
+            return (float) HMTConfig.SERVER_CONFIG.getMaxEntityScale();
         }
         
         return size;

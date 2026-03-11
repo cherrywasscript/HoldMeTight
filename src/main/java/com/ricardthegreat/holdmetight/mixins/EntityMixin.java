@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.ricardthegreat.holdmetight.Config;
+import com.ricardthegreat.holdmetight.HMTConfig;
 import com.ricardthegreat.holdmetight.carry.CarryPosition;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
@@ -42,7 +42,7 @@ public abstract class EntityMixin {
     public void unnamedsizemod$interact(Player vehicle, InteractionHand hand, CallbackInfoReturnable<InteractionResult> info) {
         Entity rider = (Entity) (Object) this;
         
-        if(rider instanceof Player && vehicle.getMainHandItem().isEmpty() && EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)/4 && Config.canPickupPlayers){
+        if(rider instanceof Player && vehicle.getMainHandItem().isEmpty() && EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)/4 && HMTConfig.SERVER_CONFIG.canPickupPlayers.get()){
             rider.startRiding(vehicle);
             
             
@@ -50,7 +50,7 @@ public abstract class EntityMixin {
             ItemStack item = PlayerStandinItem.createEntityItem((Player) rider);
             vehicle.getInventory().add(vehicle.getInventory().selected, item);
             
-        }else if (!(rider instanceof Player) && vehicle.getMainHandItem().isEmpty() && EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)/4 && Config.canPickupEntities) {
+        }else if (!(rider instanceof Player) && vehicle.getMainHandItem().isEmpty() && EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)/4 && HMTConfig.SERVER_CONFIG.canPickupEntities.get()) {
             rider.startRiding(vehicle);
 
             ItemStack item = EntityStandinItem.createEntityItem(rider);

@@ -2,7 +2,7 @@ package com.ricardthegreat.holdmetight.items;
 
 import javax.annotation.Nonnull;
 
-import com.ricardthegreat.holdmetight.Config;
+import com.ricardthegreat.holdmetight.HMTConfig;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.world.InteractionHand;
@@ -40,7 +40,7 @@ public class PaperWingsItem extends ElytraItem {
     }
 
     private boolean checkCorrectScale(Entity ent){
-        if (EntitySizeUtils.getSize(ent) >= Config.maxWingsScale) {
+        if (EntitySizeUtils.getSize(ent) >= HMTConfig.SERVER_CONFIG.maxWingsScale.get()) {
             return false;
         }
         return true;

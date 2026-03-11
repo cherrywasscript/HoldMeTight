@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
-import com.ricardthegreat.holdmetight.Config;
+import com.ricardthegreat.holdmetight.HMTConfig;
 import com.ricardthegreat.holdmetight.utils.IChatComponentPlayerSent;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
@@ -74,7 +74,7 @@ public abstract class ServerPlayerMixin implements IChatComponentPlayerSent{
    @Inject(at = @At("HEAD"), method = "render(Lnet/minecraft/client/gui/GuiGraphics;III)V", cancellable = true)
    public void render(GuiGraphics graphics, int p_283491_, int p_282406_, int p_283111_, CallbackInfo info) {
       //have this so i can put an if statement checking if it should use this or the original method
-      if (Config.playerChatScale) {
+      if (HMTConfig.SERVER_CONFIG.playerChatScale.get()) {
          customRender(graphics, p_283491_, p_282406_, p_283111_);
          info.cancel();
       }
@@ -185,7 +185,7 @@ public abstract class ServerPlayerMixin implements IChatComponentPlayerSent{
    //this needs like lots and lots of testing on actual servers with lots of messages because i can see many many issues that might and 
    //almost certainly will crop up, but i have no idea how to address them currently
    
-   //add if statement checking if i should do this based on config or command or something
+   //add if statement checking if i should do this based on HMTConfig or command or something
    public void addMessage(Component component, @Nullable MessageSignature signature, @Nullable GuiMessageTag tag, GameProfile profile){
       ClientLevel level = minecraft.level;
       Player player = null;

@@ -1,6 +1,6 @@
 package com.ricardthegreat.holdmetight.utils.sizeutils;
 
-import com.ricardthegreat.holdmetight.Config;
+import com.ricardthegreat.holdmetight.HMTConfig;
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.size.PlayerSize;
 import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
@@ -23,7 +23,7 @@ public class PlayerSizeUtils {
      * @param ticks - the time it should take for the player to reach the given size in ticks (1/20 seconds)
      */
     public static void setSize(Player player, float size, int ticks){
-        //ensure the size is not greater than the maximum allowed by the config
+        //ensure the size is not greater than the maximum allowed by the HMTConfig
         size = clampToPreferences(player, size);
         size = lockSizeCap(size);
         //System.out.println(size);
@@ -127,7 +127,7 @@ public class PlayerSizeUtils {
     }
 
     private static Float lockSizeCap(float size){
-        return (float) Math.min(size, Config.maxEntityScale);
+        return (float) Math.min(size, HMTConfig.SERVER_CONFIG.getMaxEntityScale());
     }
 
 
@@ -139,11 +139,11 @@ public class PlayerSizeUtils {
         fixStepHeight(player, currentScale);
         setFallDamage(player, currentScale);
 
-        if (Config.miningSpeedScaleLink) {
+        if (HMTConfig.SERVER_CONFIG.miningSpeedScaleLink.get()) {
             setMiningSpeed(player, currentScale);
         }
 
-        if (Config.damageTakenScaleLink) {
+        if (HMTConfig.SERVER_CONFIG.damageTakenScaleLink.get()) {
             setDefence(player, currentScale);
         }
     }
@@ -156,7 +156,7 @@ public class PlayerSizeUtils {
         ScaleData heightData = pEnt.pehkui_getScaleData(ScaleTypes.HITBOX_HEIGHT);
         ScaleData widthData = pEnt.pehkui_getScaleData(ScaleTypes.HITBOX_WIDTH);
 
-        float maxHitboxScale = (float) Config.maxHitboxScale;
+        float maxHitboxScale = (float) HMTConfig.SERVER_CONFIG.maxHitboxScale.get();
 
         if (currentScale > maxHitboxScale) {
             heightData.setScale(maxHitboxScale/currentScale);

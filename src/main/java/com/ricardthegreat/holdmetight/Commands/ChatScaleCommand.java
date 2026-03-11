@@ -3,7 +3,7 @@ package com.ricardthegreat.holdmetight.Commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.ricardthegreat.holdmetight.Config;
+import com.ricardthegreat.holdmetight.HMTConfig;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 
@@ -20,9 +20,9 @@ public class ChatScaleCommand {
 
     public static int run(CommandSourceStack command, boolean enableDisable, Entity ent) throws CommandSyntaxException {
         if(enableDisable){
-            Config.playerChatScale = true;
+            HMTConfig.SERVER_CONFIG.playerChatScale.set(true);
         }else{
-            Config.playerChatScale = false;
+            HMTConfig.SERVER_CONFIG.playerChatScale.set(false);
         }
 
         return 1;

@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.ricardthegreat.holdmetight.Config;
+import com.ricardthegreat.holdmetight.HMTConfig;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
@@ -26,7 +26,7 @@ public abstract class LivingEntityMixin extends Entity{
     //figure out how to make this the most important so that other mods that do this still have their particles removed for small folk
     @Inject(method = "tickEffects",at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V"),cancellable = true)
     private void holdmetight$disableParticles(CallbackInfo info){
-        if (EntitySizeUtils.getSize(this) <= Config.minParticleScale) {
+        if (EntitySizeUtils.getSize(this) <= HMTConfig.SERVER_CONFIG.minParticleScale.get()) {
             info.cancel();
         }
     }
