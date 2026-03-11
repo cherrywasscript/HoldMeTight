@@ -16,6 +16,7 @@
       "PowderSnowBlockMixin",
       "BigDripleafBlockMixin",
       "PlayerCarryPickupMixin",
+      "PlayerMovedTooFastMixin",
 
 
       "rendering.FrustumMixin",
