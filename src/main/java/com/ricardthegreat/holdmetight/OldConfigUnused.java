@@ -9,8 +9,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 // An example config class. This is not required, but it's a good idea to have one to keep your config organized.
 // Demonstrates how to use Forge's config APIs
-@Mod.EventBusSubscriber(modid = HoldMeTight.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class Config
+//@Mod.EventBusSubscriber(modid = HoldMeTight.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+public class OldConfigUnused
 {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
@@ -83,7 +83,7 @@ public class Config
                 return obj instanceof final String itemName && ForgeRegistries.ITEMS.containsKey(new ResourceLocation(itemName));
         }
 
-        @SubscribeEvent
+        //@SubscribeEvent
         static void onLoad(final ModConfigEvent event)
         {
                 maxHitboxScale = MAX_HITBOX_SIZE.get();
