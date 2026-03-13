@@ -11,6 +11,7 @@ import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.init.ItemInit;
 
 import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.client.model.HumanoidModel.ArmPose;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,17 +25,33 @@ public abstract class HumanoidModelMixin<T extends LivingEntity>{
     @Shadow
     ModelPart leftArm;
 
+    @Shadow
+    HumanoidModel.ArmPose rightArmPose;
+    @Shadow
+    HumanoidModel.ArmPose leftArmPose;
+
     //sets arm position while carrying an entity so it looks natural
-    @Inject(at = @At("RETURN"), method = "poseRightArm(Lnet/minecraft/world/entity/LivingEntity;)V")
+    @Inject(at = @At("HEAD"), method = "poseRightArm(Lnet/minecraft/world/entity/LivingEntity;)V", cancellable = true)
     private void poseRightArm(T ent, CallbackInfo info){
         if(ent instanceof Player){
-            if(ent.getItemInHand(InteractionHand.MAIN_HAND).is(ItemInit.PLAYER_ITEM.get())){
-                rightArm.xRot = -1.4f;
-            }
-            
-            if(ent.getItemInHand(InteractionHand.OFF_HAND).is(ItemInit.PLAYER_ITEM.get())){
-                leftArm.xRot = -1.4f;
-            } 
-        }
+            if (ArmPose.values().length >= 11) {
+                if (rightArmPose.name().equals("HELD_ENTITY")) {
+                    rightArmPose.applyTransform((HumanoidModel) (Object) this, ent, net.minecraft.world.entity.HumanoidArm.RIGHT);
+                    info.cancel();
+                }
+            }  
+        }    
+    }
+
+    @Inject(at = @At("HEAD"), method = "poseLeftArm(Lnet/minecraft/world/entity/LivingEntity;)V", cancellable = true)
+    private void poseLeftArm(T ent, CallbackInfo info){
+        if(ent instanceof Player){
+            if (ArmPose.values().length >= 11) {
+                if (leftArmPose.name().equals("HELD_ENTITY")) {
+                    leftArmPose.applyTransform((HumanoidModel) (Object) this, ent, net.minecraft.world.entity.HumanoidArm.LEFT);
+                    info.cancel();
+                }
+            }   
+        }      
     }
 }

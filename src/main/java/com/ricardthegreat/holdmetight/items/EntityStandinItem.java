@@ -7,9 +7,12 @@ import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.client.armposes.HeldEntityArmPose;
+import com.ricardthegreat.holdmetight.client.armposes.HeldEntityArmPoser;
 import com.ricardthegreat.holdmetight.client.renderers.HeldEntityItemRenderer;
 import com.ricardthegreat.holdmetight.init.ItemInit;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
@@ -17,11 +20,17 @@ import com.ricardthegreat.holdmetight.network.clientbound.CAddPlayerCarrySyncPac
 import com.ricardthegreat.holdmetight.network.clientbound.CRemovePlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SEntityPutDownPacket;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
+
+import net.minecraft.client.model.HumanoidModel.ArmPose;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.HumanoidArm;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -176,7 +185,7 @@ public class EntityStandinItem extends Item implements ICurioItem{
             }else{
                 entity = level.getEntity(tag.getInt(ENTITY_ID));
             }
-
+            
             if (entity != null) {
                 list.add(Component.literal("Size: " + EntitySizeUtils.getSize(entity)));
             }
@@ -187,6 +196,15 @@ public class EntityStandinItem extends Item implements ICurioItem{
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
+            @Override
+            public @org.jetbrains.annotations.Nullable ArmPose getArmPose(LivingEntity entityLiving, InteractionHand hand, ItemStack itemStack) {
+                if (itemStack.getItem() instanceof EntityStandinItem) {
+                    return HeldEntityArmPose.HELD_ENTITY_POSE;
+                }
+                
+                return IClientItemExtensions.super.getArmPose(entityLiving, hand, itemStack);
+            }
+
             @Override
             public BlockEntityWithoutLevelRenderer getCustomRenderer() {
                 return HeldEntityItemRenderer.INSTANCE;
