@@ -47,13 +47,13 @@ public abstract class EntityMixin {
             
             
 
-            ItemStack item = PlayerStandinItem.createEntityItem((Player) rider);
+            ItemStack item = PlayerStandinItem.createEntityItem(vehicle, (Player) rider);
             vehicle.getInventory().add(vehicle.getInventory().selected, item);
             
         }else if (!(rider instanceof Player) && vehicle.getMainHandItem().isEmpty() && EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)/4 && HMTConfig.SERVER_CONFIG.canPickupEntities.get()) {
             rider.startRiding(vehicle);
 
-            ItemStack item = EntityStandinItem.createEntityItem(rider);
+            ItemStack item = EntityStandinItem.createEntityItem(vehicle, rider);
             vehicle.getInventory().add(vehicle.getInventory().selected, item);
         }
     }
