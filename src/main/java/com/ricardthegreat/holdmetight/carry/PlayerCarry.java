@@ -10,6 +10,7 @@ import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.items.EntityStandinItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerCarrySyncPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.CRemovePlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.utils.constants.CarryPosConstants;
 import com.ricardthegreat.holdmetight.utils.constants.PlayerCarryConstants;
@@ -17,6 +18,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 
@@ -57,6 +59,7 @@ public class PlayerCarry {
     
 
     private ArrayList<CompoundTag> carriedEntities = new ArrayList<>();
+    private boolean checkedCarriedEntities = true;
 
     private boolean turnWhileCarried = true;
 
@@ -74,6 +77,28 @@ public class PlayerCarry {
                 sync(player);
             }else{
                 shouldSync = false;
+            }
+        }else{
+            if (!player.level().isClientSide && !checkedCarriedEntities) {
+                HoldMeTight.LOGGER.debug("checking carried entities");
+                for (CompoundTag tag : carriedEntities) {
+                    UUID id = tag.getUUID(EntityStandinItem.ENTITY_UUID);
+                    boolean shouldRemove = true;
+                    for (Entity entity : player.getPassengers()) {
+                        if (entity.getUUID().equals(id)) {
+                            shouldRemove = false;
+                        }
+                    }
+
+                    if (shouldRemove) {
+                        HoldMeTight.LOGGER.debug("found entity " + id + " that is not carried removing");
+                        removeCarriedEntity(id);
+
+                        DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> 
+                            PacketHandler.sendToAllClients(new CRemovePlayerCarrySyncPacket(id, player.getUUID())));
+                    }
+                }
+                checkedCarriedEntities = true;
             }
         }
     }
@@ -123,6 +148,8 @@ public class PlayerCarry {
         }
         
         carriedEntities.add(tag);
+
+        checkedCarriedEntities = false;
     }
 
     /**
@@ -135,10 +162,13 @@ public class PlayerCarry {
                 carriedEntities.remove(i);
             }
         }
+
+        checkedCarriedEntities = false;
     }
 
     //TODO remove or change
     public CarryPosition getCarryPosition(Entity entity, String hand){
+        //System.out.println("getcarrypos: " + hand);
         switch (hand) {
             case CarryPosConstants.MAIN_HAND:
                 return mainHand;
@@ -163,7 +193,7 @@ public class PlayerCarry {
                             return torso;
                         }else{
                             if (invPos < 0 || hotbarCarryPositions.size() <= invPos) {
-                                Log.error("invPos: " + invPos + " is a number that is either greater than 8 or less than 0 but still registerd as a hotbar slot, setting to custom as a failsafe");
+                                HoldMeTight.LOGGER.debug("invPos: " + invPos + " is a number that is either greater than 8 or less than 0 but still registerd as a hotbar slot, setting to custom as a failsafe");
                                 return custom;
                             }
                             return hotbarCarryPositions.get(invPos);
@@ -226,6 +256,8 @@ public class PlayerCarry {
         this.custom = source.custom;
         this.customCarryPositions = source.customCarryPositions;
         this.carriedEntities = source.carriedEntities;
+
+        this.checkedCarriedEntities = source.checkedCarriedEntities;
     }
 
 
@@ -264,6 +296,8 @@ public class PlayerCarry {
 
                 carriedEntities.add(tmp);
             }
+
+            checkedCarriedEntities = false;
         } catch (Exception e) {
             HoldMeTight.LOGGER.error(e.getMessage());
         }
