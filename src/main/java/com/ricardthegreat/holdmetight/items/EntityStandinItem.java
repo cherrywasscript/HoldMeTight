@@ -230,7 +230,7 @@ public class EntityStandinItem extends Item implements ICurioItem{
 
     //I dont think this is proper form i should probably have a seperate static createPlayerItem in PlayerStandInItem
     //TODO ^that
-    public static ItemStack createEntityItem(Entity entity){
+    public static ItemStack createEntityItem(Player vehicle, Entity entity){
         ItemStack item;
         CompoundTag tag;
         if (entity instanceof Player) {
@@ -249,6 +249,20 @@ public class EntityStandinItem extends Item implements ICurioItem{
         tag.putInt(ENTITY_ID, entity.getId());
 
         item.setTag(tag);
+
+
+        if (!vehicle.level().isClientSide) {
+            PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(vehicle);
+
+            CompoundTag entTag = new CompoundTag();
+            entTag.putUUID(ENTITY_UUID, entity.getUUID());
+            entTag.putInt(INV_ID, vehicle.getInventory().selected);
+            
+            playerCarry.addOrUpdateCarriedEntity(entTag);
+
+            PacketHandler.sendToAllClients(new CAddPlayerCarrySyncPacket(entTag, vehicle.getUUID()));
+        }
+        
         
         return item;
     }
