@@ -78,3 +78,8 @@ version 0.6.1-beta:
 - reworked the config files to move the config options from the common config to server config
 - added config options to disable picking up non player entities or to disable picking up players
 - added config options to increase the maximum movement speed before the "entity moved too fast error" for servers that want to allow big folk to move without getting impeded
+
+version 0.6.2-beta
+- made some backend changes for how arm positions are set when carrying
+- some backend changes to hopefully reduce packet sizes
+- fixed error where entity in hotbar would not be correctly placed on belt and would instead default to the custom position

@@ -13,11 +13,15 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 public class CRemovePlayerCarrySyncPacket {
-    private final UUID player;
+    private final UUID entity;
     private final UUID uuid;
 
-    public CRemovePlayerCarrySyncPacket(UUID player, UUID uuid){
-        this.player = player;
+    /**
+     * @param entity the entity to be removed from carry list
+     * @param uuid the uuid of the player the entity is being removed from
+     */
+    public CRemovePlayerCarrySyncPacket(UUID entity, UUID uuid){
+        this.entity = entity;
         this.uuid = uuid;
     }
 
@@ -26,7 +30,7 @@ public class CRemovePlayerCarrySyncPacket {
     }
 
     public void encode(FriendlyByteBuf buffer){
-        buffer.writeUUID(player);
+        buffer.writeUUID(entity);
         buffer.writeUUID(uuid);
     }
 
@@ -39,7 +43,7 @@ public class CRemovePlayerCarrySyncPacket {
     }
 
     public void playerSyncablesUpdate(PlayerCarry playerCarry){
-        playerCarry.removeCarriedEntity(player);
+        playerCarry.removeCarriedEntity(entity);
     }
 
     public UUID getUuid() {
