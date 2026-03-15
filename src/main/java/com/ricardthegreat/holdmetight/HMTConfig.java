@@ -91,10 +91,10 @@ public class HMTConfig {
                         builder.push("Maximum movespeed");
 
                         this.maximumMovespeed = builder.comment("the maximum movement speed before it starts giving the 'moved too fast' error. i hightly recommend not increasing this unless you are okay with people potentially moving way too quickly while big (default 100)")
-                                .define("miningSpeedScaleLink", 100f);
+                                .define("maximumMovespeed", 100f);
 
                         this.maximumElytraspeed = builder.comment("the maximum movement speed when using an elytra before it starts giving the 'moved too fast' error. i hightly recommend not increasing this unless you are okay with people potentially moving way too quickly while big (default 100)")
-                                .define("miningSpeedScaleLink", 300f);
+                                .define("maximumElytraspeed", 300f);
 
                         builder.pop();
                 }
