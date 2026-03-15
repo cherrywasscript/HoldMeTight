@@ -83,3 +83,6 @@ version 0.6.2-beta
 - made some backend changes for how arm positions are set when carrying
 - some backend changes to hopefully reduce packet sizes
 - fixed error where entity in hotbar would not be correctly placed on belt and would instead default to the custom position
+
+version 0.6.2.1-beta
+- fixed an error in the config where a config section was mislabeled and an option was missing
