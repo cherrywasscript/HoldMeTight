@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.ricardthegreat.holdmetight.client.guielements.tooltips.PlayerItemTooltip;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -19,6 +21,8 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.BundleItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class PlayerStandinItem extends EntityStandinItem{
 
@@ -52,25 +56,36 @@ public class PlayerStandinItem extends EntityStandinItem{
 
     @Override
     public boolean overrideOtherStackedOnMe (ItemStack stackThis, ItemStack stackOther, Slot slot, ClickAction action, Player player, SlotAccess access) {
-        if (player.level().isClientSide && action == ClickAction.SECONDARY) {
-            //TODO implement stuff here probably
-        }
         return super.overrideOtherStackedOnMe(stackThis, stackOther, slot, action, player, access);
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public Optional<TooltipComponent> getTooltipImage(ItemStack stack) {
         CompoundTag tag = stack.getTag();
+        Level level = Minecraft.getInstance().level;
+
+        if (level == null) {
+            return super.getTooltipImage(stack);
+        }
+
         if (tag != null && Minecraft.getInstance().level.isClientSide) {
             ListTag invList = tag.getList(INVENTORY, 10);
 
-            Inventory inv = new Inventory(Minecraft.getInstance().player);
+            
+            Player player = level.getPlayerByUUID(tag.getUUID(ENTITY_UUID));
 
-            inv.load(invList);
+            if (player != null) {
+                Inventory inv = new Inventory(player);
 
-            return Optional.of(new BundleTooltip(inv.items, 0));
+                inv.load(invList);
+                
+
+                return Optional.of(new PlayerItemTooltip(inv.items, inv.armor, inv.offhand, player));
+            }
+            
         }
-
+        
         return super.getTooltipImage(stack);
     }
 }

@@ -15,6 +15,8 @@ import java.util.Set;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.client.Keybindings;
+import com.ricardthegreat.holdmetight.client.guielements.tooltips.ClientPlayerItemTooltipComponent;
+import com.ricardthegreat.holdmetight.client.guielements.tooltips.PlayerItemTooltip;
 import com.ricardthegreat.holdmetight.client.models.ModModelLayers;
 import com.ricardthegreat.holdmetight.client.models.RayGunProjectileModel;
 import com.ricardthegreat.holdmetight.client.renderers.CollarRenderer;
@@ -28,6 +30,7 @@ import com.ricardthegreat.holdmetight.items.CollarItem;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -88,4 +91,11 @@ public class ClientModHandler {
         EntityRenderers.register(EntityInit.RAY_GUN_PROJECTILE.get(), RayGunProjectileRenderer::new);
         EntityRenderers.register(EntityInit.WAND_PROJECTILE.get(), WandProjectileRenderer::new);
     }
+
+        
+    @SubscribeEvent
+    public static void registerToolTip(RegisterClientTooltipComponentFactoriesEvent event){
+        event.register(PlayerItemTooltip.class, t -> new ClientPlayerItemTooltipComponent(t));
+    }
+
 }
