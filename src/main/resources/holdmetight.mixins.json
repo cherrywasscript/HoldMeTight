@@ -21,6 +21,7 @@
 
       "rendering.FrustumMixin",
       "rendering.DontRenderInvisibleCarriedPlayers",
+      "rendering.CustomTooltip",
 
 
       "playerextensions.PlayerRenderMixin",
