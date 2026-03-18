@@ -10,9 +10,11 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.item.ElytraItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 
 public class PaperWingsItem extends ElytraItem {
@@ -45,4 +47,10 @@ public class PaperWingsItem extends ElytraItem {
         }
         return true;
     }
+
+    @Override
+    public boolean isValidRepairItem(ItemStack itemToRepair, ItemStack repairItem) {
+        return repairItem.is(Items.PAPER);
+    }
+    
 }

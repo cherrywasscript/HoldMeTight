@@ -6,9 +6,9 @@
     "overrides": [
         {
             "predicate": {
-                "broken": 1
+                "minecraft:broken": 1
             },
-            "model": "minecraft:item/broken_elytra"
+            "model": "holdmetight:item/broken_wings"
         }
     ]
 }

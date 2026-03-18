@@ -5,6 +5,7 @@ import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
@@ -26,6 +27,7 @@ import com.ricardthegreat.holdmetight.client.renderers.layers.PaperWingsLayer;
 import com.ricardthegreat.holdmetight.init.EntityInit;
 import com.ricardthegreat.holdmetight.init.ItemInit;
 import com.ricardthegreat.holdmetight.items.CollarItem;
+import com.ricardthegreat.holdmetight.items.PaperWingsItem;
 
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -90,6 +92,10 @@ public class ClientModHandler {
     public static void onClientSetup(FMLClientSetupEvent event){ 
         EntityRenderers.register(EntityInit.RAY_GUN_PROJECTILE.get(), RayGunProjectileRenderer::new);
         EntityRenderers.register(EntityInit.WAND_PROJECTILE.get(), WandProjectileRenderer::new);
+
+        event.enqueueWork(() -> {
+            ItemProperties.register(ItemInit.PAPER_WINGS_ITEM.get(), new ResourceLocation("broken"), (stack, lebel, entity, seed) -> PaperWingsItem.isFlyEnabled(stack) ? 0 : 1);
+        });
     }
 
         
