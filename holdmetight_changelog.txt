@@ -93,3 +93,5 @@ version 0.6.3-beta
 - changed the repair item for paper wings from phantom membrane to paper
 - added icon for when paper wings are broken
 - slightly lowered the durability of paper wings
+
+version 0.6.4-beta
