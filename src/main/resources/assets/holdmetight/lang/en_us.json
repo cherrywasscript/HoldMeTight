@@ -56,6 +56,13 @@
     "gui.holdmetight.size_remote.checkbox.custom_duration":"Custom time",
 
 
+    "gui.holdmetight.size_remote.button.size_steal_choice_button":"Transfer height",
+    "gui.holdmetight.size_remote.button.perpetual_change_choice_button":"Perpetual height change",
+    "gui.holdmetight.size_remote.button.steal_button":"Steal",
+    "gui.holdmetight.size_remote.button.give_button":"Give",
+    "gui.holdmetight.size_remote.button.transfer_field":"Transfer",
+
+
     "gui.holdmetight.size_remote.strings.target_string":"Target",
     "gui.holdmetight.size_remote.strings.current_scale_string":"Current scale",
     "gui.holdmetight.size_remote.strings.target_scale_string":"Target scale",
@@ -91,6 +98,10 @@
     "message.holdmetight.custom_key_pressed":"Set carry position to custom",
     "message.holdmetight.default_key_pressed":"Set carry position to hand",
     "message.holdmetight.carry_key_pressed": "Set carry position to ",
+
+
+
+    "message.holdmetight.too_small_interaction":"You are too small to use this",
 
 
 
