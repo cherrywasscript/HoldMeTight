@@ -86,3 +86,12 @@ version 0.6.2-beta
 
 version 0.6.2.1-beta
 - fixed an error in the config where a config section was mislabeled and an option was missing
+
+version 0.6.3-beta
+- added actual icon for custom carry slot
+- replaced some placeholder text with actual text
+- changed the repair item for paper wings from phantom membrane to paper
+- added icon for when paper wings are broken
+- slightly lowered the durability of paper wings
+
+version 0.6.4-beta

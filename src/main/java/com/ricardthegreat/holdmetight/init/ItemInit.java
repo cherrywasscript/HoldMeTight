@@ -64,7 +64,7 @@ public class ItemInit {
                 ITEMS.register("entity_item", () -> new EntityStandinItem(new Item.Properties().stacksTo(1))));
 
         public static final RegistryObject<Item> PAPER_WINGS_ITEM = addToTab(
-                ITEMS.register("paper_wings_item", () -> new PaperWingsItem(new Item.Properties().durability(432).rarity(Rarity.COMMON))));
+                ITEMS.register("paper_wings_item", () -> new PaperWingsItem(new Item.Properties().durability(400).rarity(Rarity.COMMON))));
 
                 /* 
         public static final RegistryObject<BlockItem> JAR_ITEM = addToTab(ITEMS.register("tiny_jar", 
