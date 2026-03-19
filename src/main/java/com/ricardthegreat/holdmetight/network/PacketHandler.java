@@ -3,12 +3,15 @@ package com.ricardthegreat.holdmetight.network;
 import java.util.function.Supplier;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
+import com.ricardthegreat.holdmetight.network.clientbound.CAddCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CAddPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerCarrySimplePacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerDismountPlayerPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerSizeMixinSyncPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.CRemoveCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CRemovePlayerCarrySyncPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.SAddCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SEntityAddTargetScalePacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SEntityMultTargetScalePacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SEntityPutDownPacket;
@@ -17,6 +20,7 @@ import com.ricardthegreat.holdmetight.network.serverbound.SPlayerCarrySimplePack
 import com.ricardthegreat.holdmetight.network.serverbound.SPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SPlayerPutDownPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SPlayerSizeMixinSyncPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.SRemoveCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SSizeRaySync;
 
 import net.minecraft.resources.ResourceLocation;
@@ -117,6 +121,26 @@ public class PacketHandler {
         CRemovePlayerCarrySyncPacket::encode, 
         CRemovePlayerCarrySyncPacket::new, 
         CRemovePlayerCarrySyncPacket::handle);
+
+        INSTANCE.registerMessage(id++, SAddCustomCarryPosPacket.class, 
+        SAddCustomCarryPosPacket::encode, 
+        SAddCustomCarryPosPacket::new, 
+        SAddCustomCarryPosPacket::handle);
+
+        INSTANCE.registerMessage(id++, SRemoveCustomCarryPosPacket.class, 
+        SRemoveCustomCarryPosPacket::encode, 
+        SRemoveCustomCarryPosPacket::new, 
+        SRemoveCustomCarryPosPacket::handle);
+
+        INSTANCE.registerMessage(id++, CAddCustomCarryPosPacket.class, 
+        CAddCustomCarryPosPacket::encode, 
+        CAddCustomCarryPosPacket::new, 
+        CAddCustomCarryPosPacket::handle);
+
+        INSTANCE.registerMessage(id++, CRemoveCustomCarryPosPacket.class, 
+        CRemoveCustomCarryPosPacket::encode, 
+        CRemoveCustomCarryPosPacket::new, 
+        CRemoveCustomCarryPosPacket::handle);
     }
 
     public static void sendToServer(Object msg){
