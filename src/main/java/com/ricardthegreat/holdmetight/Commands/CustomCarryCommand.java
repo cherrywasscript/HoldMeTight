@@ -88,7 +88,7 @@ public class CustomCarryCommand {
             .then(Commands.argument("distance", DoubleArgumentType.doubleArg())
             .then(Commands.argument("height", DoubleArgumentType.doubleArg())
             .then(Commands.argument("sideways", DoubleArgumentType.doubleArg()).executes((source) -> {
-                return addCarry(source.getSource(), StringArgumentType.getString(source, "name"), IntegerArgumentType.getInteger(source, "angle"), DoubleArgumentType.getDouble(source, "distance"), DoubleArgumentType.getDouble(source, "height"), DoubleArgumentType.getDouble(source, "sideways"), null, source.getSource().getEntityOrException());
+                return editCarry(source.getSource(), StringArgumentType.getString(source, "name"), IntegerArgumentType.getInteger(source, "angle"), DoubleArgumentType.getDouble(source, "distance"), DoubleArgumentType.getDouble(source, "height"), DoubleArgumentType.getDouble(source, "sideways"), null, source.getSource().getEntityOrException());
             })
             .then(Commands.argument("connect to head (optional)", BoolArgumentType.bool()).executes((source) -> {
                 return editCarry(source.getSource(), StringArgumentType.getString(source, "name"), IntegerArgumentType.getInteger(source, "angle"), DoubleArgumentType.getDouble(source, "distance"), DoubleArgumentType.getDouble(source, "height"), DoubleArgumentType.getDouble(source, "sideways"), BoolArgumentType.getBool(source, "connect to head (optional)"), source.getSource().getEntityOrException());
@@ -131,23 +131,23 @@ public class CustomCarryCommand {
             PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
 
             ArrayList<CarryPosition> positions = playerCarry.getCustomCarryPositions();
-            CarryPosition editPos = null;
+            boolean exists = false;
             for (CarryPosition carryPosition : positions) {
                 if (carryPosition.posName.equals(name)) {
-                    editPos = carryPosition;
+                    exists = true;
                 }
             }
 
-            if (editPos == null) {
+            if (exists) {
                 throw FAILED_TO_EDIT_CUSTOM_POS.create();
             }else{
                 boolean headlink = (head != null) ? head : false;
 
-                editPos = new CarryPosition(name, rotation, distance, height, sideways, headlink);
+                CarryPosition pos = new CarryPosition(name, rotation, distance, height, sideways, headlink);
 
-                playerCarry.addCustomCarryPos(editPos);
+                playerCarry.addCustomCarryPos(pos);
 
-                PacketHandler.sendToServer(new SAddCustomCarryPosPacket(editPos));
+                PacketHandler.sendToServer(new SAddCustomCarryPosPacket(pos));
             }
         }
         return 1;
