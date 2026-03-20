@@ -2,6 +2,7 @@ package com.ricardthegreat.holdmetight.carry;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import org.jline.utils.Log;
@@ -51,7 +52,7 @@ public class PlayerCarry {
 
     private final ArrayList<CarryPosition> hotbarCarryPositions = new ArrayList<>(Arrays.asList(hotbarSlot0, hotbarSlot1, hotbarSlot2, hotbarSlot3, hotbarSlot4, hotbarSlot5, hotbarSlot6, hotbarSlot7, hotbarSlot8));
 
-    private CarryPosition custom = new CarryPosition("custom",0, 0, 0, 0, false);
+    private CarryPosition custom = new CarryPosition("default",0, 0, 0, 0, false);
 
     private ArrayList<CarryPosition> customCarryPositions = new ArrayList<>(Arrays.asList(custom));
 
@@ -111,7 +112,7 @@ public class PlayerCarry {
         //should only be updated server side so should only be called when on server
         if(!player.level().isClientSide){
             DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> 
-            PacketHandler.sendToAllClients(new CPlayerCarrySyncPacket(carriedEntities, customCarryPositions.get(0), player.getUUID())));
+            PacketHandler.sendToAllClients(new CPlayerCarrySyncPacket(carriedEntities, customCarryPositions, player.getUUID())));
         }
     }
 
@@ -124,16 +125,17 @@ public class PlayerCarry {
     }
 
     //the sync packets call this to update everything at once
-    public void updateAllSyncables(ArrayList<CompoundTag> carriedEntities, CarryPosition customCarry){
+    public void updateAllSyncables(ArrayList<CompoundTag> carriedEntities, ArrayList<CarryPosition> customCarryPositions){
         this.carriedEntities = carriedEntities;
-
-        //TODO choose if i want to allow multiple custom carry spots or just one, leaning towards just one
+        this.customCarryPositions = customCarryPositions;
+        /* 
         this.custom = customCarry;
 
         int tempSize = customCarryPositions.size();
         for(int i = 0; i < tempSize; i++){
             customCarryPositions.set(i, custom);
         }
+            */
     }
 
     /**
@@ -186,6 +188,13 @@ public class PlayerCarry {
                 return customCarryPositions.get(0);
             
             default:
+
+                for(int i = 0; i < customCarryPositions.size(); i++){
+                    if (hand.equals(CarryPosConstants.CUSTOM+i)) {
+                        return customCarryPositions.get(i);
+                    }
+                }
+
                 for (CompoundTag tag : carriedEntities) {
                     if (tag.getUUID(EntityStandinItem.ENTITY_UUID).equals(entity.getUUID())) {
                         int invPos = tag.getInt(EntityStandinItem.INV_ID);
@@ -207,14 +216,14 @@ public class PlayerCarry {
         return custom;
     }
 
+    public ArrayList<CarryPosition> getCustomCarryPositions(){
+        return customCarryPositions;
+    }
+
     public void addCustomCarryPos(CarryPosition custom){
         boolean added = false;
-        customCarryPositions.set(0, custom);
-        
-        //TODO use this when i have more than 1 custom carry
-        /* 
         for(int i = 0; i < customCarryPositions.size(); i++){
-            if (customCarryPositions.get(i).posName == custom.posName) {
+            if (customCarryPositions.get(i).posName.equals(custom.posName)) {
                 customCarryPositions.set(i, custom);
                 added = true;
             }
@@ -222,15 +231,17 @@ public class PlayerCarry {
         if (!added) {
             customCarryPositions.add(custom);
         }
-        */
     }
 
-    public void removeCustomCarryPos(String name){
+    public boolean removeCustomCarryPos(String name){
+        boolean success = false;
         for(int i = 0; i < customCarryPositions.size(); i++){
-            if (customCarryPositions.get(i).posName == custom.posName) {
+            if (customCarryPositions.get(i).posName.equals(name)) {
                 customCarryPositions.remove(i);
+                success = true;
             }
         }
+        return success;
     }
 
     //setting if it should sync
@@ -263,14 +274,18 @@ public class PlayerCarry {
 
     //TODO update to iterate through all custom positions
     public void saveNBTData(CompoundTag tag){
-        CarryPosition carry = customCarryPositions.get(0);
+        tag.putInt(PlayerCarryConstants.CARRY_POS_LIST_SIZE, customCarryPositions.size());
 
-        tag.putString(PlayerCarryConstants.POS_NAME_NBT_TAG, carry.posName);
-        tag.putInt(PlayerCarryConstants.ROTATION_NBT_TAG, carry.RotationOffset);
-        tag.putDouble(PlayerCarryConstants.MULT_NBT_TAG, carry.xymult);
-        tag.putDouble(PlayerCarryConstants.VERT_NBT_TAG, carry.vertOffset);
-        tag.putDouble(PlayerCarryConstants.LEFT_RIGHT_NBT_TAG, carry.leftRightMove);
-        tag.putBoolean(PlayerCarryConstants.HEAD_LINK_NBT_TAG, carry.headLink);
+        for (int i = 0; i < customCarryPositions.size(); i++) {
+            tag.putString(PlayerCarryConstants.POS_NAME_NBT_TAG + i, customCarryPositions.get(i).posName);
+            tag.putInt(PlayerCarryConstants.ROTATION_NBT_TAG + i, customCarryPositions.get(i).RotationOffset);
+            tag.putDouble(PlayerCarryConstants.MULT_NBT_TAG + i, customCarryPositions.get(i).xymult);
+            tag.putDouble(PlayerCarryConstants.VERT_NBT_TAG + i, customCarryPositions.get(i).vertOffset);
+            tag.putDouble(PlayerCarryConstants.LEFT_RIGHT_NBT_TAG + i, customCarryPositions.get(i).leftRightMove);
+            tag.putBoolean(PlayerCarryConstants.HEAD_LINK_NBT_TAG + i, customCarryPositions.get(i).headLink);
+        }
+
+        
 
         tag.putInt(PlayerCarryConstants.CARRIED_PLAYERS_LIST_SIZE, carriedEntities.size());
 
@@ -282,11 +297,15 @@ public class PlayerCarry {
 
     public void loadNBTData(CompoundTag tag){
         try {
-            custom = new CarryPosition(
-            tag.getString(PlayerCarryConstants.POS_NAME_NBT_TAG), tag.getInt(PlayerCarryConstants.ROTATION_NBT_TAG), tag.getDouble(PlayerCarryConstants.MULT_NBT_TAG), 
-            tag.getDouble(PlayerCarryConstants.VERT_NBT_TAG), tag.getDouble(PlayerCarryConstants.LEFT_RIGHT_NBT_TAG), tag.getBoolean(PlayerCarryConstants.HEAD_LINK_NBT_TAG));
+            ArrayList<CarryPosition> temp = new ArrayList<>();
+            for (int i = 0; i < tag.getInt(PlayerCarryConstants.CARRY_POS_LIST_SIZE); i++) {
+                CarryPosition tmp = new CarryPosition(
+                tag.getString(PlayerCarryConstants.POS_NAME_NBT_TAG+i), tag.getInt(PlayerCarryConstants.ROTATION_NBT_TAG+i), tag.getDouble(PlayerCarryConstants.MULT_NBT_TAG+i), 
+                tag.getDouble(PlayerCarryConstants.VERT_NBT_TAG+i), tag.getDouble(PlayerCarryConstants.LEFT_RIGHT_NBT_TAG+i), tag.getBoolean(PlayerCarryConstants.HEAD_LINK_NBT_TAG+i));
 
-            customCarryPositions.set(0, custom);
+                temp.add(tmp);
+            }
+            customCarryPositions = temp;
 
 
             for (int i = 0; i < tag.getInt(PlayerCarryConstants.CARRIED_PLAYERS_LIST_SIZE); i++) {
@@ -304,10 +323,14 @@ public class PlayerCarry {
     }
 
     public CPlayerCarrySyncPacket getClientSyncPacket(Player player){
-        return new CPlayerCarrySyncPacket(carriedEntities, customCarryPositions.get(0), player.getUUID());
+        return new CPlayerCarrySyncPacket(carriedEntities, customCarryPositions, player.getUUID());
     }
 
     public SPlayerCarrySyncPacket getServerSyncPacket(){
-        return new SPlayerCarrySyncPacket(carriedEntities, customCarryPositions.get(0));
+        return new SPlayerCarrySyncPacket(carriedEntities, customCarryPositions);
+    }
+
+    public void fullReset(){
+        this.copyFrom(new PlayerCarry());
     }
 }
