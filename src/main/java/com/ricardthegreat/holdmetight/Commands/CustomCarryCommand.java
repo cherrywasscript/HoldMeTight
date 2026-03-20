@@ -134,11 +134,12 @@ public class CustomCarryCommand {
             boolean exists = false;
             for (CarryPosition carryPosition : positions) {
                 if (carryPosition.posName.equals(name)) {
+                    System.out.println(carryPosition.posName + "/" + name);
                     exists = true;
                 }
             }
 
-            if (exists) {
+            if (!exists) {
                 throw FAILED_TO_EDIT_CUSTOM_POS.create();
             }else{
                 boolean headlink = (head != null) ? head : false;
