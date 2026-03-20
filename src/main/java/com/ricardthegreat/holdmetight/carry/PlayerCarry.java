@@ -235,6 +235,9 @@ public class PlayerCarry {
 
     public boolean removeCustomCarryPos(String name){
         boolean success = false;
+        if (name.equals("default")) {
+            return success;
+        }
         for(int i = 0; i < customCarryPositions.size(); i++){
             if (customCarryPositions.get(i).posName.equals(name)) {
                 customCarryPositions.remove(i);
