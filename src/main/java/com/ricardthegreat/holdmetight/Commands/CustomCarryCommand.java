@@ -91,7 +91,7 @@ public class CustomCarryCommand {
                 return addCarry(source.getSource(), StringArgumentType.getString(source, "name"), IntegerArgumentType.getInteger(source, "angle"), DoubleArgumentType.getDouble(source, "distance"), DoubleArgumentType.getDouble(source, "height"), DoubleArgumentType.getDouble(source, "sideways"), null, source.getSource().getEntityOrException());
             })
             .then(Commands.argument("connect to head (optional)", BoolArgumentType.bool()).executes((source) -> {
-                return addCarry(source.getSource(), StringArgumentType.getString(source, "name"), IntegerArgumentType.getInteger(source, "angle"), DoubleArgumentType.getDouble(source, "distance"), DoubleArgumentType.getDouble(source, "height"), DoubleArgumentType.getDouble(source, "sideways"), BoolArgumentType.getBool(source, "connect to head (optional)"), source.getSource().getEntityOrException());
+                return editCarry(source.getSource(), StringArgumentType.getString(source, "name"), IntegerArgumentType.getInteger(source, "angle"), DoubleArgumentType.getDouble(source, "distance"), DoubleArgumentType.getDouble(source, "height"), DoubleArgumentType.getDouble(source, "sideways"), BoolArgumentType.getBool(source, "connect to head (optional)"), source.getSource().getEntityOrException());
             }))))))))
             );
     }
