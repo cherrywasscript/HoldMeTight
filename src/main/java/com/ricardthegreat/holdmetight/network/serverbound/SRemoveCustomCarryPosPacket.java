@@ -9,7 +9,6 @@ import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.CAddCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CRemoveCustomCarryPosPacket;
-import com.ricardthegreat.holdmetight.utils.constants.CurioUUIDConstants;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
