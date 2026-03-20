@@ -95,3 +95,5 @@ version 0.6.3-beta
 - slightly lowered the durability of paper wings
 
 version 0.6.4-beta
+- fixed issue where an improper check caused the server to lag when carrying more than one entity
+- updated the /customcarry command 
