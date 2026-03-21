@@ -19,6 +19,7 @@ import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.serverbound.SAddCustomCarryPosPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.SEditCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SRemoveCustomCarryPosPacket;
 
@@ -131,24 +132,24 @@ public class CustomCarryCommand {
             PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
 
             ArrayList<CarryPosition> positions = playerCarry.getCustomCarryPositions();
-            boolean exists = false;
-            for (CarryPosition carryPosition : positions) {
-                if (carryPosition.posName.equals(name)) {
-                    System.out.println(carryPosition.posName + "/" + name);
-                    exists = true;
+
+            int index = -1;
+            for (int i = 0; i < positions.size(); i++) {
+                if (positions.get(i).posName.equals(name)) {
+                    index = i;
                 }
             }
 
-            if (!exists) {
+            if (index == -1) {
                 throw FAILED_TO_EDIT_CUSTOM_POS.create();
             }else{
                 boolean headlink = (head != null) ? head : false;
 
                 CarryPosition pos = new CarryPosition(name, rotation, distance, height, sideways, headlink);
 
-                playerCarry.addCustomCarryPos(pos);
+                playerCarry.editCustomCarryPos(pos, index);
 
-                PacketHandler.sendToServer(new SAddCustomCarryPosPacket(pos));
+                PacketHandler.sendToServer(new SEditCustomCarryPosPacket(pos, index));
             }
         }
         return 1;
