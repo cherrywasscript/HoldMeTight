@@ -156,15 +156,18 @@ public class PacketHandler {
     }
 
     public static void sendToServer(Object msg){
+        HoldMeTight.LOGGER.debug("PacketHandler sending packet to server");
         INSTANCE.sendToServer(msg);
     }
 
     //send directly to player
     public static void sendToPlayer(Object msg, Supplier<ServerPlayer> player) {
+        HoldMeTight.LOGGER.debug("PacketHandler sending packet to player:" + player.get().getName());
         INSTANCE.send(PacketDistributor.PLAYER.with(player), msg);
     }
 
     public static void sendToAllClients(Object msg){
+        HoldMeTight.LOGGER.debug("PacketHandler sending packet to all players");
         INSTANCE.send(PacketDistributor.ALL.noArg(), msg);
     }
 
