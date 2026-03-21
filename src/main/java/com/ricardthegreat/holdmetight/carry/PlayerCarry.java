@@ -233,6 +233,10 @@ public class PlayerCarry {
         }
     }
 
+    public void editCustomCarryPos(CarryPosition edit, int pos){
+        customCarryPositions.set(pos, edit);
+    }
+
     public boolean removeCustomCarryPos(String name){
         boolean success = false;
         if (name.equals("default")) {
