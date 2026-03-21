@@ -56,7 +56,9 @@
 
       "interaction.ButtonBlockInteractionMixin",
       "interaction.DoorBlockInteractionMixin",
-      "interaction.LeverBlockInteractionMixin"
+      "interaction.LeverBlockInteractionMixin",
+
+      "curios.CurioHoverTooltip"
     ],
     "client": [
     ],
