@@ -49,8 +49,6 @@ public class EntityStandinItem extends Item implements ICurioItem{
     public static String SELECTED = "IS_SELECTED";
     public static String IS_PLAYER = "IS_PLAYER";
 
-    private int prevSlot = -1;
-
     public EntityStandinItem(Properties properties) {
         super(properties);
     }
@@ -153,7 +151,7 @@ public class EntityStandinItem extends Item implements ICurioItem{
                 stack.shrink(1);
             }else if(entity instanceof Player vehicle){
                 if (passenger instanceof Player carried) {
-                    checkCorrectCarryPos(carried, vehicle, index, selected);
+                    checkCorrectCarryPos(carried, vehicle, index, stack, selected);
                 }else{
 
                 }
@@ -213,9 +211,12 @@ public class EntityStandinItem extends Item implements ICurioItem{
     }
 
     
-    private void checkCorrectCarryPos(Player carried, Player player, int index, boolean selected){
-        if (!player.level().isClientSide && index != prevSlot) {
-            prevSlot = index;
+    private void checkCorrectCarryPos(Player carried, Player player, int index, ItemStack stack, boolean selected){
+        CompoundTag stackTag = stack.getTag();
+        int prevIndex = stackTag.getInt(INV_ID);
+        if (!player.level().isClientSide && index != prevIndex) {
+            stackTag.putInt(INV_ID, index);
+            stack.setTag(stackTag);
             PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
 
             CompoundTag tag = new CompoundTag();
@@ -247,6 +248,9 @@ public class EntityStandinItem extends Item implements ICurioItem{
 
         tag.putUUID(ENTITY_UUID, entity.getUUID());
         tag.putInt(ENTITY_ID, entity.getId());
+
+        System.out.println("ent item inv slot: " + vehicle.getInventory().selected + "/" + vehicle.level());
+        tag.putInt(INV_ID, vehicle.getInventory().selected);
 
         item.setTag(tag);
 

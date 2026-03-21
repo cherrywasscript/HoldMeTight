@@ -1,7 +1,10 @@
 package com.ricardthegreat.holdmetight.utils;
 
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
+import com.google.common.collect.Multimap;
 import com.ricardthegreat.holdmetight.init.ItemInit;
 import com.ricardthegreat.holdmetight.items.EntityStandinItem;
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
@@ -9,32 +12,39 @@ import com.ricardthegreat.holdmetight.utils.constants.CarryPosConstants;
 
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotResult;
+import top.theillusivec4.curios.api.type.ISlotType;
+import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
+import top.theillusivec4.curios.client.gui.CuriosScreen;
+import top.theillusivec4.curios.client.gui.CuriosScreenV2;
 
 public class CheckNonInvSlotUtil {
 
     //this exists as i cant create a wrapper variable within a mixin class, is this the right way to do it? who knows definitely not me but it works and thats what matters
 
     //TODO figure out if getorcreatetag is the correct method, might be better to use gettag and have a null check to ensure the item actually has a tag instead
-    public static String checkIfNonInvSlot(Player vehicle, Entity rider){
-        var wrapper = new Object(){ boolean checkPassed = false; String strReturn = null; int count = 0;};
-
-        CuriosApi.getCuriosInventory(vehicle)
-        .ifPresent(handler -> handler.findCurios((stack) -> stack.getItem() == ItemInit.PLAYER_ITEM.get() || stack.getItem() == ItemInit.ENTITY_ITEM.get()).forEach((slotResult) -> {
-            UUID id = slotResult.stack().getOrCreateTag().getUUID(EntityStandinItem.ENTITY_UUID);
-            if (rider.getUUID().equals(id)) {
-                wrapper.checkPassed = true;
-                wrapper.strReturn = slotResult.slotContext().identifier();
-            }
-        }));
-
-        if (wrapper.checkPassed) {
-            return wrapper.strReturn;
-        }
-
+    public static String checkIfNonInvSlot(Player vehicle, Entity rider){   
+        ICuriosItemHandler curiosInventory = CuriosApi.getCuriosInventory(vehicle).resolve().get();
         
+        List<SlotResult> slots = curiosInventory.findCurios((stack) -> stack.getItem() == ItemInit.PLAYER_ITEM.get() || stack.getItem() == ItemInit.ENTITY_ITEM.get());
+        for (SlotResult slot : slots) {
+            UUID id = slot.stack().getOrCreateTag().getUUID(EntityStandinItem.ENTITY_UUID);
+            //System.out.println("this exists to remind you to look at the CheckNonInvSlotUtil class and ensure that once the multiple carry positions and dynamically adding curio slots has been set that each of the curio slots has the correct identifier because if they dont you need to redo this thing");
+            if (rider.getUUID().equals(id)) {
+                String value = slot.slotContext().identifier();
+                
+                if (value.equals(CarryPosConstants.CUSTOM)) {
+                    value = value + slot.slotContext().index();
+                }
+
+                return value;
+            }
+        }
 
         if (checkCorrectItem(vehicle.getOffhandItem(), rider)) {
             return CarryPosConstants.OFF_HAND;

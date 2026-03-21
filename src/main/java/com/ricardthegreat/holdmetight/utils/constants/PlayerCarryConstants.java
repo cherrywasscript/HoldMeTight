@@ -7,6 +7,8 @@ public class PlayerCarryConstants{
     public static final String SHOULDER_CARRY_NBT_TAG = "isShoulderCarry";
     public static final String CUSTOM_CARRY_NBT_TAG = "isCustomCarryPosition";
 
+    public static final String CARRY_POS_LIST_SIZE = "carryposlistsize";
+
     public static final String POS_NAME_NBT_TAG = "posName";
     public static final String ROTATION_NBT_TAG = "rotationOffset";
     public static final String MULT_NBT_TAG = "xymult";
