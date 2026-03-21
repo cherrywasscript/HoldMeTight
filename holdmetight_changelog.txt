@@ -101,3 +101,5 @@ version 0.6.4-beta
     - remove carry positions you have made which will also remove them from the curios menu, the only one that cannot be removed is the one you start with named "default"
     - edit carry positions that you have made including the default one you start with
 - also the curio slots now show the name set for the carry position
+
+version 0.7.0-beta
