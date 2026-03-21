@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.network.clientbound.CAddCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CAddPlayerCarrySyncPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.CEditCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerCarrySimplePacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerDismountPlayerPacket;
@@ -12,6 +13,7 @@ import com.ricardthegreat.holdmetight.network.clientbound.CPlayerSizeMixinSyncPa
 import com.ricardthegreat.holdmetight.network.clientbound.CRemoveCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CRemovePlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SAddCustomCarryPosPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.SEditCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SEntityAddTargetScalePacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SEntityMultTargetScalePacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SEntityPutDownPacket;
@@ -132,6 +134,11 @@ public class PacketHandler {
         SRemoveCustomCarryPosPacket::new, 
         SRemoveCustomCarryPosPacket::handle);
 
+        INSTANCE.registerMessage(id++, SEditCustomCarryPosPacket.class, 
+        SEditCustomCarryPosPacket::encode, 
+        SEditCustomCarryPosPacket::new, 
+        SEditCustomCarryPosPacket::handle);
+
         INSTANCE.registerMessage(id++, CAddCustomCarryPosPacket.class, 
         CAddCustomCarryPosPacket::encode, 
         CAddCustomCarryPosPacket::new, 
@@ -141,6 +148,11 @@ public class PacketHandler {
         CRemoveCustomCarryPosPacket::encode, 
         CRemoveCustomCarryPosPacket::new, 
         CRemoveCustomCarryPosPacket::handle);
+
+        INSTANCE.registerMessage(id++, CEditCustomCarryPosPacket.class, 
+        CEditCustomCarryPosPacket::encode, 
+        CEditCustomCarryPosPacket::new, 
+        CEditCustomCarryPosPacket::handle);
     }
 
     public static void sendToServer(Object msg){

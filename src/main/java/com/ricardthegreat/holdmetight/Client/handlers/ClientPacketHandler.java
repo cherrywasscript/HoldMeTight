@@ -4,10 +4,12 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
+import com.ricardthegreat.holdmetight.carry.CarryPosition;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.network.clientbound.CAddCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CAddPlayerCarrySyncPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.CEditCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerDismountPlayerPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerSizeMixinSyncPacket;
@@ -115,6 +117,20 @@ public class ClientPacketHandler {
 
                 PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
                 playerCarry.removeCustomCarryPos(name);
+            }
+        }
+    }
+
+    public static void handleEditCarryPosPacket(CEditCustomCarryPosPacket msg, Supplier<NetworkEvent.Context> context){
+        ClientLevel level = Minecraft.getInstance().level;
+        if (level != null) {
+            Player player = level.getPlayerByUUID(msg.getUuid());
+            if(player != null) {
+                CarryPosition pos = msg.getCarryPos();
+                int index = msg.getIndex();
+
+                PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
+                playerCarry.editCustomCarryPos(pos, index);
             }
         }
     }
