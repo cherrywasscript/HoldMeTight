@@ -96,4 +96,7 @@ version 0.6.3-beta
 
 version 0.6.4-beta
 - fixed issue where an improper check caused the server to lag when carrying more than one entity
-- updated the /customcarry command 
+- updated the /customcarry command so that you can now
+    - add new carry positions which appear in the curios menu (currently will just show up as "custom" when hovered over)
+    - remove carry positions you have made which will also remove them from the curios menu, the only one that cannot be removed is the one you start with named "default"
+    - edit carry positions that you have made including the default one you start with
