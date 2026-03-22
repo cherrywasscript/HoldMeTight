@@ -1,21 +1,4 @@
 1.20.1 Changelog
-47.4
-====
- - 47.4.10 Work around mixins targeting IForgePlayer#canReach (#10680)
- - 47.4.9  Bump ASM to 9.8 for Java 25 runtime support  (#10664)
- - 47.4.8  Optimize fix for MC-176559 (#10649)
- - 47.4.7  Ignore item equality when checking shouldCauseBlockBreakReset, fixes #10645 (#10646)
- - 47.4.6  Allow command suggestions/autocomplete to search all modded paths at once without namespace provided (#10595)
- - 47.4.5  Fix ServerChatEvent thread not using correct class loader. (#10591)
- - 47.4.4  Fix ignitedByLava making blocks permanently flammable (#10570)
- - 47.4.3  Add back magic number to make mixin happy.
- - 47.4.2  Fix container screens closing when opened with an extended REACH attribute. Fixes #10560
-           Also fixes cases where creative mode effected reach incorrectly.
- - 47.4.1  Deprecate EntityRenderersEvent.AddLayers functions that hard case to LivingEntityRenderers as the backing maps do not guarantee that type. (#10513)
-           Co-authored-by: LexManos <LexManos@gmail.com>
- - 47.4.0  1.20.1 RB 4
-           https://forums.minecraftforge.net/topic/154387-forge-474-minecraft-1201/
-
 47.3
 ====
  - 47.3.39 Fix ForgeDev's test runs not working due to dead test mod (#10483)
