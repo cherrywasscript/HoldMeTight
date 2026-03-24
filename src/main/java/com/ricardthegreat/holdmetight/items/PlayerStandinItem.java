@@ -56,6 +56,9 @@ public class PlayerStandinItem extends EntityStandinItem{
 
     @Override
     public boolean overrideOtherStackedOnMe (ItemStack stackThis, ItemStack stackOther, Slot slot, ClickAction action, Player player, SlotAccess access) {
+        if (action == ClickAction.SECONDARY) {
+            return false;
+        }
         return super.overrideOtherStackedOnMe(stackThis, stackOther, slot, action, player, access);
     }
 
