@@ -57,7 +57,10 @@
       "interaction.DoorBlockInteractionMixin",
       "interaction.LeverBlockInteractionMixin",
 
-      "curios.CurioHoverTooltip"
+      "curios.CurioHoverTooltip",
+
+      "pehkui.ScreenHandlerMixinReplacement",
+      "pehkui.IForgePlayerMixin"
     ],
     "client": [
     ],
