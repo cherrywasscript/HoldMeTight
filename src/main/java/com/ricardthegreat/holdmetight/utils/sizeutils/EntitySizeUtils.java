@@ -19,7 +19,7 @@ public class EntitySizeUtils {
     private static final ScaleType hitbox_width = ScaleTypes.HITBOX_WIDTH;
     private static final ScaleType step_height = ScaleTypes.STEP_HEIGHT;
 
-    private static float maxScale = (float) HMTConfig.SERVER_CONFIG.maxHitboxScale.get();
+    private static float maxScale = HMTConfig.SERVER_CONFIG.maxHitboxScale.get().floatValue();
 
     public static void setSize(Entity entity, float size, int ticks) {
         size = lockSizeCap(size);

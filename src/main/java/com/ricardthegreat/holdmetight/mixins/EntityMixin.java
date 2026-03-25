@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.ricardthegreat.holdmetight.HMTConfig;
+import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.carry.CarryPosition;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
@@ -42,7 +43,7 @@ public abstract class EntityMixin {
     public void unnamedsizemod$interact(Player vehicle, InteractionHand hand, CallbackInfoReturnable<InteractionResult> info) {
         Entity rider = (Entity) (Object) this;
         
-        if(rider instanceof Player && vehicle.getMainHandItem().isEmpty() && EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)/4 && HMTConfig.SERVER_CONFIG.canPickupPlayers.get()){
+        if(rider instanceof Player && vehicle.getMainHandItem().isEmpty() && canPickup(vehicle, rider) && HMTConfig.SERVER_CONFIG.canPickupPlayers.get()){
             rider.startRiding(vehicle);
             
             
@@ -50,7 +51,7 @@ public abstract class EntityMixin {
             ItemStack item = PlayerStandinItem.createEntityItem(vehicle, (Player) rider);
             vehicle.getInventory().add(vehicle.getInventory().selected, item);
             
-        }else if (!(rider instanceof Player) && vehicle.getMainHandItem().isEmpty() && EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)/4 && HMTConfig.SERVER_CONFIG.canPickupEntities.get()) {
+        }else if (!(rider instanceof Player) && vehicle.getMainHandItem().isEmpty() && canPickup(vehicle, rider) && HMTConfig.SERVER_CONFIG.canPickupEntities.get()) {
             rider.startRiding(vehicle);
 
             ItemStack item = EntityStandinItem.createEntityItem(vehicle, rider);
@@ -79,8 +80,7 @@ public abstract class EntityMixin {
         Entity vehicle = (Entity) (Object) this;
         if (vehicle.hasPassenger(rider)) {
             if(vehicle instanceof Player playerV){
-                double scaleDif =  EntitySizeUtils.getSize(vehicle)/EntitySizeUtils.getSize(rider);
-                if(scaleDif<4){
+                if(!canCarry(playerV, rider)){
                     rider.stopRiding();
                 }
                 
@@ -125,7 +125,17 @@ public abstract class EntityMixin {
         yOffset *= EntitySizeUtils.getSize(vehicle);
     }
 
+    private boolean canPickup(Player vehicle, Entity rider){
+        if (vehicle.getPassengers().contains(rider)) {
+            HoldMeTight.LOGGER.debug("cannot carry something you are already carrying");
+            return false;
+        }
+        return canCarry(vehicle, rider);
+    }
 
+    private boolean canCarry(Player vehicle, Entity rider){
+        return EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)*HMTConfig.SERVER_CONFIG.pickupRatioScale.get();
+    }
     
     
 

@@ -1,0 +1,5 @@
+pehkui hasnt been updated in years and i imagine isnt likely to recieve another one so stuff needs to be fixed when forge updates and breaks stuff
+currently just using bawnorton's mixinsquared to cancel certain mixins that break but i'll be putting other things in here if they are specifically
+to fix issues with pehki
+
+replacement mixins can be found at com.ricardthegreat.holdmetight.mixins.pehkui

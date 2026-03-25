@@ -45,8 +45,8 @@ public class HoldMeTight {
     
     public static boolean curiosInstalled;
 
-    public HoldMeTight() {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public HoldMeTight(FMLJavaModLoadingContext context) {
+        IEventBus modEventBus = context.getModEventBus();
 
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
@@ -73,7 +73,7 @@ public class HoldMeTight {
         // config file for us
         //ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         //TODO add common and client sided configs
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, HMTConfig.serverSpec);
+        context.registerConfig(ModConfig.Type.SERVER, HMTConfig.serverSpec);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
