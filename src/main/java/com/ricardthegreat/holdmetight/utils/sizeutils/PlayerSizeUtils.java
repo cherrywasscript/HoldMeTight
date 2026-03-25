@@ -156,7 +156,7 @@ public class PlayerSizeUtils {
         ScaleData heightData = pEnt.pehkui_getScaleData(ScaleTypes.HITBOX_HEIGHT);
         ScaleData widthData = pEnt.pehkui_getScaleData(ScaleTypes.HITBOX_WIDTH);
 
-        float maxHitboxScale = (float) HMTConfig.SERVER_CONFIG.maxHitboxScale.get();
+        float maxHitboxScale = HMTConfig.SERVER_CONFIG.maxHitboxScale.get().floatValue();
 
         if (currentScale > maxHitboxScale) {
             float hitboxScale = maxHitboxScale/currentScale;
