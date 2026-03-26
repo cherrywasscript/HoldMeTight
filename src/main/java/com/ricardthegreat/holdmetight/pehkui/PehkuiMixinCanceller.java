@@ -5,6 +5,8 @@ import java.util.List;
 import com.bawnorton.mixinsquared.api.MixinCanceller;
 import com.ricardthegreat.holdmetight.HoldMeTight;
 
+import net.minecraftforge.versions.forge.ForgeVersion;
+
 public class PehkuiMixinCanceller implements MixinCanceller{
 
     private static List<String> CANCEL = List.of(
@@ -13,7 +15,6 @@ public class PehkuiMixinCanceller implements MixinCanceller{
 
     @Override
     public boolean shouldCancel(List<String> targetClassNames, String mixinClassName) {
-
         for (String string : CANCEL) {
             if (mixinClassName.equals(string)) {
                 HoldMeTight.LOGGER.debug("cancelling mixin:" + mixinClassName);
