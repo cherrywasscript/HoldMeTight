@@ -109,4 +109,4 @@ version 0.6.5-beta
 - added a config option to choose the scale difference required to pickup players and entities
 
 version 0.6.5.1-beta
-- added a check that (should) allow for compatability with forge versions 47.4.0 and 47.4.1 (and possibly earlier) though i cannot guaranteed compatability for older versions will be constant as i update
+- added a check that (should) allow for compatibility  with forge versions 47.4.0 and 47.4.1 (and possibly earlier) though i cannot guaranteed compatibility  for older versions will be constant as i update
