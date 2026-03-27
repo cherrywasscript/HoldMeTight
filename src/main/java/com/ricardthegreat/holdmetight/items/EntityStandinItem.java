@@ -7,12 +7,10 @@ import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.client.armposes.HeldEntityArmPose;
-import com.ricardthegreat.holdmetight.client.armposes.HeldEntityArmPoser;
 import com.ricardthegreat.holdmetight.client.renderers.HeldEntityItemRenderer;
 import com.ricardthegreat.holdmetight.init.ItemInit;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
@@ -22,14 +20,12 @@ import com.ricardthegreat.holdmetight.network.serverbound.SEntityPutDownPacket;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.client.model.HumanoidModel.ArmPose;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;

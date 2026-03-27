@@ -11,7 +11,6 @@ import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
 
-import net.minecraftforge.fml.loading.FMLLoader;
 import net.minecraftforge.versions.forge.ForgeVersion;
 
 public class HoldMeTightMixinConfigPlugin implements IMixinConfigPlugin {

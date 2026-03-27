@@ -5,13 +5,9 @@ import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.carry.PlayerCarry;
-import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.serverbound.SEntityAddTargetScalePacket;
-import com.ricardthegreat.holdmetight.size.PlayerSize;
-import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
 
@@ -24,9 +20,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.common.util.LazyOptional;
-import virtuoel.pehkui.api.ScaleData;
-import virtuoel.pehkui.util.PehkuiEntityExtensions;
 
 public class MasterSizeRemoteScreen extends AdvancedSizeRemoteScreen{
 

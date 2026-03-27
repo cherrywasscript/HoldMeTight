@@ -1,9 +1,6 @@
 package com.ricardthegreat.holdmetight.Commands;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import javax.annotation.Nullable;
 
 import com.mojang.brigadier.CommandDispatcher;
@@ -20,7 +17,6 @@ import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.serverbound.SAddCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SEditCustomCarryPosPacket;
-import com.ricardthegreat.holdmetight.network.serverbound.SPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SRemoveCustomCarryPosPacket;
 
 import net.minecraft.commands.CommandSourceStack;
@@ -28,10 +24,7 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
-import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
 public class CustomCarryCommand {
     private static final SimpleCommandExceptionType FAILED_TO_REMOVE_CUSTOM_POS = new SimpleCommandExceptionType(Component.translatable("commands." + HoldMeTight.MODID + ".remove.failed"));
