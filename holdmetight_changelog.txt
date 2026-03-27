@@ -102,4 +102,16 @@ version 0.6.4-beta
     - edit carry positions that you have made including the default one you start with
 - also the curio slots now show the name set for the carry position
 
+version 0.6.5-beta
+- updated the mod to be on the current recommended forge version (47.4.10)
+- fixed many issues that came with that
+- fixed issues with config that i am unsure were present before the forge update but may have been
+- added a config option to choose the scale difference required to pickup players and entities
+
+version 0.6.5.1-beta
+- added a check that (should) allow for compatability with forge versions 47.4.0 and 47.4.1 (and possibly earlier) though i cannot guaranteed compatability for older versions will be constant as i update
+
+version 0.6.6-beta
+- fixed a crash on singleplayer and multiplayer where picking up and putting down entites would crash you as well as leaving and rejoining a server while holding someone would cause you to get kicked
+
 version 0.7.0-beta

@@ -3,20 +3,16 @@ package com.ricardthegreat.holdmetight.network.serverbound;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import com.ricardthegreat.holdmetight.carry.CarryPosition;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
-import com.ricardthegreat.holdmetight.network.clientbound.CAddCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CRemoveCustomCarryPosPacket;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraftforge.network.NetworkEvent;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
-import top.theillusivec4.curios.client.gui.CuriosScreenV2;
 
 public class SRemoveCustomCarryPosPacket {
     private final String pos;

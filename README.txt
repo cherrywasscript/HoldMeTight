@@ -8,7 +8,7 @@ An addon for pehkui that adds more size interactions as well as new ways to chan
 Features:
 - Remotes for changing your size and the size of others
 - Potions of growth and shrinking
-- The ability to pick up players who are at least 1/4 your size and choose where you carry them
+- The ability to pick up players who are at least 1/4 your size (configurable) and choose where you carry them
 - Small players have the ability to climb up certain blocks (such as dirt and gravel) and can climb all blocks if they are holding a slimeball
 - Extremely small players are too quiet to be heard by skulk entities
 - Extremely small players are too light to trigger pressureplates or activate switches and buttons

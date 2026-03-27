@@ -2,10 +2,8 @@ package com.ricardthegreat.holdmetight.carry;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Iterator;
 import java.util.UUID;
-
-import org.jline.utils.Log;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.items.EntityStandinItem;
@@ -19,7 +17,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 
@@ -81,8 +78,10 @@ public class PlayerCarry {
             }
         }else{
             if (!player.level().isClientSide && !checkedCarriedEntities) {
+                checkedCarriedEntities = true;
                 HoldMeTight.LOGGER.debug("checking carried entities");
-                for (CompoundTag tag : carriedEntities) {
+                for (Iterator<CompoundTag> it = carriedEntities.iterator(); it.hasNext(); ) {
+                    CompoundTag tag = it.next();
                     UUID id = tag.getUUID(EntityStandinItem.ENTITY_UUID);
                     boolean shouldRemove = true;
                     for (Entity entity : player.getPassengers()) {
@@ -93,13 +92,12 @@ public class PlayerCarry {
 
                     if (shouldRemove) {
                         HoldMeTight.LOGGER.debug("found entity " + id + " that is not carried removing");
-                        removeCarriedEntity(id);
+                        it.remove();
 
                         DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> 
                             PacketHandler.sendToAllClients(new CRemovePlayerCarrySyncPacket(id, player.getUUID())));
                     }
                 }
-                checkedCarriedEntities = true;
             }
         }
     }

@@ -1,7 +1,6 @@
 package com.ricardthegreat.holdmetight.events;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.data.HMTCurioDataProvider;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 
 import net.minecraftforge.data.event.GatherDataEvent;

@@ -176,6 +176,11 @@ repositories {
             includeGroup "maven.modrinth"
         }
     }
+
+    //bawnorton maven (mixinsquared)
+    maven { url = "https://maven.bawnorton.com/releases" }
+    // Mirror
+    maven { url = "https://maven.enjarai.dev/mirrors" }
 }
 
 //for some cunting reason you need to use ./gradlew --refresh-dependencies   to refresh dependencies because ./gradlew does fucking nothing fucking
@@ -208,9 +213,9 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
     
-    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.4.1"))
-    implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.4.1")) {
-        jarJar.ranged(it, "[0.4.1,)")
+    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.3"))
+    implementation(jarJar("io.github.llamalad7:mixinextras-forge:0.5.3")) {
+        jarJar.ranged(it, "[0.5.3,)")
     }
 
 
@@ -226,6 +231,12 @@ dependencies {
     compileOnly(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}:api"))
     // Use the full Curios API jar at runtime
     implementation(fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}"))
+
+
+    //Mixin squared (only using this to cancel pehkui mixins that break my dev environment)
+    implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-common:${mixinsquared_version}"))
+    implementation("com.github.bawnorton.mixinsquared:mixinsquared-forge:${mixinsquared_version}")
+
 }
 
 mixin {
