@@ -110,3 +110,6 @@ version 0.6.5-beta
 
 version 0.6.5.1-beta
 - added a check that (should) allow for compatability with forge versions 47.4.0 and 47.4.1 (and possibly earlier) though i cannot guaranteed compatability for older versions will be constant as i update
+
+version 0.6.6-beta
+- fixed a crash on singleplayer and multiplayer where picking up and putting down entites would crash you as well as leaving and rejoining a server while holding someone would cause you to get kicked
