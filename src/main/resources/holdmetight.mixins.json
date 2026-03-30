@@ -61,7 +61,9 @@
       "curios.CurioHoverTooltip",
 
       "pehkui.ScreenHandlerMixinReplacement",
-      "pehkui.IForgePlayerMixin"
+      "pehkui.IForgePlayerMixin",
+
+      "sound.EntitySoundMixin"
     ],
     "client": [
     ],
