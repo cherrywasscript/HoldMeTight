@@ -3,7 +3,6 @@ package com.ricardthegreat.holdmetight.network.clientbound;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import com.ricardthegreat.holdmetight.carry.CarryPosition;
 import com.ricardthegreat.holdmetight.client.handlers.ClientPacketHandler;
 
 import net.minecraft.network.FriendlyByteBuf;

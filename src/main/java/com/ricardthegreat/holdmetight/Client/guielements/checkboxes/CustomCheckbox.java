@@ -18,7 +18,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class CustomCheckbox extends AbstractButton{
 
     //this is temporary
-    private static final ResourceLocation TEXTURE = new ResourceLocation(HoldMeTight.MODID, "textures/gui/checkbox.png");
+    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(HoldMeTight.MODID, "textures/gui/checkbox.png");
     private boolean selected;
     private final boolean showLabel;
     private int textWidth;

@@ -2,8 +2,6 @@ package com.ricardthegreat.holdmetight.blocks.tinyjars;
 
 import javax.annotation.Nonnull;
 
-import com.ricardthegreat.holdmetight.carry.PlayerCarry;
-import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.init.ItemInit;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 

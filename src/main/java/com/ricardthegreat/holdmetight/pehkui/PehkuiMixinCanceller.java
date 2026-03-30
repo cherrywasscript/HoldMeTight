@@ -5,8 +5,6 @@ import java.util.List;
 import com.bawnorton.mixinsquared.api.MixinCanceller;
 import com.ricardthegreat.holdmetight.HoldMeTight;
 
-import net.minecraftforge.versions.forge.ForgeVersion;
-
 public class PehkuiMixinCanceller implements MixinCanceller{
 
     private static List<String> CANCEL = List.of(

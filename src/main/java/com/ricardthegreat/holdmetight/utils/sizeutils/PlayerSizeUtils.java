@@ -1,7 +1,6 @@
 package com.ricardthegreat.holdmetight.utils.sizeutils;
 
 import com.ricardthegreat.holdmetight.HMTConfig;
-import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.size.PlayerSize;
 import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
 

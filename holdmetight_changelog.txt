@@ -109,4 +109,9 @@ version 0.6.5-beta
 - added a config option to choose the scale difference required to pickup players and entities
 
 version 0.6.5.1-beta
-- added a check that (should) allow for compatibility  with forge versions 47.4.0 and 47.4.1 (and possibly earlier) though i cannot guaranteed compatibility  for older versions will be constant as i update
+- added a check that (should) allow for compatability with forge versions 47.4.0 and 47.4.1 (and possibly earlier) though i cannot guaranteed compatability for older versions will be constant as i update
+
+version 0.6.6-beta
+- fixed a crash on singleplayer and multiplayer where picking up and putting down entites would crash you as well as leaving and rejoining a server while holding someone would cause you to get kicked
+- added icons for growth, shrink and supershrink effects
+- added a config option to enable the pitch of sounds made by entities to change based on their size as well as options for the minimum and maximum change of pitch (this is off by default as i can imagine it being quite annoying)

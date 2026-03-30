@@ -1,27 +1,18 @@
 package com.ricardthegreat.holdmetight.utils;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
-import com.google.common.collect.Multimap;
 import com.ricardthegreat.holdmetight.init.ItemInit;
 import com.ricardthegreat.holdmetight.items.EntityStandinItem;
-import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.utils.constants.CarryPosConstants;
 
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotResult;
-import top.theillusivec4.curios.api.type.ISlotType;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
-import top.theillusivec4.curios.client.gui.CuriosScreen;
-import top.theillusivec4.curios.client.gui.CuriosScreenV2;
 
 public class CheckNonInvSlotUtil {
 

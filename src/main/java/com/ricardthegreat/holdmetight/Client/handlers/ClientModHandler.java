@@ -1,17 +1,13 @@
 package com.ricardthegreat.holdmetight.client.handlers;
 
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraft.client.color.item.ItemColors;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
-
 import java.util.Set;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
