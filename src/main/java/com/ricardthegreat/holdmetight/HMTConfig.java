@@ -1,5 +1,7 @@
 package com.ricardthegreat.holdmetight;
 
+import java.util.function.Supplier;
+
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -59,6 +61,9 @@ public class HMTConfig {
                 public final ForgeConfigSpec.BooleanValue damageTakenScaleLink;
                 public final ForgeConfigSpec.BooleanValue canPickupEntities;
                 public final ForgeConfigSpec.BooleanValue canPickupPlayers;
+                public final ForgeConfigSpec.BooleanValue changeSoundPitchWithScale;
+                private final ForgeConfigSpec.ConfigValue<Double> soundPitchMin;
+                private final ForgeConfigSpec.ConfigValue<Double> soundPitchMax;
                 public final ForgeConfigSpec.BooleanValue playerChatScale;
                 public final ForgeConfigSpec.DoubleValue maximumMovespeed;
                 public final ForgeConfigSpec.DoubleValue maximumElytraspeed;
@@ -92,6 +97,12 @@ public class HMTConfig {
                                 .define("canPickupMobs", true);
                         this.canPickupPlayers = builder.comment("enable or disable the ability to pickup players")
                                 .define("canPickupPlayers", true);
+
+                        this.changeSoundPitchWithScale = builder.comment("enable the changing of pitch when an entities size changes")
+                                .define("changeSoundPitchWithScale", false);
+                        this.soundPitchMin = builder.comment("the range that the pitch can be changed by")
+                                .define("soundPitchMin", 0.5d);
+                        this.soundPitchMax = builder.define("soundPitchMax", 2d);
                         
                         this.playerChatScale = builder//.comment("should player messages be scaled based on their size (this is not properly tested and could cause many issues use at your own risk)")
                                 .comment("this isnt used currently")
@@ -118,6 +129,15 @@ public class HMTConfig {
                                 maxEntityScale.set(1d);;
                         }
                         return maxEntityScale.get().floatValue();
+                }
+
+                public Pair<Double,Double> getPitchRange(){
+                        if (this.soundPitchMin.get() > this.soundPitchMax.get()) {
+                                HoldMeTight.LOGGER.error("Error soundPitchMin value:" + soundPitchMin + "greater than soundPitchMax value:" + soundPitchMax + "resetting to default");
+                                soundPitchMin.set(0.5d);
+                                soundPitchMax.set(2d);
+                        }
+                        return Pair.of(soundPitchMin.get(), soundPitchMax.get());
                 }
         }
 }
