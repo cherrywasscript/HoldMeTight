@@ -115,3 +115,6 @@ version 0.6.6-beta
 - fixed a crash on singleplayer and multiplayer where picking up and putting down entites would crash you as well as leaving and rejoining a server while holding someone would cause you to get kicked
 - added icons for growth, shrink and supershrink effects
 - added a config option to enable the pitch of sounds made by entities to change based on their size as well as options for the minimum and maximum change of pitch (this is off by default as i can imagine it being quite annoying)
+
+version 0.6.7-beta
+- fixed non player entites not properly having their position updated while being carried

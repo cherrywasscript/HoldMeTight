@@ -146,11 +146,7 @@ public class EntityStandinItem extends Item implements ICurioItem{
             if (passenger == null) {
                 stack.shrink(1);
             }else if(entity instanceof Player vehicle){
-                if (passenger instanceof Player carried) {
-                    checkCorrectCarryPos(carried, vehicle, index, stack, selected);
-                }else{
-
-                }
+                checkCorrectCarryPos(passenger, vehicle, index, stack, selected);
             }
         }
         super.inventoryTick(stack, level, entity, index, selected);
@@ -207,7 +203,7 @@ public class EntityStandinItem extends Item implements ICurioItem{
     }
 
     
-    private void checkCorrectCarryPos(Player carried, Player player, int index, ItemStack stack, boolean selected){
+    private void checkCorrectCarryPos(Entity carried, Player player, int index, ItemStack stack, boolean selected){
         CompoundTag stackTag = stack.getTag();
         int prevIndex = stackTag.getInt(INV_ID);
         if (!player.level().isClientSide && index != prevIndex) {
