@@ -21,7 +21,7 @@
 
 
       "rendering.FrustumMixin",
-      "rendering.DontRenderInvisibleCarriedPlayers",
+      "rendering.DontRenderInvisibleCarriedEntities",
 
 
       "playerextensions.PlayerRenderMixin",
@@ -63,7 +63,11 @@
       "pehkui.ScreenHandlerMixinReplacement",
       "pehkui.IForgePlayerMixin",
 
-      "sound.EntitySoundMixin"
+      "sound.EntitySoundMixin",
+
+      "sizeinteractions.AdjustPlayerKnockback",
+      "sizeinteractions.AdjustMobKnockback",
+      "sizeinteractions.AdjustTakenKnockback"
     ],
     "client": [
     ],
