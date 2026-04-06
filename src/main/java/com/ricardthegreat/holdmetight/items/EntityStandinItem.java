@@ -16,6 +16,8 @@ import com.ricardthegreat.holdmetight.init.ItemInit;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.CAddPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CRemovePlayerCarrySyncPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.CThrowEntityPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.CThrowPlayerPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SEntityPutDownPacket;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
@@ -23,6 +25,7 @@ import net.minecraft.client.model.HumanoidModel.ArmPose;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -34,7 +37,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraftforge.fml.DistExecutor;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 public class EntityStandinItem extends Item implements ICurioItem{
@@ -261,5 +267,49 @@ public class EntityStandinItem extends Item implements ICurioItem{
         
         
         return item;
+    }
+
+    @Override
+    public boolean onDroppedByPlayer(ItemStack item, Player player) {
+        CompoundTag tag = item.getTag();
+        if (tag != null) {
+            UUID id = tag.getUUID(ENTITY_UUID);
+            for (Entity passenger : player.getPassengers()) {
+                if (passenger.getUUID().equals(id)) {
+                    passenger.stopRiding();
+                    Vec3 movement = thrownMovement(player);
+                    passenger.setDeltaMovement(movement); 
+                    passenger.hurtMarked = true;
+
+                    
+                    if (!player.level().isClientSide) {
+                        PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
+                        playerCarry.removeCarriedEntity(id);
+                        DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> 
+                            PacketHandler.sendToAllClients(new CRemovePlayerCarrySyncPacket(id, player.getUUID())));
+
+                        if (passenger instanceof Player) {
+                            DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> 
+                                PacketHandler.sendToAllClients(new CThrowPlayerPacket(id, movement.toVector3f())));
+                        }else{
+                            DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> 
+                                PacketHandler.sendToAllClients(new CThrowEntityPacket(tag.getInt(ENTITY_ID), movement.toVector3f())));
+                        }
+                    }
+                }
+            }
+        }
+
+        return super.onDroppedByPlayer(item, player);
+    }
+
+    private Vec3 thrownMovement(Player player){
+        float f8 = Mth.sin(player.getXRot() * ((float)Math.PI / 180F));
+        float f2 = Mth.cos(player.getXRot() * ((float)Math.PI / 180F));
+        float f3 = Mth.sin(player.getYRot() * ((float)Math.PI / 180F));
+        float f4 = Mth.cos(player.getYRot() * ((float)Math.PI / 180F));
+        float f5 = player.getRandom().nextFloat() * ((float)Math.PI * 2F);
+        float f6 = 0.02F * player.getRandom().nextFloat();
+        return new Vec3((double)(-f3 * f2 * 0.3F) + Math.cos((double)f5) * (double)f6, (double)(-f8 * 0.3F + 0.1F + (player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.1F), (double)(f4 * f2 * 0.3F) + Math.sin((double)f5) * (double)f6);
     }
 }
