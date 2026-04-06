@@ -11,7 +11,7 @@ import net.minecraft.world.entity.Mob;
 @Mixin(Mob.class)
 public class AdjustMobKnockback {
     
-    @ModifyArg(method = "doHurtTarget(Lnet/minecraft/world/entity/Entity;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"), index = 0)
+    @ModifyArg(method = "doHurtTarget(Lnet/minecraft/world/entity/Entity;)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"), index = 0)
     private double modifyStrength(double strength){
         Mob entity = (Mob) (Object) this;
         float scale = EntitySizeUtils.getSize(entity);

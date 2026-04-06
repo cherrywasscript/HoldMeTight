@@ -13,8 +13,8 @@ import net.minecraft.world.entity.LivingEntity;
 @Mixin(LivingEntity.class)
 public class AdjustTakenKnockback {
     
-    @ModifyArg(method = "hurt(Lnet/minecraft/world/damagesource/DamageSource;F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"), index = 0)
-    private double modifyStrength$sprint(double strength, @Local Entity entity){
+    @ModifyArg(method = "hurt(Lnet/minecraft/world/damagesource/DamageSource;F)Z", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"), index = 0)
+    private double modifyStrength(double strength, @Local Entity entity){
         float scale = EntitySizeUtils.getSize(entity);
         scale = (float) Math.pow(scale, 0.6);
         return strength*scale;
