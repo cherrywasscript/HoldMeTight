@@ -96,9 +96,10 @@ public class ForgeModEvents {
     //when item is thrown check if it is player item, if it is then remove it and put the player it represents there with the same momentum
     @SubscribeEvent
     public static void onItemTossEvent(ItemTossEvent event){
+        /*
         ItemEntity entity = event.getEntity();
         
-        if (entity.getItem().getItem() instanceof PlayerStandinItem) {
+        if (entity.getItem().getItem() instanceof EntityStandinItem) {
             Player thrower = event.getPlayer();
 
             ItemStack stack = entity.getItem();
@@ -132,6 +133,7 @@ public class ForgeModEvents {
                 }
             }
         }
+             */
     }
 
     public static void syncPlayerCapabilities(ServerPlayer serverJoiner, MinecraftServer server){
