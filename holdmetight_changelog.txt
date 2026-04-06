@@ -118,3 +118,6 @@ version 0.6.6-beta
 
 version 0.6.7-beta
 - fixed non player entites not properly having their position updated while being carried
+- fixed issue where dropping an item related to a non player mob would cause them to permanently stick to you until they died
+- knockback applied and recieved now scales with size, e.g. a bigger entity will hit with more knockback and take less knockback
+- updated how pitch scaling works so hopefully it now correctly scales the pitch of players as well as scales the pitch of sounds that only exist locally
