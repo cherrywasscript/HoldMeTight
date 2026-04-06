@@ -12,18 +12,6 @@ import net.minecraft.world.entity.Entity;
 
 @Mixin(Entity.class)
 public class EntitySoundMixin {
-
-    @ModifyVariable(method = "playSound(Lnet/minecraft/sounds/SoundEvent;FF)V", at = @At("HEAD"), ordinal = 0)
-    public float playSound$volume(float volume) {
-        /* 
-        if (HMTConfig.SERVER_CONFIG.changeSoundVolumeWithScale.get()) {
-            float scale = getScaleClamped(HMTConfig.SERVER_CONFIG.getVolumeRange());
-            volume *= scale;
-        }
-        */
-        return volume;
-    }
-
     @ModifyVariable(method = "playSound(Lnet/minecraft/sounds/SoundEvent;FF)V", at = @At("HEAD"), ordinal = 1)
     public float playSound$pitch(float pitch) {
         if (HMTConfig.SERVER_CONFIG.changeSoundPitchWithScale.get()) {
