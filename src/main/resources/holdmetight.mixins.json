@@ -64,6 +64,8 @@
       "pehkui.IForgePlayerMixin",
 
       "sound.EntitySoundMixin",
+      "sound.PlayerSoundMixin",
+      "sound.LocalPlayerSoundMixin",
 
       "sizeinteractions.AdjustPlayerKnockback",
       "sizeinteractions.AdjustMobKnockback",
