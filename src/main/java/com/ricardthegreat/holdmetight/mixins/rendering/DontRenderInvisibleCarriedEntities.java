@@ -24,9 +24,6 @@ public class DontRenderInvisibleCarriedEntities<T extends LivingEntity, M extend
 
     @Inject(at = @At("HEAD"), method = "render(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", cancellable = true)
     public void render(T ent, float p_115309_, float p_115310_, PoseStack p_115311_, MultiBufferSource p_115312_, int p_115313_, CallbackInfo info) {
-        if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Pre<T, M>(ent, (LivingEntityRenderer) (Object) this, p_115310_, p_115311_, p_115312_, p_115313_))) return;
-
-        
         if (ent.getVehicle() instanceof Player vehicle) {
             PlayerCarry vehicleCarry = PlayerCarryProvider.getPlayerCarryCapability(vehicle);
 
@@ -36,6 +33,5 @@ public class DontRenderInvisibleCarriedEntities<T extends LivingEntity, M extend
                 info.cancel();
             }
         } 
-        
     }
 }
