@@ -21,7 +21,7 @@
 
 
       "rendering.FrustumMixin",
-      "rendering.DontRenderInvisibleCarriedPlayers",
+      "rendering.DontRenderInvisibleCarriedEntities",
       "rendering.CustomTooltip",
 
 
@@ -62,7 +62,15 @@
       "curios.CurioHoverTooltip",
 
       "pehkui.ScreenHandlerMixinReplacement",
-      "pehkui.IForgePlayerMixin"
+      "pehkui.IForgePlayerMixin",
+
+      "sound.EntitySoundMixin",
+      "sound.PlayerSoundMixin",
+      "sound.LocalPlayerSoundMixin",
+
+      "sizeinteractions.AdjustPlayerKnockback",
+      "sizeinteractions.AdjustMobKnockback",
+      "sizeinteractions.AdjustTakenKnockback"
     ],
     "client": [
     ],

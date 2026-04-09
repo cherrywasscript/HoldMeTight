@@ -14,6 +14,8 @@ import com.ricardthegreat.holdmetight.network.clientbound.CPlayerDismountPlayerP
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerSizeMixinSyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CRemoveCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CRemovePlayerCarrySyncPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.CThrowEntityPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.CThrowPlayerPacket;
 import com.ricardthegreat.holdmetight.size.PlayerSize;
 import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
 
@@ -21,7 +23,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.network.NetworkEvent;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.Vec3;
 
 public class ClientPacketHandler {
 
@@ -33,6 +37,30 @@ public class ClientPacketHandler {
                 player.stopRiding();
             }
         }   
+    }
+
+    public static void handleThrowPlayerPacket(CThrowPlayerPacket msg, Supplier<NetworkEvent.Context> context){
+        ClientLevel level = Minecraft.getInstance().level;
+        if(level != null){
+            Player thrown = level.getPlayerByUUID(msg.getThrownId());
+            if(thrown != null) {
+                thrown.stopRiding();
+                thrown.setDeltaMovement(new Vec3(msg.getMovement())); 
+                thrown.hurtMarked = true;
+            }
+        }
+    }
+
+    public static void handleThrowEntityPacket(CThrowEntityPacket msg, Supplier<NetworkEvent.Context> context){
+        ClientLevel level = Minecraft.getInstance().level;
+        if(level != null){
+            Entity thrown = level.getEntity(msg.getThrownId());
+            if(thrown != null) {
+                thrown.stopRiding();
+                thrown.setDeltaMovement(new Vec3(msg.getMovement())); 
+                thrown.hurtMarked = true;
+            }
+        }
     }
 
     public static void handleCarryPacket(CPlayerCarrySyncPacket msg, Supplier<NetworkEvent.Context> context){

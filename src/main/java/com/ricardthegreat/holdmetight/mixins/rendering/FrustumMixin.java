@@ -6,6 +6,9 @@ import org.joml.Vector4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.ricardthegreat.holdmetight.utils.rendering.FrustumIntersectionCustom;
 
@@ -19,12 +22,16 @@ public class FrustumMixin{
    @Shadow Matrix4f matrix;
    @Shadow Vector4f viewVector;
 
-   @Overwrite
-   private void calculateFrustum(Matrix4f p_253909_, Matrix4f p_254521_) {
-      p_254521_.mul(p_253909_, this.matrix);
+   @Inject(at = @At("HEAD"), method = "calculateFrustum(Lorg/joml/Matrix4f;Lorg/joml/Matrix4f;)V", cancellable = true)
+   private void calculateFrustum(Matrix4f p_253909_, Matrix4f p_254521_, CallbackInfo info) {
+      if (true) {
+         p_254521_.mul(p_253909_, this.matrix);
 
-      ((FrustumIntersectionCustom) intersection).set(this.matrix);
+         ((FrustumIntersectionCustom) intersection).set(this.matrix);
 
-      this.viewVector = this.matrix.transformTranspose(new Vector4f(0.0F, 0.0F, 1.0F, 0.0F));
+         this.viewVector = this.matrix.transformTranspose(new Vector4f(0.0F, 0.0F, 1.0F, 0.0F));
+
+         info.cancel();
+      }
    }
 }

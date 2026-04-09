@@ -12,6 +12,7 @@ import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.CRemovePlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.size.PlayerSize;
 import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
+import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -27,6 +28,9 @@ import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerRespawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -92,9 +96,10 @@ public class ForgeModEvents {
     //when item is thrown check if it is player item, if it is then remove it and put the player it represents there with the same momentum
     @SubscribeEvent
     public static void onItemTossEvent(ItemTossEvent event){
+        /*
         ItemEntity entity = event.getEntity();
         
-        if (entity.getItem().getItem() instanceof PlayerStandinItem) {
+        if (entity.getItem().getItem() instanceof EntityStandinItem) {
             Player thrower = event.getPlayer();
 
             ItemStack stack = entity.getItem();
@@ -128,6 +133,7 @@ public class ForgeModEvents {
                 }
             }
         }
+             */
     }
 
     public static void syncPlayerCapabilities(ServerPlayer serverJoiner, MinecraftServer server){
@@ -158,4 +164,19 @@ public class ForgeModEvents {
             }
     }
 
+    @SubscribeEvent
+    public static void onLivingKnockbackEvent(LivingKnockBackEvent event){
+        float scale = EntitySizeUtils.getSize(event.getEntity());
+        float strength = event.getOriginalStrength();
+        System.out.println("kb event strength:" + strength);
+        scale = (float) Math.pow(scale, 0.6);
+        strength /= scale;
+        System.out.println("kb event strength mod:" + strength);
+        event.setStrength(strength);
+    }
+
+    @SubscribeEvent
+    public static void onLivingAttackEvent(LivingAttackEvent event){
+        
+    }
 }

@@ -12,6 +12,8 @@ import com.ricardthegreat.holdmetight.network.clientbound.CPlayerDismountPlayerP
 import com.ricardthegreat.holdmetight.network.clientbound.CPlayerSizeMixinSyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CRemoveCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CRemovePlayerCarrySyncPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.CThrowEntityPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.CThrowPlayerPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SAddCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SEditCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SEntityAddTargetScalePacket;
@@ -153,6 +155,16 @@ public class PacketHandler {
         CEditCustomCarryPosPacket::encode, 
         CEditCustomCarryPosPacket::new, 
         CEditCustomCarryPosPacket::handle);
+
+        INSTANCE.registerMessage(id++, CThrowPlayerPacket.class, 
+        CThrowPlayerPacket::encode, 
+        CThrowPlayerPacket::new, 
+        CThrowPlayerPacket::handle);
+
+        INSTANCE.registerMessage(id++, CThrowEntityPacket.class, 
+        CThrowEntityPacket::encode, 
+        CThrowEntityPacket::new, 
+        CThrowEntityPacket::handle);
     }
 
     public static void sendToServer(Object msg){
