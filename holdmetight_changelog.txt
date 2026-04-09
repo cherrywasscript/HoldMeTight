@@ -121,3 +121,6 @@ version 0.6.7-beta
 - fixed issue where dropping an item related to a non player mob would cause them to permanently stick to you until they died
 - knockback applied and recieved now scales with size, e.g. a bigger entity will hit with more knockback and take less knockback
 - updated how pitch scaling works so hopefully it now correctly scales the pitch of players as well as scales the pitch of sounds that only exist locally
+
+version 0.6.8-beta
+- fixed issue with quark where viewing an emoting player would cause the game to crash (also probably fixes other render based crashes that just hadnt been encountered/reported)
