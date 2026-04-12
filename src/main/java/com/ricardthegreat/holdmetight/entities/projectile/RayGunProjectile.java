@@ -17,11 +17,17 @@ import net.minecraft.world.phys.Vec3;;
 
 public class RayGunProjectile extends Projectile {
 
+    private static int LIFESPAN = 200;
+
     private float scale = 1.0f;
     private boolean isMult = false;
+    private int age;
+
+    public int rayLifespan = RayGunProjectile.LIFESPAN;
 
     public RayGunProjectile(EntityType<? extends RayGunProjectile> entityType, Level level) {
         super(entityType, level);
+        this.age = 0;
     }
 
     public RayGunProjectile(LivingEntity entity, Level level, float scale, boolean isMult) {
@@ -74,6 +80,11 @@ public class RayGunProjectile extends Projectile {
             }
             //this.setDeltaMovement(0, 0, 0);
             this.setPos(d0, d1, d2);
+        }
+
+        age++;
+        if (this.age > this.rayLifespan) {
+            this.discard();
         }
     }
 
