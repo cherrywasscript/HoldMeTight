@@ -9,7 +9,8 @@ public class PehkuiMixinCanceller implements MixinCanceller{
 
     private static List<String> CANCEL = List.of(
         "virtuoel.pehkui.mixin.compat1204minus.ScreenHandlerMixin", 
-        "virtuoel.pehkui.mixin.reach.compat1204minus.ScreenHandlerMixin");
+        "virtuoel.pehkui.mixin.reach.compat1204minus.ScreenHandlerMixin",
+        "virtuoel.pehkui.mixin.reach.compat1204minus.compat1194plus.InventoryMixin");
 
     @Override
     public boolean shouldCancel(List<String> targetClassNames, String mixinClassName) {
