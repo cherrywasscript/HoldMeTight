@@ -4,6 +4,8 @@ import javax.annotation.Nonnull;
 
 import com.ricardthegreat.holdmetight.client.ClientHooks;
 import com.ricardthegreat.holdmetight.entities.projectile.RayGunProjectile;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -11,9 +13,14 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.EntityHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 
@@ -52,7 +59,6 @@ public class SizeRay extends Item {
 
         }else if (!player.isShiftKeyDown() && !level.isClientSide()) {
 
-            System.out.println("scale: "+ tag.getFloat(SCALE_TAG) + " ismult: " + tag.getBoolean(MULT_TAG));
             RayGunProjectile rayGunProjectile = new RayGunProjectile(player, level, tag.getFloat(SCALE_TAG), tag.getBoolean(MULT_TAG));
             rayGunProjectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1.5F, 1.0F);
             rayGunProjectile.setNoGravity(true);
