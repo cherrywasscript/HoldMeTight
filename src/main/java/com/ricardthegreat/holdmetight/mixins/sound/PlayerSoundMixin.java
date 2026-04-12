@@ -39,12 +39,9 @@ public class PlayerSoundMixin {
 
     @ModifyVariable(method = "playSound(Lnet/minecraft/sounds/SoundEvent;FF)V", at = @At("HEAD"), ordinal = 1)
     public float playSound$pitch(float pitch) {
-        System.out.println("playerpitch:" + pitch);
         if (HMTConfig.SERVER_CONFIG.changeSoundPitchWithScale.get()) {
-            System.out.println("modifying");
             float scale = getScaleClamped(HMTConfig.SERVER_CONFIG.getPitchRange());
             pitch /= scale;
-            System.out.println("playerpitchmod:" + pitch);
         }
         return pitch;
     }
