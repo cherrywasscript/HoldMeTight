@@ -1,6 +1,8 @@
 package com.ricardthegreat.holdmetight.client.handlers;
 
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.gui.screens.inventory.ShulkerBoxScreen;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
@@ -20,8 +22,10 @@ import com.ricardthegreat.holdmetight.client.renderers.CollarRenderer;
 import com.ricardthegreat.holdmetight.client.renderers.RayGunProjectileRenderer;
 import com.ricardthegreat.holdmetight.client.renderers.WandProjectileRenderer;
 import com.ricardthegreat.holdmetight.client.renderers.layers.PaperWingsLayer;
+import com.ricardthegreat.holdmetight.client.screens.HeldPlayerInvScreen;
 import com.ricardthegreat.holdmetight.init.EntityInit;
 import com.ricardthegreat.holdmetight.init.ItemInit;
+import com.ricardthegreat.holdmetight.init.MenuInit;
 import com.ricardthegreat.holdmetight.items.CollarItem;
 import com.ricardthegreat.holdmetight.items.PaperWingsItem;
 
@@ -31,9 +35,16 @@ import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
+import top.theillusivec4.curios.client.ClientEventHandler;
+import top.theillusivec4.curios.client.IconHelper;
+import top.theillusivec4.curios.client.gui.CuriosScreen;
+import top.theillusivec4.curios.client.gui.CuriosScreenV2;
+import top.theillusivec4.curios.common.CuriosRegistry;
 
 @Mod.EventBusSubscriber(modid = HoldMeTight.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientModHandler {
@@ -88,6 +99,8 @@ public class ClientModHandler {
     public static void onClientSetup(FMLClientSetupEvent event){ 
         EntityRenderers.register(EntityInit.RAY_GUN_PROJECTILE.get(), RayGunProjectileRenderer::new);
         EntityRenderers.register(EntityInit.WAND_PROJECTILE.get(), WandProjectileRenderer::new);
+
+        MenuScreens.register(MenuInit.HELD_PLAYER_MENU.get(), HeldPlayerInvScreen::new);
 
         event.enqueueWork(() -> {
             ItemProperties.register(ItemInit.PAPER_WINGS_ITEM.get(), new ResourceLocation("broken"), (stack, lebel, entity, seed) -> PaperWingsItem.isFlyEnabled(stack) ? 0 : 1);
