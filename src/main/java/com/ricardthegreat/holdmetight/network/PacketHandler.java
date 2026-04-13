@@ -14,8 +14,6 @@ import com.ricardthegreat.holdmetight.network.clientbound.CRemoveCustomCarryPosP
 import com.ricardthegreat.holdmetight.network.clientbound.CRemovePlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CThrowEntityPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CThrowPlayerPacket;
-import com.ricardthegreat.holdmetight.network.serverbound.SAddCustomCarryPosPacket;
-import com.ricardthegreat.holdmetight.network.serverbound.SEditCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SEntityAddTargetScalePacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SEntityMultTargetScalePacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SEntityPutDownPacket;
@@ -24,8 +22,10 @@ import com.ricardthegreat.holdmetight.network.serverbound.SPlayerCarrySimplePack
 import com.ricardthegreat.holdmetight.network.serverbound.SPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SPlayerPutDownPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SPlayerSizeMixinSyncPacket;
-import com.ricardthegreat.holdmetight.network.serverbound.SRemoveCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SSizeRaySync;
+import com.ricardthegreat.holdmetight.network.serverbound.carrypositions.SAddCustomCarryPosPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.carrypositions.SEditCustomCarryPosPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.carrypositions.SRemoveCustomCarryPosPacket;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;

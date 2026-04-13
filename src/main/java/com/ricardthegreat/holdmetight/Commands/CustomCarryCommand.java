@@ -15,9 +15,9 @@ import com.ricardthegreat.holdmetight.carry.CarryPosition;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
-import com.ricardthegreat.holdmetight.network.serverbound.SAddCustomCarryPosPacket;
-import com.ricardthegreat.holdmetight.network.serverbound.SEditCustomCarryPosPacket;
-import com.ricardthegreat.holdmetight.network.serverbound.SRemoveCustomCarryPosPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.carrypositions.SAddCustomCarryPosPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.carrypositions.SEditCustomCarryPosPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.carrypositions.SRemoveCustomCarryPosPacket;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
