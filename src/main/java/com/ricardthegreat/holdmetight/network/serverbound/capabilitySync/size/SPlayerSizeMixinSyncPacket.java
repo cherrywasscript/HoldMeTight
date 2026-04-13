@@ -1,4 +1,4 @@
-package com.ricardthegreat.holdmetight.network.serverbound;
+package com.ricardthegreat.holdmetight.network.serverbound.capabilitySync.size;
 
 import java.util.UUID;
 import java.util.function.Supplier;

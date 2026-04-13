@@ -1,4 +1,4 @@
-package com.ricardthegreat.holdmetight.network.clientbound;
+package com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry;
 
 import java.util.UUID;
 import java.util.function.Supplier;

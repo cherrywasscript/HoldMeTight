@@ -1,4 +1,4 @@
-package com.ricardthegreat.holdmetight.network.serverbound;
+package com.ricardthegreat.holdmetight.network.serverbound.capabilitySync.carry;
 
 import java.util.ArrayList;
 import java.util.function.Supplier;
@@ -7,7 +7,7 @@ import com.ricardthegreat.holdmetight.carry.CarryPosition;
 import com.ricardthegreat.holdmetight.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
-import com.ricardthegreat.holdmetight.network.clientbound.CPlayerCarrySyncPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CPlayerCarrySyncPacket;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;

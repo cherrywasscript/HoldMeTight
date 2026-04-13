@@ -1,4 +1,4 @@
-package com.ricardthegreat.holdmetight.network.serverbound;
+package com.ricardthegreat.holdmetight.network.serverbound.scalepackets;
 
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -11,7 +11,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.network.NetworkEvent;
 
-public class SEntitySetTargetScalePacket {
+public class SEntityMultTargetScalePacket {
 
     private final float scale;
     private final UUID uuid;
@@ -19,7 +19,7 @@ public class SEntitySetTargetScalePacket {
     private final int ticks;
     private final boolean player;
 
-    public SEntitySetTargetScalePacket(float scale, UUID uuid, int numericId, int ticks, boolean player){
+    public SEntityMultTargetScalePacket(float scale, UUID uuid, int numericId, int ticks, boolean player){
         this.scale = scale;
         this.uuid = uuid;
         this.numericId = numericId;
@@ -27,7 +27,7 @@ public class SEntitySetTargetScalePacket {
         this.player = player;
     }
     
-    public SEntitySetTargetScalePacket(FriendlyByteBuf buffer){
+    public SEntityMultTargetScalePacket(FriendlyByteBuf buffer){
         this(buffer.readFloat(), buffer.readUUID(), buffer.readInt(), buffer.readInt(), buffer.readBoolean());
     }
 
@@ -42,25 +42,18 @@ public class SEntitySetTargetScalePacket {
     public void handle(Supplier<NetworkEvent.Context> context){
         
         ServerPlayer sender = context.get().getSender();
-    
+
         if (player) {
             ServerPlayer target = sender.server.getPlayerList().getPlayer(uuid);
 
             if(target != null){
-                PlayerSizeUtils.setSize(target, scale, ticks);
-                /* 
-                if (ticks > 0) {
-                    SizeUtils.setSizeOverTimeCustom(target, scale, ticks);
-                }else{
-                    SizeUtils.setSizeInstant(target, scale);
-                } 
-                    */
+                PlayerSizeUtils.multSize(target, scale, ticks);
             }
         }else{
             Entity target = sender.level().getEntity(numericId);
 
             if (target != null && target.getUUID().compareTo(uuid) == 0) {
-                EntitySizeUtils.setSize(target, scale, ticks);
+                EntitySizeUtils.multSize(target, scale, ticks);
             }
         }
     }

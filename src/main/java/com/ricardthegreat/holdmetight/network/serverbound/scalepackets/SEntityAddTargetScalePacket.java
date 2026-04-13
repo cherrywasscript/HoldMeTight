@@ -1,4 +1,4 @@
-package com.ricardthegreat.holdmetight.network.serverbound;
+package com.ricardthegreat.holdmetight.network.serverbound.scalepackets;
 
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -11,31 +11,30 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.network.NetworkEvent;
 
-public class SEntityMultTargetScalePacket {
+public class SEntityAddTargetScalePacket {
 
     private final float scale;
     private final UUID uuid;
     private final int numericId;
-    private final int ticks;
     private final boolean player;
 
-    public SEntityMultTargetScalePacket(float scale, UUID uuid, int numericId, int ticks, boolean player){
+    // for scaleType 0 - sets target,  1- mults target
+    //probably gonna add more, not sure on the default yet maybe just setting to 1
+    public SEntityAddTargetScalePacket(float scale, UUID uuid, int numericId, boolean player){
         this.scale = scale;
         this.uuid = uuid;
         this.numericId = numericId;
-        this.ticks = ticks;
         this.player = player;
     }
     
-    public SEntityMultTargetScalePacket(FriendlyByteBuf buffer){
-        this(buffer.readFloat(), buffer.readUUID(), buffer.readInt(), buffer.readInt(), buffer.readBoolean());
+    public SEntityAddTargetScalePacket(FriendlyByteBuf buffer){
+        this(buffer.readFloat(), buffer.readUUID(), buffer.readInt(), buffer.readBoolean());
     }
 
     public void encode(FriendlyByteBuf buffer){
         buffer.writeFloat(scale);
         buffer.writeUUID(uuid);
         buffer.writeInt(numericId);
-        buffer.writeInt(ticks);
         buffer.writeBoolean(player);
     }
 
@@ -47,13 +46,13 @@ public class SEntityMultTargetScalePacket {
             ServerPlayer target = sender.server.getPlayerList().getPlayer(uuid);
 
             if(target != null){
-                PlayerSizeUtils.multSize(target, scale, ticks);
+                PlayerSizeUtils.addSize(target, scale);
             }
         }else{
             Entity target = sender.level().getEntity(numericId);
 
             if (target != null && target.getUUID().compareTo(uuid) == 0) {
-                EntitySizeUtils.multSize(target, scale, ticks);
+                EntitySizeUtils.addSize(target, scale);
             }
         }
     }
