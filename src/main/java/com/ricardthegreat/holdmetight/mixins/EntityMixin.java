@@ -15,7 +15,7 @@ import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.items.EntityStandinItem;
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
-import com.ricardthegreat.holdmetight.network.clientbound.CPlayerDismountPlayerPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CPlayerDismountPlayerPacket;
 import com.ricardthegreat.holdmetight.utils.CheckNonInvSlotUtil;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;

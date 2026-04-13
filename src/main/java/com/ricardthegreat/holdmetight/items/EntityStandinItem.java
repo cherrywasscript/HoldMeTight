@@ -15,10 +15,10 @@ import com.ricardthegreat.holdmetight.client.renderers.HeldEntityItemRenderer;
 import com.ricardthegreat.holdmetight.init.ItemInit;
 import com.ricardthegreat.holdmetight.inventory.HeldEntityInventoryProvider;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
-import com.ricardthegreat.holdmetight.network.clientbound.CAddPlayerCarrySyncPacket;
-import com.ricardthegreat.holdmetight.network.clientbound.CRemovePlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CThrowEntityPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CThrowPlayerPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CAddPlayerCarrySyncPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CRemovePlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SEntityPutDownPacket;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
