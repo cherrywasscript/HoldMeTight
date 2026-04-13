@@ -5,11 +5,13 @@ import java.util.Optional;
 import org.jetbrains.annotations.Nullable;
 
 import com.ricardthegreat.holdmetight.client.guielements.tooltips.PlayerItemTooltip;
+import com.ricardthegreat.holdmetight.inventory.HeldEntityInventoryProvider;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Inventory;
@@ -57,7 +59,19 @@ public class PlayerStandinItem extends EntityStandinItem{
     @Override
     public boolean overrideOtherStackedOnMe (ItemStack stackThis, ItemStack stackOther, Slot slot, ClickAction action, Player player, SlotAccess access) {
         if (action == ClickAction.SECONDARY) {
-            return false;
+
+            if (stackOther.isEmpty()) {
+                CompoundTag tag = stackThis.getTag();
+                Level level = player.level();
+
+                if (!level.isClientSide) {
+                    if (tag != null) {
+                        Player representation = level.getPlayerByUUID(tag.getUUID(ENTITY_UUID));
+                        player.openMenu(new HeldEntityInventoryProvider());
+                    }
+                }
+                return false;
+            }
         }
         return super.overrideOtherStackedOnMe(stackThis, stackOther, slot, action, player, access);
     }

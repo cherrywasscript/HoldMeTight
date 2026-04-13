@@ -13,6 +13,7 @@ import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.client.armposes.HeldEntityArmPose;
 import com.ricardthegreat.holdmetight.client.renderers.HeldEntityItemRenderer;
 import com.ricardthegreat.holdmetight.init.ItemInit;
+import com.ricardthegreat.holdmetight.inventory.HeldEntityInventoryProvider;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.CAddPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CRemovePlayerCarrySyncPacket;
@@ -30,8 +31,11 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickAction;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -42,6 +46,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.fml.DistExecutor;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
+import top.theillusivec4.curios.client.gui.CuriosScreenV2;
 
 public class EntityStandinItem extends Item implements ICurioItem{
 
@@ -311,5 +316,34 @@ public class EntityStandinItem extends Item implements ICurioItem{
         float f5 = player.getRandom().nextFloat() * ((float)Math.PI * 2F);
         float f6 = 0.02F * player.getRandom().nextFloat();
         return new Vec3((double)(-f3 * f2 * 0.3F) + Math.cos((double)f5) * (double)f6, (double)(-f8 * 0.3F + 0.1F + (player.getRandom().nextFloat() - player.getRandom().nextFloat()) * 0.1F), (double)(f4 * f2 * 0.3F) + Math.sin((double)f5) * (double)f6);
+    }
+
+
+
+
+
+
+
+    @Override
+    public boolean overrideOtherStackedOnMe (ItemStack stackThis, ItemStack stackOther, Slot slot, ClickAction action, Player player, SlotAccess access) {
+        System.out.println(action + "/" + stackOther.isEmpty() + "/" + player.level());
+        if (action == ClickAction.SECONDARY) {
+
+            if (stackOther.isEmpty()) {
+                CompoundTag tag = stackThis.getTag();
+                Level level = player.level();
+
+                if (!level.isClientSide) {
+                    if (tag != null) {
+                        //Player representation = level.getPlayerByUUID(tag.getUUID(ENTITY_UUID));
+                        player.openMenu(new HeldEntityInventoryProvider());
+                    }
+                }else{
+                    
+                }
+                return false;
+            }
+        }
+        return super.overrideOtherStackedOnMe(stackThis, stackOther, slot, action, player, access);
     }
 }
