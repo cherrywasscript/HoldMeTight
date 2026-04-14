@@ -23,6 +23,7 @@ import com.ricardthegreat.holdmetight.network.serverbound.capabilitySync.size.SP
 import com.ricardthegreat.holdmetight.network.serverbound.carrypositions.SAddCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.carrypositions.SEditCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.carrypositions.SRemoveCustomCarryPosPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.itempackets.standinitem.SOpenStandInItemMenuPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.scalepackets.SEntityAddTargetScalePacket;
 import com.ricardthegreat.holdmetight.network.serverbound.scalepackets.SEntityMultTargetScalePacket;
 import com.ricardthegreat.holdmetight.network.serverbound.scalepackets.SEntitySetTargetScalePacket;
@@ -165,6 +166,11 @@ public class PacketHandler {
         CThrowEntityPacket::encode, 
         CThrowEntityPacket::new, 
         CThrowEntityPacket::handle);
+
+        INSTANCE.registerMessage(id++, SOpenStandInItemMenuPacket.class, 
+        SOpenStandInItemMenuPacket::encode, 
+        SOpenStandInItemMenuPacket::new, 
+        SOpenStandInItemMenuPacket::handle);
     }
 
     public static void sendToServer(Object msg){
