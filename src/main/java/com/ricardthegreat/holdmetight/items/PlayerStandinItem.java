@@ -6,6 +6,8 @@ import org.jetbrains.annotations.Nullable;
 
 import com.ricardthegreat.holdmetight.client.guielements.tooltips.PlayerItemTooltip;
 import com.ricardthegreat.holdmetight.inventory.HeldEntityInventoryProvider;
+import com.ricardthegreat.holdmetight.network.PacketHandler;
+import com.ricardthegreat.holdmetight.network.serverbound.itempackets.standinitem.SOpenStandInItemMenuPacket;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
@@ -63,14 +65,18 @@ public class PlayerStandinItem extends EntityStandinItem{
             if (stackOther.isEmpty()) {
                 CompoundTag tag = stackThis.getTag();
                 Level level = player.level();
-
-                if (!level.isClientSide) {
-                    if (tag != null) {
-                        Player representation = level.getPlayerByUUID(tag.getUUID(ENTITY_UUID));
-                        player.openMenu(new HeldEntityInventoryProvider());
+                Player representation = level.getPlayerByUUID(tag.getUUID(ENTITY_UUID));
+                if (representation != null) {
+                    if (!level.isClientSide) {
+                        if (tag != null) {
+                            player.openMenu(new HeldEntityInventoryProvider(representation));
+                        }
+                    }else{
+                        PacketHandler.sendToServer(new SOpenStandInItemMenuPacket(representation.getUUID()));
                     }
                 }
-                return false;
+            
+                return true;
             }
         }
         return super.overrideOtherStackedOnMe(stackThis, stackOther, slot, action, player, access);

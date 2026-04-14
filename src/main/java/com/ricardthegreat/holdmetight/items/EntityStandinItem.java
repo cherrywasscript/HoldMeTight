@@ -20,6 +20,7 @@ import com.ricardthegreat.holdmetight.network.clientbound.CThrowPlayerPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CAddPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CRemovePlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SEntityPutDownPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.itempackets.standinitem.SOpenStandInItemMenuPacket;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.client.model.HumanoidModel.ArmPose;
@@ -326,6 +327,7 @@ public class EntityStandinItem extends Item implements ICurioItem{
 
     @Override
     public boolean overrideOtherStackedOnMe (ItemStack stackThis, ItemStack stackOther, Slot slot, ClickAction action, Player player, SlotAccess access) {
+        /* 
         System.out.println(action + "/" + stackOther.isEmpty() + "/" + player.level());
         if (action == ClickAction.SECONDARY) {
 
@@ -336,14 +338,15 @@ public class EntityStandinItem extends Item implements ICurioItem{
                 if (!level.isClientSide) {
                     if (tag != null) {
                         //Player representation = level.getPlayerByUUID(tag.getUUID(ENTITY_UUID));
-                        player.openMenu(new HeldEntityInventoryProvider());
+                        player.openMenu(new HeldEntityInventoryProvider(player));
                     }
                 }else{
-                    
+                    PacketHandler.sendToServer(new SOpenStandInItemMenuPacket(player.getUUID()));
                 }
-                return false;
+                return true;
             }
         }
+        */
         return super.overrideOtherStackedOnMe(stackThis, stackOther, slot, action, player, access);
     }
 }
