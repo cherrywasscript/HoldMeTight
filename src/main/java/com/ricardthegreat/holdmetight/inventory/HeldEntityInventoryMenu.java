@@ -2,6 +2,7 @@ package com.ricardthegreat.holdmetight.inventory;
 
 import com.mojang.datafixers.util.Pair;
 import com.ricardthegreat.holdmetight.init.MenuInit;
+import com.ricardthegreat.holdmetight.items.EntityStandinItem;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -9,6 +10,8 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ChestMenu;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Equipable;
@@ -27,36 +30,47 @@ public class HeldEntityInventoryMenu extends AbstractContainerMenu{
 
     private static final EquipmentSlot[] SLOT_IDS = new EquipmentSlot[]{EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET};
 
+    private final DataSlot ownerId = DataSlot.standalone();
+
     private final Player owner;
 
     public HeldEntityInventoryMenu(int containerId, Inventory playerInv){
-        this(containerId, playerInv, playerInv.player);
+        this(containerId, new Inventory(playerInv.player), playerInv);
     }
 
-    public HeldEntityInventoryMenu(int containerId, Inventory playerInv, Player player){
+    public HeldEntityInventoryMenu(int containerId, Inventory targetInv, Inventory playerInv){
         super(MenuInit.HELD_PLAYER_MENU.get(), containerId);
+        this.owner = targetInv.player;
 
-        this.owner = player;
+        System.out.println(containerId);
 
+        createTargetInvSlots(targetInv);
+        createPlayerInventorySlots(playerInv);
+
+        addDataSlot(ownerId);
+        this.ownerId.set(owner.getId());
+    }
+
+    private void createTargetInvSlots(Inventory playerInv){
         for(int i = 0; i < 4; ++i) {
             final EquipmentSlot equipmentslot = SLOT_IDS[i];
-            this.addSlot(new Slot(playerInv, 39 - i, 8, 8 + i * 18) {
-                public void setByPlayer(ItemStack p_270969_) {
-                    HeldEntityInventoryMenu.onEquipItem(player, equipmentslot, p_270969_, this.getItem());
-                    super.setByPlayer(p_270969_);
+            this.addSlot(new Slot(playerInv, 39 - i, 8, 12 + i * 18) {
+                public void setByPlayer(ItemStack stack) {
+                    HeldEntityInventoryMenu.onEquipItem(owner, equipmentslot, stack, this.getItem());
+                    super.setByPlayer(stack);
                 }
 
                 public int getMaxStackSize() {
                     return 1;
                 }
 
-                public boolean mayPlace(ItemStack p_39746_) {
-                    return p_39746_.canEquip(equipmentslot, owner);
+                public boolean mayPlace(ItemStack stack) {
+                    return stack.canEquip(equipmentslot, owner);
                 }
 
-                public boolean mayPickup(Player p_39744_) {
+                public boolean mayPickup(Player stack) {
                     ItemStack itemstack = this.getItem();
-                    return !itemstack.isEmpty() && !p_39744_.isCreative() && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.mayPickup(p_39744_);
+                    return !itemstack.isEmpty() && !stack.isCreative() && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.mayPickup(stack);
                 }
 
                 public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
@@ -67,18 +81,18 @@ public class HeldEntityInventoryMenu extends AbstractContainerMenu{
 
         for(int i = 0; i < 3; ++i) {
             for(int j = 0; j < 9; ++j) {
-                this.addSlot(new Slot(playerInv, j + (i + 1) * 9, 8 + j * 18, 84 + i * 18));
+                this.addSlot(new Slot(playerInv, j + (i + 1) * 9, 8 + j * 18, 88 + i * 18));
             }
         }
 
         for(int i = 0; i < 9; ++i) {
-            this.addSlot(new Slot(playerInv, i, 8 + i * 18, 142));
+            this.addSlot(new Slot(playerInv, i, 8 + i * 18, 146));
         }
 
-        this.addSlot(new Slot(playerInv, 40, 77, 62) {
-            public void setByPlayer(ItemStack p_270479_) {
-                HeldEntityInventoryMenu.onEquipItem(player, EquipmentSlot.OFFHAND, p_270479_, this.getItem());
-                super.setByPlayer(p_270479_);
+        this.addSlot(new Slot(playerInv, 40, 77, 66) {
+            public void setByPlayer(ItemStack stack) {
+                HeldEntityInventoryMenu.onEquipItem(owner, EquipmentSlot.OFFHAND, stack, this.getItem());
+                super.setByPlayer(stack);
             }
 
             public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
@@ -87,15 +101,47 @@ public class HeldEntityInventoryMenu extends AbstractContainerMenu{
         });
     }
 
+    private void createPlayerInventorySlots(Inventory playerInv){
+        for(int i1 = 0; i1 < 3; ++i1) {
+            for(int k1 = 0; k1 < 9; ++k1) {
+                this.addSlot(new Slot(playerInv, k1 + i1 * 9 + 9, 8 + k1 * 18, 174 + i1 * 18));
+            }
+        }
 
-    private static void onEquipItem(Player p_270432_, EquipmentSlot p_270254_, ItemStack p_270316_, ItemStack p_270993_) {
-        Equipable equipable = Equipable.get(p_270316_);
-        if (equipable != null) {
-            p_270432_.onEquipItem(p_270254_, p_270993_, p_270316_);
+        for(int j1 = 0; j1 < 9; ++j1) {
+            this.addSlot(new Slot(playerInv, j1, 8 + j1 * 18, 232));
         }
     }
 
+    @Override
+    protected boolean moveItemStackTo(ItemStack stack, int i, int j, boolean bool) {
+        //TODO figure out what i, j and bool represent
+        //System.out.println(stack.getItem() + "/" + i + "/" + j + "/" + bool);
+        if (stack.getItem() instanceof EntityStandinItem) {
+            return false;
+        }
+        return super.moveItemStackTo(stack, i, j, bool);
+    }
 
+    private static void onEquipItem(Player player, EquipmentSlot slot, ItemStack stack, ItemStack stack2) {
+        Equipable equipable = Equipable.get(stack);
+        if (equipable != null) {
+            player.onEquipItem(slot, stack2, stack);
+        }
+    }
+
+    @Override
+    public void clicked(int slot, int mouse, ClickType click, Player player) {
+        if (slot < 0 || slot >= slots.size()) {
+            super.clicked(slot, mouse, click, player);
+        }else{
+            ItemStack stack = slots.get(slot).getItem();
+
+            if (!(stack.getItem() instanceof EntityStandinItem)) {
+                super.clicked(slot, mouse, click, player);
+            }
+        }
+    }
 
     @Override
     public ItemStack quickMoveStack(Player player, int quickMovedSlotIndex) {
@@ -173,5 +219,9 @@ public class HeldEntityInventoryMenu extends AbstractContainerMenu{
     @Override
     public boolean stillValid(Player player) {
         return true;
+    }
+
+    public DataSlot getOwnerId(){
+        return this.ownerId;
     }
 }
