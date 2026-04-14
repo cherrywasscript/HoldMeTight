@@ -20,7 +20,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
 //TODO change background
-public class SizePrefsScreen extends Screen{
+public class PreferencesScreen extends Screen{
 
     private static final Component TITLE = Component.literal("Size Prefs Screen");
 
@@ -68,7 +68,7 @@ public class SizePrefsScreen extends Screen{
     protected EditBox defaultScaleField;
 
 
-    public SizePrefsScreen(Player player) {
+    public PreferencesScreen(Player player) {
         super(TITLE);
         
         this.imageWidth = 256;
