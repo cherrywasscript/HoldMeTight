@@ -17,15 +17,15 @@ public class PlayerCarryProvider implements ICapabilityProvider, INBTSerializabl
 
     public static Capability<PlayerCarry> PLAYER_CARRY = CapabilityManager.get(new CapabilityToken<PlayerCarry>() {});
 
-    private PlayerCarry size = null;
+    private PlayerCarry carry = null;
     private final LazyOptional<PlayerCarry> optional = LazyOptional.of(this::createPlayerCarry);
 
     private PlayerCarry createPlayerCarry() {
-        if (this.size == null) {
-            this.size = new PlayerCarry();
+        if (this.carry == null) {
+            this.carry = new PlayerCarry();
         }
 
-        return this.size;
+        return this.carry;
     }
 
     @Override
