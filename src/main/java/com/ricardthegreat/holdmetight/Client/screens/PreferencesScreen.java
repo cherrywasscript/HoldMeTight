@@ -4,6 +4,7 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
 
+import com.ricardthegreat.holdmetight.HMTConfig;
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.size.PlayerSize;
 import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
@@ -12,18 +13,29 @@ import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
+import net.minecraft.client.gui.components.StringWidget;
 import net.minecraft.client.gui.components.Tooltip;
+import net.minecraft.client.gui.components.tabs.GridLayoutTab;
+import net.minecraft.client.gui.components.tabs.TabManager;
+import net.minecraft.client.gui.components.tabs.TabNavigationBar;
+import net.minecraft.client.gui.layouts.FrameLayout;
+import net.minecraft.client.gui.layouts.GridLayout.RowHelper;
+import net.minecraft.client.gui.navigation.ScreenRectangle;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 //TODO change background
 public class PreferencesScreen extends Screen{
+    //TODO make these translatable
+    private static final Component TITLE = Component.literal("Preferences Screen");
 
-    private static final Component TITLE = Component.literal("Size Prefs Screen");
-
+    //String components related to scale preferences
     protected static final Component MAX_BUTTON = Component.literal("set max");
     protected static final Component MIN_BUTTON = Component.literal("set min");
     protected static final Component DEFAULT_BUTTON = Component.literal("set default");
@@ -40,9 +52,17 @@ public class PreferencesScreen extends Screen{
     protected static final Component MIN_SCALE_FIELD_TOOLTIP = Component.literal("input min scale");
     protected static final Component DEFAULT_SCALE_FIELD_TOOLTIP = Component.literal("input default scale");
 
+    //String components related to carry preferences
+    protected static final Component ACCESS_INVENTORY_BUTTON = Component.literal("True/False");
+    protected static final Component TRAP_WHEN_CARRYING_BUTTON = Component.literal("True/False");
+    protected static final Component TRAP_WHEN_CARRIED_BUTTON = Component.literal("True/False");
+
+    protected static final Component ACCESS_INVENTORY_BUTTON_TOOLTIP = Component.literal("Allow players carrying you to access and edit your inventory");
+    protected static final Component TRAP_WHEN_CARRYING_BUTTON_TOOLTIP = Component.literal("Prevent players you are carrying from dismounting");
+    protected static final Component TRAP_WHEN_CARRIED_BUTTON_TOOLTIP = Component.literal("Allow players who are carrying you to prevent you from dismounting");
+
     private final int imageWidth;
     private final int imageHeight;
-
 
     //the image background not final
     private ResourceLocation BACKGROUND = new ResourceLocation(HoldMeTight.MODID, "textures/gui/size_remote_bg.png");
@@ -58,7 +78,13 @@ public class PreferencesScreen extends Screen{
     private int centerHorizonalPos;
     private int centerVerticalPos;
 
+    protected Tab currentTab;
 
+    //Tabs
+    protected Button scalePreferences;
+    protected Button CarryPreferences;
+
+    //Buttons and fields related to scale preferences
     protected Button maxButton;
     protected Button minButton;
     protected Button defaultButton;
@@ -66,6 +92,12 @@ public class PreferencesScreen extends Screen{
     protected EditBox maxScaleField;
     protected EditBox minScaleField;
     protected EditBox defaultScaleField;
+
+    //Buttons and fields related to carry preferences
+    protected Button accessInventoryButton; // true/false allow players carrying you to access and mess with your inventory
+    protected Button trapWhenCarryingButton; // true/false for stopping players from "shifting" off when you are carrying them
+    protected Button trapWhenCarriedButton; // true/false for allowing yourself to not be able to "shift" off if the person carrying you has the above option enabled
+
 
 
     public PreferencesScreen(Player player) {
@@ -95,11 +127,11 @@ public class PreferencesScreen extends Screen{
         Level level = this.minecraft.level;
         if(level == null) return;
 
+        this.currentTab = Tab.SIZE;
 
         initButtons();
 
         initEditBoxes();
-        
     }
 
     @Override
@@ -123,10 +155,15 @@ public class PreferencesScreen extends Screen{
     }
 
     private void saveEditBox(){
-
+        //TODO add logic for saving edit boxes
     }
 
     protected void initButtons(){
+        initScalePreferenceButtons();
+        initCarryPreferenceButtons();
+    }
+
+    protected void initScalePreferenceButtons(){
         maxButton = addRenderableWidget(
             Button.builder(
                 MAX_BUTTON, this::handleMaxButton)
@@ -150,6 +187,13 @@ public class PreferencesScreen extends Screen{
                 .tooltip(Tooltip.create(DEFAULT_BUTTON_TOOLTIP))
                 .build()
         );
+    }
+
+    protected void initCarryPreferenceButtons(){
+        System.out.println("config: " + HMTConfig.CLIENT_CONFIG.getMinScale() + "/" + HMTConfig.CLIENT_CONFIG.getDefaultScale() + "/" + HMTConfig.CLIENT_CONFIG.getMaxScale());
+        //accessInventoryButton
+        //trapWhenCarryingButton
+        //trapWhenCarriedButton
     }
 
     protected void handleMaxButton(Button button){
@@ -235,5 +279,9 @@ public class PreferencesScreen extends Screen{
     public boolean isPauseScreen() {
         return false;
     }
-    
+
+    enum Tab {
+        SIZE,
+        CARRY
+    }
 }
