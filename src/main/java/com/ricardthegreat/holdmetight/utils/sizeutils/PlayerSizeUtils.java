@@ -1,8 +1,8 @@
 package com.ricardthegreat.holdmetight.utils.sizeutils;
 
 import com.ricardthegreat.holdmetight.HMTConfig;
-import com.ricardthegreat.holdmetight.size.PlayerSize;
-import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
+import com.ricardthegreat.holdmetight.capabilities.size.PlayerSize;
+import com.ricardthegreat.holdmetight.capabilities.size.PlayerSizeProvider;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.util.LazyOptional;

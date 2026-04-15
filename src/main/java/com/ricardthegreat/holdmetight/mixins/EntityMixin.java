@@ -9,9 +9,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.ricardthegreat.holdmetight.HMTConfig;
 import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.carry.CarryPosition;
-import com.ricardthegreat.holdmetight.carry.PlayerCarry;
-import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.capabilities.carry.CarryPosition;
+import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarry;
+import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.items.EntityStandinItem;
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;

@@ -4,8 +4,8 @@ import javax.annotation.Nullable;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import com.ricardthegreat.holdmetight.carry.PlayerCarry;
-import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarry;
+import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarryProvider;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;

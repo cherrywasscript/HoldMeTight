@@ -6,8 +6,8 @@ import javax.annotation.Nonnull;
 
 import com.ricardthegreat.holdmetight.HMTConfig;
 import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.size.PlayerSize;
-import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
+import com.ricardthegreat.holdmetight.capabilities.size.PlayerSize;
+import com.ricardthegreat.holdmetight.capabilities.size.PlayerSizeProvider;
 import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
 
 import net.minecraft.client.gui.GuiGraphics;

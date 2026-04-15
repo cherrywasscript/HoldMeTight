@@ -6,8 +6,8 @@ import javax.annotation.Nonnull;
 
 import org.joml.Quaternionf;
 import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.carry.PlayerCarry;
-import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarry;
+import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.utils.PlayerRenderExtension;
 
 import net.minecraft.client.gui.GuiGraphics;

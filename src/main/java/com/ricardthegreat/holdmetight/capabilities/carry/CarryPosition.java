@@ -1,4 +1,4 @@
-package com.ricardthegreat.holdmetight.carry;
+package com.ricardthegreat.holdmetight.capabilities.carry;
 
 public class CarryPosition {
     /*

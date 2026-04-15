@@ -6,9 +6,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.ricardthegreat.holdmetight.carry.CarryPosition;
-import com.ricardthegreat.holdmetight.carry.PlayerCarry;
-import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.capabilities.carry.CarryPosition;
+import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarry;
+import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.utils.CheckNonInvSlotUtil;
 
 import net.minecraft.client.model.EntityModel;

@@ -4,14 +4,14 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.carry.PlayerCarry;
-import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarry;
+import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.capabilities.size.PlayerSize;
+import com.ricardthegreat.holdmetight.capabilities.size.PlayerSizeProvider;
 import com.ricardthegreat.holdmetight.items.EntityStandinItem;
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CRemovePlayerCarrySyncPacket;
-import com.ricardthegreat.holdmetight.size.PlayerSize;
-import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.nbt.CompoundTag;

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import com.ricardthegreat.holdmetight.carry.CarryPosition;
-import com.ricardthegreat.holdmetight.carry.PlayerCarry;
+import com.ricardthegreat.holdmetight.capabilities.carry.CarryPosition;
+import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.client.handlers.ClientPacketHandler;
 
 import net.minecraft.nbt.CompoundTag;

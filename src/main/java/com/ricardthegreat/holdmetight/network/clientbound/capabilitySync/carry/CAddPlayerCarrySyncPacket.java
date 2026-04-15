@@ -3,7 +3,7 @@ package com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import com.ricardthegreat.holdmetight.carry.PlayerCarry;
+import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.client.handlers.ClientPacketHandler;
 
 import net.minecraft.nbt.CompoundTag;

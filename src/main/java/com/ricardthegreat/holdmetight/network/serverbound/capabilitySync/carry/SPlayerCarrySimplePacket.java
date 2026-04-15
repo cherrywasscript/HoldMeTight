@@ -3,8 +3,8 @@ package com.ricardthegreat.holdmetight.network.serverbound.capabilitySync.carry;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import com.ricardthegreat.holdmetight.carry.PlayerCarry;
-import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarry;
+import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CPlayerCarrySimplePacket;
 

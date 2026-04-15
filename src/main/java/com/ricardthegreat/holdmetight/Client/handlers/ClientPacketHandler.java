@@ -3,9 +3,11 @@ package com.ricardthegreat.holdmetight.client.handlers;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import com.ricardthegreat.holdmetight.carry.CarryPosition;
-import com.ricardthegreat.holdmetight.carry.PlayerCarry;
-import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.capabilities.carry.CarryPosition;
+import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarry;
+import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.capabilities.size.PlayerSize;
+import com.ricardthegreat.holdmetight.capabilities.size.PlayerSizeProvider;
 import com.ricardthegreat.holdmetight.network.clientbound.CThrowEntityPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CThrowPlayerPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CAddPlayerCarrySyncPacket;
@@ -16,8 +18,6 @@ import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.size.CP
 import com.ricardthegreat.holdmetight.network.clientbound.carrypositions.CAddCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.carrypositions.CEditCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.carrypositions.CRemoveCustomCarryPosPacket;
-import com.ricardthegreat.holdmetight.size.PlayerSize;
-import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;

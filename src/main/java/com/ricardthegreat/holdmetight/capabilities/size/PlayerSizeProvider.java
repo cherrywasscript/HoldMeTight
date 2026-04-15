@@ -1,4 +1,4 @@
-package com.ricardthegreat.holdmetight.carry;
+package com.ricardthegreat.holdmetight.capabilities.size;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,16 +13,16 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 
-public class PlayerCarryProvider implements ICapabilityProvider, INBTSerializable<CompoundTag>{
+public class PlayerSizeProvider implements ICapabilityProvider, INBTSerializable<CompoundTag>{
 
-    public static Capability<PlayerCarry> PLAYER_CARRY = CapabilityManager.get(new CapabilityToken<PlayerCarry>() {});
+    public static Capability<PlayerSize> PLAYER_SIZE = CapabilityManager.get(new CapabilityToken<PlayerSize>() {});
 
-    private PlayerCarry size = null;
-    private final LazyOptional<PlayerCarry> optional = LazyOptional.of(this::createPlayerCarry);
+    private PlayerSize size = null;
+    private final LazyOptional<PlayerSize> optional = LazyOptional.of(this::createPlayerSize);
 
-    private PlayerCarry createPlayerCarry() {
+    private PlayerSize createPlayerSize() {
         if (this.size == null) {
-            this.size = new PlayerCarry();
+            this.size = new PlayerSize();
         }
 
         return this.size;
@@ -31,26 +31,27 @@ public class PlayerCarryProvider implements ICapabilityProvider, INBTSerializabl
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag tag = new CompoundTag();
-        createPlayerCarry().saveNBTData(tag);
+        createPlayerSize().saveNBTData(tag);
         return tag;
     }
 
     @Override
     public void deserializeNBT(CompoundTag tag) {
-       createPlayerCarry().loadNBTData(tag);
+       createPlayerSize().loadNBTData(tag);
     }
 
     @Override
     public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == PLAYER_CARRY) {
+        if (cap == PLAYER_SIZE) {
             return optional.cast();
         }
 
         return LazyOptional.empty();
     }
 
-    public static PlayerCarry getPlayerCarryCapability(Player player){
-        LazyOptional<PlayerCarry> optional = player.getCapability(PLAYER_CARRY);
-        return optional.orElse(new PlayerCarry());
+    //TODO make it so the only file that references this is the playersizeutils file
+    public static PlayerSize getPlayerSizeCapability(Player player){
+        LazyOptional<PlayerSize> optional = player.getCapability(PLAYER_SIZE);
+        return optional.orElse(new PlayerSize());
     }
 }

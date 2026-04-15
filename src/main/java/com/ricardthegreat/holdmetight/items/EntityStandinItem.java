@@ -8,8 +8,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.carry.PlayerCarry;
-import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarry;
+import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.client.armposes.HeldEntityArmPose;
 import com.ricardthegreat.holdmetight.client.renderers.HeldEntityItemRenderer;
 import com.ricardthegreat.holdmetight.init.ItemInit;

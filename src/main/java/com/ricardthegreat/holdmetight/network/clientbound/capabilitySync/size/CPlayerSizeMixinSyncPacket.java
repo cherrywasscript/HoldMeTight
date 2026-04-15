@@ -3,8 +3,8 @@ package com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.size;
 import java.util.UUID;
 import java.util.function.Supplier;
 
+import com.ricardthegreat.holdmetight.capabilities.size.PlayerSize;
 import com.ricardthegreat.holdmetight.client.handlers.ClientPacketHandler;
-import com.ricardthegreat.holdmetight.size.PlayerSize;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
