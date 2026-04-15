@@ -74,6 +74,7 @@ public class HoldMeTight {
         // config file for us
         //ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
         //TODO add common and client sided configs
+        context.registerConfig(ModConfig.Type.CLIENT, HMTConfig.clientSpec);
         context.registerConfig(ModConfig.Type.SERVER, HMTConfig.serverSpec);
     }
 

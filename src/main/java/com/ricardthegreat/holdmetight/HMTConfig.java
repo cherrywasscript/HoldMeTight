@@ -39,8 +39,69 @@ public class HMTConfig {
         }
 
         public static class ClientConfig {
-                ClientConfig(ForgeConfigSpec.Builder builder){
+                private final ForgeConfigSpec.ConfigValue<Double> scaleMinimum;
+                private final ForgeConfigSpec.ConfigValue<Double> scaleMaximum;
+                private final ForgeConfigSpec.ConfigValue<Double> scaleDefault;
+                public final ForgeConfigSpec.BooleanValue inventoryCanBeAccessed;
+                public final ForgeConfigSpec.BooleanValue trapCarriedPlayer;
+                public final ForgeConfigSpec.BooleanValue canBeTrappedWhileCarried;
 
+                ClientConfig(ForgeConfigSpec.Builder builder){
+                        builder.comment("ClientSide Config Settings, These mostly exist as preference setting so you dont need to customise them every server you join");
+                        
+                        builder.push("Size Preferences");
+                        //TODO make these translations
+                        this.scaleMinimum = builder.comment("The minimum scale that you can be set to")
+                                .define("scaleMinimum", 0d);
+                        this.scaleMaximum = builder.comment("The maximum scale that you can be set to")
+                                .define("scaleMaximum", Double.MAX_VALUE);
+                        this.scaleDefault = builder.comment("Your default scale, what you will be set to when scale is 'reset' such as through a size remotes reset button")
+                                .define("scaleDefault", 1d);
+                        builder.pop();
+
+                        builder.push("Carry Preferences");
+                        this.inventoryCanBeAccessed = builder.comment("If your inventory can be accessed and changed by a player who is carrying you")
+                                .define("inventoryCanBeAccessed", true);
+                        this.trapCarriedPlayer = builder.comment("Prevent players you are carrying from dismounting by 'shifting'")
+                                .define("trapCarriedPlayer", true);
+                        this.canBeTrappedWhileCarried = builder.comment("allow yourself to be prevented from dismounting by players carrying you that have the above option enabled")
+                                .define("canBeTrappedWhileCarried", true);
+                        builder.pop();
+                        
+                        builder.build();
+                }
+
+                public float getMinScale(){
+                        if (scaleMinimum.get() > scaleMaximum.get()) {
+                                HoldMeTight.LOGGER.error("error min scale in client config greater than max scale resetting all scale options to default");
+                                resetScaleOptions();
+                        }
+                        return scaleMinimum.get().floatValue();
+                }
+
+                public float getMaxScale(){
+                        if (scaleMinimum.get() > scaleMaximum.get()) {
+                                HoldMeTight.LOGGER.error("error min scale in client config greater than max scale resetting all scale options to default");
+                                resetScaleOptions();
+                        }
+                        return scaleMaximum.get().floatValue();
+                }
+
+                public float getDefaultScale(){
+                        if (scaleDefault.get() > scaleMaximum.get()) {
+                                HoldMeTight.LOGGER.error("error default scale in client config greater than max scale resetting all scale options to default");
+                                resetScaleOptions();
+                        }else if (scaleDefault.get() < scaleMinimum.get()) {
+                                HoldMeTight.LOGGER.error("error default scale in client config less than min scale resetting all scale options to default");
+                                resetScaleOptions();
+                        }
+                        return scaleDefault.get().floatValue();
+                }
+
+                private void resetScaleOptions(){
+                        scaleMinimum.set(0d);
+                        scaleMaximum.set(Double.MAX_VALUE);
+                        scaleDefault.set(1d);
                 }
         }
 
@@ -118,7 +179,7 @@ public class HMTConfig {
                         this.maximumElytraspeed = builder.comment("the maximum movement speed when using an elytra before it starts giving the 'moved too fast' error. i hightly recommend not increasing this unless you are okay with people potentially moving way too quickly while big (default 100)")
                                 .defineInRange("maximumElytraspeed", 300, 300, Double.MAX_VALUE);
 
-                        //builder.pop();
+                        builder.pop();
                         builder.build();
                 }
 
