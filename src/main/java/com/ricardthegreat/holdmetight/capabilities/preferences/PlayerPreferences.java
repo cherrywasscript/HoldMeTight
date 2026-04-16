@@ -22,14 +22,19 @@ import net.minecraftforge.fml.DistExecutor;
 
 public class PlayerPreferences {
 
+    //Size related preferences
     private float maxScale = Float.MAX_VALUE;
     private float minScale = 0;
     private float defaultScale = 1;
+    private boolean othersCanChangeYourSize = true;
+    private boolean youCanChangeYourSize = true;
 
+    //Carry related preferences
     private boolean inventoryCanBeAccessed = true;
     private boolean trapCarriedPlayer = true;
     private boolean canBeTrappedWhileCarried = true;
-
+    private boolean canBePickedup = true;
+    private boolean canPickupOthers = true;
 
     private boolean shouldSync = false;
 
@@ -101,50 +106,134 @@ public class PlayerPreferences {
         }  
     }
 
+    public boolean getOthersCanChange(){
+        return othersCanChangeYourSize;
+    }
+
+    public void setOthersCanChange(boolean othersCanChangeYourSize){
+        this.othersCanChangeYourSize = othersCanChangeYourSize;
+    }
+
+    public boolean getSelfCanChange(){
+        return youCanChangeYourSize;
+    }
+
+    public void setSelfCanChange(boolean youCanChangeYourSize){
+        this.youCanChangeYourSize = youCanChangeYourSize;
+    }
+
+        public boolean isInventoryCanBeAccessed() {
+        return inventoryCanBeAccessed;
+    }
+
+    public void setInventoryCanBeAccessed(boolean inventoryCanBeAccessed) {
+        this.inventoryCanBeAccessed = inventoryCanBeAccessed;
+    }
+
+    public boolean isTrapCarriedPlayer() {
+        return trapCarriedPlayer;
+    }
+
+    public void setTrapCarriedPlayer(boolean trapCarriedPlayer) {
+        this.trapCarriedPlayer = trapCarriedPlayer;
+    }
+
+    public boolean isCanBeTrappedWhileCarried() {
+        return canBeTrappedWhileCarried;
+    }
+
+    public void setCanBeTrappedWhileCarried(boolean canBeTrappedWhileCarried) {
+        this.canBeTrappedWhileCarried = canBeTrappedWhileCarried;
+    }
+
+    public boolean isCanBePickedup() {
+        return canBePickedup;
+    }
+
+    public void setCanBePickedup(boolean canBePickedup) {
+        this.canBePickedup = canBePickedup;
+    }
+
+    public boolean isCanPickupOthers() {
+        return canPickupOthers;
+    }
+
+    public void setCanPickupOthers(boolean canPickupOthers) {
+        this.canPickupOthers = canPickupOthers;
+    }
+
     public void saveNBTData(CompoundTag tag){
         tag.putFloat("maxScale", maxScale);
         tag.putFloat("minScale", minScale);
         tag.putFloat("defaultScale", defaultScale);
+        tag.putBoolean("othersCanChangeYourSize", othersCanChangeYourSize);
+        tag.putBoolean("youCanChangeYourSize", youCanChangeYourSize);
 
         tag.putBoolean("inventoryCanBeAccessed", inventoryCanBeAccessed);
         tag.putBoolean("trapCarriedPlayer", trapCarriedPlayer);
         tag.putBoolean("canBeTrappedWhileCarried", canBeTrappedWhileCarried);
+        tag.putBoolean("canBePickedup", canBePickedup);
+        tag.putBoolean("canPickupOthers", canPickupOthers);
     }
 
     public void loadNBTData(CompoundTag tag){
         maxScale = tag.getFloat("maxScale");
         minScale = tag.getFloat("minScale");
         defaultScale = tag.getFloat("defaultScale");
+        othersCanChangeYourSize = tag.getBoolean("othersCanChangeYourSize");
+        youCanChangeYourSize = tag.getBoolean("youCanChangeYourSize");
 
         inventoryCanBeAccessed = tag.getBoolean("inventoryCanBeAccessed");
         trapCarriedPlayer = tag.getBoolean("trapCarriedPlayer");
         canBeTrappedWhileCarried = tag.getBoolean("canBeTrappedWhileCarried");
+        canBePickedup = tag.getBoolean("canBePickedup");
+        canPickupOthers = tag.getBoolean("canPickupOthers");
     }
 
     public void copyFrom(PlayerPreferences source){
         this.maxScale = source.maxScale;
         this.minScale = source.minScale;
         this.defaultScale = source.defaultScale;
+        this.othersCanChangeYourSize = source.othersCanChangeYourSize;
+        this.youCanChangeYourSize = source.youCanChangeYourSize;
 
         this.inventoryCanBeAccessed = source.inventoryCanBeAccessed;
         this.trapCarriedPlayer = source.trapCarriedPlayer;
         this.canBeTrappedWhileCarried = source.canBeTrappedWhileCarried;
+        this.canBePickedup = source.canBePickedup;
+        this.canPickupOthers = source.canPickupOthers;
     }
 
-    public void updateAllSyncables(float maxScale, float minScale, float defaultScale, boolean inventoryCanBeAccessed, boolean trapCarriedPlayer, boolean canBeTrappedWhileCarried){
+    public void updateAllSyncables(
+        float maxScale, float minScale, float defaultScale, boolean othersCanChangeYourSize, boolean youCanChangeYourSize, 
+        boolean inventoryCanBeAccessed, boolean trapCarriedPlayer, boolean canBeTrappedWhileCarried, boolean canBePickedup, boolean canPickupOthers
+        ){
         this.maxScale = maxScale;
         this.minScale = minScale;
         this.defaultScale = defaultScale;
+        this.othersCanChangeYourSize = othersCanChangeYourSize;
+        this.youCanChangeYourSize = youCanChangeYourSize;
+
         this.inventoryCanBeAccessed = inventoryCanBeAccessed;
         this.trapCarriedPlayer = trapCarriedPlayer;
         this.canBeTrappedWhileCarried = canBeTrappedWhileCarried;
+        this.canBePickedup = canBePickedup;
+        this.canPickupOthers = canPickupOthers;
     }
 
+    //TODO consider changing these packets to just send nbts?
+    //im not certain what is the best bc im sure that sending an nbt would be more data overall but also it would make the code far cleaner
+    //than sending every single variable individually
     public CPlayerPreferencesSyncPacket getClientSyncPacket(Player player){
-        return new CPlayerPreferencesSyncPacket(maxScale, minScale, defaultScale, inventoryCanBeAccessed, trapCarriedPlayer, canBeTrappedWhileCarried, player.getUUID());
+        return new CPlayerPreferencesSyncPacket(
+            maxScale, minScale, defaultScale, othersCanChangeYourSize, youCanChangeYourSize, 
+            inventoryCanBeAccessed, trapCarriedPlayer, canBeTrappedWhileCarried, canBePickedup, canPickupOthers, 
+            player.getUUID());
     }
 
     public SPlayerPreferencesSyncPacket getServerSyncPacket(){
-        return new SPlayerPreferencesSyncPacket(maxScale, minScale, defaultScale, inventoryCanBeAccessed, trapCarriedPlayer, canBeTrappedWhileCarried);
+        return new SPlayerPreferencesSyncPacket(
+            maxScale, minScale, defaultScale, othersCanChangeYourSize, youCanChangeYourSize, 
+            inventoryCanBeAccessed, trapCarriedPlayer, canBeTrappedWhileCarried, canBePickedup, canPickupOthers);
     }
 }
