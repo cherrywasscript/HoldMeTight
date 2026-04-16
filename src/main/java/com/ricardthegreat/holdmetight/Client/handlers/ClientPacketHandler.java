@@ -6,6 +6,8 @@ import java.util.function.Supplier;
 import com.ricardthegreat.holdmetight.capabilities.carry.CarryPosition;
 import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.capabilities.preferences.PlayerPreferences;
+import com.ricardthegreat.holdmetight.capabilities.preferences.PlayerPreferencesProvider;
 import com.ricardthegreat.holdmetight.capabilities.size.PlayerSize;
 import com.ricardthegreat.holdmetight.capabilities.size.PlayerSizeProvider;
 import com.ricardthegreat.holdmetight.network.clientbound.CThrowEntityPacket;
@@ -14,6 +16,7 @@ import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.C
 import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CPlayerDismountPlayerPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CRemovePlayerCarrySyncPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.preferences.CPlayerPreferencesSyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.size.CPlayerSizeMixinSyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.carrypositions.CAddCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.carrypositions.CEditCustomCarryPosPacket;
@@ -74,16 +77,8 @@ public class ClientPacketHandler {
         }   
     }
 
+    //TODO remove
     public static void handleSizePacket(CPlayerSizeMixinSyncPacket msg, Supplier<NetworkEvent.Context> context){
-        ClientLevel level = Minecraft.getInstance().level;
-        if(level != null){
-            Player player = level.getPlayerByUUID(msg.getUuid());
-            if(player != null) {
-                LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
-                PlayerSize orElse = optional.orElse(new PlayerSize());
-                msg.playerSyncablesUpdate(orElse);
-            }
-        }  
     }
 
     @Deprecated
@@ -157,6 +152,17 @@ public class ClientPacketHandler {
                 playerCarry.editCustomCarryPos(pos, index);
             }
         }
+    }
+
+    public static void handlePreferencesPacket(CPlayerPreferencesSyncPacket msg, Supplier<NetworkEvent.Context> context){
+        ClientLevel level = Minecraft.getInstance().level;
+        if(level != null){
+            Player player = level.getPlayerByUUID(msg.getUuid());
+            if(player != null) {
+                PlayerPreferences playerPreferences = PlayerPreferencesProvider.getPlayerPreferencesCapability(player);
+                msg.playerSyncablesUpdate(playerPreferences);
+            }
+        }   
     }
 
 }
