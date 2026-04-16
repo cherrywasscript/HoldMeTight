@@ -10,6 +10,7 @@ import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.C
 import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CPlayerDismountPlayerPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CRemovePlayerCarrySyncPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.preferences.CPlayerPreferencesSyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.size.CPlayerSizeMixinSyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.carrypositions.CAddCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.carrypositions.CEditCustomCarryPosPacket;
@@ -19,6 +20,7 @@ import com.ricardthegreat.holdmetight.network.serverbound.SPlayerPutDownPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SSizeRaySync;
 import com.ricardthegreat.holdmetight.network.serverbound.capabilitySync.carry.SPlayerCarrySimplePacket;
 import com.ricardthegreat.holdmetight.network.serverbound.capabilitySync.carry.SPlayerCarrySyncPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.capabilitySync.preferences.SPlayerPreferencesSyncPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.capabilitySync.size.SPlayerSizeMixinSyncPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.carrypositions.SAddCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.carrypositions.SEditCustomCarryPosPacket;
@@ -171,6 +173,16 @@ public class PacketHandler {
         SOpenStandInItemMenuPacket::encode, 
         SOpenStandInItemMenuPacket::new, 
         SOpenStandInItemMenuPacket::handle);
+
+        INSTANCE.registerMessage(id++, CPlayerPreferencesSyncPacket.class, 
+        CPlayerPreferencesSyncPacket::encode, 
+        CPlayerPreferencesSyncPacket::new, 
+        CPlayerPreferencesSyncPacket::handle);
+
+        INSTANCE.registerMessage(id++, SPlayerPreferencesSyncPacket.class, 
+        SPlayerPreferencesSyncPacket::encode, 
+        SPlayerPreferencesSyncPacket::new, 
+        SPlayerPreferencesSyncPacket::handle);
     }
 
     public static void sendToServer(Object msg){
