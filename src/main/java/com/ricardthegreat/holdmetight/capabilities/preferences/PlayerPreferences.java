@@ -6,14 +6,19 @@ import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.capabilities.carry.CarryPosition;
 import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.items.EntityStandinItem;
+import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.preferences.CPlayerPreferencesSyncPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.size.CPlayerSizeMixinSyncPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.capabilitySync.carry.SPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.capabilitySync.preferences.SPlayerPreferencesSyncPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.capabilitySync.size.SPlayerSizeMixinSyncPacket;
 import com.ricardthegreat.holdmetight.utils.constants.PlayerCarryConstants;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 
 public class PlayerPreferences {
 
@@ -24,6 +29,35 @@ public class PlayerPreferences {
     private boolean inventoryCanBeAccessed = true;
     private boolean trapCarriedPlayer = true;
     private boolean canBeTrappedWhileCarried = true;
+
+
+    private boolean shouldSync = false;
+
+    public void tick(Player player){
+        if (shouldSync) {
+            sync(player);
+        }
+    }
+
+    private void sync(Player player){
+        shouldSync = false;
+        if (player.level().isClientSide) {
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> 
+                PacketHandler.sendToServer(getServerSyncPacket()));
+        }else {
+            if (!player.getServer().isDedicatedServer()) {
+                DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> 
+                PacketHandler.sendToAllClients(getClientSyncPacket(player)));
+            }else{
+                DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> 
+                PacketHandler.sendToAllClients(getClientSyncPacket(player)));
+            }
+        }
+    }
+
+    public void updateShouldSync(){
+        this.shouldSync = true;
+    }
 
     public float getMaxScale() {
         return maxScale;

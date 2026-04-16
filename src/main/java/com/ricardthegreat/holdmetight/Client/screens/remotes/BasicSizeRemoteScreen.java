@@ -5,6 +5,7 @@ import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
+import com.ricardthegreat.holdmetight.capabilities.preferences.PlayerPreferencesProvider;
 import com.ricardthegreat.holdmetight.capabilities.size.PlayerSizeProvider;
 import com.ricardthegreat.holdmetight.items.remotes.AbstractSizeRemoteItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
@@ -117,7 +118,7 @@ public class BasicSizeRemoteScreen extends AbstractSizeRemoteScreen{
                 //send the multiplier and playeruuid to the server packet handler
                 float scale = DEFAULT_SCALE;
                 if (tag.getBoolean(AbstractSizeRemoteItem.IS_PLAYER_TAG)) {
-                    scale = PlayerSizeProvider.getPlayerSizeCapability((Player) selectedEnt).getDefaultScale();
+                    scale = PlayerPreferencesProvider.getPlayerPreferencesCapability((Player) selectedEnt).getDefaultScale();
                     PacketHandler.sendToServer(new SEntitySetTargetScalePacket(scale, selectedEnt.getUUID(), tag.getInt(AbstractSizeRemoteItem.ENTITY_ID), 1, tag.getBoolean(AbstractSizeRemoteItem.IS_PLAYER_TAG)));
                 }else {
                     PacketHandler.sendToServer(new SEntitySetTargetScalePacket(scale, selectedEnt.getUUID(), tag.getInt(AbstractSizeRemoteItem.ENTITY_ID), 20, tag.getBoolean(AbstractSizeRemoteItem.IS_PLAYER_TAG)));

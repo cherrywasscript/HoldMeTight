@@ -6,6 +6,8 @@ import javax.annotation.Nonnull;
 
 import com.ricardthegreat.holdmetight.HMTConfig;
 import com.ricardthegreat.holdmetight.HoldMeTight;
+import com.ricardthegreat.holdmetight.capabilities.preferences.PlayerPreferences;
+import com.ricardthegreat.holdmetight.capabilities.preferences.PlayerPreferencesProvider;
 import com.ricardthegreat.holdmetight.capabilities.size.PlayerSize;
 import com.ricardthegreat.holdmetight.capabilities.size.PlayerSizeProvider;
 import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
@@ -68,7 +70,7 @@ public class PreferencesScreen extends Screen{
     private ResourceLocation BACKGROUND = new ResourceLocation(HoldMeTight.MODID, "textures/gui/size_remote_bg.png");
 
     private Player player;
-    private PlayerSize playerSize;
+    private PlayerPreferences playerPreferences;
 
     //positions on the image background
     private int leftPos;
@@ -107,7 +109,7 @@ public class PreferencesScreen extends Screen{
         this.imageHeight = 256;
 
         this.player = player;
-        this.playerSize = PlayerSizeProvider.getPlayerSizeCapability(player);
+        this.playerPreferences = PlayerPreferencesProvider.getPlayerPreferencesCapability(player);
     }
 
     @Override
@@ -144,9 +146,9 @@ public class PreferencesScreen extends Screen{
         //graphics.fill(centerHorizonalPos-50, centerVerticalPos-20, centerHorizonalPos+50, centerVerticalPos+20, 0x88FFFFFF);
 
         graphics.drawString(this.font, String.valueOf(PlayerSizeUtils.getSize(player)), leftPos + 8 + font.width("Current scale: "), topPos +18,0xdddddd,false);
-        graphics.drawString(this.font, String.valueOf(playerSize.getMaxScale()), leftPos + 8 + font.width("Max scale: "), topPos +30,0xdddddd,false);
-        graphics.drawString(this.font, String.valueOf(playerSize.getMinScale()), leftPos + 8 + font.width("Min scale: "), topPos +40,0xdddddd,false);
-        graphics.drawString(this.font, String.valueOf(playerSize.getDefaultScale()), leftPos + 8 + font.width("Default scale: "), topPos +50,0xdddddd,false);
+        graphics.drawString(this.font, String.valueOf(playerPreferences.getMaxScale()), leftPos + 8 + font.width("Max scale: "), topPos +30,0xdddddd,false);
+        graphics.drawString(this.font, String.valueOf(playerPreferences.getMinScale()), leftPos + 8 + font.width("Min scale: "), topPos +40,0xdddddd,false);
+        graphics.drawString(this.font, String.valueOf(playerPreferences.getDefaultScale()), leftPos + 8 + font.width("Default scale: "), topPos +50,0xdddddd,false);
 
         graphics.drawString(this.font, "Current scale:", leftPos + 8, topPos +18,0xdddddd,false);
         graphics.drawString(this.font, "Max scale:", leftPos + 8, topPos +30,0xdddddd,false);
@@ -199,22 +201,22 @@ public class PreferencesScreen extends Screen{
     protected void handleMaxButton(Button button){
         String scaleString = maxScaleField.getValue();
         if (scaleString != null && !scaleString.isEmpty()){
-            playerSize.setMaxScale(Float.parseFloat(scaleString));
-            playerSize.updateShouldSync();
+            playerPreferences.setMaxScale(Float.parseFloat(scaleString));
+            playerPreferences.updateShouldSync();
         }
     }
     protected void handleMinButton(Button button){
         String scaleString = minScaleField.getValue();
         if (scaleString != null && !scaleString.isEmpty()){
-            playerSize.setMinScale(Float.parseFloat(scaleString));
-            playerSize.updateShouldSync();
+            playerPreferences.setMinScale(Float.parseFloat(scaleString));
+            playerPreferences.updateShouldSync();
         }
     }
     protected void handleDefaultButton(Button button){
         String scaleString = defaultScaleField.getValue();
         if (scaleString != null && !scaleString.isEmpty()){
-            playerSize.setDefaultScale(Float.parseFloat(scaleString));
-            playerSize.updateShouldSync();
+            playerPreferences.setDefaultScale(Float.parseFloat(scaleString));
+            playerPreferences.updateShouldSync();
         }
     }
 
@@ -260,9 +262,9 @@ public class PreferencesScreen extends Screen{
         minScaleField.setFilter(filter);
         defaultScaleField.setFilter(filter);
 
-        maxScaleField.setValue(Float.toString(playerSize.getMaxScale()));
-        minScaleField.setValue(Float.toString(playerSize.getMinScale()));
-        defaultScaleField.setValue(Float.toString(playerSize.getDefaultScale()));
+        maxScaleField.setValue(Float.toString(playerPreferences.getMaxScale()));
+        minScaleField.setValue(Float.toString(playerPreferences.getMinScale()));
+        defaultScaleField.setValue(Float.toString(playerPreferences.getDefaultScale()));
 
         maxScaleField.setTooltip(Tooltip.create(MAX_SCALE_FIELD_TOOLTIP, MAX_SCALE_FIELD_TOOLTIP));
         minScaleField.setTooltip(Tooltip.create(MIN_SCALE_FIELD_TOOLTIP, MIN_SCALE_FIELD_TOOLTIP));

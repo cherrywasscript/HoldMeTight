@@ -1,6 +1,8 @@
 package com.ricardthegreat.holdmetight.utils.sizeutils;
 
 import com.ricardthegreat.holdmetight.HMTConfig;
+import com.ricardthegreat.holdmetight.capabilities.preferences.PlayerPreferences;
+import com.ricardthegreat.holdmetight.capabilities.preferences.PlayerPreferencesProvider;
 import com.ricardthegreat.holdmetight.capabilities.size.PlayerSize;
 import com.ricardthegreat.holdmetight.capabilities.size.PlayerSizeProvider;
 
@@ -214,8 +216,8 @@ public class PlayerSizeUtils {
     }
 
     private static float clampToPreferences(Player player, float size){
-        LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
-        PlayerSize orElse = optional.orElse(null);
+        LazyOptional<PlayerPreferences> optional = player.getCapability(PlayerPreferencesProvider.PLAYER_PREFERENCES);
+        PlayerPreferences orElse = optional.orElse(null);
         if (orElse != null) {
             size = Math.max(size, orElse.getMinScale());
             size = Math.min(size, orElse.getMaxScale());
