@@ -6,6 +6,8 @@ import java.util.function.Supplier;
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.capabilities.preferences.PlayerPreferences;
+import com.ricardthegreat.holdmetight.capabilities.preferences.PlayerPreferencesProvider;
 import com.ricardthegreat.holdmetight.capabilities.size.PlayerSize;
 import com.ricardthegreat.holdmetight.capabilities.size.PlayerSizeProvider;
 import com.ricardthegreat.holdmetight.items.EntityStandinItem;
@@ -75,6 +77,7 @@ public class ForgeModEvents {
     public static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
         event.register(PlayerSize.class);
         event.register(PlayerCarry.class);
+        event.register(PlayerPreferences.class);
     }
 
     @SubscribeEvent
@@ -140,6 +143,8 @@ public class ForgeModEvents {
             Supplier<ServerPlayer> supplier = () -> serverJoiner;
 
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+                //TODO remove this if i find no use for size capability
+                /* 
                 LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
                 if (optional.isPresent()) {
                     PlayerSize orElse = optional.orElse(new PlayerSize());
@@ -150,10 +155,22 @@ public class ForgeModEvents {
                         PacketHandler.sendToPlayer(orElse.getSyncPacket(player), supplier);
                     }
                 }
+                    */
 
                 LazyOptional<PlayerCarry> CarryOptional = player.getCapability(PlayerCarryProvider.PLAYER_CARRY);
                 if (CarryOptional.isPresent()) {
                     PlayerCarry orElse = CarryOptional.orElse(new PlayerCarry());
+
+                    if (player == serverJoiner) {
+                        PacketHandler.sendToAllClients(orElse.getClientSyncPacket(player));
+                    }else{
+                        PacketHandler.sendToPlayer(orElse.getClientSyncPacket(player), supplier);
+                    }
+                }
+
+                LazyOptional<PlayerPreferences> PreferencesOptional = player.getCapability(PlayerPreferencesProvider.PLAYER_PREFERENCES);
+                if (PreferencesOptional.isPresent()) {
+                    PlayerPreferences orElse = PreferencesOptional.orElse(new PlayerPreferences());
 
                     if (player == serverJoiner) {
                         PacketHandler.sendToAllClients(orElse.getClientSyncPacket(player));
