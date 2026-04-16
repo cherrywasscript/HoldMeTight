@@ -12,6 +12,8 @@ import net.minecraftforge.fml.DistExecutor;
 
 public class PlayerSize {
 
+    //TODO remove this class if i find no use for it
+
     public void updateSyncables(float maxScale, float minScale, float defaultScale){
 
     }
@@ -20,25 +22,12 @@ public class PlayerSize {
         return new CPlayerSizeMixinSyncPacket(player.getUUID());
     }
 
-    public void updateShouldSync(){
-        this.shouldSync = true;
-    }
-
     public void copy(PlayerSize source){
-        this.maxScale = source.maxScale;
-        this.minScale = source.minScale;
-        this.defaultScale = source.defaultScale;
     }
 
     public void saveNBTData(CompoundTag tag){
-        tag.putFloat("maxScale", maxScale);
-        tag.putFloat("minScale", minScale);
-        tag.putFloat("defaultScale", defaultScale);
     }
 
     public void loadNBTData(CompoundTag tag){
-        maxScale = tag.getFloat("maxScale");
-        minScale = tag.getFloat("minScale");
-        defaultScale = tag.getFloat("defaultScale");
     }
 }
