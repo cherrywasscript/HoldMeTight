@@ -12,27 +12,22 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 public class CPlayerSizeMixinSyncPacket {
+    //TODO remove this class
 
-    private final float maxScale;
-    private final float minScale;
-    private final float defaultScale;
+    //private final float maxScale;
+    //private final float minScale;
+    //private final float defaultScale;
     private final UUID uuid;
 
-    public CPlayerSizeMixinSyncPacket(float maxScale, float minScale, float defaultScale, UUID uuid){
-        this.maxScale = maxScale;
-        this.minScale = minScale;
-        this.defaultScale = defaultScale;
+    public CPlayerSizeMixinSyncPacket(UUID uuid){
         this.uuid = uuid;
     }
 
     public CPlayerSizeMixinSyncPacket(FriendlyByteBuf buffer){
-        this(buffer.readFloat(), buffer.readFloat(), buffer.readFloat(), buffer.readUUID());
+        this(buffer.readUUID());
     }
 
     public void encode(FriendlyByteBuf buffer){
-        buffer.writeFloat(maxScale);
-        buffer.writeFloat(minScale);
-        buffer.writeFloat(defaultScale);
         buffer.writeUUID(uuid);
     }
 
@@ -45,7 +40,6 @@ public class CPlayerSizeMixinSyncPacket {
     }
 
     public void playerSyncablesUpdate(PlayerSize playerSize){
-        playerSize.updateSyncables(maxScale, minScale, defaultScale);
     }
 
     public UUID getUuid() {
