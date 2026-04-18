@@ -47,7 +47,7 @@ public class SEntitySetTargetScalePacket {
             ServerPlayer target = sender.server.getPlayerList().getPlayer(uuid);
 
             if(target != null){
-                PlayerSizeUtils.setSize(target, scale, ticks);
+                PlayerSizeUtils.setSize(sender, target, scale, ticks);
                 /* 
                 if (ticks > 0) {
                     SizeUtils.setSizeOverTimeCustom(target, scale, ticks);
@@ -60,7 +60,7 @@ public class SEntitySetTargetScalePacket {
             Entity target = sender.level().getEntity(numericId);
 
             if (target != null && target.getUUID().compareTo(uuid) == 0) {
-                EntitySizeUtils.setSize(target, scale, ticks);
+                EntitySizeUtils.setSize(sender, target, scale, ticks);
             }
         }
     }

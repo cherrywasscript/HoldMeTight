@@ -47,13 +47,13 @@ public class SEntityMultTargetScalePacket {
             ServerPlayer target = sender.server.getPlayerList().getPlayer(uuid);
 
             if(target != null){
-                PlayerSizeUtils.multSize(target, scale, ticks);
+                PlayerSizeUtils.multSize(sender, target, scale, ticks);
             }
         }else{
             Entity target = sender.level().getEntity(numericId);
 
             if (target != null && target.getUUID().compareTo(uuid) == 0) {
-                EntitySizeUtils.multSize(target, scale, ticks);
+                EntitySizeUtils.multSize(sender, target, scale, ticks);
             }
         }
     }

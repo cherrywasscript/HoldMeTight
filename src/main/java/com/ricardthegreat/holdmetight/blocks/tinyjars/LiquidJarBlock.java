@@ -38,7 +38,8 @@ public class LiquidJarBlock extends AbstractJarBlock {
                 float size = EntitySizeUtils.getSize(entity);
                 double target = size*mult;
 
-                EntitySizeUtils.setSize(entity, (float) target, 0);
+                //TODO make this send entity who placed the block
+                EntitySizeUtils.setSize(null, entity, (float) target, 0);
             }
         }
     }

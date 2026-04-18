@@ -46,13 +46,13 @@ public class SEntityAddTargetScalePacket {
             ServerPlayer target = sender.server.getPlayerList().getPlayer(uuid);
 
             if(target != null){
-                PlayerSizeUtils.addSize(target, scale);
+                PlayerSizeUtils.addSize(sender, target, scale);
             }
         }else{
             Entity target = sender.level().getEntity(numericId);
 
             if (target != null && target.getUUID().compareTo(uuid) == 0) {
-                EntitySizeUtils.addSize(target, scale);
+                EntitySizeUtils.addSize(sender, target, scale);
             }
         }
     }
