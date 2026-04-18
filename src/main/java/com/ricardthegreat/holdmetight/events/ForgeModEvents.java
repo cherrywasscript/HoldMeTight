@@ -203,26 +203,4 @@ public class ForgeModEvents {
     public static void onLivingAttackEvent(LivingAttackEvent event){
         
     }
-
-    @SubscribeEvent
-    public static void onMobEffectAppliedEvent(MobEffectEvent.Added event){
-        Entity source = event.getEffectSource();
-        if (source != null) {
-            Entity ent = event.getEntity();
-            if (ent instanceof Player player) {
-                PlayerPreferences prefs = PlayerPreferencesProvider.getPlayerPreferencesCapability(player);
-                if (!prefs.getOthersCanChange()) {
-                    if (!source.getUUID().equals(player.getUUID())) {
-                        player.removeEffect(event.getEffectInstance().getEffect());
-                    }
-                }
-
-                if (!prefs.getSelfCanChange()) {
-                    if (source.getUUID().equals(player.getUUID())) {
-                        player.removeEffect(event.getEffectInstance().getEffect());
-                    }
-                }
-            }
-        }
-    }
 }
