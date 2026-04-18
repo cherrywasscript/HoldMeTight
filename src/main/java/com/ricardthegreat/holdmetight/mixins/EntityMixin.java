@@ -14,6 +14,7 @@ import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.items.EntityStandinItem;
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
+import com.ricardthegreat.holdmetight.mixins.carry.PickupEntityMixin;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CPlayerDismountPlayerPacket;
 import com.ricardthegreat.holdmetight.utils.CheckNonInvSlotUtil;
@@ -28,6 +29,7 @@ import net.minecraft.world.item.ItemStack;
 
 
 //TODO make not pushed by fluids when big (IFORGEENTITY)
+//Also split this into seperate classes so its easier to understand and not just "entity mixin"
 @Mixin(Entity.class)
 public abstract class EntityMixin {
 
@@ -36,43 +38,6 @@ public abstract class EntityMixin {
     private double yOffset = 0;
 
     private boolean hidden = false;
-
-    //allows for picking up entities when clicking on them
-    //currently only works on players
-    @Inject(at = @At("HEAD"), method = "interact(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/InteractionHand;)Lnet/minecraft/world/InteractionResult;", cancellable = true)
-    public void unnamedsizemod$interact(Player vehicle, InteractionHand hand, CallbackInfoReturnable<InteractionResult> info) {
-        Entity rider = (Entity) (Object) this;
-        
-        if(rider instanceof Player && vehicle.getMainHandItem().isEmpty() && canPickup(vehicle, rider) && HMTConfig.SERVER_CONFIG.canPickupPlayers.get()){
-            rider.startRiding(vehicle);
-            
-            
-
-            ItemStack item = PlayerStandinItem.createEntityItem(vehicle, (Player) rider);
-            vehicle.getInventory().add(vehicle.getInventory().selected, item);
-            
-        }else if (!(rider instanceof Player) && vehicle.getMainHandItem().isEmpty() && canPickup(vehicle, rider) && HMTConfig.SERVER_CONFIG.canPickupEntities.get()) {
-            rider.startRiding(vehicle);
-
-            ItemStack item = EntityStandinItem.createEntityItem(vehicle, rider);
-            vehicle.getInventory().add(vehicle.getInventory().selected, item);
-        }
-    }
-
-
-    //dismounting players is desynced so this sends a packet from the server to all clients which should sync it up
-    //it works in my testing but idk about at scale 
-    @Inject(at = @At("HEAD"), method = "stopRiding()V")
-    public void unnamedsizemod$dismount(CallbackInfo info){
-        Entity ent = (Entity) (Object) this;
-        Entity vehicle = ent.getVehicle();
-        if(ent instanceof Player && ent.isPassenger() && vehicle != null && vehicle instanceof Player){
-            if(!ent.level().isClientSide()) {
-                PacketHandler.sendToAllClients(new CPlayerDismountPlayerPacket(ent.getUUID()));
-            }
-        }
-    }   
-
     
     //@Overwrite
     @Inject(at = @At("HEAD"), method = "positionRider(Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity$MoveFunction;)V", cancellable = true)
@@ -80,7 +45,7 @@ public abstract class EntityMixin {
         Entity vehicle = (Entity) (Object) this;
         if (vehicle.hasPassenger(rider)) {
             if(vehicle instanceof Player playerV){
-                if(!canCarry(playerV, rider)){
+                if(!PickupEntityMixin.canCarry(playerV, rider)){
                     rider.stopRiding();
                 }
                 
@@ -123,18 +88,6 @@ public abstract class EntityMixin {
 
         xOffset *= EntitySizeUtils.getSize(vehicle);
         yOffset *= EntitySizeUtils.getSize(vehicle);
-    }
-
-    private boolean canPickup(Player vehicle, Entity rider){
-        if (vehicle.getPassengers().contains(rider)) {
-            HoldMeTight.LOGGER.debug("cannot carry something you are already carrying");
-            return false;
-        }
-        return canCarry(vehicle, rider);
-    }
-
-    private boolean canCarry(Player vehicle, Entity rider){
-        return EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)*HMTConfig.SERVER_CONFIG.pickupRatioScale.get();
     }
     
     
