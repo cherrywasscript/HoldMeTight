@@ -46,6 +46,7 @@ public class PlayerPreferences {
 
     private void sync(Player player){
         shouldSync = false;
+        System.out.println("player pref sync");
         if (player.level().isClientSide) {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> 
                 PacketHandler.sendToServer(getServerSyncPacket()));
@@ -122,7 +123,7 @@ public class PlayerPreferences {
         this.youCanChangeYourSize = youCanChangeYourSize;
     }
 
-        public boolean isInventoryCanBeAccessed() {
+    public boolean getInventoryCanBeAccessed() {
         return inventoryCanBeAccessed;
     }
 
@@ -130,7 +131,7 @@ public class PlayerPreferences {
         this.inventoryCanBeAccessed = inventoryCanBeAccessed;
     }
 
-    public boolean isTrapCarriedPlayer() {
+    public boolean getTrapCarriedPlayer() {
         return trapCarriedPlayer;
     }
 
@@ -138,7 +139,7 @@ public class PlayerPreferences {
         this.trapCarriedPlayer = trapCarriedPlayer;
     }
 
-    public boolean isCanBeTrappedWhileCarried() {
+    public boolean getCanBeTrappedWhileCarried() {
         return canBeTrappedWhileCarried;
     }
 
@@ -146,7 +147,7 @@ public class PlayerPreferences {
         this.canBeTrappedWhileCarried = canBeTrappedWhileCarried;
     }
 
-    public boolean isCanBePickedup() {
+    public boolean getCanBePickedup() {
         return canBePickedup;
     }
 
@@ -154,7 +155,7 @@ public class PlayerPreferences {
         this.canBePickedup = canBePickedup;
     }
 
-    public boolean isCanPickupOthers() {
+    public boolean getCanPickupOthers() {
         return canPickupOthers;
     }
 

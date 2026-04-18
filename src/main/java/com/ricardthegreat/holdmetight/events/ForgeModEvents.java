@@ -52,6 +52,10 @@ public class ForgeModEvents {
             if(!event.getObject().getCapability(PlayerCarryProvider.PLAYER_CARRY).isPresent()) {
                 event.addCapability(new ResourceLocation(HoldMeTight.MODID, "carry"), new PlayerCarryProvider());
             }
+
+            if(!event.getObject().getCapability(PlayerPreferencesProvider.PLAYER_PREFERENCES).isPresent()) {
+                event.addCapability(new ResourceLocation(HoldMeTight.MODID, "preferences"), new PlayerPreferencesProvider());
+            }
         }
     }
 
@@ -66,6 +70,11 @@ public class ForgeModEvents {
             });
             event.getOriginal().getCapability(PlayerCarryProvider.PLAYER_CARRY).ifPresent(oldStore -> {
                 event.getEntity().getCapability(PlayerCarryProvider.PLAYER_CARRY).ifPresent(newStore -> {
+                    newStore.copyFrom(oldStore);
+                });
+            });
+            event.getOriginal().getCapability(PlayerPreferencesProvider.PLAYER_PREFERENCES).ifPresent(oldStore -> {
+                event.getEntity().getCapability(PlayerPreferencesProvider.PLAYER_PREFERENCES).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);
                 });
             });
@@ -142,9 +151,7 @@ public class ForgeModEvents {
     public static void syncPlayerCapabilities(ServerPlayer serverJoiner, MinecraftServer server){
             Supplier<ServerPlayer> supplier = () -> serverJoiner;
 
-            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
-                //TODO remove this if i find no use for size capability
-                /* 
+            for (ServerPlayer player : server.getPlayerList().getPlayers()) { 
                 LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
                 if (optional.isPresent()) {
                     PlayerSize orElse = optional.orElse(new PlayerSize());
@@ -155,8 +162,7 @@ public class ForgeModEvents {
                         PacketHandler.sendToPlayer(orElse.getSyncPacket(player), supplier);
                     }
                 }
-                    */
-
+                
                 LazyOptional<PlayerCarry> CarryOptional = player.getCapability(PlayerCarryProvider.PLAYER_CARRY);
                 if (CarryOptional.isPresent()) {
                     PlayerCarry orElse = CarryOptional.orElse(new PlayerCarry());

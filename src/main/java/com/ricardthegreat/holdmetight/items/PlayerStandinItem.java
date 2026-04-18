@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.ricardthegreat.holdmetight.capabilities.preferences.PlayerPreferencesProvider;
 import com.ricardthegreat.holdmetight.client.guielements.tooltips.PlayerItemTooltip;
 import com.ricardthegreat.holdmetight.inventory.HeldEntityInventoryProvider;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
@@ -67,12 +68,15 @@ public class PlayerStandinItem extends EntityStandinItem{
                 Level level = player.level();
                 Player representation = level.getPlayerByUUID(tag.getUUID(ENTITY_UUID));
                 if (representation != null) {
-                    if (!level.isClientSide) {
-                        if (tag != null) {
-                            player.openMenu(new HeldEntityInventoryProvider(representation));
+                    boolean canViewInv = PlayerPreferencesProvider.getPlayerPreferencesCapability(representation).getInventoryCanBeAccessed();
+                    if (canViewInv) {
+                        if (!level.isClientSide) {
+                            if (tag != null) {
+                                player.openMenu(new HeldEntityInventoryProvider(representation));
+                            }
+                        }else{
+                            PacketHandler.sendToServer(new SOpenStandInItemMenuPacket(representation.getUUID()));
                         }
-                    }else{
-                        PacketHandler.sendToServer(new SOpenStandInItemMenuPacket(representation.getUUID()));
                     }
                 }
             

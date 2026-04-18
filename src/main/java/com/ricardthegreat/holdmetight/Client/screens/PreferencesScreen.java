@@ -37,6 +37,12 @@ public class PreferencesScreen extends Screen{
     //TODO make these translatable
     private static final Component TITLE = Component.literal("Preferences Screen");
 
+    protected static final Component SAVE_BUTTON = Component.literal("Save");
+    protected static final Component RESET_BUTTON = Component.literal("Reset");
+
+    protected static final Component SAVE_BUTTON_TOOLTIP = Component.literal("Save all changed preferences");
+    protected static final Component RESET_BUTTON_TOOLTIP = Component.literal("Reset all preferences to default(you must manually click save after this to apply the reset)");
+
     //String components related to scale preferences
     protected static final Component MAX_BUTTON = Component.literal("set max");
     protected static final Component MIN_BUTTON = Component.literal("set min");
@@ -45,6 +51,9 @@ public class PreferencesScreen extends Screen{
     protected static final Component MAX_BUTTON_TOOLTIP = Component.literal("set your maximum scale");
     protected static final Component MIN_BUTTON_TOOLTIP = Component.literal("set minimum scale");
     protected static final Component DEFAULT_BUTTON_TOOLTIP = Component.literal("set default scale");
+    protected static final Component OTHERS_CAN_CHANGE_YOUR_SIZE_BUTTON_TOOLTIP = Component.literal("Allow or disallow others from changing your size");
+    protected static final Component YOU_CAN_CHANGE_YOUR_SIZE_BUTTON_TOOLTIP = Component.literal("Allow or disallow yourself from changing your size");
+
 
     protected static final Component MAX_SCALE_FIELD = Component.literal("max scale");
     protected static final Component MIN_SCALE_FIELD = Component.literal("min scale");
@@ -55,13 +64,19 @@ public class PreferencesScreen extends Screen{
     protected static final Component DEFAULT_SCALE_FIELD_TOOLTIP = Component.literal("input default scale");
 
     //String components related to carry preferences
-    protected static final Component ACCESS_INVENTORY_BUTTON = Component.literal("True/False");
-    protected static final Component TRAP_WHEN_CARRYING_BUTTON = Component.literal("True/False");
-    protected static final Component TRAP_WHEN_CARRIED_BUTTON = Component.literal("True/False");
+    //protected static final Component ACCESS_INVENTORY_BUTTON = Component.literal("True/False");
+    //protected static final Component TRAP_WHEN_CARRYING_BUTTON = Component.literal("True/False");
+    //protected static final Component TRAP_WHEN_CARRIED_BUTTON = Component.literal("True/False");
+    protected static final Component TRUE_BUTTON = Component.literal("True");
+    protected static final Component FALSE_BUTTON = Component.literal("False");
 
-    protected static final Component ACCESS_INVENTORY_BUTTON_TOOLTIP = Component.literal("Allow players carrying you to access and edit your inventory");
-    protected static final Component TRAP_WHEN_CARRYING_BUTTON_TOOLTIP = Component.literal("Prevent players you are carrying from dismounting");
-    protected static final Component TRAP_WHEN_CARRIED_BUTTON_TOOLTIP = Component.literal("Allow players who are carrying you to prevent you from dismounting");
+    protected static final Component ACCESS_INVENTORY_BUTTON_TOOLTIP = Component.literal("Allow or disallow players carrying you from accessing and editing your inventory");
+    protected static final Component TRAP_WHEN_CARRYING_BUTTON_TOOLTIP = Component.literal("Allow or disallow players you are carrying from dismounting");
+    protected static final Component TRAP_WHEN_CARRIED_BUTTON_TOOLTIP = Component.literal("Allow or disallow players who are carrying you from preventing you from dismounting");
+    protected static final Component CAN_BE_PICKED_UP_BUTTON_TOOLTIP = Component.literal("Allow or disallow other players picking you up");
+    protected static final Component CAN_PICKUP_OTHERS_BUTTON_TOOLTIP = Component.literal("Allow or disallow yourself from picking other players up");
+
+
 
     private final int imageWidth;
     private final int imageHeight;
@@ -90,17 +105,33 @@ public class PreferencesScreen extends Screen{
     protected Button maxButton;
     protected Button minButton;
     protected Button defaultButton;
+    protected Button othersCanChangeYourSize;
+    protected Button youCanChangeYourSize;
 
     protected EditBox maxScaleField;
     protected EditBox minScaleField;
     protected EditBox defaultScaleField;
 
     //Buttons and fields related to carry preferences
-    protected Button accessInventoryButton; // true/false allow players carrying you to access and mess with your inventory
-    protected Button trapWhenCarryingButton; // true/false for stopping players from "shifting" off when you are carrying them
-    protected Button trapWhenCarriedButton; // true/false for allowing yourself to not be able to "shift" off if the person carrying you has the above option enabled
+    protected Button inventoryCanBeAccessed; // true/false allow players carrying you to access and mess with your inventory
+    protected Button trapCarriedPlayer; // true/false for stopping players from "shifting" off when you are carrying them
+    protected Button canBeTrappedWhileCarried; // true/false for allowing yourself to not be able to "shift" off if the person carrying you has the above option enabled
+    protected Button canBePickedup;
+    protected Button canPickupOthers;
+
+    //preference variables
+    protected boolean othersCanChangeYourSizeVar;
+    protected boolean youCanChangeYourSizeVar;
+    protected boolean inventoryCanBeAccessedVar;
+    protected boolean trapCarriedPlayerVar;
+    protected boolean canBeTrappedWhileCarriedVar;
+    protected boolean canBePickedupVar;
+    protected boolean canPickupOthersVar;
 
 
+    //"universal" buttons
+    protected Button saveButton;
+    protected Button resetButton;
 
     public PreferencesScreen(Player player) {
         super(TITLE);
@@ -131,6 +162,8 @@ public class PreferencesScreen extends Screen{
 
         this.currentTab = Tab.SIZE;
 
+        initPreferenceVariables();
+
         initButtons();
 
         initEditBoxes();
@@ -160,7 +193,33 @@ public class PreferencesScreen extends Screen{
         //TODO add logic for saving edit boxes
     }
 
+    protected void initPreferenceVariables(){
+        othersCanChangeYourSizeVar = playerPreferences.getOthersCanChange();
+        youCanChangeYourSizeVar = playerPreferences.getSelfCanChange();
+        inventoryCanBeAccessedVar = playerPreferences.getInventoryCanBeAccessed();
+        trapCarriedPlayerVar = playerPreferences.getTrapCarriedPlayer();
+        canBeTrappedWhileCarriedVar = playerPreferences.getCanBeTrappedWhileCarried();
+        canBePickedupVar = playerPreferences.getCanBePickedup();
+        canPickupOthersVar = playerPreferences.getCanPickupOthers();
+    }
+
     protected void initButtons(){
+        saveButton = addRenderableWidget(
+            Button.builder(
+                SAVE_BUTTON, this::handleMaxButton)
+                .bounds(leftPos + 8, this.bottomPos, 74, 20)
+                .tooltip(Tooltip.create(SAVE_BUTTON_TOOLTIP))
+                .build()
+        );
+
+        resetButton = addRenderableWidget(
+            Button.builder(
+                RESET_BUTTON, this::handleMaxButton)
+                .bounds(rightPos, this.bottomPos, 74, 20)
+                .tooltip(Tooltip.create(RESET_BUTTON_TOOLTIP))
+                .build()
+        );
+
         initScalePreferenceButtons();
         initCarryPreferenceButtons();
     }
@@ -189,13 +248,64 @@ public class PreferencesScreen extends Screen{
                 .tooltip(Tooltip.create(DEFAULT_BUTTON_TOOLTIP))
                 .build()
         );
+
+        othersCanChangeYourSize = addRenderableWidget(
+            Button.builder(
+                TRUE_BUTTON, this::handleOtherSizeButton)
+                .bounds(leftPos + 8, this.bottomPos -90, 30, 20)
+                .tooltip(Tooltip.create(OTHERS_CAN_CHANGE_YOUR_SIZE_BUTTON_TOOLTIP))
+                .build()
+        );
+
+        youCanChangeYourSize = addRenderableWidget(
+            Button.builder(
+                TRUE_BUTTON, this::handleYouSizeButton)
+                .bounds(leftPos + 8 + 30, this.bottomPos -90, 30, 20)
+                .tooltip(Tooltip.create(YOU_CAN_CHANGE_YOUR_SIZE_BUTTON_TOOLTIP))
+                .build()
+        );
     }
 
     protected void initCarryPreferenceButtons(){
-        System.out.println("config: " + HMTConfig.CLIENT_CONFIG.getMinScale() + "/" + HMTConfig.CLIENT_CONFIG.getDefaultScale() + "/" + HMTConfig.CLIENT_CONFIG.getMaxScale());
-        //accessInventoryButton
-        //trapWhenCarryingButton
-        //trapWhenCarriedButton
+        inventoryCanBeAccessed = addRenderableWidget(
+            Button.builder(
+                TRUE_BUTTON, this::handleInvAccessButton)
+                .bounds(leftPos + 8 + 30 + 30 , this.bottomPos -90, 30, 20)
+                .tooltip(Tooltip.create(ACCESS_INVENTORY_BUTTON_TOOLTIP))
+                .build()
+        );
+
+        trapCarriedPlayer = addRenderableWidget(
+            Button.builder(
+                TRUE_BUTTON, this::handleTrapCarriedButton)
+                .bounds(leftPos + 8 + 30 + 30 + 30, this.bottomPos -90, 30, 20)
+                .tooltip(Tooltip.create(TRAP_WHEN_CARRYING_BUTTON_TOOLTIP))
+                .build()
+        );
+
+        canBeTrappedWhileCarried = addRenderableWidget(
+            Button.builder(
+                TRUE_BUTTON, this::handleCanTrapButton)
+                .bounds(leftPos + 8 + 30 + 30 + 30 + 30, this.bottomPos -90, 30, 20)
+                .tooltip(Tooltip.create(TRAP_WHEN_CARRIED_BUTTON_TOOLTIP))
+                .build()
+        );
+
+        canBePickedup = addRenderableWidget(
+            Button.builder(
+                TRUE_BUTTON, this::handleCanBePickedButton)
+                .bounds(leftPos + 8 + 30 + 30 + 30 + 30 + 30, this.bottomPos -90, 30, 20)
+                .tooltip(Tooltip.create(CAN_BE_PICKED_UP_BUTTON_TOOLTIP))
+                .build()
+        );
+        
+        canPickupOthers = addRenderableWidget(
+            Button.builder(
+                TRUE_BUTTON, this::handleCanPickOthersButton)
+                .bounds(leftPos + 8 + 30 + 30 + 30 + 30 + 30 + 30, this.bottomPos -90, 30, 20)
+                .tooltip(Tooltip.create(CAN_PICKUP_OTHERS_BUTTON_TOOLTIP))
+                .build()
+        );
     }
 
     protected void handleMaxButton(Button button){
@@ -217,6 +327,96 @@ public class PreferencesScreen extends Screen{
         if (scaleString != null && !scaleString.isEmpty()){
             playerPreferences.setDefaultScale(Float.parseFloat(scaleString));
             playerPreferences.updateShouldSync();
+        }
+    }
+
+    protected void handleOtherSizeButton(Button button){
+        othersCanChangeYourSizeVar = !othersCanChangeYourSizeVar;
+        flipTrueFalseMessage(button, othersCanChangeYourSizeVar);
+    }
+    protected void handleYouSizeButton(Button button){
+        youCanChangeYourSizeVar = !youCanChangeYourSizeVar;
+        flipTrueFalseMessage(button, youCanChangeYourSizeVar);
+    }
+    protected void handleInvAccessButton(Button button){
+        inventoryCanBeAccessedVar = !inventoryCanBeAccessedVar;
+        flipTrueFalseMessage(button, inventoryCanBeAccessedVar);
+    }
+    protected void handleTrapCarriedButton(Button button){
+        trapCarriedPlayerVar = !trapCarriedPlayerVar;
+        flipTrueFalseMessage(button, trapCarriedPlayerVar);
+    }
+    protected void handleCanTrapButton(Button button){
+        canBeTrappedWhileCarriedVar = !canBeTrappedWhileCarriedVar;
+        flipTrueFalseMessage(button, canBeTrappedWhileCarriedVar);
+    }
+    protected void handleCanBePickedButton(Button button){
+        canBePickedupVar = !canBePickedupVar;
+        flipTrueFalseMessage(button, canBePickedupVar);
+    }
+    protected void handleCanPickOthersButton(Button button){
+        canPickupOthersVar = !canPickupOthersVar;
+        flipTrueFalseMessage(button, canPickupOthersVar);
+    }
+
+    protected void handleSaveButton(Button button){
+        String scaleString = maxScaleField.getValue();
+        if (scaleString != null && !scaleString.isEmpty()){
+            playerPreferences.setMaxScale(Float.parseFloat(scaleString));
+        }
+
+        scaleString = minScaleField.getValue();
+        if (scaleString != null && !scaleString.isEmpty()){
+            playerPreferences.setMinScale(Float.parseFloat(scaleString));
+        }
+
+        scaleString = defaultScaleField.getValue();
+        if (scaleString != null && !scaleString.isEmpty()){
+            playerPreferences.setDefaultScale(Float.parseFloat(scaleString));
+        }
+
+        playerPreferences.setOthersCanChange(othersCanChangeYourSizeVar);
+        playerPreferences.setSelfCanChange(youCanChangeYourSizeVar);
+        playerPreferences.setInventoryCanBeAccessed(inventoryCanBeAccessedVar);
+        playerPreferences.setTrapCarriedPlayer(trapCarriedPlayerVar);
+        playerPreferences.setCanBeTrappedWhileCarried(canBeTrappedWhileCarriedVar);
+        playerPreferences.setCanBePickedup(canBePickedupVar);
+        playerPreferences.setCanPickupOthers(canPickupOthersVar);
+
+        playerPreferences.updateShouldSync();
+    }
+    protected void handleResetButton(Button button){
+        maxScaleField.setValue(Double.toString(0d));
+        minScaleField.setValue(Double.toString(1d));
+        defaultScaleField.setValue(Double.toString(Double.MAX_VALUE));
+
+        othersCanChangeYourSizeVar = true;
+        flipTrueFalseMessage(othersCanChangeYourSize, othersCanChangeYourSizeVar);
+
+        youCanChangeYourSizeVar = true;
+        flipTrueFalseMessage(youCanChangeYourSize, youCanChangeYourSizeVar);
+
+        inventoryCanBeAccessedVar = true;
+        flipTrueFalseMessage(inventoryCanBeAccessed, inventoryCanBeAccessedVar);
+
+        trapCarriedPlayerVar = true;
+        flipTrueFalseMessage(trapCarriedPlayer, trapCarriedPlayerVar);
+
+        canBeTrappedWhileCarriedVar = true;
+        flipTrueFalseMessage(canBeTrappedWhileCarried, canBeTrappedWhileCarriedVar);
+
+        canBePickedupVar = true;
+        flipTrueFalseMessage(canBePickedup, canBePickedupVar);
+
+        canPickupOthersVar = true;
+        flipTrueFalseMessage(canPickupOthers, canPickupOthersVar);
+    }
+
+    protected void flipTrueFalseMessage(Button button, boolean bool){
+        if (bool) {
+            button.setMessage(TRUE_BUTTON);
+        }else{
+            button.setMessage(FALSE_BUTTON);
         }
     }
 

@@ -42,7 +42,7 @@ public class ClientHooks {
     }
 
     public static void openSizePrefsScreen(Player player){
-        Minecraft.getInstance().setScreen(new PreferencesScreen(player));
+        Minecraft.getInstance().setScreen(new com.ricardthegreat.holdmetight.client.screens.preferences.PreferencesScreen(player));
     }
 
 
