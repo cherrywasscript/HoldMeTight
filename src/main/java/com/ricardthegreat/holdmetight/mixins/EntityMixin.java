@@ -18,6 +18,7 @@ import com.ricardthegreat.holdmetight.mixins.carry.PickupEntityMixin;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CPlayerDismountPlayerPacket;
 import com.ricardthegreat.holdmetight.utils.CheckNonInvSlotUtil;
+import com.ricardthegreat.holdmetight.utils.carry.carryPreferencesChecker;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
 
@@ -45,7 +46,7 @@ public abstract class EntityMixin {
         Entity vehicle = (Entity) (Object) this;
         if (vehicle.hasPassenger(rider)) {
             if(vehicle instanceof Player playerV){
-                if(!PickupEntityMixin.canCarry(playerV, rider)){
+                if(!carryPreferencesChecker.canCarry(playerV, rider)){
                     rider.stopRiding();
                 }
                 

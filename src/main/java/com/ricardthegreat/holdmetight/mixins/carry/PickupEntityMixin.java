@@ -14,6 +14,7 @@ import com.ricardthegreat.holdmetight.items.EntityStandinItem;
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CPlayerDismountPlayerPacket;
+import com.ricardthegreat.holdmetight.utils.carry.carryPreferencesChecker;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.world.InteractionHand;
@@ -29,7 +30,7 @@ public class PickupEntityMixin {
     public void unnamedsizemod$interact(Player vehicle, InteractionHand hand, CallbackInfoReturnable<InteractionResult> info) {
         Entity rider = (Entity) (Object) this;
         
-        if(rider instanceof Player && vehicle.getMainHandItem().isEmpty() && canPickup(vehicle, rider) && HMTConfig.SERVER_CONFIG.canPickupPlayers.get()){
+        if(rider instanceof Player && vehicle.getMainHandItem().isEmpty() && carryPreferencesChecker.canPickup(vehicle, rider) && HMTConfig.SERVER_CONFIG.canPickupPlayers.get()){
             rider.startRiding(vehicle);
             
             
@@ -37,7 +38,7 @@ public class PickupEntityMixin {
             ItemStack item = PlayerStandinItem.createEntityItem(vehicle, (Player) rider);
             vehicle.getInventory().add(vehicle.getInventory().selected, item);
             
-        }else if (!(rider instanceof Player) && vehicle.getMainHandItem().isEmpty() && canPickup(vehicle, rider) && HMTConfig.SERVER_CONFIG.canPickupEntities.get()) {
+        }else if (!(rider instanceof Player) && vehicle.getMainHandItem().isEmpty() && carryPreferencesChecker.canPickup(vehicle, rider) && HMTConfig.SERVER_CONFIG.canPickupEntities.get()) {
             rider.startRiding(vehicle);
 
             ItemStack item = EntityStandinItem.createEntityItem(vehicle, rider);
@@ -57,24 +58,4 @@ public class PickupEntityMixin {
             }
         }
     }   
-
-    private boolean canPickup(Player vehicle, Entity rider){
-        if (vehicle.getPassengers().contains(rider)) {
-            HoldMeTight.LOGGER.debug("cannot carry something you are already carrying");
-            return false;
-        }
-
-        if (rider instanceof Player player) {
-            PlayerPreferences vehPref = PlayerPreferencesProvider.getPlayerPreferencesCapability(vehicle);
-            PlayerPreferences ridPref = PlayerPreferencesProvider.getPlayerPreferencesCapability(player);
-            if (!vehPref.getCanPickupOthers() || !ridPref.getCanBePickedup()) {
-                return false;
-            }
-        }
-        return canCarry(vehicle, rider);
-    }
-
-    public static boolean canCarry(Player vehicle, Entity rider){
-        return EntitySizeUtils.getSize(rider) <= EntitySizeUtils.getSize(vehicle)*HMTConfig.SERVER_CONFIG.pickupRatioScale.get();
-    }
 }
