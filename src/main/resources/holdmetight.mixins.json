@@ -19,6 +19,9 @@
       "PlayerCarryPickupMixin",
       "PlayerMovedTooFastMixin",
 
+      "carry.PickupEntityMixin",
+      "carry.PlayerDismountMixin",
+
 
       "rendering.FrustumMixin",
       "rendering.DontRenderInvisibleCarriedEntities",

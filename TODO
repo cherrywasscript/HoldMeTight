@@ -1,8 +1,4 @@
-figure out why shift+clicking into and out of carried inventories is so strange
-add option to disable players from being able to access your inventory
-
-add options to both not allow players you are carrying to sneak off 
-as well as to always be able to sneak off if you are being carried
+check that all preference functions work properly
 
 make it so foxes aren't spooked by smaller players (probably some ratio maybe like 0.25 and lower relative to the fox)
 
@@ -10,6 +6,6 @@ add hotkey to pickup small entities so that you dont have to be super precice wh
 
 add ability to apply potions to entities by clicking them onto one another
 
-expand preferences screen a bit more (e.g. disable being picked up, disable being able to pickup others, disallow others from chaning your size, disallow yourself from changing your size)
+figure out why shift+clicking into and out of carried inventories is so strange
 
 more mobility options while tiny? super jump?
