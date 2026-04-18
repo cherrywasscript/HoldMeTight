@@ -125,6 +125,7 @@ public class PreferencesScreen extends Screen{
     public void render(@Nonnull GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
         renderBackground(graphics);
         super.render(graphics, mouseX, mouseY, partialTicks);
+        sizeTab.currentScale.setMessage(Component.literal("Current Size: " + PlayerSizeUtils.getSize(player)));
     }
 
     public void repositionElements() {
@@ -191,9 +192,9 @@ public class PreferencesScreen extends Screen{
         private static final Component TITLE = Component.literal("Size");
 
         protected static final Component OTHERS_CAN_CHANGE_YOUR_SIZE_BUTTON = Component.literal("Others can change your size");
-        protected static final Component OTHERS_CAN_CHANGE_YOUR_SIZE_BUTTON_TOOLTIP = Component.literal("Allow or disallow others from changing your size");
+        protected static final Component OTHERS_CAN_CHANGE_YOUR_SIZE_BUTTON_TOOLTIP = Component.literal("Allow or disallow others from changing your size (using size remotes)");
         protected static final Component YOU_CAN_CHANGE_YOUR_SIZE_BUTTON = Component.literal("You can change your size");
-        protected static final Component YOU_CAN_CHANGE_YOUR_SIZE_BUTTON_TOOLTIP = Component.literal("Allow or disallow yourself from changing your size");
+        protected static final Component YOU_CAN_CHANGE_YOUR_SIZE_BUTTON_TOOLTIP = Component.literal("Allow or disallow yourself from changing your size (using size remotes)");
 
         protected static final Component MIN_SCALE_FIELD = Component.literal("min scale");
         protected static final Component MIN_SCALE_FIELD_TOOLTIP = Component.literal("input min scale");
@@ -211,6 +212,8 @@ public class PreferencesScreen extends Screen{
         protected EditBox minScaleField;
         protected EditBox defaultScaleField;
         protected EditBox maxScaleField;
+
+        protected StringWidget currentScale;
 
         //should this be here, no idea but it is
         private Predicate<String> filter = new Predicate<String>() {
@@ -249,7 +252,7 @@ public class PreferencesScreen extends Screen{
             super(TITLE);
             RowHelper mainGrid = this.layout.rowSpacing(8).createRowHelper(1);
             
-            mainGrid.addChild(new StringWidget(210, 9, Component.literal("Current Size: " + PlayerSizeUtils.getSize(player)), font)).alignCenter();
+            currentScale = mainGrid.addChild(new StringWidget(210, 9, Component.literal("Current Size: " + PlayerSizeUtils.getSize(player)), font)).alignCenter();
 
             initButtons(mainGrid);
 
