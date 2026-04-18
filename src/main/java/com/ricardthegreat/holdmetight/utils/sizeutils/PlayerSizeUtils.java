@@ -19,11 +19,12 @@ public class PlayerSizeUtils {
 
     /**
      * set the player to change size
+     * @param changer - the player who instantiated the size change (used with preferences to ensure the size change should happen)
      * @param player - the player whos size is changing
      * @param size - the value the players size should become
      * @param ticks - the time it should take for the player to reach the given size in ticks (1/20 seconds)
      */
-    public static void setSize(Player player, float size, int ticks){
+    public static void setSize(Player changer, Player player, float size, int ticks){
         //ensure the size is not greater than the maximum allowed by the HMTConfig
         size = clampToPreferences(player, size);
         size = lockSizeCap(size);
@@ -58,12 +59,12 @@ public class PlayerSizeUtils {
      * @param size - the multplier to be applied to the players size
      * @param ticks - the time it should take for the player to reach the given size in ticks (1/20 seconds)
      */
-    public static void multSize(Player player, Float size, int ticks){
+    public static void multSize(Player changer, Player player, Float size, int ticks){
         ScaleData data = getScaleData(player);
 
         Float targetScale = data.getTargetScale()*size;
         
-        setSize(player, targetScale, ticks);
+        setSize(changer, player, targetScale, ticks);
     }
 
     /**
@@ -72,7 +73,7 @@ public class PlayerSizeUtils {
      * @param size - the amount the player should change by over the given time
      * @param ticks - the time in ticks (1/20 seconds) in which the player should change by the amount given in size
      */
-    public static void perpetualSize(Player player, Float size, int ticks){
+    public static void perpetualSize(Player changer, Player player, Float size, int ticks){
 
     }
 
@@ -81,7 +82,7 @@ public class PlayerSizeUtils {
      * @param player - the player whos size is changing
      * @param size - the amount that should be added to their size
      */
-    public static void addSize(Player player, Float size){
+    public static void addSize(Player changer, Player player, Float size){
         ScaleData data = getScaleData(player);
 
         Float currentScale = data.getScale();
