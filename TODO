@@ -1,11 +1,16 @@
-check that all preference functions work properly
-
-make it so foxes aren't spooked by smaller players (probably some ratio maybe like 0.25 and lower relative to the fox)
-
 add hotkey to pickup small entities so that you dont have to be super precice when targeting very small players
 
 add ability to apply potions to entities by clicking them onto one another
 
+fix anvilscreenhandlermixin closing anvils at big sizes
+
 figure out why shift+clicking into and out of carried inventories is so strange
 
 more mobility options while tiny? super jump?
+
+
+
+
+play the grabby animation thing when picking an ent up
+
+change how arm position is set currently its a mixin but i might be able to do it straight from the item or from the blockentityrender thing

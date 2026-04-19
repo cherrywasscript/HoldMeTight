@@ -125,5 +125,7 @@ version 0.6.7-beta
 version 0.7.0-beta
 - fixed issue with quark where viewing an emoting player would cause the game to crash (also probably fixes other render based crashes that just hadnt been encountered/reported)
 - fixed issue with reach while big so inventories (such as chests, barrels, furnaces, brewing stands etc.) should remain open
-- added ability to view and change the inventories of players you are carrying (right click)  you can disable this in preference settings (default key "]") if you dont want people to be able to mess with your stuff
 - expanded the preference menu (default key "]") to include more than just min, max and default height options
+- added ability to view and change the inventories of players you are carrying (right click)  you can disable this in preference settings (default key "]") if you dont want people to be able to mess with your stuff
+- made it so that players being carried cannot manually dismount by "shiftin" (changable via preferences menu default key "]")
+- mobs no longer avoid players that are less than 1/2 their height

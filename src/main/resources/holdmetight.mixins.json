@@ -74,7 +74,10 @@
 
       "sizeinteractions.AdjustPlayerKnockback",
       "sizeinteractions.AdjustMobKnockback",
-      "sizeinteractions.AdjustTakenKnockback"
+      "sizeinteractions.AdjustTakenKnockback",
+
+
+      "entitybehaviour.MobAvoidPlayerMixin"
     ],
     "client": [
     ],
