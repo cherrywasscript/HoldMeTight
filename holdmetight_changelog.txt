@@ -129,3 +129,6 @@ version 0.7.0-beta
 - added ability to view and change the inventories of players you are carrying (right click)  you can disable this in preference settings (default key "]") if you dont want people to be able to mess with your stuff
 - made it so that players being carried cannot manually dismount by "shiftin" (changable via preferences menu default key "]")
 - mobs no longer avoid players that are less than 1/2 their height
+- added "sticky finger" hotkey (default key " ' ") to pickup players in front of you that are difficult to target precicely (works best while at regular size trying to pick up small players rather than at larger size trying to pickup normal players)
+- added the ability to apply potions to carried players by either right clicking the potion on the player or the player on the potion
+- added ability to feed players that are carried

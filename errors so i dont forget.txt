@@ -1,0 +1,1 @@
+EOFException - make sure i havent called buffer.readInt() or readbyte or whatever in a function like a for loop and only call it for assigning variables

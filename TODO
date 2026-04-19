@@ -1,7 +1,3 @@
-add hotkey to pickup small entities so that you dont have to be super precice when targeting very small players
-
-add ability to apply potions to entities by clicking them onto one another
-
 fix anvilscreenhandlermixin closing anvils at big sizes
 
 figure out why shift+clicking into and out of carried inventories is so strange
