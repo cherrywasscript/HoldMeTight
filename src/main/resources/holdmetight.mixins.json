@@ -13,7 +13,6 @@
       "LivingEntityMixin",
       "WebBlockMixin",
       "VibrationSystemListenerMixin",
-      "BottleItemMixin",
       "PowderSnowBlockMixin",
       "BigDripleafBlockMixin",
       "PlayerCarryPickupMixin",
@@ -22,11 +21,9 @@
       "carry.PickupEntityMixin",
       "carry.PlayerDismountMixin",
 
-
       "rendering.FrustumMixin",
       "rendering.DontRenderInvisibleCarriedEntities",
       "rendering.CustomTooltip",
-
 
       "playerextensions.PlayerRenderMixin",
       "playerextensions.PlayerCapabilityMixin",
@@ -34,16 +31,13 @@
       "playerextensions.PlayerTurnWhileHeldExtension",
       "playerextensions.InvulnerableWhileCarried",
 
-
       "climbing.BlockClimbingMixin",
       "climbing.EntityClimbingMixin",
-
 
       "swimming.SwimmingMixin",
       "swimming.CauldronMixin",
       "swimming.BlockSwimmingMixin",
       "swimming.LocalPlayerMixin",
-
 
       "collisions.BasePressurePlateBlockMixin",
       "collisions.CrossCollisionBlockMixin",
@@ -76,6 +70,7 @@
       "sizeinteractions.AdjustMobKnockback",
       "sizeinteractions.AdjustTakenKnockback",
 
+      "items.BottleItemMixin",
 
       "entitybehaviour.MobAvoidPlayerMixin"
     ],
