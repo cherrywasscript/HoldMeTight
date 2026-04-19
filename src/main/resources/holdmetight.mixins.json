@@ -61,6 +61,7 @@
       "pehkui.ScreenHandlerMixinReplacement",
       "pehkui.IForgePlayerMixin",
       "pehkui.InventoryMixinReplacement",
+      "pehkui.ItemCombinerMenuMixin",
 
       "sound.EntitySoundMixin",
       "sound.PlayerSoundMixin",
