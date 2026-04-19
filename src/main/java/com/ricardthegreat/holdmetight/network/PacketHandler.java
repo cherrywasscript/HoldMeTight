@@ -25,6 +25,7 @@ import com.ricardthegreat.holdmetight.network.serverbound.capabilitySync.size.SP
 import com.ricardthegreat.holdmetight.network.serverbound.carrypositions.SAddCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.carrypositions.SEditCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.carrypositions.SRemoveCustomCarryPosPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.itempackets.standinitem.SApplyPlayerEffectPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.itempackets.standinitem.SOpenStandInItemMenuPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.scalepackets.SEntityAddTargetScalePacket;
 import com.ricardthegreat.holdmetight.network.serverbound.scalepackets.SEntityMultTargetScalePacket;
@@ -183,6 +184,11 @@ public class PacketHandler {
         SPlayerPreferencesSyncPacket::encode, 
         SPlayerPreferencesSyncPacket::new, 
         SPlayerPreferencesSyncPacket::handle);
+
+        INSTANCE.registerMessage(id++, SApplyPlayerEffectPacket.class, 
+        SApplyPlayerEffectPacket::encode, 
+        SApplyPlayerEffectPacket::new, 
+        SApplyPlayerEffectPacket::handle);
     }
 
     public static void sendToServer(Object msg){

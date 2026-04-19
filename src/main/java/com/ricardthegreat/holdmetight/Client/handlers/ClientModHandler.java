@@ -55,6 +55,7 @@ public class ClientModHandler {
         event.register(Keybindings.INSTANCE.carryWheelKey);
         event.register(Keybindings.INSTANCE.sizePrefsKey);
         event.register(Keybindings.INSTANCE.carryScreenKey);
+        event.register(Keybindings.INSTANCE.stickyFingerKey);
     } 
 
     @SubscribeEvent

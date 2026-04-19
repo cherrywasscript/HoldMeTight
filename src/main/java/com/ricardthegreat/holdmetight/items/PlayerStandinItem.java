@@ -1,5 +1,6 @@
 package com.ricardthegreat.holdmetight.items;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.jetbrains.annotations.Nullable;
@@ -8,6 +9,7 @@ import com.ricardthegreat.holdmetight.capabilities.preferences.PlayerPreferences
 import com.ricardthegreat.holdmetight.client.guielements.tooltips.PlayerItemTooltip;
 import com.ricardthegreat.holdmetight.inventory.HeldEntityInventoryProvider;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
+import com.ricardthegreat.holdmetight.network.serverbound.itempackets.standinitem.SApplyPlayerEffectPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.itempackets.standinitem.SOpenStandInItemMenuPacket;
 
 import net.minecraft.client.Minecraft;
@@ -15,6 +17,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Inventory;
@@ -25,6 +28,10 @@ import net.minecraft.world.inventory.tooltip.BundleTooltip;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.BundleItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.PotionItem;
+import net.minecraft.world.item.alchemy.Potion;
+import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -84,6 +91,36 @@ public class PlayerStandinItem extends EntityStandinItem{
             }
         }
         return super.overrideOtherStackedOnMe(stackThis, stackOther, slot, action, player, access);
+    }
+
+    @Override
+    public boolean overrideStackedOnOther(ItemStack stackThis, Slot slot, ClickAction action, Player player) {
+        if (action == ClickAction.SECONDARY) {
+            ItemStack stackOther = slot.getItem();
+            if (!stackOther.isEmpty() && stackOther.getItem() instanceof PotionItem) {
+                CompoundTag tag = stackThis.getTag();
+                Level level = player.level();
+                Player representation = level.getPlayerByUUID(tag.getUUID(ENTITY_UUID));
+                if (representation != null) {
+                    if (!player.level().isClientSide) {
+                        //this will never be called
+                        //i have no idea why
+                        //from what i can tell it **should** be called on both the server and the client
+                        //but it is only ever called on the client
+                        //its really annoying
+                        //i dont want to have to keep making packets just to perform on stack events
+                    }else{
+                        if (!(PotionUtils.getPotion(stackOther) == Potions.EMPTY)) {
+                            Potion potion = PotionUtils.getPotion(stackOther);
+                            List<MobEffectInstance> effects = potion.getEffects();
+                            PacketHandler.sendToServer(new SApplyPlayerEffectPacket(effects, representation.getUUID()));
+                        }
+                    }
+                }
+                return true;
+            }
+        }
+        return super.overrideStackedOnOther(stackThis, slot, action, player);
     }
 
     @Override
