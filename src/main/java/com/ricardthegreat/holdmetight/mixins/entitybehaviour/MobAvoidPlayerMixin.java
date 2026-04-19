@@ -39,7 +39,6 @@ public class MobAvoidPlayerMixin<T extends LivingEntity> {
 		Predicate<LivingEntity> tmp = (ent) -> {
 			if (ent instanceof Player player) {
 				boolean bool = EntitySizeUtils.getSize(mob) <= EntitySizeUtils.getSize(player)*2;
-				System.out.println(EntitySizeUtils.getSize(mob) + "/" + EntitySizeUtils.getSize(player) + "/" + predicate.test(player) + "/" + bool);
 				return predicate.test(ent) && bool;
 			}else{
 				return predicate.test(ent);
