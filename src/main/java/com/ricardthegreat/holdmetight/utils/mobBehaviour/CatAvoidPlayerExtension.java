@@ -6,7 +6,6 @@ import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.animal.Cat;
-import net.minecraft.world.entity.animal.Cat.CatAvoidEntityGoal;
 import net.minecraft.world.entity.player.Player;
 
 public class CatAvoidPlayerExtension<T extends LivingEntity> extends AvoidEntityGoal<T>{
