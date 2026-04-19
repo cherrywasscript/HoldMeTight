@@ -35,6 +35,7 @@ public abstract class SmallEntityRenderMixin<T extends Entity> {
 	public boolean shouldRender(T entity, Frustum frustum, double x, double y, double z, CallbackInfoReturnable<Dimensions> cir){
 		
 		if(FMLEnvironment.dist == Dist.CLIENT && entity instanceof Player){
+			//TODO look at this and try and actually get it to work
 			double scale = EntitySizeUtils.getSize(entity);
 			AABB aabb = entity.getBoundingBoxForCulling().inflate(0.5D);
 			if (scale < 1) {
