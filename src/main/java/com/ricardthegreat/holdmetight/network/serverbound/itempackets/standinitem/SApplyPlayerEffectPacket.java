@@ -5,16 +5,11 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import com.ricardthegreat.holdmetight.inventory.HeldEntityInventoryProvider;
-
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.ClickAction;
-import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -29,22 +24,28 @@ public class SApplyPlayerEffectPacket {
     }
     
     public SApplyPlayerEffectPacket(FriendlyByteBuf buffer){
-        this.effects = new ArrayList<>();
-
-        for(int i = 0; i < buffer.readByte(); i++){
+        int listSize = buffer.readInt();
+        if (listSize >= 1) {
+            this.effects = new ArrayList<>();
+        }else{
+            this.effects = List.of();
+        }
+        
+        for(int i = 0; i < listSize; i++){
             MobEffectInstance temp = MobEffectInstance.load(buffer.readNbt());
             effects.add(temp);
         }
-
+        
         this.targetPlayer = buffer.readUUID();
     }
 
     public void encode(FriendlyByteBuf buffer){
-        buffer.writeByte(effects.size());
+        buffer.writeInt(effects.size());
 
         for(int i = 0; i < effects.size(); i++){
             CompoundTag tag = new CompoundTag();
             effects.get(i).save(tag);
+
             buffer.writeNbt(tag);
         }
 
@@ -57,12 +58,17 @@ public class SApplyPlayerEffectPacket {
         Player target = level.getPlayerByUUID(targetPlayer);
 
         if (target != null) {
-            for(MobEffectInstance mobeffectinstance : effects) {
-                if (mobeffectinstance.getEffect().isInstantenous()) {
-                    mobeffectinstance.getEffect().applyInstantenousEffect(sender, sender, target, mobeffectinstance.getAmplifier(), 1.0D);
-                } else {
-                    target.addEffect(new MobEffectInstance(mobeffectinstance));
+            target.playSound(SoundEvents.AMBIENT_UNDERWATER_EXIT);
+            if (effects.size() >= 1) {
+                for(MobEffectInstance mobeffectinstance : effects) {
+                    if (mobeffectinstance.getEffect().isInstantenous()) {
+                        mobeffectinstance.getEffect().applyInstantenousEffect(sender, sender, target, mobeffectinstance.getAmplifier(), 1.0D);
+                    } else {
+                        target.addEffect(new MobEffectInstance(mobeffectinstance));
+                    }
                 }
+            }else{
+                target.removeAllEffects();
             }
         }
     }

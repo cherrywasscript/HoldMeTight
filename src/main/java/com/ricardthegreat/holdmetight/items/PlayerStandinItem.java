@@ -10,12 +10,15 @@ import com.ricardthegreat.holdmetight.client.guielements.tooltips.PlayerItemTool
 import com.ricardthegreat.holdmetight.inventory.HeldEntityInventoryProvider;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.serverbound.itempackets.standinitem.SApplyPlayerEffectPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.itempackets.standinitem.SFeedPlayerPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.itempackets.standinitem.SOpenStandInItemMenuPacket;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
@@ -28,6 +31,7 @@ import net.minecraft.world.inventory.tooltip.BundleTooltip;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.BundleItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.MilkBucketItem;
 import net.minecraft.world.item.PotionItem;
 import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
@@ -69,12 +73,11 @@ public class PlayerStandinItem extends EntityStandinItem{
     @Override
     public boolean overrideOtherStackedOnMe (ItemStack stackThis, ItemStack stackOther, Slot slot, ClickAction action, Player player, SlotAccess access) {
         if (action == ClickAction.SECONDARY) {
-
-            if (stackOther.isEmpty()) {
-                CompoundTag tag = stackThis.getTag();
-                Level level = player.level();
-                Player representation = level.getPlayerByUUID(tag.getUUID(ENTITY_UUID));
-                if (representation != null) {
+            CompoundTag tag = stackThis.getTag();
+            Level level = player.level();
+            Player representation = level.getPlayerByUUID(tag.getUUID(ENTITY_UUID));
+            if (representation != null) {
+                if (stackOther.isEmpty()) {
                     boolean canViewInv = PlayerPreferencesProvider.getPlayerPreferencesCapability(representation).getInventoryCanBeAccessed();
                     if (canViewInv) {
                         if (!level.isClientSide) {
@@ -85,9 +88,29 @@ public class PlayerStandinItem extends EntityStandinItem{
                             PacketHandler.sendToServer(new SOpenStandInItemMenuPacket(representation.getUUID()));
                         }
                     }
+                    return true;
+                }else if(stackOther.getItem() instanceof PotionItem){
+                    if (player.level().isClientSide) {
+                        if (!(PotionUtils.getPotion(stackOther) == Potions.EMPTY)) {
+                            Potion potion = PotionUtils.getPotion(stackOther);
+                            List<MobEffectInstance> effects = potion.getEffects();
+                            PacketHandler.sendToServer(new SApplyPlayerEffectPacket(effects, representation.getUUID()));
+                        }
+                    }
+                    //playSound();
+                    return true;
+                }else if (stackOther.getItem() instanceof MilkBucketItem) {
+                    if (player.level().isClientSide) {
+                        PacketHandler.sendToServer(new SApplyPlayerEffectPacket(List.of(), representation.getUUID()));
+                    }
+                    //playSound();
+                    return true;
+                }else if (stackOther.isEdible()) {
+                    if (player.level().isClientSide) {
+                        PacketHandler.sendToServer(new SFeedPlayerPacket(stackOther.copy(), representation.getUUID()));
+                    }
+                    return true;
                 }
-            
-                return true;
             }
         }
         return super.overrideOtherStackedOnMe(stackThis, stackOther, slot, action, player, access);
@@ -97,11 +120,11 @@ public class PlayerStandinItem extends EntityStandinItem{
     public boolean overrideStackedOnOther(ItemStack stackThis, Slot slot, ClickAction action, Player player) {
         if (action == ClickAction.SECONDARY) {
             ItemStack stackOther = slot.getItem();
-            if (!stackOther.isEmpty() && stackOther.getItem() instanceof PotionItem) {
-                CompoundTag tag = stackThis.getTag();
-                Level level = player.level();
-                Player representation = level.getPlayerByUUID(tag.getUUID(ENTITY_UUID));
-                if (representation != null) {
+            CompoundTag tag = stackThis.getTag();
+            Level level = player.level();
+            Player representation = level.getPlayerByUUID(tag.getUUID(ENTITY_UUID));
+            if (representation != null && !stackOther.isEmpty()) {
+                if (stackOther.getItem() instanceof PotionItem) {
                     if (!player.level().isClientSide) {
                         //this will never be called
                         //i have no idea why
@@ -116,8 +139,20 @@ public class PlayerStandinItem extends EntityStandinItem{
                             PacketHandler.sendToServer(new SApplyPlayerEffectPacket(effects, representation.getUUID()));
                         }
                     }
+                    //playSound();
+                    return true;
+                }else if (stackOther.getItem() instanceof MilkBucketItem) {
+                    if (player.level().isClientSide) {
+                        PacketHandler.sendToServer(new SApplyPlayerEffectPacket(List.of(), representation.getUUID()));
+                    }
+                    //playSound();
+                    return true;
+                }else if (stackOther.isEdible()) {
+                    if (player.level().isClientSide) {
+                        PacketHandler.sendToServer(new SFeedPlayerPacket(stackOther.copy(), representation.getUUID()));
+                    }
+                    return true;
                 }
-                return true;
             }
         }
         return super.overrideStackedOnOther(stackThis, slot, action, player);
@@ -151,5 +186,10 @@ public class PlayerStandinItem extends EntityStandinItem{
         }
         
         return super.getTooltipImage(stack);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void playSound(){
+        //Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.AMBIENT_UNDERWATER_EXIT, 1.0F));
     }
 }
