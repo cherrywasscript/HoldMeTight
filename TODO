@@ -2,6 +2,9 @@ figure out why shift+clicking into and out of carried inventories is so strange
 
 more mobility options while tiny? super jump?
 
+make it so you can see and edit curios as well as regular inventory
+
+work on the collar stuff
 
 make it so custom carry positions can choose if the player is stuck or not
 
@@ -9,8 +12,12 @@ play the grabby animation thing when picking an ent up
 
 change how arm position is set currently its a mixin but i might be able to do it straight from the item or from the blockentityrender thing
 
+work on making the size ray good
 
 
+option to disable the reduced movements accociated with getting smaller (like walking slower and jumping less high)
+
+more server side options + ways to disable certain items like the remotes
 
 
 more "violent" size options possibly
