@@ -1,8 +1,12 @@
 package com.ricardthegreat.holdmetight.utils.sizeutils;
 
+import javax.annotation.Nullable;
+
 import com.ricardthegreat.holdmetight.HMTConfig;
-import com.ricardthegreat.holdmetight.size.PlayerSize;
-import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
+import com.ricardthegreat.holdmetight.capabilities.preferences.PlayerPreferences;
+import com.ricardthegreat.holdmetight.capabilities.preferences.PlayerPreferencesProvider;
+import com.ricardthegreat.holdmetight.capabilities.size.PlayerSize;
+import com.ricardthegreat.holdmetight.capabilities.size.PlayerSizeProvider;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.util.LazyOptional;
@@ -17,79 +21,103 @@ public class PlayerSizeUtils {
 
     /**
      * set the player to change size
+     * @param changer - the player who instantiated the size change (used with preferences to ensure the size change should happen)
      * @param player - the player whos size is changing
      * @param size - the value the players size should become
      * @param ticks - the time it should take for the player to reach the given size in ticks (1/20 seconds)
      */
-    public static void setSize(Player player, float size, int ticks){
-        //ensure the size is not greater than the maximum allowed by the HMTConfig
-        size = clampToPreferences(player, size);
-        size = lockSizeCap(size);
-        //System.out.println(size);
-        ScaleData data = getScaleData(player);
+    public static void setSize(@Nullable Player changer, Player player, float size, int ticks){
+        if (getShouldChangeFromPrefs(changer, player)) {
+            //ensure the size is not greater than the maximum allowed by the HMTConfig
+            size = clampToPreferences(player, size);
+            size = lockSizeCap(size);
+            //System.out.println(size);
+            ScaleData data = getScaleData(player);
 
-        if (ticks < 0) {
-            
-        }else if (ticks == 0) {
-            float mult = size/data.getScale();
-            float prevTargScale = data.getTargetScale();
-            
-            data.setScale(size);
-            data.setTargetScale(prevTargScale*mult);
-            
-            if (data.getScale() != size) {
-                float errorScaleDifference = size/data.getScale();
-                data.setScale(size*errorScaleDifference);
-                //data.setTargetScale(prevTargScale*mult*errorScaleDifference);
-                //HoldMeTight.LOGGER.error("unexpected change in scale hopefully correcting");
+            if (ticks < 0) {
+                
+            }else if (ticks == 0) {
+                float mult = size/data.getScale();
+                float prevTargScale = data.getTargetScale();
+                
+                data.setScale(size);
+                data.setTargetScale(prevTargScale*mult);
+                
+                if (data.getScale() != size) {
+                    float errorScaleDifference = size/data.getScale();
+                    data.setScale(size*errorScaleDifference);
+                    //data.setTargetScale(prevTargScale*mult*errorScaleDifference);
+                    //HoldMeTight.LOGGER.error("unexpected change in scale hopefully correcting");
+                }
+
+            }else{
+                data.setScaleTickDelay(ticks);
+                data.setTargetScale(size);
             }
-
-        }else{
-            data.setScaleTickDelay(ticks);
-            data.setTargetScale(size);
         }
     }
 
     /**
      * multiply a players size 
+     * @param changer - the player who instantiated the size change (used with preferences to ensure the size change should happen)
      * @param player - the player whos size is changing
      * @param size - the multplier to be applied to the players size
      * @param ticks - the time it should take for the player to reach the given size in ticks (1/20 seconds)
      */
-    public static void multSize(Player player, Float size, int ticks){
+    public static void multSize(@Nullable Player changer, Player player, Float size, int ticks){
         ScaleData data = getScaleData(player);
 
         Float targetScale = data.getTargetScale()*size;
         
-        setSize(player, targetScale, ticks);
+        setSize(changer, player, targetScale, ticks);
     }
 
     /**
      * set the player to perpetually change size TODO implement
+     * @param changer - the player who instantiated the size change (used with preferences to ensure the size change should happen)
      * @param player - the player whos size is changing
      * @param size - the amount the player should change by over the given time
      * @param ticks - the time in ticks (1/20 seconds) in which the player should change by the amount given in size
      */
-    public static void perpetualSize(Player player, Float size, int ticks){
+    public static void perpetualSize(@Nullable Player changer, Player player, Float size, int ticks){
 
     }
 
     /**
      * add to the players height instantly (use SEntityAddTargetScalePacket to call this from client)
+     * @param changer - the player who instantiated the size change (used with preferences to ensure the size change should happen)
      * @param player - the player whos size is changing
      * @param size - the amount that should be added to their size
      */
-    public static void addSize(Player player, Float size){
-        ScaleData data = getScaleData(player);
+    public static void addSize(@Nullable Player changer, Player player, Float size){
+        if (getShouldChangeFromPrefs(changer, player)) {
+            ScaleData data = getScaleData(player);
 
-        Float currentScale = data.getScale();
-        Float targetScale = data.getTargetScale();
+            Float currentScale = data.getScale();
+            Float targetScale = data.getTargetScale();
 
-        currentScale = lockSizeCap(currentScale + size);
-        targetScale = lockSizeCap(targetScale + size);
+            currentScale = lockSizeCap(currentScale + size);
+            targetScale = lockSizeCap(targetScale + size);
 
-        data.setScale(currentScale);
-        data.setTargetScale(targetScale);
+            data.setScale(currentScale);
+            data.setTargetScale(targetScale);
+        }
+    }
+
+    private static boolean getShouldChangeFromPrefs(@Nullable Player changer, Player player){
+        PlayerPreferences preferences = PlayerPreferencesProvider.getPlayerPreferencesCapability(player);
+        boolean other = preferences.getOthersCanChange();
+        boolean self = preferences.getSelfCanChange();
+
+        if (changer == null) {
+            return true;
+        }else if (changer.getUUID().equals(player.getUUID()) && self) {
+            return true;
+        }else if (!changer.getUUID().equals(player.getUUID()) && other) {
+            return true;
+        }else {
+            return false;
+        }
     }
 
     //get a players size
@@ -214,8 +242,8 @@ public class PlayerSizeUtils {
     }
 
     private static float clampToPreferences(Player player, float size){
-        LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
-        PlayerSize orElse = optional.orElse(null);
+        LazyOptional<PlayerPreferences> optional = player.getCapability(PlayerPreferencesProvider.PLAYER_PREFERENCES);
+        PlayerPreferences orElse = optional.orElse(null);
         if (orElse != null) {
             size = Math.max(size, orElse.getMinScale());
             size = Math.min(size, orElse.getMaxScale());

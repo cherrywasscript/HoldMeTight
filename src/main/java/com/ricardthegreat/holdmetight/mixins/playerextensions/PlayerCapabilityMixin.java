@@ -5,8 +5,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
-import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
+import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.capabilities.preferences.PlayerPreferencesProvider;
+import com.ricardthegreat.holdmetight.capabilities.size.PlayerSizeProvider;
 import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
 
 import net.minecraft.world.entity.player.Player;
@@ -25,8 +26,8 @@ public abstract class PlayerCapabilityMixin {
         PehkuiEntityExtensions pEnt = (PehkuiEntityExtensions) player;
         ScaleData data = pEnt.pehkui_getScaleData(ScaleTypes.BASE);
 
-        (player).getCapability(PlayerSizeProvider.PLAYER_SIZE).ifPresent(scale -> {
-            scale.tick(player);
+        (player).getCapability(PlayerPreferencesProvider.PLAYER_PREFERENCES).ifPresent(preferences -> {
+            preferences.tick(player);
         });
 
         (player).getCapability(PlayerCarryProvider.PLAYER_CARRY).ifPresent(carry -> {

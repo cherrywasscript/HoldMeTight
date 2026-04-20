@@ -42,4 +42,10 @@ public final class Keybindings {
          KeyConflictContext.IN_GAME, 
          InputConstants.getKey(InputConstants.KEY_LBRACKET, -1),
          CATEGORY);
+
+    public final KeyMapping stickyFingerKey = new KeyMapping(
+        "key." + HoldMeTight.MODID + ".sticky_finger_key",
+        KeyConflictContext.IN_GAME, 
+        InputConstants.getKey(InputConstants.KEY_APOSTROPHE, -1),
+        CATEGORY);
 }

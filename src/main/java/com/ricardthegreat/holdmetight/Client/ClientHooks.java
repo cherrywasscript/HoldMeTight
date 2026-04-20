@@ -4,7 +4,7 @@ package com.ricardthegreat.holdmetight.client;
 
 import com.ricardthegreat.holdmetight.client.screens.CarryPositionScreen;
 import com.ricardthegreat.holdmetight.client.screens.CollarScreen;
-import com.ricardthegreat.holdmetight.client.screens.SizePrefsScreen;
+import com.ricardthegreat.holdmetight.client.screens.PreferencesScreen;
 import com.ricardthegreat.holdmetight.client.screens.SizeRayScreen;
 import com.ricardthegreat.holdmetight.client.screens.remotes.AdvancedSizeRemoteScreen;
 import com.ricardthegreat.holdmetight.client.screens.remotes.BasicSizeRemoteScreen;
@@ -42,7 +42,7 @@ public class ClientHooks {
     }
 
     public static void openSizePrefsScreen(Player player){
-        Minecraft.getInstance().setScreen(new SizePrefsScreen(player));
+        Minecraft.getInstance().setScreen(new com.ricardthegreat.holdmetight.client.screens.preferences.PreferencesScreen(player));
     }
 
 

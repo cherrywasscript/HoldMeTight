@@ -117,8 +117,8 @@ public class HeldEntityItemRenderer extends BlockEntityWithoutLevelRenderer{
                         //render using existing models so i dont have to implement anything myself
                         VertexConsumer consumer = source.getBuffer(entModel.renderType(render.getTextureLocation(entity)));
                         entModel.renderToBuffer(poseStack, consumer, int0, int1, 1, 1, 1, 1);
-                        poseStack.popPose();
                     }
+                    poseStack.popPose();
                     break;
 
                 default:

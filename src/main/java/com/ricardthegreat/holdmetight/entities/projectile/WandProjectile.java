@@ -45,10 +45,11 @@ public class WandProjectile extends Projectile {
             System.out.println("is not clientside, scale: "+ scale + " ismult: " + isMult);
         }
         
+        //TODO make these send the player who fired them
         if (isMult) {
-            EntitySizeUtils.multSize(hitEntity.getEntity(), scale, 20);
+            EntitySizeUtils.multSize(null, hitEntity.getEntity(), scale, 20);
         }else{
-            EntitySizeUtils.setSize(hitEntity.getEntity(), scale, 20);
+            EntitySizeUtils.setSize(null, hitEntity.getEntity(), scale, 20);
         }
     }
 

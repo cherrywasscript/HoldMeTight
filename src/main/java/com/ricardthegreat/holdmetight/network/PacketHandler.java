@@ -3,29 +3,34 @@ package com.ricardthegreat.holdmetight.network;
 import java.util.function.Supplier;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.network.clientbound.CAddCustomCarryPosPacket;
-import com.ricardthegreat.holdmetight.network.clientbound.CAddPlayerCarrySyncPacket;
-import com.ricardthegreat.holdmetight.network.clientbound.CEditCustomCarryPosPacket;
-import com.ricardthegreat.holdmetight.network.clientbound.CPlayerCarrySimplePacket;
-import com.ricardthegreat.holdmetight.network.clientbound.CPlayerCarrySyncPacket;
-import com.ricardthegreat.holdmetight.network.clientbound.CPlayerDismountPlayerPacket;
-import com.ricardthegreat.holdmetight.network.clientbound.CPlayerSizeMixinSyncPacket;
-import com.ricardthegreat.holdmetight.network.clientbound.CRemoveCustomCarryPosPacket;
-import com.ricardthegreat.holdmetight.network.clientbound.CRemovePlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CThrowEntityPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.CThrowPlayerPacket;
-import com.ricardthegreat.holdmetight.network.serverbound.SAddCustomCarryPosPacket;
-import com.ricardthegreat.holdmetight.network.serverbound.SEditCustomCarryPosPacket;
-import com.ricardthegreat.holdmetight.network.serverbound.SEntityAddTargetScalePacket;
-import com.ricardthegreat.holdmetight.network.serverbound.SEntityMultTargetScalePacket;
+import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CAddPlayerCarrySyncPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CPlayerCarrySimplePacket;
+import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CPlayerCarrySyncPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CPlayerDismountPlayerPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CRemovePlayerCarrySyncPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.preferences.CPlayerPreferencesSyncPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.size.CPlayerSizeMixinSyncPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.carrypositions.CAddCustomCarryPosPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.carrypositions.CEditCustomCarryPosPacket;
+import com.ricardthegreat.holdmetight.network.clientbound.carrypositions.CRemoveCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SEntityPutDownPacket;
-import com.ricardthegreat.holdmetight.network.serverbound.SEntitySetTargetScalePacket;
-import com.ricardthegreat.holdmetight.network.serverbound.SPlayerCarrySimplePacket;
-import com.ricardthegreat.holdmetight.network.serverbound.SPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SPlayerPutDownPacket;
-import com.ricardthegreat.holdmetight.network.serverbound.SPlayerSizeMixinSyncPacket;
-import com.ricardthegreat.holdmetight.network.serverbound.SRemoveCustomCarryPosPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SSizeRaySync;
+import com.ricardthegreat.holdmetight.network.serverbound.capabilitySync.carry.SPlayerCarrySimplePacket;
+import com.ricardthegreat.holdmetight.network.serverbound.capabilitySync.carry.SPlayerCarrySyncPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.capabilitySync.preferences.SPlayerPreferencesSyncPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.capabilitySync.size.SPlayerSizeMixinSyncPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.carrypositions.SAddCustomCarryPosPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.carrypositions.SEditCustomCarryPosPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.carrypositions.SRemoveCustomCarryPosPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.itempackets.standinitem.SApplyPlayerEffectPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.itempackets.standinitem.SFeedPlayerPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.itempackets.standinitem.SOpenStandInItemMenuPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.scalepackets.SEntityAddTargetScalePacket;
+import com.ricardthegreat.holdmetight.network.serverbound.scalepackets.SEntityMultTargetScalePacket;
+import com.ricardthegreat.holdmetight.network.serverbound.scalepackets.SEntitySetTargetScalePacket;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -165,6 +170,31 @@ public class PacketHandler {
         CThrowEntityPacket::encode, 
         CThrowEntityPacket::new, 
         CThrowEntityPacket::handle);
+
+        INSTANCE.registerMessage(id++, SOpenStandInItemMenuPacket.class, 
+        SOpenStandInItemMenuPacket::encode, 
+        SOpenStandInItemMenuPacket::new, 
+        SOpenStandInItemMenuPacket::handle);
+
+        INSTANCE.registerMessage(id++, CPlayerPreferencesSyncPacket.class, 
+        CPlayerPreferencesSyncPacket::encode, 
+        CPlayerPreferencesSyncPacket::new, 
+        CPlayerPreferencesSyncPacket::handle);
+
+        INSTANCE.registerMessage(id++, SPlayerPreferencesSyncPacket.class, 
+        SPlayerPreferencesSyncPacket::encode, 
+        SPlayerPreferencesSyncPacket::new, 
+        SPlayerPreferencesSyncPacket::handle);
+
+        INSTANCE.registerMessage(id++, SApplyPlayerEffectPacket.class, 
+        SApplyPlayerEffectPacket::encode, 
+        SApplyPlayerEffectPacket::new, 
+        SApplyPlayerEffectPacket::handle);
+
+        INSTANCE.registerMessage(id++, SFeedPlayerPacket.class, 
+        SFeedPlayerPacket::encode, 
+        SFeedPlayerPacket::new, 
+        SFeedPlayerPacket::handle);
     }
 
     public static void sendToServer(Object msg){

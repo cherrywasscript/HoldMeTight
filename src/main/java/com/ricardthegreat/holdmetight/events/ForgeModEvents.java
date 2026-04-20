@@ -4,14 +4,16 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
-import com.ricardthegreat.holdmetight.carry.PlayerCarry;
-import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarry;
+import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.capabilities.preferences.PlayerPreferences;
+import com.ricardthegreat.holdmetight.capabilities.preferences.PlayerPreferencesProvider;
+import com.ricardthegreat.holdmetight.capabilities.size.PlayerSize;
+import com.ricardthegreat.holdmetight.capabilities.size.PlayerSizeProvider;
 import com.ricardthegreat.holdmetight.items.EntityStandinItem;
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
-import com.ricardthegreat.holdmetight.network.clientbound.CRemovePlayerCarrySyncPacket;
-import com.ricardthegreat.holdmetight.size.PlayerSize;
-import com.ricardthegreat.holdmetight.size.PlayerSizeProvider;
+import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CRemovePlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.nbt.CompoundTag;
@@ -31,6 +33,7 @@ import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
+import net.minecraftforge.event.entity.living.MobEffectEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerRespawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -50,6 +53,10 @@ public class ForgeModEvents {
             if(!event.getObject().getCapability(PlayerCarryProvider.PLAYER_CARRY).isPresent()) {
                 event.addCapability(new ResourceLocation(HoldMeTight.MODID, "carry"), new PlayerCarryProvider());
             }
+
+            if(!event.getObject().getCapability(PlayerPreferencesProvider.PLAYER_PREFERENCES).isPresent()) {
+                event.addCapability(new ResourceLocation(HoldMeTight.MODID, "preferences"), new PlayerPreferencesProvider());
+            }
         }
     }
 
@@ -67,6 +74,11 @@ public class ForgeModEvents {
                     newStore.copyFrom(oldStore);
                 });
             });
+            event.getOriginal().getCapability(PlayerPreferencesProvider.PLAYER_PREFERENCES).ifPresent(oldStore -> {
+                event.getEntity().getCapability(PlayerPreferencesProvider.PLAYER_PREFERENCES).ifPresent(newStore -> {
+                    newStore.copyFrom(oldStore);
+                });
+            });
             event.getOriginal().invalidateCaps();//reinvalidating the caps after doing what i need
         }
     }
@@ -75,6 +87,7 @@ public class ForgeModEvents {
     public static void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
         event.register(PlayerSize.class);
         event.register(PlayerCarry.class);
+        event.register(PlayerPreferences.class);
     }
 
     @SubscribeEvent
@@ -139,7 +152,7 @@ public class ForgeModEvents {
     public static void syncPlayerCapabilities(ServerPlayer serverJoiner, MinecraftServer server){
             Supplier<ServerPlayer> supplier = () -> serverJoiner;
 
-            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+            for (ServerPlayer player : server.getPlayerList().getPlayers()) { 
                 LazyOptional<PlayerSize> optional = player.getCapability(PlayerSizeProvider.PLAYER_SIZE);
                 if (optional.isPresent()) {
                     PlayerSize orElse = optional.orElse(new PlayerSize());
@@ -150,10 +163,21 @@ public class ForgeModEvents {
                         PacketHandler.sendToPlayer(orElse.getSyncPacket(player), supplier);
                     }
                 }
-
+                
                 LazyOptional<PlayerCarry> CarryOptional = player.getCapability(PlayerCarryProvider.PLAYER_CARRY);
                 if (CarryOptional.isPresent()) {
                     PlayerCarry orElse = CarryOptional.orElse(new PlayerCarry());
+
+                    if (player == serverJoiner) {
+                        PacketHandler.sendToAllClients(orElse.getClientSyncPacket(player));
+                    }else{
+                        PacketHandler.sendToPlayer(orElse.getClientSyncPacket(player), supplier);
+                    }
+                }
+
+                LazyOptional<PlayerPreferences> PreferencesOptional = player.getCapability(PlayerPreferencesProvider.PLAYER_PREFERENCES);
+                if (PreferencesOptional.isPresent()) {
+                    PlayerPreferences orElse = PreferencesOptional.orElse(new PlayerPreferences());
 
                     if (player == serverJoiner) {
                         PacketHandler.sendToAllClients(orElse.getClientSyncPacket(player));

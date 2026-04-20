@@ -1,5 +1,7 @@
 package com.ricardthegreat.holdmetight.utils.sizeutils;
 
+import javax.annotation.Nullable;
+
 import com.ricardthegreat.holdmetight.HMTConfig;
 
 import net.minecraft.world.entity.Entity;
@@ -21,10 +23,10 @@ public class EntitySizeUtils {
 
     private static float maxScale = HMTConfig.SERVER_CONFIG.maxHitboxScale.get().floatValue();
 
-    public static void setSize(Entity entity, float size, int ticks) {
+    public static void setSize(@Nullable Player changer, Entity entity, float size, int ticks) {
         size = lockSizeCap(size);
         if (entity instanceof Player) {
-            PlayerSizeUtils.setSize((Player) entity, size, ticks);
+            PlayerSizeUtils.setSize(changer, (Player) entity, size, ticks);
         }else {
             if (ticks < 0) {
             ticks = 0;
@@ -37,19 +39,19 @@ public class EntitySizeUtils {
         }
     }
 
-    public static void multSize(Entity entity, Float size, int ticks) {
+    public static void multSize(@Nullable Player changer, Entity entity, Float size, int ticks) {
         if (entity instanceof Player) {
-            PlayerSizeUtils.multSize((Player) entity, size, ticks);
+            PlayerSizeUtils.multSize(changer, (Player) entity, size, ticks);
         }else{
             Float targetScale = getScaleData(entity).getTargetScale()*size;
-            setSize(entity, targetScale, ticks);
+            setSize(changer, entity, targetScale, ticks);
         }
     } 
 
-    public static void addSize(Entity entity, Float size){
+    public static void addSize(@Nullable Player changer, Entity entity, Float size){
 
         if (entity instanceof Player) {
-            PlayerSizeUtils.addSize((Player) entity, size);
+            PlayerSizeUtils.addSize(changer, (Player) entity, size);
         }else{
             ScaleData data = getScaleData(entity);
             

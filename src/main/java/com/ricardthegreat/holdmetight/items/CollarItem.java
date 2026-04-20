@@ -109,33 +109,33 @@ public class CollarItem extends Item implements DyeableLeatherItem, ICurioItem {
     }
 
     @Override
-    public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack stack2, Slot slot, ClickAction action, Player player, SlotAccess access) {
+    public boolean overrideOtherStackedOnMe(ItemStack stackThis, ItemStack stackOther, Slot slot, ClickAction action, Player player, SlotAccess access) {
         if (action == ClickAction.SECONDARY) {
             if (!(slot instanceof CurioSlot)) {
 
-                if (!(PotionUtils.getPotion(stack2) == Potions.EMPTY)) {
-                    setEffect(stack, PotionUtils.getPotion(stack2));
+                if (!(PotionUtils.getPotion(stackOther) == Potions.EMPTY)) {
+                    setEffect(stackThis, PotionUtils.getPotion(stackOther));
                     return true;
                 }
 
-                setLocked(stack);
+                setLocked(stackThis);
                 if (player.level().isClientSide) {
-                    playSound(stack);
+                    playSound(stackThis);
                 }
                 return true;
-            }else if (stack2.getItem() instanceof CollarKeyItem key) {
-                Pair<UUID, String> pair = key.getOwner(stack2);
+            }else if (stackOther.getItem() instanceof CollarKeyItem key) {
+                Pair<UUID, String> pair = key.getOwner(stackOther);
 
-                if (pair != null && pair.getFirst().compareTo(getFirstOwner(stack).getFirst()) == 0) {
-                    setLocked(stack);
+                if (pair != null && pair.getFirst().compareTo(getFirstOwner(stackThis).getFirst()) == 0) {
+                    setLocked(stackThis);
                     if (player.level().isClientSide) {
-                       playSound(stack);
+                       playSound(stackThis);
                     }
                     return true;
                 }
             }
         }
-        return super.overrideOtherStackedOnMe(stack, stack, slot, action, player, access);
+        return super.overrideOtherStackedOnMe(stackThis, stackOther, slot, action, player, access);
     }
 
     @Override

@@ -98,6 +98,7 @@
     "message.holdmetight.custom_key_pressed":"Set carry position to custom",
     "message.holdmetight.default_key_pressed":"Set carry position to hand",
     "message.holdmetight.carry_key_pressed": "Set carry position to ",
+    "message.holdmetight.picked_up_player":"You have picked up: %s",
 
 
 

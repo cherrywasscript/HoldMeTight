@@ -121,3 +121,15 @@ version 0.6.7-beta
 - fixed issue where dropping an item related to a non player mob would cause them to permanently stick to you until they died
 - knockback applied and recieved now scales with size, e.g. a bigger entity will hit with more knockback and take less knockback
 - updated how pitch scaling works so hopefully it now correctly scales the pitch of players as well as scales the pitch of sounds that only exist locally
+
+version 0.7.0-beta
+- fixed issue with quark where viewing an emoting player would cause the game to crash (also probably fixes other render based crashes that just hadnt been encountered/reported)
+- fixed issue with reach while big so inventories (such as chests, barrels, furnaces, brewing stands etc.) should remain open
+- fixed issue with anvil and smithing tables closing if you opened them while too far away as big
+- expanded the preference menu (default key "]") to include more than just min, max and default height options
+- added ability to view and change the inventories of players you are carrying (right click)  you can disable this in preference settings (default key "]") if you dont want people to be able to mess with your stuff
+- made it so that players being carried cannot manually dismount by "shiftin" (changable via preferences menu default key "]")
+- mobs no longer avoid players that are less than 1/2 their height
+- added "sticky finger" hotkey (default key " ' ") to pickup players in front of you that are difficult to target precicely (works best while at regular size trying to pick up small players rather than at larger size trying to pickup normal players)
+- added the ability to apply potions to carried players by either right clicking the potion on the player or the player on the potion
+- added ability to feed players that are carried

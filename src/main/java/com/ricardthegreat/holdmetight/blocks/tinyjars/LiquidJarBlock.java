@@ -1,7 +1,7 @@
 package com.ricardthegreat.holdmetight.blocks.tinyjars;
 
-import com.ricardthegreat.holdmetight.carry.PlayerCarry;
-import com.ricardthegreat.holdmetight.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarry;
+import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarryProvider;
 import com.ricardthegreat.holdmetight.init.ItemInit;
 import com.ricardthegreat.holdmetight.utils.IBlockSwimming;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
@@ -38,7 +38,8 @@ public class LiquidJarBlock extends AbstractJarBlock {
                 float size = EntitySizeUtils.getSize(entity);
                 double target = size*mult;
 
-                EntitySizeUtils.setSize(entity, (float) target, 0);
+                //TODO make this send entity who placed the block
+                EntitySizeUtils.setSize(null, entity, (float) target, 0);
             }
         }
     }
