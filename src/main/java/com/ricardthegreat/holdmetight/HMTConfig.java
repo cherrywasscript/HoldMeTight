@@ -47,7 +47,7 @@ public class HMTConfig {
                 public final ForgeConfigSpec.BooleanValue canBeTrappedWhileCarried;
 
                 ClientConfig(ForgeConfigSpec.Builder builder){
-                        builder.comment("ClientSide Config Settings, These mostly exist as preference setting so you dont need to customise them every server you join");
+                        builder.comment("ClientSide Config Settings, These mostly exist as preference setting so you dont need to customise them every server you join (currently these do nothing and are just placeholders)");
                         
                         builder.push("Size Preferences");
                         //TODO make these translations
