@@ -120,6 +120,7 @@ public class HMTConfig {
                 public final ForgeConfigSpec.DoubleValue pickupRatioScale;
                 public final ForgeConfigSpec.BooleanValue miningSpeedScaleLink;
                 public final ForgeConfigSpec.BooleanValue damageTakenScaleLink;
+                public final ForgeConfigSpec.BooleanValue dontSlowDownSmallerMovement;
                 public final ForgeConfigSpec.BooleanValue canPickupEntities;
                 public final ForgeConfigSpec.BooleanValue canPickupPlayers;
                 public final ForgeConfigSpec.BooleanValue changeSoundPitchWithScale;
@@ -154,6 +155,8 @@ public class HMTConfig {
                                 .define("miningSpeedScaleLink", true);
                         this.damageTakenScaleLink = builder.comment("should the damage a player takes be linked to their scale (less for larger folk more for smaller folk)")
                                 .define("damageTakenScaleLink", true);
+                        this.dontSlowDownSmallerMovement = builder.comment("if set to true players under 1x will still be able to move as if they were 1x (e.g. jumping 1 block heights moving at full speed etc)")
+                                .define("dontSlowDownSmallerMovement", false);
                         this.canPickupEntities = builder.comment("enable or disable the ability to pickup non player mobs")
                                 .define("canPickupMobs", true);
                         this.canPickupPlayers = builder.comment("enable or disable the ability to pickup players")

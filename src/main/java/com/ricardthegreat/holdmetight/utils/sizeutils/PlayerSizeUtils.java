@@ -173,6 +173,10 @@ public class PlayerSizeUtils {
         if (HMTConfig.SERVER_CONFIG.damageTakenScaleLink.get()) {
             setDefence(player, currentScale);
         }
+
+        if (HMTConfig.SERVER_CONFIG.dontSlowDownSmallerMovement.get()) {
+            scaleMovement(player, currentScale);
+        }
     }
 
     //ensure that the players hitbox does not go above the maximum and 
@@ -219,6 +223,17 @@ public class PlayerSizeUtils {
         ScaleData defenceData = pEnt.pehkui_getScaleData(ScaleTypes.DEFENSE);
 
         defenceData.setScale((float) Math.sqrt(currentScale));
+    }
+
+    private static void scaleMovement(Player player, float currentScale){
+        PehkuiEntityExtensions pEnt = (PehkuiEntityExtensions) player;
+        ScaleData movementData = pEnt.pehkui_getScaleData(ScaleTypes.MOTION);
+
+        if (currentScale < 1) {
+            movementData.setScale(1/currentScale);
+        }else if (movementData.getScale() != 1) {
+            movementData.setScale(1f);
+        }
     }
 
     private static void setMiningSpeed(Player player, float currentScale){
