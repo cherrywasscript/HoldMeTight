@@ -37,12 +37,14 @@ public class PickupEntityMixin {
 
             ItemStack item = PlayerStandinItem.createEntityItem(vehicle, (Player) rider);
             vehicle.getInventory().add(vehicle.getInventory().selected, item);
+            info.setReturnValue(InteractionResult.sidedSuccess(vehicle.level().isClientSide));
             
         }else if (!(rider instanceof Player) && vehicle.getMainHandItem().isEmpty() && carryPreferencesChecker.canPickup(vehicle, rider) && HMTConfig.SERVER_CONFIG.canPickupEntities.get()) {
             rider.startRiding(vehicle);
 
             ItemStack item = EntityStandinItem.createEntityItem(vehicle, rider);
             vehicle.getInventory().add(vehicle.getInventory().selected, item);
+            info.setReturnValue(InteractionResult.sidedSuccess(vehicle.level().isClientSide));
         }
     }
 
