@@ -8,7 +8,6 @@
     "mixins": [
       "SmallEntityRenderMixin",
       "EntityMixin",
-      "HumanoidModelMixin",
       "MultiPlayerGameModeMixin",
       "LivingEntityMixin",
       "WebBlockMixin",
