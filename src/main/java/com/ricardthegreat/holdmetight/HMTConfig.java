@@ -155,7 +155,7 @@ public class HMTConfig {
                                 .define("miningSpeedScaleLink", true);
                         this.damageTakenScaleLink = builder.comment("should the damage a player takes be linked to their scale (less for larger folk more for smaller folk)")
                                 .define("damageTakenScaleLink", true);
-                        this.dontSlowDownSmallerMovement = builder.comment("if set to true players under 1x will still be able to move as if they were 1x (e.g. jumping 1 block heights moving at full speed etc)")
+                        this.dontSlowDownSmallerMovement = builder.comment("if set to true players under 1x will still be able to move as if they were 1x (e.g. jumping 1 block heights moving at full speed etc), players over 1x will still move faster")
                                 .define("dontSlowDownSmallerMovement", false);
                         this.canPickupEntities = builder.comment("enable or disable the ability to pickup non player mobs")
                                 .define("canPickupMobs", true);
