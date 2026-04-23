@@ -21,6 +21,7 @@ import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.C
 import com.ricardthegreat.holdmetight.network.serverbound.SEntityPutDownPacket;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.HumanoidModel.ArmPose;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
@@ -195,10 +196,12 @@ public class EntityStandinItem extends Item implements ICurioItem{
             @Override
             public @org.jetbrains.annotations.Nullable ArmPose getArmPose(LivingEntity entityLiving, InteractionHand hand, ItemStack itemStack) {
                 if (itemStack.getItem() instanceof EntityStandinItem) {
-                    return HeldEntityArmPose.HELD_ENTITY_POSE;
+                    if (entityLiving.getUsedItemHand() == hand && entityLiving.getUseItemRemainingTicks() == 0) {
+                        return HeldEntityArmPose.HELD_ENTITY_POSE;
+                    }
                 }
                 
-                return IClientItemExtensions.super.getArmPose(entityLiving, hand, itemStack);
+                return HumanoidModel.ArmPose.EMPTY;
             }
 
             @Override
