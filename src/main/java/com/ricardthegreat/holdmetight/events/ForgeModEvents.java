@@ -192,10 +192,10 @@ public class ForgeModEvents {
     public static void onLivingKnockbackEvent(LivingKnockBackEvent event){
         float scale = EntitySizeUtils.getSize(event.getEntity());
         float strength = event.getOriginalStrength();
-        System.out.println("kb event strength:" + strength);
+        HoldMeTight.LOGGER.debug("kb event strength:" + strength);
         scale = (float) Math.pow(scale, 0.6);
         strength /= scale;
-        System.out.println("kb event strength mod:" + strength);
+        HoldMeTight.LOGGER.debug("kb event strength mod:" + strength);
         event.setStrength(strength);
     }
 

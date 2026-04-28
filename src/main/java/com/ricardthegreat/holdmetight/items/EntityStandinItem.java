@@ -250,7 +250,7 @@ public class EntityStandinItem extends Item implements ICurioItem{
         tag.putUUID(ENTITY_UUID, entity.getUUID());
         tag.putInt(ENTITY_ID, entity.getId());
 
-        System.out.println("ent item inv slot: " + vehicle.getInventory().selected + "/" + vehicle.level());
+        HoldMeTight.LOGGER.debug("ent item inv slot: " + vehicle.getInventory().selected + "/" + vehicle.level());
         tag.putInt(INV_ID, vehicle.getInventory().selected);
 
         item.setTag(tag);

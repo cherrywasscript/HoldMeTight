@@ -46,7 +46,7 @@ public class PlayerPreferences {
 
     private void sync(Player player){
         shouldSync = false;
-        System.out.println("player pref sync");
+        HoldMeTight.LOGGER.debug("player pref sync");
         if (player.level().isClientSide) {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> 
                 PacketHandler.sendToServer(getServerSyncPacket()));
