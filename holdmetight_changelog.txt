@@ -133,3 +133,7 @@ version 0.7.0-beta
 - added "sticky finger" hotkey (default key " ' ") to pickup players in front of you that are difficult to target precisely (works best while at regular size trying to pick up small players rather than at larger size trying to pickup normal players)
 - added the ability to apply potions to carried players by either right clicking the potion on the player or the player on the potion
 - added ability to feed players that are carried
+
+version 0.7.1-beta
+- changed how the "too fast error" is handled so mods such as "TooFast" should no longer have compatability issues and should instead just overwrite what this mod does
+- small players can now rummage through suspicious gravel and sand (hold right click with an empty hand) to find items as if they were using a brush

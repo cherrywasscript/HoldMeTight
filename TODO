@@ -8,18 +8,15 @@ work on the collar stuff
 
 make it so custom carry positions can choose if the player is stuck or not
 
-play the grabby animation thing when picking an ent up
-
-add server config option to disable this mods "moved too fast" speed changes and disable the mixin in HoldMeTightMixinConfigPlugin
-
-change how arm position is set currently its a mixin but i might be able to do it straight from the item or from the blockentityrender thing
-
 work on making the size ray good
 
 
 option to disable the reduced movements accociated with getting smaller (like walking slower and jumping less high)
 
 more server side options + ways to disable certain items like the remotes
+
+
+suspicious gravel/sand can be brushed through while tiny safely without needing a brush
 
 
 more "violent" size options possibly
