@@ -101,7 +101,7 @@ public class RayGunProjectile extends Projectile {
     }
 
     public void setSecondsOnFire(int p_20255_) {
-        System.out.println("fire");
+        //System.out.println("fire");
     }
 
 

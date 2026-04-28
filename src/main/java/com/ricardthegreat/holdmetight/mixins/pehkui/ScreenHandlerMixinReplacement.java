@@ -19,8 +19,7 @@ public class ScreenHandlerMixinReplacement {
 	//basically the entire issue with this class was that the Player and Block classes needed to be swapped
 
     @ModifyExpressionValue(method = { "method_17696", "func_216960_a", "lambda$stillValid$0" }, require = 0, expect = 0, at = @At(value = "CONSTANT", args = "doubleValue=0.5D", ordinal = 0))
-	private static double pehkui$canUse$xOffset(double value, Player player, Block block,  Level world, BlockPos pos, @Local double reach) {
-		System.out.println("blockreach: "+ player.getBlockReach() + "/localblockreach:" + reach);
+	private static double pehkui$canUse$xOffset(double value, Player player, Block block,  Level world, BlockPos pos) {
 		return ScaleUtils.getBlockXOffset(pos, player);
 	}
 	

@@ -134,7 +134,6 @@ public abstract class EntityClimbingMixin2 extends Entity{
         if (!list.isEmpty()) {
             for(Entity collison : list){
                 if (touchSide(entity, collison)) {
-                    System.out.println(true);
                     return true;
                 }
             }

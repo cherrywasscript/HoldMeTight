@@ -20,7 +20,6 @@ public class PowderSnowBlockMixin {
     @Inject(at = @At("HEAD"), method = "entityInside(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/Entity;)V", cancellable = true)
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, CallbackInfo info) {
         if (EntitySizeUtils.getSize(entity) >= 4) {
-            System.out.println(entity.getName());
             info.cancel();
         }
     }

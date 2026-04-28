@@ -42,8 +42,6 @@ public class HeldEntityInventoryMenu extends AbstractContainerMenu{
         super(MenuInit.HELD_PLAYER_MENU.get(), containerId);
         this.owner = targetInv.player;
 
-        System.out.println(containerId);
-
         createTargetInvSlots(targetInv);
         createPlayerInventorySlots(playerInv);
 

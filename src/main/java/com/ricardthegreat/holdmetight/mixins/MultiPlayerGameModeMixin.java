@@ -28,11 +28,6 @@ public abstract class MultiPlayerGameModeMixin {
             Entity passenger = player.getFirstPassenger();
             PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
             
-            if (player.level().getBlockState(blockHit.getBlockPos()).is(Blocks.AIR)) {
-                HoldMeTight.LOGGER.info("MultiPlayerGameModeMixin.java line 35: block is air");
-                System.out.println("block is air");
-            }
-            
             if (player.level().getBlockState(blockHit.getBlockPos()).is(BlockInit.TINY_JAR_EMPTY.get())) {
                 return;
             }

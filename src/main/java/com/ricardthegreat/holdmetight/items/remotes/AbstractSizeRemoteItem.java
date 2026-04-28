@@ -120,7 +120,6 @@ public abstract class AbstractSizeRemoteItem extends Item{
     @SuppressWarnings("null")
     @Override
     public InteractionResult interactLivingEntity(@Nonnull ItemStack stack, @Nonnull Player player, @Nonnull LivingEntity entity, @Nonnull InteractionHand hand) {
-        //System.out.println("interact"); //TODO remove
         ItemStack item = player.getItemInHand(hand);
         if (!item.hasTag()) {
             setDefaultTags(item, player);
