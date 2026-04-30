@@ -19,6 +19,7 @@
 
       "carry.PickupEntityMixin",
       "carry.PlayerDismountMixin",
+      "carry.DropEntityItemMixin",
 
       "rendering.FrustumMixin",
       "rendering.DontRenderInvisibleCarriedEntities",
