@@ -4,6 +4,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.inventory.ShulkerBoxScreen;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
@@ -14,6 +15,8 @@ import java.util.Set;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.client.Keybindings;
+import com.ricardthegreat.holdmetight.client.armposes.HeldEntityArmPose;
+import com.ricardthegreat.holdmetight.client.armposes.HeldEntityArmPoser;
 import com.ricardthegreat.holdmetight.client.guielements.tooltips.ClientPlayerItemTooltipComponent;
 import com.ricardthegreat.holdmetight.client.guielements.tooltips.PlayerItemTooltip;
 import com.ricardthegreat.holdmetight.client.models.ModModelLayers;
@@ -48,6 +51,9 @@ import top.theillusivec4.curios.common.CuriosRegistry;
 
 @Mod.EventBusSubscriber(modid = HoldMeTight.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientModHandler {
+
+    public static HumanoidModel.ArmPose HELD_ENTITY_POSE;
+
     @SubscribeEvent
     public static void registerKeys(RegisterKeyMappingsEvent event) {
         event.register(Keybindings.INSTANCE.shoulderCarryKey);
@@ -105,6 +111,11 @@ public class ClientModHandler {
 
         event.enqueueWork(() -> {
             ItemProperties.register(ItemInit.PAPER_WINGS_ITEM.get(), new ResourceLocation("broken"), (stack, lebel, entity, seed) -> PaperWingsItem.isFlyEnabled(stack) ? 0 : 1);
+        });
+
+        event.enqueueWork(() -> {
+            // calling this in client mod handler to initialise it i guess because if i dont have this call it just fucking causes an out of bounds exception later on
+            HeldEntityArmPose.HELD_ENTITY_POSE.ordinal();
         });
     }
 
