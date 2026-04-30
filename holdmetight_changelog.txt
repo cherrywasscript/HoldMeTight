@@ -137,3 +137,4 @@ version 0.7.0-beta
 version 0.7.1-beta
 - changed how the "too fast error" is handled so mods such as "TooFast" should no longer have compatability issues and should instead just overwrite what this mod does
 - small players can now rummage through suspicious gravel and sand (hold right click with an empty hand) to find items as if they were using a brush
+- added config option to disable the reduction of movement for players that are below 1x (e.g. a player at 0.5 will still be able to jump up 1 block and move at regular speed) while keeping the increase in movement for players above 1x, this is disabled by default
