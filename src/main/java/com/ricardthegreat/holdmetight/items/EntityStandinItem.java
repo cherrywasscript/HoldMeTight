@@ -19,6 +19,7 @@ import com.ricardthegreat.holdmetight.network.clientbound.CThrowPlayerPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CAddPlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CRemovePlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.SEntityPutDownPacket;
+import com.ricardthegreat.holdmetight.network.serverbound.itempackets.standinitem.SPlayerDropItemPacket;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.client.model.HumanoidModel;
@@ -42,6 +43,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 public class EntityStandinItem extends Item implements ICurioItem{
@@ -288,16 +290,16 @@ public class EntityStandinItem extends Item implements ICurioItem{
                     if (!player.level().isClientSide) {
                         PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
                         playerCarry.removeCarriedEntity(id);
-                        DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> 
-                            PacketHandler.sendToAllClients(new CRemovePlayerCarrySyncPacket(id, player.getUUID())));
-
+                        PacketHandler.sendToAllClients(new CRemovePlayerCarrySyncPacket(id, player.getUUID()));
                         if (passenger instanceof Player) {
-                            DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> 
-                                PacketHandler.sendToAllClients(new CThrowPlayerPacket(id, movement.toVector3f())));
+                            PacketHandler.sendToAllClients(new CThrowPlayerPacket(id, movement.toVector3f()));
                         }else{
-                            DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> 
-                                PacketHandler.sendToAllClients(new CThrowEntityPacket(tag.getInt(ENTITY_ID), movement.toVector3f())));
+                            PacketHandler.sendToAllClients(new CThrowEntityPacket(tag.getInt(ENTITY_ID), movement.toVector3f()));
                         }
+                    }else{
+                        CompoundTag save = new CompoundTag();
+                        item.save(save);
+                        PacketHandler.sendToServer(new SPlayerDropItemPacket(save));
                     }
                 }
             }
