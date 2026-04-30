@@ -1,34 +1,20 @@
-figure out why shift+clicking into and out of carried inventories is so strange
+Bugs:
+- make it so dropping entities works in single player as the bug where they just stick to you still exists there for some reason
+- figure out why shift+clicking into and out of carried inventories is so strange
 
-more mobility options while tiny? super jump?
-
-make it so you can see and edit curios as well as regular inventory
-
-work on the collar stuff
-
-make it so custom carry positions can choose if the player is stuck or not
-
-work on making the size ray good
-
-
-option to disable the reduced movements accociated with getting smaller (like walking slower and jumping less high)
-
-more server side options (like disabling tiny players brushing blocks) + ways to disable certain items like the remotes
-
-
-suspicious gravel/sand can be brushed through while tiny safely without needing a brush
-
-
-more "violent" size options possibly
-- squishing e.g. an entity walking over another entity that is much smaller takes damage (off by default with preference options to turn it on)
-- block squishing? have it so if you place a block on top of a small player they die or take damage and are "shunted" out
-- (custom damage types for custom death messages?)
-
-
-
-
-
-survival things for tinies?
-- foraging twigs/sticks/pebblets/plantfibers by clicking on blocks, drops change depending on both block and biome
-- handheld "crafting tables" with items like climbing gear so for moving and some simple armour and weapon options
-- tools that expand the nature of what can be foraged
+Features:
+- more mobility options while tiny? super jump?
+- make it so you can see and edit curios as well as regular inventory
+- option to disable the reduced movements accociated with getting smaller (like walking slower and jumping less high)
+- more server side options (like disabling tiny players brushing blocks) + ways to disable certain items like the remotes
+- make it so custom carry positions can choose if the player is stuck or not
+- work on the collar stuff
+- work on making the size ray good
+- more "violent" size options possibly
+    - squishing e.g. an entity walking over another entity that is much smaller takes damage (off by default with preference options to turn it on)
+    - block squishing? have it so if you place a block on top of a small player they die or take damage and are "shunted" out
+    - (custom damage types for custom death messages?)
+- survival things for tinies?
+    - foraging twigs/sticks/pebblets/plantfibers by clicking on blocks, drops change depending on both block and biome
+    - handheld "crafting tables" with items like climbing gear so for moving and some simple armour and weapon options
+    - tools that expand the nature of what can be foraged
