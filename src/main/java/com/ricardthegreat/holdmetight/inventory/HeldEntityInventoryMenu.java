@@ -114,7 +114,6 @@ public class HeldEntityInventoryMenu extends AbstractContainerMenu{
     @Override
     protected boolean moveItemStackTo(ItemStack stack, int i, int j, boolean bool) {
         //TODO figure out what i, j and bool represent
-        //System.out.println(stack.getItem() + "/" + i + "/" + j + "/" + bool);
         if (stack.getItem() instanceof EntityStandinItem) {
             return false;
         }

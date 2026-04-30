@@ -168,7 +168,6 @@ public class PlayerCarry {
 
     //TODO remove or change
     public CarryPosition getCarryPosition(Entity entity, String hand){
-        //System.out.println("getcarrypos: " + hand);
         switch (hand) {
             case CarryPosConstants.MAIN_HAND:
                 return mainHand;

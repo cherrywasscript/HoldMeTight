@@ -59,7 +59,6 @@ public class TorchBlockMixin extends Block{
 
     private boolean entOnTop(Entity entity, BlockPos pos){
         Vec3 entPos = entity.position();
-        //System.out.println("line 64/"+ pos);
         if (entPos.y() == pos.getY()+0.625 && correctX(entPos.x(), pos.getX()) && correctZ(entPos.z(), pos.getZ())) {
             return true;
         }

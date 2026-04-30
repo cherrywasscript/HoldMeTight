@@ -34,7 +34,6 @@ public class SizeWand extends Item {
         ItemStack itemstack = player.getItemInHand(hand);
 
         if (!itemstack.hasTag()) {
-            System.out.println("notag");
             setDefaultTags(itemstack);
         }
 
@@ -51,8 +50,6 @@ public class SizeWand extends Item {
             return InteractionResultHolder.success(player.getItemInHand(hand));
 
         }else if (!player.isShiftKeyDown() && !level.isClientSide()) {
-
-            System.out.println("scale: "+ tag.getFloat(SCALE_TAG) + " ismult: " + tag.getBoolean(MULT_TAG));
             WandProjectile wandProjectile = new WandProjectile(player, level, tag.getFloat(SCALE_TAG), tag.getBoolean(MULT_TAG));
             wandProjectile.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 1.5F, 1.0F);
             wandProjectile.setNoGravity(true);
@@ -75,7 +72,6 @@ public class SizeWand extends Item {
     }
 
     public void onCraftedBy(@Nonnull ItemStack stack, @Nonnull Level level, @Nonnull Player player) {
-        System.out.println("this had been crafted hopefully");
         setDefaultTags(stack);
     }
 }

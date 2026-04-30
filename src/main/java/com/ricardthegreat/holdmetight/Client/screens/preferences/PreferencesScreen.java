@@ -129,7 +129,6 @@ public class PreferencesScreen extends Screen{
     }
 
     public void repositionElements() {
-        System.out.println(this.width);
         if (this.tabNavigationBar != null && this.bottomButtons != null) {
             this.tabNavigationBar.setWidth(this.width);
             this.tabNavigationBar.arrangeElements();

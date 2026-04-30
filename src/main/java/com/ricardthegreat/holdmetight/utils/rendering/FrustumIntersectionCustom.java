@@ -245,8 +245,6 @@ public class FrustumIntersectionCustom extends FrustumIntersection{
         planes[4].set(nzX, nzY, nzZ, nzW);
         pzX = m.m03() - m.m02(); pzY = m.m13() - m.m12(); pzZ = m.m23() - m.m22(); pzW = m.m33() - m.m32();
 
-        //System.out.println(pzX+"/"+pzY+"/"+pzZ+"/"+pzW);
-
         if (allowTestSpheres) {
             invl = org.joml.Math.invsqrt(pzX * pzX + pzY * pzY + pzZ * pzZ);
             //TODO FIGURE SHIT OUT WITH THIS LIKE???????
@@ -254,8 +252,6 @@ public class FrustumIntersectionCustom extends FrustumIntersection{
                 invl = 417000000;
             }
             pzX *= invl; pzY *= invl; pzZ *= invl; pzW *= invl;
-
-            //System.out.println(pzX+"/"+pzY+"/"+pzZ+"/"+pzW+"/"+invl);
         }
 
         planes[5].set(pzX, pzY, pzZ, pzW);
@@ -614,7 +610,6 @@ public class FrustumIntersectionCustom extends FrustumIntersection{
                         inside &= pyX * (pyX < 0 ? maxX : minX) + pyY * (pyY < 0 ? maxY : minY) + pyZ * (pyZ < 0 ? maxZ : minZ) >= -pyW;
                         if (nzX * (nzX < 0 ? minX : maxX) + nzY * (nzY < 0 ? minY : maxY) + nzZ * (nzZ < 0 ? minZ : maxZ) >= -nzW) {
                             plane = PLANE_PZ;
-                            //System.out.println("-pzW:" + -pzW + "/other stuff:" + (pzX * (pzX < 0 ? minX : maxX) + pzY * (pzY < 0 ? minY : maxY) + pzZ * (pzZ < 0 ? minZ : maxZ)));
                             inside &= nzX * (nzX < 0 ? maxX : minX) + nzY * (nzY < 0 ? maxY : minY) + nzZ * (nzZ < 0 ? maxZ : minZ) >= -nzW;
                             if (pzX * (pzX < 0 ? minX : maxX) + pzY * (pzY < 0 ? minY : maxY) + pzZ * (pzZ < 0 ? minZ : maxZ) >= -pzW) {
                                 inside &= pzX * (pzX < 0 ? maxX : minX) + pzY * (pzY < 0 ? maxY : minY) + pzZ * (pzZ < 0 ? maxZ : minZ) >= -pzW;

@@ -31,7 +31,6 @@ public class PlayerSizeUtils {
             //ensure the size is not greater than the maximum allowed by the HMTConfig
             size = clampToPreferences(player, size);
             size = lockSizeCap(size);
-            //System.out.println(size);
             ScaleData data = getScaleData(player);
 
             if (ticks < 0) {

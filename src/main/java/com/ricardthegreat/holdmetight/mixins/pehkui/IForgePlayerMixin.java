@@ -29,8 +29,6 @@ public interface IForgePlayerMixin {
         final double range = self.getAttributeValue(ForgeMod.ENTITY_REACH.get());
 		final double ret = range == 0.0 ? 0.0 : range + (double) (self.isCreative() ? 0.5 : 0);
 
-        System.out.println("canreachraw");
-
 		final float scale = ScaleUtils.getBlockReachScale(self);
 
         if (scale != 1.0f) {

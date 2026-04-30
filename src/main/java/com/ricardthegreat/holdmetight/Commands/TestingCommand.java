@@ -42,10 +42,8 @@ public class TestingCommand {
                 Minecraft minecraft = Minecraft.getInstance();
                 LocalPlayer mcPlayer = minecraft.player;
 
-                System.out.println("is carried: " + playerCarry.getIsCarried());
                 HoldMeTight.LOGGER.atDebug().log("is carried: " + playerCarry.getIsCarried());
 
-                System.out.println("is carrying: " + playerCarry.getIsCarrying());
                 HoldMeTight.LOGGER.atDebug().log("is carrying: " + playerCarry.getIsCarrying());
 
                 if (mcPlayer != null) {

@@ -41,7 +41,6 @@ public class SizeRay extends Item {
         ItemStack itemstack = player.getItemInHand(hand);
 
         if (!itemstack.hasTag()) {
-            System.out.println("notag");
             setDefaultTags(itemstack);
         }
 

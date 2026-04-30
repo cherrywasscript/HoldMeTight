@@ -39,11 +39,6 @@ public class WandProjectile extends Projectile {
     protected void onHitEntity(EntityHitResult hitEntity) {
         super.onHitEntity(hitEntity);
         Entity entity = this.getOwner();
-        if (level().isClientSide) {
-            System.out.println("clientside, scale: "+ scale + " ismult: " + isMult);
-        }else{
-            System.out.println("is not clientside, scale: "+ scale + " ismult: " + isMult);
-        }
         
         //TODO make these send the player who fired them
         if (isMult) {
@@ -92,11 +87,9 @@ public class WandProjectile extends Projectile {
     }
 
     public void setSecondsOnFire(int p_20255_) {
-        System.out.println("fire");
     }
 
     public void recreateFromPacket(ClientboundAddEntityPacket p_150162_) {
-        super.recreateFromPacket(p_150162_);
         double d0 = p_150162_.getXa();
         double d1 = p_150162_.getYa();
         double d2 = p_150162_.getZa();
@@ -106,7 +99,6 @@ public class WandProjectile extends Projectile {
            double d3 = 0.4D + 0.1D * (double)i;
            this.level().addParticle(ParticleTypes.PORTAL, this.getX(), this.getY(), this.getZ(), d0 * d3, d1, d2 * d3);
         }
-        System.out.println("recreate from packet");
   
         this.setDeltaMovement(d0, d1, d2);
      }

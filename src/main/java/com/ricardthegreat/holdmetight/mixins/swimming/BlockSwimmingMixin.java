@@ -38,7 +38,6 @@ public abstract class BlockSwimmingMixin implements IBlockSwimming, IForgeEntity
 
     @Inject(at = @At("RETURN"), method = "isInWater()Z", cancellable = true)
     public void isInWater(CallbackInfoReturnable<Boolean> info) {
-        //System.out.println(wasInBlock);
         if (wasInBlock) {
             info.setReturnValue(true);
         }

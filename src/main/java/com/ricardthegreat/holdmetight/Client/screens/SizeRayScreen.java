@@ -80,8 +80,6 @@ public class SizeRayScreen extends Screen {
     protected void init() {
         super.init();
 
-        //System.out.println("SizeItemScreen line 124: " + SizeUtils.getHitboxScaleData(selectedPlayer).getScale());
-
         this.leftPos = (this.width - this.imageWidth) / 2;
         this.rightPos = (this.width - this.leftPos) ;
         this.topPos = (this.height - this.imageHeight) / 2;

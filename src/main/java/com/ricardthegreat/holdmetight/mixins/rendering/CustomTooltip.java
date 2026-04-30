@@ -41,7 +41,6 @@ public abstract class CustomTooltip extends Screen{
 
     @Inject(method = "renderTooltip(Lnet/minecraft/client/gui/GuiGraphics;II)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;renderTooltip(Lnet/minecraft/client/gui/Font;Ljava/util/List;Ljava/util/Optional;Lnet/minecraft/world/item/ItemStack;II)V"), cancellable = true)
     private void renderTooltip(GuiGraphics graphics, int x, int y, CallbackInfo info, @Local ItemStack itemstack){
-        //System.out.println("rendertooltip:" + itemstack.getDisplayName());
         if (itemstack.is(ItemInit.PLAYER_ITEM.get())) {
             info.cancel();
 

@@ -25,7 +25,6 @@ public class CheckNonInvSlotUtil {
         List<SlotResult> slots = curiosInventory.findCurios((stack) -> stack.getItem() == ItemInit.PLAYER_ITEM.get() || stack.getItem() == ItemInit.ENTITY_ITEM.get());
         for (SlotResult slot : slots) {
             UUID id = slot.stack().getOrCreateTag().getUUID(EntityStandinItem.ENTITY_UUID);
-            //System.out.println("this exists to remind you to look at the CheckNonInvSlotUtil class and ensure that once the multiple carry positions and dynamically adding curio slots has been set that each of the curio slots has the correct identifier because if they dont you need to redo this thing");
             if (rider.getUUID().equals(id)) {
                 String value = slot.slotContext().identifier();
                 

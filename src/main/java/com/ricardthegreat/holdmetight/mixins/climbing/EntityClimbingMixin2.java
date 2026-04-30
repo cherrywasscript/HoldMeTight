@@ -67,7 +67,6 @@ public abstract class EntityClimbingMixin2 extends Entity{
 
             if (!list.isEmpty()) {
                 if (onTop(entity, list.get(0))) {
-                    //System.out.println(entity.level().getBlockState(list.get(0).blockPosition().below()).getBlock().getName());
                     return list.get(0).blockPosition().below();
                 }
             }
@@ -144,8 +143,6 @@ public abstract class EntityClimbingMixin2 extends Entity{
     private boolean touchSide(LivingEntity player, Entity ent){
         AABB entBB = ent.getBoundingBox();
         AABB playerBB = player.getBoundingBox();
-
-        //System.out.println(playerBB);
 
         boolean minX = entBB.minX == playerBB.maxX;
         boolean maxX = entBB.maxX == playerBB.minX;
@@ -230,8 +227,6 @@ public abstract class EntityClimbingMixin2 extends Entity{
         
         if (!list.isEmpty()) {
             if (onTop(entity, list.get(0))) {
-                //System.out.println("list exists");
-                
                 if (entity.getDeltaMovement().y < 0) {
                     entity.setDeltaMovement(entity.getDeltaMovement().x, 0, entity.getDeltaMovement().z);
                 }
@@ -248,8 +243,6 @@ public abstract class EntityClimbingMixin2 extends Entity{
                 
                 //entity.hurtMarked = true;
                 //entity.getAbilities().flying = false;
-                                    
-                //System.out.println(entity.hasImpulse);
                 
                 onTop = true;
                 horizontalCollision = true;
