@@ -231,6 +231,7 @@ public class PlayerSizeUtils {
 
         if (currentScale < 1) {
             movementData.setScale(1/currentScale);
+            fixStepHeight(player, 1);//putting this here as it should ensure that step height is treated as if the player is 1x
         }else if (movementData.getScale() != 1) {
             movementData.setScale(1f);
         }
