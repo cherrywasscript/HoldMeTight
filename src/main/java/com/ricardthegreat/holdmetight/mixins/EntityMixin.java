@@ -61,7 +61,7 @@ public abstract class EntityMixin {
     //need to check the scale of the rider and the vehicle and move accordingly
     // if rider is above 0.25 set them to just being on head like normal probably
     //on shoulder rider should get lower e.g. 0.125 should have a larger vertical offset tho im not sure by how much yet
-
+    //TODO while this method works its kinda clunky and not easy to look at i need to improve it
     private void calcBodyPosition(Player vehicle, Entity rider){
         //this is rider
 
