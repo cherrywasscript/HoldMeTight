@@ -139,3 +139,4 @@ version 0.7.1-beta
 - small players can now rummage through suspicious gravel and sand (hold right click with an empty hand) to find items as if they were using a brush
 - added config option to disable the reduction of movement for players that are below 1x (e.g. a player at 0.5 will still be able to jump up 1 block and move at regular speed) while keeping the increase in movement for players above 1x, this is disabled by default
 - fixed issue where dropped entities would still be stuck to you in singleplayer games
+- removed testing remnants printing to and spamming the server console, some still remain but rather than printing to console they exist in debug.log
