@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.ricardthegreat.holdmetight.utils.ModTags;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
 import net.minecraft.core.BlockPos;
@@ -117,7 +118,7 @@ public class BlockClimbingMixin {
             return true;
         }
 
-        if(state.is(BlockTags.DIRT) || state.is(BlockTags.SAND) || state.is(BlockTags.WOOL) || state.is(BlockTags.WOOL_CARPETS)){
+        if(state.is(ModTags.Blocks.TINY_CLIMBABLE)){
             return true;
         }
 
