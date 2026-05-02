@@ -2,7 +2,7 @@ Bugs:
 - figure out why shift+clicking into and out of carried inventories is so strange
 
 Features:
-- more mobility options while tiny? super jump?
+- more mobility options while tiny? super jump? - TinySuperJumpMixin (cant seem to find a way that i like to make a super jump work)
 - make it so you can see and edit curios as well as regular inventory
 - more server side options (like disabling tiny players brushing blocks) + ways to disable certain items like the remotes
 - make it so custom carry positions can choose if the player is stuck or not
