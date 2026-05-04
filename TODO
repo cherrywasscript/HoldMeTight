@@ -8,6 +8,7 @@ Features:
 - make it so custom carry positions can choose if the player is stuck or not
 - work on the collar stuff
 - work on making the size ray good
+- make the mining speed differences more obvious for being small/large and potentially swap damage resistance for a health buff
 - more "violent" size options possibly
     - squishing e.g. an entity walking over another entity that is much smaller takes damage (off by default with preference options to turn it on)
     - block squishing? have it so if you place a block on top of a small player they die or take damage and are "shunted" out
