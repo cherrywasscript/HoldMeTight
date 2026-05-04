@@ -31,7 +31,6 @@
       "playerextensions.PlayerTurnWhileHeldExtension",
       "playerextensions.InvulnerableWhileCarried",
       "playerextensions.TinyPlayersBrushBlocks",
-      "playerextensions.TinySuperJumpMixin",
 
       "climbing.BlockClimbingMixin",
       "climbing.EntityClimbingMixin",

@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public class TinySuperJumpMixin {
     @ModifyReturnValue( at = @At("RETURN"), method = "getJumpPower()F")
 	private float getJumpPower(float original) {
-        if (((LivingEntity) (Object) this) instanceof Player player && false) {
+        if (((LivingEntity) (Object) this) instanceof Player player) {
             if (EntitySizeUtils.getSize(player) < 0.8) {
                 if (checkForBlock(player)) {
                     return original+0.2f;
