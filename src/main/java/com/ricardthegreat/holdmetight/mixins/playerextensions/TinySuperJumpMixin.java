@@ -14,6 +14,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 @Mixin(LivingEntity.class)
 public class TinySuperJumpMixin {
+    //TODO actually enable this class
+
     @ModifyReturnValue( at = @At("RETURN"), method = "getJumpPower()F")
 	private float getJumpPower(float original) {
         if (((LivingEntity) (Object) this) instanceof Player player) {
