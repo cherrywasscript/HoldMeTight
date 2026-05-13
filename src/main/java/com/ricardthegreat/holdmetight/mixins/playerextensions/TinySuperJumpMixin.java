@@ -4,12 +4,17 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
+import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
 
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.FenceBlock;
+import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 @Mixin(LivingEntity.class)
@@ -99,9 +104,21 @@ public class TinySuperJumpMixin {
             BlockPos aboveBlockPos = blockPos.above();
             BlockState above = level.getBlockState(aboveBlockPos);
 
-            //TODO add check for 
-            if (preCheck && above.getCollisionShape(level, aboveBlockPos).isEmpty() && ent.horizontalCollision) {
-                return true;
+            //TODO make this better im kinda sleepy and am just making it functionable
+            //also future me if you're reading this and not understanding it just know i could have explained it here but choose
+            //not to because im tired *middle finger emoji*
+            if (preCheck && ent.horizontalCollision) {
+                if (above.getCollisionShape(level, aboveBlockPos).isEmpty() ) {
+                    double height = state.getCollisionShape(level, blockPos).max(Direction.Axis.Y) + blockPos.getY();
+                    if (height-ent.getY() <= 1 && height-ent.getY() <= 2.5*PlayerSizeUtils.getSize(ent)) {
+                        return true;
+                    }
+                }else{
+                    double height = above.getCollisionShape(level, aboveBlockPos).max(Direction.Axis.Y) + aboveBlockPos.getY();
+                    if (height-ent.getY() <= 1.5*PlayerSizeUtils.getSize(ent)) {
+                        return true;
+                    }
+                }
             }
         }
   
