@@ -25,6 +25,8 @@ public class SPlayerPreferencesSyncPacket {
     private final boolean othersCanChangeYourSize;
     private final boolean youCanChangeYourSize;
 
+    private final boolean enableVaulting;
+
     private final boolean inventoryCanBeAccessed;
     private final boolean trapCarriedPlayer;
     private final boolean canBeTrappedWhileCarried;
@@ -33,6 +35,7 @@ public class SPlayerPreferencesSyncPacket {
 
     public SPlayerPreferencesSyncPacket(
         float maxScale, float minScale, float defaultScale, boolean othersCanChangeYourSize, boolean youCanChangeYourSize, 
+        boolean enableVaulting,
         boolean inventoryCanBeAccessed, boolean trapCarriedPlayer, boolean canBeTrappedWhileCarried, boolean canBePickedup, boolean canPickupOthers
         ){
         this.maxScale = maxScale;
@@ -40,6 +43,8 @@ public class SPlayerPreferencesSyncPacket {
         this.defaultScale = defaultScale;
         this.othersCanChangeYourSize = othersCanChangeYourSize;
         this.youCanChangeYourSize = youCanChangeYourSize;
+
+        this.enableVaulting = enableVaulting;
 
         this.inventoryCanBeAccessed = inventoryCanBeAccessed;
         this.trapCarriedPlayer = trapCarriedPlayer;
@@ -55,6 +60,8 @@ public class SPlayerPreferencesSyncPacket {
         this.othersCanChangeYourSize = buffer.readBoolean();
         this.youCanChangeYourSize = buffer.readBoolean();
 
+        this.enableVaulting = buffer.readBoolean();
+
         this.inventoryCanBeAccessed = buffer.readBoolean();
         this.trapCarriedPlayer = buffer.readBoolean();
         this.canBeTrappedWhileCarried = buffer.readBoolean();
@@ -68,6 +75,8 @@ public class SPlayerPreferencesSyncPacket {
         buffer.writeFloat(defaultScale);
         buffer.writeBoolean(othersCanChangeYourSize);
         buffer.writeBoolean(youCanChangeYourSize);
+
+        buffer.writeBoolean(enableVaulting);
 
         buffer.writeBoolean(inventoryCanBeAccessed);
         buffer.writeBoolean(trapCarriedPlayer);
@@ -83,11 +92,13 @@ public class SPlayerPreferencesSyncPacket {
         if(preferences != null){
             preferences.updateAllSyncables(
                 maxScale, minScale, defaultScale, othersCanChangeYourSize, youCanChangeYourSize, 
+                enableVaulting,
                 inventoryCanBeAccessed, trapCarriedPlayer, canBeTrappedWhileCarried, canBePickedup, canPickupOthers);
 
             PacketHandler.sendToAllClients(
                 new CPlayerPreferencesSyncPacket(
                     maxScale, minScale, defaultScale, othersCanChangeYourSize, youCanChangeYourSize, 
+                    enableVaulting,
                     inventoryCanBeAccessed, trapCarriedPlayer, canBeTrappedWhileCarried, canBePickedup, canPickupOthers, 
                     player.getUUID()));
         }
