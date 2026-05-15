@@ -140,3 +140,7 @@ version 0.7.1-beta
 - added config option to disable the reduction of movement for players that are below 1x (e.g. a player at 0.5 will still be able to jump up 1 block and move at regular speed) while keeping the increase in movement for players above 1x, this is disabled by default
 - fixed issue where dropped entities would still be stuck to you in singleplayer games
 - removed testing remnants printing to and spamming the server console, some still remain but rather than printing to console they exist in debug.log
+
+version 0.7.2-beta
+- added a "vaulting" feature for tinies, if you jump while walking into a block you will have an increased jump height allowing you to jump over a full block at down to 0.4 scale
+- 

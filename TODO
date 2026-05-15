@@ -6,13 +6,38 @@ Features:
 - make it so you can see and edit curios as well as regular inventory
 - more server side options (like disabling tiny players brushing blocks) + ways to disable certain items like the remotes
 - make it so custom carry positions can choose if the player is stuck or not
+
+
+- hitboxes when small:
+    - walls (like fences)
+    - sea pickles? there's some randomness but if there's a way to detect which ways the pickles are setup then i can do those
+    - chorus plants (simple in theory but given how they can grow it might be strange)
+    - chorus flower (should be easier)
+    - signs (make it so that the placed signs arent just 1 big hitbox, angled signs can have pseudo angles maybe but at the very least 90 degree signs should be regular
+            bring the wall sign hitbox in slightly so that it is more in line with its visual model)
+    - lecturn (top)
+    - compost bin (compost)
+    - decorated pot (would need a similar thing to fences with more than 1 block high collision, ill take a look but might not do)
+    - iron bars (see if i can make nice feeling collision with the bars)
+    - fences (same with the connecting bars)
+    - fence gate (add some collision to the visual parts)
+    - glass panes (thought i fixed these clearly not they are still intangible)
+    - tripwire (main body is easy hook is angled again can do something simple probably)
+    - small dripleaves (the leaves)
+    - mangrove roots
+    - mangrove propagule
+    - leaves  (make climbable)
+
+- change the "super jump" so it doesnt activate if they should already be able to jump over it
 - work on the collar stuff
 - work on making the size ray good
+- "tiny accessable chests" chest with a hole that really small players can enter through and when they open their inventory they open the chest
 - make the mining speed differences more obvious for being small/large and potentially swap damage resistance for a health buff
 - more "violent" size options possibly
     - squishing e.g. an entity walking over another entity that is much smaller takes damage (off by default with preference options to turn it on)
     - block squishing? have it so if you place a block on top of a small player they die or take damage and are "shunted" out
     - (custom damage types for custom death messages?)
+- boat for tinies (lilypad + paper + stick?)
 - survival things for tinies?
     - foraging twigs/sticks/pebblets/plantfibers by clicking on blocks, drops change depending on both block and biome
     - handheld "crafting tables" with items like climbing gear so for moving and some simple armour and weapon options
