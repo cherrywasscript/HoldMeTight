@@ -31,6 +31,7 @@
       "playerextensions.PlayerTurnWhileHeldExtension",
       "playerextensions.InvulnerableWhileCarried",
       "playerextensions.TinyPlayersBrushBlocks",
+      "playerextensions.TinySuperJumpMixin",
 
       "climbing.BlockClimbingMixin",
       "climbing.EntityClimbingMixin",
@@ -52,6 +53,15 @@
       "collisions.SweetBerryBushBlockMixin",
       "collisions.WallHangingSignBlockMixin",
       "collisions.ButtonBlockMixin",
+      "collisions.EndRodBlockMixin",
+      "collisions.LightningRodBlockMixin",
+      "collisions.BrewingStandBlockMixin",
+      "collisions.FlowerPotBlockMixin",
+      "collisions.DragonEggBlockMixin",
+      "collisions.ComparatorBlockMixin",
+      "collisions.RepeaterBlockMixin",
+      "collisions.WaterlilyBlockMixin",
+      "collisions.FrogspawnBlockMixin",
 
       "interaction.ButtonBlockInteractionMixin",
       "interaction.DoorBlockInteractionMixin",
