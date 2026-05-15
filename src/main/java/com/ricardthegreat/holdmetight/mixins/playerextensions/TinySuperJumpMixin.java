@@ -24,9 +24,13 @@ public class TinySuperJumpMixin {
     @ModifyReturnValue( at = @At("RETURN"), method = "getJumpPower()F")
 	private float getJumpPower(float original) {
         if (((LivingEntity) (Object) this) instanceof Player player) {
-            if (EntitySizeUtils.getSize(player) < 0.8) {
-                if (checkForBlock(player)) {
-                    return original+0.2f;
+            //TODO return to this later, i think just having it activate while shifting should be fine but might want to use
+            //PlayerPreferences "enableVaulting" and have it be fully disableable
+            if (player.isShiftKeyDown()) {
+                if (EntitySizeUtils.getSize(player) < 0.8) {
+                    if (checkForBlock(player)) {
+                        return original+0.2f;
+                    }
                 }
             }
         }
