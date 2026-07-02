@@ -1,26 +1,16 @@
 package com.ricardthegreat.holdmetight.mixins.collisions;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
-import net.minecraft.client.gui.components.DebugScreenOverlay;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.ComparatorBlock;
 import net.minecraft.world.level.block.DiodeBlock;
-import net.minecraft.world.level.block.DragonEggBlock;
-import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.RepeaterBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;

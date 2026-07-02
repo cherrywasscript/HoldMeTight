@@ -41,8 +41,9 @@
       "swimming.BlockSwimmingMixin",
       "swimming.LocalPlayerMixin",
 
+      "collisions.crosscollisionblocks.FenceBlockMixin",
+      "collisions.crosscollisionblocks.IronBarsBlockMixin",
       "collisions.BasePressurePlateBlockMixin",
-      "collisions.CrossCollisionBlockMixin",
       "collisions.FenceGateBlockMixin",
       "collisions.HoneyBlockMixin",
       "collisions.LeavesBlockMixin",
@@ -62,6 +63,11 @@
       "collisions.RepeaterBlockMixin",
       "collisions.WaterlilyBlockMixin",
       "collisions.FrogspawnBlockMixin",
+      "collisions.DecoratedPotBlockMixin",
+      "collisions.ComposterBlockMixin",
+      "collisions.WallBlockMixin",
+      "collisions.ChorusFlowerBlockMixin",
+      "collisions.LecternBlockMixin",
 
       "interaction.ButtonBlockInteractionMixin",
       "interaction.DoorBlockInteractionMixin",
@@ -84,7 +90,9 @@
 
       "items.BottleItemMixin",
 
-      "entitybehaviour.MobAvoidPlayerMixin"
+      "entitybehaviour.MobAvoidPlayerMixin",
+      "entitybehaviour.MobAvoidLargeEntityMixin",
+      "entitybehaviour.NearestAttackableTargetGoalMixin"
     ],
     "client": [
     ],
