@@ -142,5 +142,5 @@ version 0.7.1-beta
 - removed testing remnants printing to and spamming the server console, some still remain but rather than printing to console they exist in debug.log
 
 version 0.7.2-beta
-- added a "vaulting" feature for tinies, if you jump while walking into a block you will have an increased jump height allowing you to jump over a full block at down to 0.4 scale
-- 
+- added a "vaulting" feature for tinies, if you jump while shift-walking into a block you will have an increased jump height allowing you to jump over a full block at down to 0.4 scale
+- added more custom collisions for certain blocks while small that more accurately match their visuals
