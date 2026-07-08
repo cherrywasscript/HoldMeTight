@@ -35,7 +35,6 @@ public abstract class NearestAttackableTargetGoalMixin<T extends LivingEntity> e
         if (cls == Player.class || cls == ServerPlayer.class) {
             predicate = (ent) -> {
                     if (EntitySizeUtils.getSize(mob) <= EntitySizeUtils.getSize(ent)/4) {
-                        System.out.println("toobig");
                         return false;
                     }
                     return true;
