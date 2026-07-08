@@ -144,3 +144,4 @@ version 0.7.1-beta
 version 0.7.2-beta
 - added a "vaulting" feature for tinies, if you jump while shift-walking into a block you will have an increased jump height allowing you to jump over a full block at down to 0.4 scale
 - added more custom collisions for certain blocks while small that more accurately match their visuals
+- made it so mobs no longer attack characters that are 4x their size or larger and will run away from them if they get too close

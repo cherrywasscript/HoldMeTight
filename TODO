@@ -15,14 +15,7 @@ Features:
 
 - hitboxes when small:
     - tripwire (main body is easy hook is angled again can do something simple probably)
-    - small dripleaves (the leaves)
-    - mangrove roots
     - leaves  (make climbable)
-
-- can't:
-    - sea pickles rotation is done by however choosing a random model is decided so there is no way to be accurate with its hitboxes unless i can figure out if i can access that random check in the code
-    - same for lilypads
-    - same for chorus plants, though i can for the flowers
 
 - change the "super jump" so it doesnt activate if they should already be able to jump over it
 - work on the collar stuff
@@ -42,3 +35,14 @@ Features:
     - tools that expand the nature of what can be foraged
 
 - look into intergration with simple voice chat
+
+
+stuff i cant/wont do:
+can't:
+    - sea pickles rotation is done by however choosing a random model is decided so there is no way to be accurate with its hitboxes unless i can figure out if i can access that random check in the code
+    - same for lilypads
+    - same for chorus plants, though i can for the flowers
+
+wont:
+    - small dripleaves (the leaves) might do in the future
+    - mangrove roots maybe in the future

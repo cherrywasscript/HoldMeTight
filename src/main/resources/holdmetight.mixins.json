@@ -68,6 +68,7 @@
       "collisions.WallBlockMixin",
       "collisions.ChorusFlowerBlockMixin",
       "collisions.LecternBlockMixin",
+      "collisions.TripWireHookBlockMixin",
 
       "interaction.ButtonBlockInteractionMixin",
       "interaction.DoorBlockInteractionMixin",
