@@ -1,19 +1,48 @@
 Bugs:
 - figure out why shift+clicking into and out of carried inventories is so strange
+- dying does weird stuff to carry position syncing? need to check
+- grabbing someone while they crouch might be broken
 
 Features:
 - more mobility options while tiny? super jump? - TinySuperJumpMixin (cant seem to find a way that i like to make a super jump work)
 - make it so you can see and edit curios as well as regular inventory
 - more server side options (like disabling tiny players brushing blocks) + ways to disable certain items like the remotes
 - make it so custom carry positions can choose if the player is stuck or not
+- damage not just defence scaling when bigger/smaller
+- aoe mining when big
+
+- let tinies be moved into other tinies inventories (assuming they're the right size for carrying) and they will start being carried by them
+
+- hitboxes when small:
+    - tripwire (main body is easy hook is angled again can do something simple probably)
+    - leaves  (make climbable)
+
+- change the "super jump" so it doesnt activate if they should already be able to jump over it
 - work on the collar stuff
 - work on making the size ray good
+- tinies can see in the inventory of bigs carrying them (maybe only the items directly adjacent)
+- "tiny accessable chests" chest with a hole that really small players can enter through and when they open their inventory they open the chest
 - make the mining speed differences more obvious for being small/large and potentially swap damage resistance for a health buff
 - more "violent" size options possibly
     - squishing e.g. an entity walking over another entity that is much smaller takes damage (off by default with preference options to turn it on)
     - block squishing? have it so if you place a block on top of a small player they die or take damage and are "shunted" out
     - (custom damage types for custom death messages?)
+- boat for tinies (lilypad + paper + stick?)
+- make it so water and lava impact bigs movements less
 - survival things for tinies?
     - foraging twigs/sticks/pebblets/plantfibers by clicking on blocks, drops change depending on both block and biome
     - handheld "crafting tables" with items like climbing gear so for moving and some simple armour and weapon options
     - tools that expand the nature of what can be foraged
+
+- look into intergration with simple voice chat
+
+
+stuff i cant/wont do:
+can't:
+    - sea pickles rotation is done by however choosing a random model is decided so there is no way to be accurate with its hitboxes unless i can figure out if i can access that random check in the code
+    - same for lilypads
+    - same for chorus plants, though i can for the flowers
+
+wont:
+    - small dripleaves (the leaves) might do in the future
+    - mangrove roots maybe in the future

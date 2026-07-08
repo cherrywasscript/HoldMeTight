@@ -29,6 +29,9 @@ public class PlayerPreferences {
     private boolean othersCanChangeYourSize = true;
     private boolean youCanChangeYourSize = true;
 
+    //Other preferences
+    private boolean enableVaulting = true;
+
     //Carry related preferences
     private boolean inventoryCanBeAccessed = true;
     private boolean trapCarriedPlayer = true;
@@ -123,6 +126,14 @@ public class PlayerPreferences {
         this.youCanChangeYourSize = youCanChangeYourSize;
     }
 
+    public boolean isEnableVaulting() {
+        return enableVaulting;
+    }
+
+    public void setEnableVaulting(boolean enableVaulting) {
+        this.enableVaulting = enableVaulting;
+    }
+
     public boolean getInventoryCanBeAccessed() {
         return inventoryCanBeAccessed;
     }
@@ -170,6 +181,8 @@ public class PlayerPreferences {
         tag.putBoolean("othersCanChangeYourSize", othersCanChangeYourSize);
         tag.putBoolean("youCanChangeYourSize", youCanChangeYourSize);
 
+        tag.putBoolean("enableVaulting", enableVaulting);
+
         tag.putBoolean("inventoryCanBeAccessed", inventoryCanBeAccessed);
         tag.putBoolean("trapCarriedPlayer", trapCarriedPlayer);
         tag.putBoolean("canBeTrappedWhileCarried", canBeTrappedWhileCarried);
@@ -183,6 +196,8 @@ public class PlayerPreferences {
         defaultScale = tag.getFloat("defaultScale");
         othersCanChangeYourSize = tag.getBoolean("othersCanChangeYourSize");
         youCanChangeYourSize = tag.getBoolean("youCanChangeYourSize");
+
+        enableVaulting = tag.getBoolean("enableVaulting");
 
         inventoryCanBeAccessed = tag.getBoolean("inventoryCanBeAccessed");
         trapCarriedPlayer = tag.getBoolean("trapCarriedPlayer");
@@ -198,6 +213,8 @@ public class PlayerPreferences {
         this.othersCanChangeYourSize = source.othersCanChangeYourSize;
         this.youCanChangeYourSize = source.youCanChangeYourSize;
 
+        this.enableVaulting = source.enableVaulting;
+
         this.inventoryCanBeAccessed = source.inventoryCanBeAccessed;
         this.trapCarriedPlayer = source.trapCarriedPlayer;
         this.canBeTrappedWhileCarried = source.canBeTrappedWhileCarried;
@@ -207,6 +224,7 @@ public class PlayerPreferences {
 
     public void updateAllSyncables(
         float maxScale, float minScale, float defaultScale, boolean othersCanChangeYourSize, boolean youCanChangeYourSize, 
+        boolean enableVaulting,
         boolean inventoryCanBeAccessed, boolean trapCarriedPlayer, boolean canBeTrappedWhileCarried, boolean canBePickedup, boolean canPickupOthers
         ){
         this.maxScale = maxScale;
@@ -214,6 +232,8 @@ public class PlayerPreferences {
         this.defaultScale = defaultScale;
         this.othersCanChangeYourSize = othersCanChangeYourSize;
         this.youCanChangeYourSize = youCanChangeYourSize;
+
+        this.enableVaulting = enableVaulting;
 
         this.inventoryCanBeAccessed = inventoryCanBeAccessed;
         this.trapCarriedPlayer = trapCarriedPlayer;
@@ -228,6 +248,7 @@ public class PlayerPreferences {
     public CPlayerPreferencesSyncPacket getClientSyncPacket(Player player){
         return new CPlayerPreferencesSyncPacket(
             maxScale, minScale, defaultScale, othersCanChangeYourSize, youCanChangeYourSize, 
+            enableVaulting,
             inventoryCanBeAccessed, trapCarriedPlayer, canBeTrappedWhileCarried, canBePickedup, canPickupOthers, 
             player.getUUID());
     }
@@ -235,6 +256,7 @@ public class PlayerPreferences {
     public SPlayerPreferencesSyncPacket getServerSyncPacket(){
         return new SPlayerPreferencesSyncPacket(
             maxScale, minScale, defaultScale, othersCanChangeYourSize, youCanChangeYourSize, 
+            enableVaulting,
             inventoryCanBeAccessed, trapCarriedPlayer, canBeTrappedWhileCarried, canBePickedup, canPickupOthers);
     }
 }

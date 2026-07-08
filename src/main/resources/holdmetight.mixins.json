@@ -31,6 +31,7 @@
       "playerextensions.PlayerTurnWhileHeldExtension",
       "playerextensions.InvulnerableWhileCarried",
       "playerextensions.TinyPlayersBrushBlocks",
+      "playerextensions.TinySuperJumpMixin",
 
       "climbing.BlockClimbingMixin",
       "climbing.EntityClimbingMixin",
@@ -40,8 +41,9 @@
       "swimming.BlockSwimmingMixin",
       "swimming.LocalPlayerMixin",
 
+      "collisions.crosscollisionblocks.FenceBlockMixin",
+      "collisions.crosscollisionblocks.IronBarsBlockMixin",
       "collisions.BasePressurePlateBlockMixin",
-      "collisions.CrossCollisionBlockMixin",
       "collisions.FenceGateBlockMixin",
       "collisions.HoneyBlockMixin",
       "collisions.LeavesBlockMixin",
@@ -52,6 +54,21 @@
       "collisions.SweetBerryBushBlockMixin",
       "collisions.WallHangingSignBlockMixin",
       "collisions.ButtonBlockMixin",
+      "collisions.EndRodBlockMixin",
+      "collisions.LightningRodBlockMixin",
+      "collisions.BrewingStandBlockMixin",
+      "collisions.FlowerPotBlockMixin",
+      "collisions.DragonEggBlockMixin",
+      "collisions.ComparatorBlockMixin",
+      "collisions.RepeaterBlockMixin",
+      "collisions.WaterlilyBlockMixin",
+      "collisions.FrogspawnBlockMixin",
+      "collisions.DecoratedPotBlockMixin",
+      "collisions.ComposterBlockMixin",
+      "collisions.WallBlockMixin",
+      "collisions.ChorusFlowerBlockMixin",
+      "collisions.LecternBlockMixin",
+      "collisions.TripWireHookBlockMixin",
 
       "interaction.ButtonBlockInteractionMixin",
       "interaction.DoorBlockInteractionMixin",
@@ -74,7 +91,9 @@
 
       "items.BottleItemMixin",
 
-      "entitybehaviour.MobAvoidPlayerMixin"
+      "entitybehaviour.MobAvoidPlayerMixin",
+      "entitybehaviour.MobAvoidLargeEntityMixin",
+      "entitybehaviour.NearestAttackableTargetGoalMixin"
     ],
     "client": [
     ],
