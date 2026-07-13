@@ -32,12 +32,13 @@ public abstract class NearestAttackableTargetGoalMixin<T extends LivingEntity> e
 
     @Inject(method = "<init>(Lnet/minecraft/world/entity/Mob;Ljava/lang/Class;IZZLjava/util/function/Predicate;)V", at = @At("TAIL"), cancellable = true)
     public void NearestAttackableTargetGoal(Mob mob, Class<T> cls, int i, boolean bool0, boolean bool1, @Nullable Predicate<LivingEntity> predicate, CallbackInfo info) {
-        if (cls == Player.class || cls == ServerPlayer.class) {
+        if ((cls == Player.class || cls == ServerPlayer.class) && predicate != null) {
+            Predicate<LivingEntity> test = predicate;
             predicate = (ent) -> {
                     if (EntitySizeUtils.getSize(mob) <= EntitySizeUtils.getSize(ent)/4) {
                         return false;
                     }
-                    return true;
+                    return test.test(ent);
             };
 
             this.targetConditions = TargetingConditions.forCombat().range(this.getFollowDistance()).selector(predicate);
