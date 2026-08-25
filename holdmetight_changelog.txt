@@ -148,3 +148,6 @@ version 0.7.2-beta
 
 version 0.7.2.1-beta
 - fixed an issue where neutral mobs would be always hostile if you were less than 4x their size
+
+version 0.7.3-beta
+- added the mistakenly missing tag minecraft:dirt to the blocks valid for climbing while small so you can climb dirt and grass while 0.8 and under
