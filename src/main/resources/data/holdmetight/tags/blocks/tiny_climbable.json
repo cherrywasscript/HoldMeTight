@@ -1,6 +1,7 @@
 {
     "values": [
         "#minecraft:sand",
+        "#minecraft:dirt",
         "#minecraft:wool",
         "#minecraft:wool_carpets"
     ]
