@@ -4,18 +4,21 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
+import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
 public class PlayerItemTooltip implements TooltipComponent{
     private final NonNullList<ItemStack> items;
     private final NonNullList<ItemStack> armour;
     private final NonNullList<ItemStack> offhand;
     private final Player player;
+    private final ICuriosItemHandler curios;
 
-    public PlayerItemTooltip(NonNullList<ItemStack> items, NonNullList<ItemStack> armour, NonNullList<ItemStack> offhand, Player player) {
+    public PlayerItemTooltip(NonNullList<ItemStack> items, NonNullList<ItemStack> armour, NonNullList<ItemStack> offhand, Player player, ICuriosItemHandler curios) {
         this.items = items;
         this.armour = armour;
         this.offhand = offhand;
         this.player = player;
+        this.curios = curios;
     }
 
     public NonNullList<ItemStack> getItems() {
@@ -32,5 +35,9 @@ public class PlayerItemTooltip implements TooltipComponent{
 
     public Player getPlayer(){
         return this.player;
+    }
+
+    public ICuriosItemHandler getCurios(){
+        return this.curios;
     }
 }
