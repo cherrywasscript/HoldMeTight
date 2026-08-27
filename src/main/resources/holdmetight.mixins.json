@@ -91,6 +91,8 @@
 
       "items.BottleItemMixin",
 
+      "menu.PreventPlayerItemInteractionMixin",
+
       "entitybehaviour.MobAvoidPlayerMixin",
       "entitybehaviour.MobAvoidLargeEntityMixin",
       "entitybehaviour.NearestAttackableTargetGoalMixin"

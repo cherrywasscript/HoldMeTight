@@ -151,3 +151,4 @@ version 0.7.2.1-beta
 
 version 0.7.3-beta
 - added the mistakenly missing tag minecraft:dirt to the blocks valid for climbing while small so you can climb dirt and grass while 0.8 and under
+- "fixed" chests breaking carrying by just not letting you put the carry items in them
