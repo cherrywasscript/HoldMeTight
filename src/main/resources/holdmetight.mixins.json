@@ -16,6 +16,7 @@
       "BigDripleafBlockMixin",
       "PlayerCarryPickupMixin",
       "PlayerMovedTooFastMixin",
+      "FluidPushEntMixin",
 
       "carry.PickupEntityMixin",
       "carry.PlayerDismountMixin",

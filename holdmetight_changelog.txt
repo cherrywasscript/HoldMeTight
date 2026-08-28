@@ -152,3 +152,8 @@ version 0.7.2.1-beta
 version 0.7.3-beta
 - added the mistakenly missing tag minecraft:dirt to the blocks valid for climbing while small so you can climb dirt and grass while 0.8 and under
 - "fixed" chests breaking carrying by just not letting you put the carry items in them
+- finally added dependencies to mods.toml so there should be better crash reporting hopefully
+- added 2 enchantments - Shrinking and Size Steal, they can be applied to swords and axes and BOTH set weapon damage to 0
+    - Shrinking, sets weapon damage to 0 and shrinks the target based on how much damage the weapon would have done, higher enchant level = more Shrinking
+    - Size Steal, acts exactly like shrinking however also grows you by the amount the target is shrunk by
+- made it so flowing liquids (water, lava) affect you differently when smaller/larger so you get pushed more/less respectively, also at 4x and higher you are no longer pushed at all
