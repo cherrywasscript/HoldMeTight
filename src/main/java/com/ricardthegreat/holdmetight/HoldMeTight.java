@@ -8,6 +8,7 @@ import com.ricardthegreat.holdmetight.init.BlockEntityInit;
 import com.ricardthegreat.holdmetight.init.BlockInit;
 import com.ricardthegreat.holdmetight.init.CreativeTabInit;
 import com.ricardthegreat.holdmetight.init.EffectsInit;
+import com.ricardthegreat.holdmetight.init.EnchantmentInit;
 import com.ricardthegreat.holdmetight.init.EntityInit;
 import com.ricardthegreat.holdmetight.init.ItemInit;
 import com.ricardthegreat.holdmetight.init.MenuInit;
@@ -66,6 +67,7 @@ public class HoldMeTight {
         EffectsInit.register(modEventBus);
         PotionsInit.register(modEventBus);
         MenuInit.register(modEventBus);
+        EnchantmentInit.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
