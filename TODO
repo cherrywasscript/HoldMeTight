@@ -13,8 +13,6 @@ Features:
 - damage not just defence scaling when bigger/smaller
 - aoe mining when big
 - spiking food with shrink/growth potion
-- shrinking enchantment on weapons, reduces the weapons damage to 0 but shrinks the target by 1/1+(damage)
-- size stealing enchantment on weapons, like shrinking but adds the size taken to the person using the weapon
 
 - let tinies be moved into other tinies inventories (assuming they're the right size for carrying) and they will start being carried by them
 
