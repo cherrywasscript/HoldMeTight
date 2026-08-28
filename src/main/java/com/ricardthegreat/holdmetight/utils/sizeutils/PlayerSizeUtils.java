@@ -103,6 +103,10 @@ public class PlayerSizeUtils {
         }
     }
 
+    public static boolean willChangeBeAllowed(@Nullable Player changer, Player player){
+        return getShouldChangeFromPrefs(changer, player);
+    }
+
     private static boolean getShouldChangeFromPrefs(@Nullable Player changer, Player player){
         PlayerPreferences preferences = PlayerPreferencesProvider.getPlayerPreferencesCapability(player);
         boolean other = preferences.getOthersCanChange();

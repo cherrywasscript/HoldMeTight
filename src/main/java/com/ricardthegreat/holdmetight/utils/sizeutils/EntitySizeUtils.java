@@ -77,6 +77,14 @@ public class EntitySizeUtils {
         return getScaleData(entity).getTargetScale();
     }
 
+    public static boolean willChangeBeAllowed(@Nullable Player changer, Entity entity){
+        if (entity instanceof Player player) {
+            return PlayerSizeUtils.willChangeBeAllowed(changer, player);
+        }
+        
+        return true;
+    }
+
     private static ScaleData getScaleData(Entity entity) {
         PehkuiEntityExtensions pEnt = (PehkuiEntityExtensions) entity;
         ScaleData data = pEnt.pehkui_getScaleData(base);
