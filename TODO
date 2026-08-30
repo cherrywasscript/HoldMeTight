@@ -5,6 +5,8 @@ Bugs:
 - update vaulting so it works with blocks like trapdoors
 - items in the first 4 hotbar slots on carried players show their number in armour slots for some reason
 
+- USING COLLAR KEY THROWS ERROR BUT DOESNT CAUSE CRASH LOOK AT AFTER WORK
+
 Features:
 - more mobility options while tiny? super jump? - TinySuperJumpMixin (cant seem to find a way that i like to make a super jump work)
 - make it so you can see and edit curios as well as regular inventory

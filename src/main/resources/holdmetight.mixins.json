@@ -25,6 +25,7 @@
       "rendering.FrustumMixin",
       "rendering.DontRenderInvisibleCarriedEntities",
       "rendering.CustomTooltip",
+      "rendering.CollarNametagCustomMixin",
 
       "playerextensions.PlayerRenderMixin",
       "playerextensions.PlayerCapabilityMixin",
