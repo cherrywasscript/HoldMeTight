@@ -140,14 +140,18 @@ public class CollarItem extends Item implements DyeableLeatherItem, ICurioItem {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        //TODO add stuff to use
+        /* 
         if (level.isClientSide()) {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientHooks.openCollarScreen(player, hand));
         }
         return InteractionResultHolder.success(player.getItemInHand(hand));
+        */
+       return super.use(level, player, hand);
     }
     
     //TODO get more than 1 owner
-    public Pair<UUID, String> getFirstOwner(ItemStack stack){
+    public static Pair<UUID, String> getFirstOwner(ItemStack stack){
         CompoundTag tag = stack.getTagElement("owners");
         if (tag != null && tag.contains("uuid"+0) && tag.contains("name"+0)) {
             return new Pair<UUID,String>(tag.getUUID("uuid"+0), tag.getString("name"+0));
@@ -155,7 +159,7 @@ public class CollarItem extends Item implements DyeableLeatherItem, ICurioItem {
         return null;
     }
 
-    public List<Pair<UUID, String>> getOwners(ItemStack stack){
+    public static List<Pair<UUID, String>> getOwners(ItemStack stack){
         CompoundTag tag = stack.getTagElement("owners");
 
         List<Pair<UUID, String>> owners = new ArrayList<>();
@@ -183,7 +187,7 @@ public class CollarItem extends Item implements DyeableLeatherItem, ICurioItem {
 
     }
 
-    public boolean getIsLocked(ItemStack stack){
+    public static boolean getIsLocked(ItemStack stack){
         CompoundTag tag = stack.getOrCreateTagElement("locked");
         return tag.getBoolean("isLocked");
     }
