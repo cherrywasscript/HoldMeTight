@@ -105,6 +105,14 @@
     "message.holdmetight.too_small_interaction":"You are too small to use this",
 
 
+    "enchantment.holdmetight.shrink":"Shrink",
+    "enchantment.holdmetight.shrink.desc":"Reduces weapon damage to 0, shrinks the target based on how much damage the weapon would have done",
+    "enchantment.holdmetight.sizesteal":"Size Steal",
+    "enchantment.holdmetight.sizesteal.desc":"Reduces weapon damage to 0, shrinks the target based on how much damage the weapon would have done and grows you by that amount",
+    "enchantment.holdmetight.shrinkcurse":"Curse of Shrinking",
+    "enchantment.holdmetight.shrinkcurse.desc":"Slowly shrinks the anyone wearing the item with no limit",
+    "enchantment.holdmetight.growthcurse":"Curse of Growing",
+    "enchantment.holdmetight.growthcurse.desc":"Slowly shrinks the anyone wearing the item with a cap at 8x for stability's sake",
 
     "curios.identifier.collar":"Collar"
 }

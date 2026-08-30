@@ -18,6 +18,7 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -39,10 +40,13 @@ import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
 public class PlayerStandinItem extends EntityStandinItem{
 
     public static String INVENTORY = "Inventory";
+    public static String CURIOS = "Curios";
 
     public PlayerStandinItem(Properties properties) {
         super(properties);
@@ -58,11 +62,20 @@ public class PlayerStandinItem extends EntityStandinItem{
                 Player player = entity.level().getPlayerByUUID(tag.getUUID(ENTITY_UUID));
 
                 if (player != null) {
-                    ListTag savedInv = tag.getList(INVENTORY, 10);
+                    ListTag savedInv = tag.getList(INVENTORY, Tag.TAG_COMPOUND);
                     ListTag playerInv = player.getInventory().save(new ListTag());
 
                     if (!savedInv.equals(playerInv)) {
                         tag.put(INVENTORY, playerInv);
+                    }
+
+                    ListTag savedCurios = tag.getList(CURIOS, Tag.TAG_COMPOUND);
+                    ICuriosItemHandler curioHandler = CuriosApi.getCuriosInventory(player).orElse(null);
+                    if (curioHandler != null ) {
+                        ListTag playerCurios = curioHandler.saveInventory(false);
+                        if (!savedCurios.equals(playerCurios)) {
+                            tag.put(CURIOS, playerCurios);
+                        }
                     }
                 }
             }
@@ -169,18 +182,21 @@ public class PlayerStandinItem extends EntityStandinItem{
         }
 
         if (tag != null && Minecraft.getInstance().level.isClientSide) {
-            ListTag invList = tag.getList(INVENTORY, 10);
+            ListTag invList = tag.getList(INVENTORY, Tag.TAG_COMPOUND);
+            ListTag curioList = tag.getList(CURIOS, Tag.TAG_COMPOUND);
 
             
             Player player = level.getPlayerByUUID(tag.getUUID(ENTITY_UUID));
 
             if (player != null) {
                 Inventory inv = new Inventory(player);
-
                 inv.load(invList);
                 
+                ICuriosItemHandler curios = CuriosApi.getCuriosInventory(player).orElse(null);
+                curios.loadInventory(curioList);
 
-                return Optional.of(new PlayerItemTooltip(inv.items, inv.armor, inv.offhand, player));
+                
+                return Optional.of(new PlayerItemTooltip(inv.items, inv.armor, inv.offhand, player, curios));
             }
             
         }

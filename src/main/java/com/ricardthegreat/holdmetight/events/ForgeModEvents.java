@@ -10,17 +10,24 @@ import com.ricardthegreat.holdmetight.capabilities.preferences.PlayerPreferences
 import com.ricardthegreat.holdmetight.capabilities.preferences.PlayerPreferencesProvider;
 import com.ricardthegreat.holdmetight.capabilities.size.PlayerSize;
 import com.ricardthegreat.holdmetight.capabilities.size.PlayerSizeProvider;
+import com.ricardthegreat.holdmetight.enchantments.ShrinkingEnchantment;
+import com.ricardthegreat.holdmetight.enchantments.SizeStealEnchantment;
+import com.ricardthegreat.holdmetight.init.EnchantmentInit;
+import com.ricardthegreat.holdmetight.init.ItemInit;
 import com.ricardthegreat.holdmetight.items.EntityStandinItem;
 import com.ricardthegreat.holdmetight.items.PlayerStandinItem;
 import com.ricardthegreat.holdmetight.network.PacketHandler;
 import com.ricardthegreat.holdmetight.network.clientbound.capabilitySync.carry.CRemovePlayerCarrySyncPacket;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
+import com.ricardthegreat.holdmetight.utils.sizeutils.PlayerSizeUtils;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -29,8 +36,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.TickEvent.PlayerTickEvent;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.event.entity.living.MobEffectEvent;
@@ -39,6 +49,8 @@ import net.minecraftforge.event.entity.player.PlayerEvent.PlayerRespawnEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
 @Mod.EventBusSubscriber(modid = HoldMeTight.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ForgeModEvents {
@@ -188,15 +200,58 @@ public class ForgeModEvents {
     public static void onLivingKnockbackEvent(LivingKnockBackEvent event){
         float scale = EntitySizeUtils.getSize(event.getEntity());
         float strength = event.getOriginalStrength();
-        HoldMeTight.LOGGER.debug("kb event strength:" + strength);
+        //HoldMeTight.LOGGER.debug("kb event strength:" + strength);
         scale = (float) Math.pow(scale, 0.6);
         strength /= scale;
-        HoldMeTight.LOGGER.debug("kb event strength mod:" + strength);
+        //HoldMeTight.LOGGER.debug("kb event strength mod:" + strength);
         event.setStrength(strength);
     }
 
     @SubscribeEvent
-    public static void onLivingAttackEvent(LivingAttackEvent event){
-        
+    public static void onLivingDamageEvent(LivingDamageEvent event){
+        DamageSource source = event.getSource();
+        if (!source.isIndirect()) {
+            Entity ent = source.getEntity();
+            if (ent instanceof LivingEntity living) {
+                int level = living.getMainHandItem().getEnchantmentLevel(EnchantmentInit.SHRINKING_ENCHANTMENT.get());
+                if (level > 0) {
+                    ShrinkingEnchantment.doShrink(event.getEntity(), living, event.getAmount(), level);
+                    event.setAmount(0.0F);
+                }else{
+                    level = living.getMainHandItem().getEnchantmentLevel(EnchantmentInit.SIZE_STEALING_ENCHANTMENT.get());
+                    if (level > 0) {
+                        SizeStealEnchantment.doSteal(event.getEntity(), living, event.getAmount(), level);
+                        event.setAmount(0.0F);
+                    }
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerTickEvent(PlayerTickEvent event){
+        if(event.phase.equals(TickEvent.Phase.END)){
+            Player player = event.player;
+            if (!player.level().isClientSide) {
+                ICuriosItemHandler curios = CuriosApi.getCuriosInventory(player).orElse(null);
+                if (curios != null) {
+                    if (curios.isEquipped(ItemInit.COLLAR_ITEM.get())) {
+                        ItemStack stack = curios.findCurios(ItemInit.COLLAR_ITEM.get()).get(0).stack();
+
+                        int level = stack.getEnchantmentLevel(EnchantmentInit.SHRINKING_CURSE_ENCHANTMENT.get());
+                        if (level > 0) {
+                            PlayerSizeUtils.multSize(null, player, 0.99994f, 0);
+                        }else{
+                            level = stack.getEnchantmentLevel(EnchantmentInit.GROWTH_CURSE_ENCHANTMENT.get());
+                            if (level > 0) {
+                                if (PlayerSizeUtils.getTargetSize(player) < 8 && PlayerSizeUtils.getSize(player) < 8) {
+                                    PlayerSizeUtils.multSize(null, player, 1.00006f, 1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

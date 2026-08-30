@@ -48,7 +48,10 @@ public class PlayerSizeUtils {
                     //data.setTargetScale(prevTargScale*mult*errorScaleDifference);
                     //HoldMeTight.LOGGER.error("unexpected change in scale hopefully correcting");
                 }
-
+            }else if (ticks == 1) {
+                float mult = size/data.getScale();
+                float prevTargScale = data.getTargetScale();
+                data.setTargetScale(prevTargScale*mult);
             }else{
                 data.setScaleTickDelay(ticks);
                 data.setTargetScale(size);
@@ -66,7 +69,7 @@ public class PlayerSizeUtils {
     public static void multSize(@Nullable Player changer, Player player, Float size, int ticks){
         ScaleData data = getScaleData(player);
 
-        Float targetScale = data.getTargetScale()*size;
+        Float targetScale = data.getScale()*size;
         
         setSize(changer, player, targetScale, ticks);
     }
@@ -101,6 +104,10 @@ public class PlayerSizeUtils {
             data.setScale(currentScale);
             data.setTargetScale(targetScale);
         }
+    }
+
+    public static boolean willChangeBeAllowed(@Nullable Player changer, Player player){
+        return getShouldChangeFromPrefs(changer, player);
     }
 
     private static boolean getShouldChangeFromPrefs(@Nullable Player changer, Player player){

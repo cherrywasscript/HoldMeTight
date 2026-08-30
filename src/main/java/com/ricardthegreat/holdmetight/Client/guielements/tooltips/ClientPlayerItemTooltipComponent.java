@@ -53,6 +53,7 @@ public class ClientPlayerItemTooltipComponent implements ClientTooltipComponent{
       renderInventory(0, font, x, y, graphics);
       renderArmour(0, font, x, y, graphics);
       renderOffhand(0, font, x, y, graphics);
+      renderCurios(0, font, x, y, graphics);
       renderPlayer(x, y, graphics);
       
    }
@@ -60,13 +61,13 @@ public class ClientPlayerItemTooltipComponent implements ClientTooltipComponent{
    private void renderInventory(int itemNumber, Font font, int x, int y, GuiGraphics graphics){
       for(int i = 0; i < 4; i++){
          for(int j = 0; j < 9; j++){
-            int itemX = x + j*18 + 7;
+            int itemX = x + j*SLOT_SIZE_X + 7;
 
             int itemY = 0;
             if (i == 0) {
-               itemY = y + 4*18 +     69;
+               itemY = y + MARGIN_Y*SLOT_SIZE_X +     69;
             }else{
-               itemY = y + i*18 +     65;
+               itemY = y + i*SLOT_SIZE_X +     65;
             }
             
             ItemStack item = items.get(itemNumber);
@@ -82,20 +83,24 @@ public class ClientPlayerItemTooltipComponent implements ClientTooltipComponent{
    private void renderArmour(int itemNumber, Font font, int x, int y, GuiGraphics graphics){
       for(int i = armour.size()-1; i >= 0; i--){
          int itemX = x + 7;
-         int itemY = y + i*18 + 7;
+         int itemY = y + i*SLOT_SIZE_X + 7;
 
          graphics.renderItem(armour.get(itemNumber), itemX + 1, itemY + 1, itemNumber);
-         graphics.renderItemDecorations(font, items.get(itemNumber), itemX + 1, itemY + 1);
+         graphics.renderItemDecorations(font, armour.get(itemNumber), itemX + 1, itemY + 1);
 
          itemNumber++;
       }
    }
 
    private void renderOffhand(int itemNumber, Font font, int x, int y, GuiGraphics graphics){
-      int itemX = x + 4 + 4*18;
-      int itemY = y + 3*18 + 7;
+      int itemX = x + 4 + 4*SLOT_SIZE_X;
+      int itemY = y + 3*SLOT_SIZE_X + 7;
       graphics.renderItem(offhand.get(itemNumber), itemX + 1, itemY + 1, itemNumber);
-      graphics.renderItemDecorations(font, items.get(itemNumber), itemX + 1, itemY + 1);
+      graphics.renderItemDecorations(font, offhand.get(itemNumber), itemX + 1, itemY + 1);
+   }
+
+   private void renderCurios(int itemNumber, Font font, int x, int y, GuiGraphics graphics){
+
    }
     
    private void renderPlayer(int x, int y, GuiGraphics graphics){

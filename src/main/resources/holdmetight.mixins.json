@@ -16,6 +16,7 @@
       "BigDripleafBlockMixin",
       "PlayerCarryPickupMixin",
       "PlayerMovedTooFastMixin",
+      "FluidPushEntMixin",
 
       "carry.PickupEntityMixin",
       "carry.PlayerDismountMixin",
@@ -24,6 +25,7 @@
       "rendering.FrustumMixin",
       "rendering.DontRenderInvisibleCarriedEntities",
       "rendering.CustomTooltip",
+      "rendering.CollarNametagCustomMixin",
 
       "playerextensions.PlayerRenderMixin",
       "playerextensions.PlayerCapabilityMixin",
@@ -90,6 +92,8 @@
       "sizeinteractions.AdjustTakenKnockback",
 
       "items.BottleItemMixin",
+
+      "menu.PreventPlayerItemInteractionMixin",
 
       "entitybehaviour.MobAvoidPlayerMixin",
       "entitybehaviour.MobAvoidLargeEntityMixin",

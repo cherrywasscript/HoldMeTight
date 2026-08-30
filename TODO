@@ -2,6 +2,10 @@ Bugs:
 - figure out why shift+clicking into and out of carried inventories is so strange
 - dying does weird stuff to carry position syncing? need to check
 - grabbing someone while they crouch might be broken
+- update vaulting so it works with blocks like trapdoors
+- items in the first 4 hotbar slots on carried players show their number in armour slots for some reason
+
+- USING COLLAR KEY THROWS ERROR BUT DOESNT CAUSE CRASH LOOK AT AFTER WORK
 
 Features:
 - more mobility options while tiny? super jump? - TinySuperJumpMixin (cant seem to find a way that i like to make a super jump work)
@@ -10,6 +14,7 @@ Features:
 - make it so custom carry positions can choose if the player is stuck or not
 - damage not just defence scaling when bigger/smaller
 - aoe mining when big
+- spiking food with shrink/growth potion
 
 - let tinies be moved into other tinies inventories (assuming they're the right size for carrying) and they will start being carried by them
 
@@ -36,6 +41,7 @@ Features:
     - tools that expand the nature of what can be foraged
 
 - look into intergration with simple voice chat
+- add create compatability (belt motion + maybe other stuff)
 
 
 stuff i cant/wont do:

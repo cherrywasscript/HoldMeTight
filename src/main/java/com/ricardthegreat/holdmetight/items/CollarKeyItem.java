@@ -23,6 +23,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.DistExecutor;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 
@@ -54,7 +55,7 @@ public class CollarKeyItem extends Item{
                         for (int i = 0; i < stackHandler.getSlots(); i++) {
                             ItemStack collarStack = stackHandler.getStackInSlot(i);
                             if (collarStack.getItem() instanceof CollarItem item) {
-                                interactResult = unlockCollar(stack, collarStack);
+                                interactResult = unlockCollar(stack, collarStack, player.level());
                             }
                         }
 
@@ -99,15 +100,15 @@ public class CollarKeyItem extends Item{
         tag.putString("name", name);
     }
 
-    private InteractionResult unlockCollar(ItemStack key, ItemStack collarStack){
+    private InteractionResult unlockCollar(ItemStack key, ItemStack collarStack, Level level){
         CollarItem collar = (CollarItem) collarStack.getItem();
 
         Pair<UUID, String> owner = collar.getFirstOwner(collarStack);
         if (owner != null && owner.getFirst().compareTo(getOwner(key).getFirst()) == 0) {
             collar.setLocked(collarStack);
 
-            if (Minecraft.getInstance().level != null && Minecraft.getInstance().level.isClientSide) {
-                 playSound(collarStack);
+            if (level != null && level.isClientSide) {
+                playSound(collarStack);
             }
         }
 

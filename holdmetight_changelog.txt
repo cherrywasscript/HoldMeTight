@@ -148,3 +148,20 @@ version 0.7.2-beta
 
 version 0.7.2.1-beta
 - fixed an issue where neutral mobs would be always hostile if you were less than 4x their size
+
+version 0.8.0-beta
+- added the mistakenly missing tag minecraft:dirt to the blocks valid for climbing while small so you can climb dirt and grass while 0.8 and under
+- "fixed" chests breaking carrying by just not letting you put the carry items in them
+- finally added dependencies to mods.toml so there should be better crash reporting hopefully
+- added 2 enchantments - Shrinking and Size Steal, they can be applied to swords and axes and BOTH set weapon damage to 0
+    - Shrinking, sets weapon damage to 0 and shrinks the target based on how much damage the weapon would have done, higher enchant level = more Shrinking
+    - Size Steal, acts exactly like shrinking however also grows you by the amount the target is shrunk by
+- made it so flowing liquids (water, lava) affect you differently when smaller/larger so you get pushed more/less respectively, also at 4x and higher you are no longer pushed at all
+- added crafing recipes for the collar and collar key
+- collars can be worn in the collar curio slot and locked or unlocked with a key so long as both the collar and key were made by the same player
+- while the collar is locked it cannot be removed
+- you can lock or unlock a collar directly from the inventory by clicking on it while holding the key or externally by right clicking on the player wearing it with the key
+- while wearing a collar the name of the person who owns it will be shown next to yours on your nameplate
+- added 2 collar exclusive curses - Curse of Shrinking and Curse of Growing
+    - Curse of Shrinking, slowly shrinks the player wearing the cursed collar
+    - Curse of Growing, slowly grows the player wearing the cursed collar (up to 8x for stability reasons)
