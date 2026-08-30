@@ -2,6 +2,8 @@ package com.ricardthegreat.holdmetight.init;
 
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.effects.MassiveShrinkEffect;
+import com.ricardthegreat.holdmetight.enchantments.GrowingCurseEnchantment;
+import com.ricardthegreat.holdmetight.enchantments.ShrinkingCurseEnchantment;
 import com.ricardthegreat.holdmetight.enchantments.ShrinkingEnchantment;
 import com.ricardthegreat.holdmetight.enchantments.SizeStealEnchantment;
 
@@ -23,6 +25,12 @@ public class EnchantmentInit {
 
     public static final RegistryObject<Enchantment> SIZE_STEALING_ENCHANTMENT = EFFECTS.register("sizesteal", 
         () -> new SizeStealEnchantment(Enchantment.Rarity.VERY_RARE, EnchantmentCategory.WEAPON, EquipmentSlot.MAINHAND));
+
+    public static final RegistryObject<Enchantment> SHRINKING_CURSE_ENCHANTMENT = EFFECTS.register("shrinkcurse", 
+        () -> new ShrinkingCurseEnchantment(Enchantment.Rarity.RARE, EnchantmentCategory.WEARABLE));
+
+    public static final RegistryObject<Enchantment> GROWTH_CURSE_ENCHANTMENT = EFFECTS.register("growthcurse", 
+        () -> new GrowingCurseEnchantment(Enchantment.Rarity.RARE, EnchantmentCategory.WEARABLE));
 
     public static void register(IEventBus bus){
         EFFECTS.register(bus);
