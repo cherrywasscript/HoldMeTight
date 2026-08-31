@@ -165,3 +165,6 @@ version 0.8.0-beta
 - added 2 collar exclusive curses - Curse of Shrinking and Curse of Growing
     - Curse of Shrinking, slowly shrinks the player wearing the cursed collar
     - Curse of Growing, slowly grows the player wearing the cursed collar (up to 8x for stability reasons)
+
+version 0.8.0.1-beta
+- changed the new water pushing slightly to prevent a crash when using sinytra connector
