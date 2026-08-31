@@ -14,8 +14,9 @@ import net.minecraft.world.phys.Vec3;
 @Mixin(Entity.class)
 public class FluidPushEntMixin {
     
-    //@ModifyArg(method = "updateFluidHeightAndDoFluidPushing(Ljava/util/function/Predicate;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/phys/Vec3;add(Lnet/minecraft/world/phys/Vec3;)Lnet/minecraft/world/phys/Vec3"), index = 0)
-    @ModifyVariable(method = "updateFluidHeightAndDoFluidPushing(Ljava/util/function/Predicate;)V", at = @At("STORE"), ordinal = 1, remap = false)
+    //TODO For whatever reason this just does not function with synatra connector and i have no idea why, honestly really fucking annoying
+    /* 
+    @ModifyVariable(method = "updateFluidHeightAndDoFluidPushing(Ljava/util/function/Predicate;)V", at = @At("STORE"), ordinal = 1)
     public Vec3 updateFluidHeightAndDoFluidPushing(Vec3 vec){
         Entity rep = (Entity) (Object) this;
         if ( rep instanceof Player) {
@@ -31,4 +32,5 @@ public class FluidPushEntMixin {
         }
         return vec;
     }
+        */
 }
