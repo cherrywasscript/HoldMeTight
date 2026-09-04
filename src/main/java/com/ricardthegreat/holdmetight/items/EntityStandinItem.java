@@ -10,6 +10,8 @@ import javax.annotation.Nullable;
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarryProvider;
+import com.ricardthegreat.holdmetight.capabilities.preferences.PlayerPreferences;
+import com.ricardthegreat.holdmetight.capabilities.preferences.PlayerPreferencesProvider;
 import com.ricardthegreat.holdmetight.client.armposes.HeldEntityArmPose;
 import com.ricardthegreat.holdmetight.client.renderers.HeldEntityItemRenderer;
 import com.ricardthegreat.holdmetight.init.ItemInit;
@@ -22,6 +24,7 @@ import com.ricardthegreat.holdmetight.network.serverbound.SEntityPutDownPacket;
 import com.ricardthegreat.holdmetight.network.serverbound.itempackets.standinitem.SPlayerDropItemPacket;
 import com.ricardthegreat.holdmetight.utils.sizeutils.EntitySizeUtils;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.HumanoidModel.ArmPose;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
@@ -187,6 +190,13 @@ public class EntityStandinItem extends Item implements ICurioItem{
             
             if (entity != null) {
                 list.add(Component.literal("Size: " + EntitySizeUtils.getSize(entity)));
+
+                if (entity instanceof Player player) {
+                    PlayerPreferences prefs = PlayerPreferencesProvider.getPlayerPreferencesCapability(player);
+                    if (prefs.getInventoryCanBeAccessed()) {
+                        list.add(Component.literal("Rightclick to open inventory").withStyle(ChatFormatting.LIGHT_PURPLE));
+                    }
+                }
             }
         }
         super.appendHoverText(stack, level, list, flag);
