@@ -22,6 +22,7 @@ import com.ricardthegreat.holdmetight.network.serverbound.carrypositions.SRemove
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -87,6 +88,9 @@ public class CustomCarryCommand {
             .then(Commands.argument("connect to head (optional)", BoolArgumentType.bool()).executes((source) -> {
                 return editCarry(source.getSource(), StringArgumentType.getString(source, "name"), IntegerArgumentType.getInteger(source, "angle"), DoubleArgumentType.getDouble(source, "distance"), DoubleArgumentType.getDouble(source, "height"), DoubleArgumentType.getDouble(source, "sideways"), BoolArgumentType.getBool(source, "connect to head (optional)"), source.getSource().getEntityOrException());
             }))))))))
+            .then(Commands.literal("sync").executes((source) -> {
+                return syncCarry(source.getSource().getEntity());
+            }))
             );
     }
 
@@ -144,6 +148,14 @@ public class CustomCarryCommand {
 
                 PacketHandler.sendToServer(new SEditCustomCarryPosPacket(pos, index));
             }
+        }
+        return 1;
+    }
+
+    public static int syncCarry(Entity entity) throws CommandSyntaxException {
+        if (entity instanceof Player player) {
+            PlayerCarry playerCarry = PlayerCarryProvider.getPlayerCarryCapability(player);
+            PacketHandler.sendToServer(playerCarry.getServerSyncPacket());
         }
         return 1;
     }
