@@ -3,6 +3,7 @@ package com.ricardthegreat.holdmetight.events;
 import java.util.UUID;
 import java.util.function.Supplier;
 
+import com.ricardthegreat.holdmetight.HMTConfig;
 import com.ricardthegreat.holdmetight.HoldMeTight;
 import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarry;
 import com.ricardthegreat.holdmetight.capabilities.carry.PlayerCarryProvider;
@@ -10,6 +11,8 @@ import com.ricardthegreat.holdmetight.capabilities.preferences.PlayerPreferences
 import com.ricardthegreat.holdmetight.capabilities.preferences.PlayerPreferencesProvider;
 import com.ricardthegreat.holdmetight.capabilities.size.PlayerSize;
 import com.ricardthegreat.holdmetight.capabilities.size.PlayerSizeProvider;
+import com.ricardthegreat.holdmetight.enchantments.GrowingCurseEnchantment;
+import com.ricardthegreat.holdmetight.enchantments.ShrinkingCurseEnchantment;
 import com.ricardthegreat.holdmetight.enchantments.ShrinkingEnchantment;
 import com.ricardthegreat.holdmetight.enchantments.SizeStealEnchantment;
 import com.ricardthegreat.holdmetight.init.EnchantmentInit;
@@ -27,10 +30,12 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
@@ -233,25 +238,58 @@ public class ForgeModEvents {
         if(event.phase.equals(TickEvent.Phase.END)){
             Player player = event.player;
             if (!player.level().isClientSide) {
+                int level = 0;
                 ICuriosItemHandler curios = CuriosApi.getCuriosInventory(player).orElse(null);
                 if (curios != null) {
                     if (curios.isEquipped(ItemInit.COLLAR_ITEM.get())) {
                         ItemStack stack = curios.findCurios(ItemInit.COLLAR_ITEM.get()).get(0).stack();
 
-                        int level = stack.getEnchantmentLevel(EnchantmentInit.SHRINKING_CURSE_ENCHANTMENT.get());
-                        if (level > 0) {
-                            PlayerSizeUtils.multSize(null, player, 0.99994f, 0);
-                        }else{
-                            level = stack.getEnchantmentLevel(EnchantmentInit.GROWTH_CURSE_ENCHANTMENT.get());
-                            if (level > 0) {
-                                if (PlayerSizeUtils.getTargetSize(player) < 8 && PlayerSizeUtils.getSize(player) < 8) {
-                                    PlayerSizeUtils.multSize(null, player, 1.00006f, 1);
-                                }
-                            }
-                        }
+                        level += getCurseLevel(stack);
                     }
                 }
+
+                level += getCurseLevel(player.getItemBySlot(EquipmentSlot.HEAD));
+                level += getCurseLevel(player.getItemBySlot(EquipmentSlot.CHEST));
+                level += getCurseLevel(player.getItemBySlot(EquipmentSlot.LEGS));
+                level += getCurseLevel(player.getItemBySlot(EquipmentSlot.FEET));
+                
+                if (level != 0) {
+                    doSizeCurse(player, level);
+                }
             }
+        }
+    }
+
+    private static int getCurseLevel(ItemStack stack){
+        if (stack.getEnchantmentLevel(EnchantmentInit.SHRINKING_CURSE_ENCHANTMENT.get()) > 0) {
+            return -1;
+        }else if (stack.getEnchantmentLevel(EnchantmentInit.GROWTH_CURSE_ENCHANTMENT.get()) > 0){
+            return 1;
+        }
+
+        return 0;
+    }
+
+    private static void doSizeCurse(Player player, int level){
+        float mult = 0.99994f;
+        int ticks = 0;
+        boolean cap = false;
+        if (level > 0) {
+            mult = 1.00006f;
+            ticks = 1;
+            cap = true;
+        }else{
+            level = -level;
+        }
+
+        mult = (float) Math.pow(mult, level);
+
+        if (cap) {
+            if (PlayerSizeUtils.getTargetSize(player) < HMTConfig.SERVER_CONFIG.growthCurseMaxScale.get() && PlayerSizeUtils.getSize(player) < HMTConfig.SERVER_CONFIG.growthCurseMaxScale.get()) {
+                PlayerSizeUtils.multSize(null, player, mult, ticks);
+            }
+        }else{
+            PlayerSizeUtils.multSize(null, player, mult, ticks);
         }
     }
 }
