@@ -56,9 +56,6 @@ public class ClientModHandler {
 
     @SubscribeEvent
     public static void registerKeys(RegisterKeyMappingsEvent event) {
-        event.register(Keybindings.INSTANCE.shoulderCarryKey);
-        event.register(Keybindings.INSTANCE.customCarryKey);
-        event.register(Keybindings.INSTANCE.carryWheelKey);
         event.register(Keybindings.INSTANCE.sizePrefsKey);
         event.register(Keybindings.INSTANCE.carryScreenKey);
         event.register(Keybindings.INSTANCE.stickyFingerKey);
