@@ -3,6 +3,7 @@ package com.ricardthegreat.holdmetight.enchantments;
 import com.ricardthegreat.holdmetight.init.ItemInit;
 
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
@@ -30,7 +31,7 @@ public class ShrinkingCurseEnchantment extends Enchantment{
     }
 
     public boolean canEnchant(ItemStack stack) {
-        return stack.is(ItemInit.COLLAR_ITEM.get());
+        return stack.getItem() instanceof ArmorItem || stack.is(ItemInit.COLLAR_ITEM.get());
     }
 
     @Override
