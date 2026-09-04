@@ -10,12 +10,15 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 @Mixin(LivingEntity.class)
 public class TinySuperJumpMixin {
@@ -118,7 +121,14 @@ public class TinySuperJumpMixin {
                         return true;
                     }
                 }else{
-                    double height = above.getCollisionShape(level, aboveBlockPos).max(Direction.Axis.Y) + aboveBlockPos.getY();
+                    VoxelShape collision = above.getCollisionShape(level, aboveBlockPos);
+                    
+                    if (checkIfPlayerWillHitBlock(ent, aboveBlockPos, collision)) {
+                        return true;
+                    }
+                    
+                    //allow it if the block on top is not too high for the player to actually jump onto
+                    double height = collision.max(Direction.Axis.Y) + aboveBlockPos.getY();
                     if (height-ent.getY() <= 1.5*PlayerSizeUtils.getSize(ent)) {
                         return true;
                     }
@@ -126,6 +136,32 @@ public class TinySuperJumpMixin {
             }
         }
   
+        return false;
+    }
+
+    private boolean checkIfPlayerWillHitBlock(Player player, BlockPos blockPos, VoxelShape collision){
+        double xPos = player.getX();
+        double zPos = player.getZ();
+        Vec3 posCentre = blockPos.getCenter();
+
+        /*
+        * check if player is not out of bound of the X of the block and if they are not,
+        * allow the jump if the block does not cover the x position of the block a player is standing at 
+        * (only works for the full width so --. would allow a jump at the . but -.- wouldnt)
+        */
+        if (collision.max(Direction.Axis.X) < 1 || collision.min(Direction.Axis.X) > 0) {
+            if (xPos > collision.max(Direction.Axis.X)+blockPos.getX() || xPos < collision.min(Direction.Axis.X)+blockPos.getX()) {
+                return true;
+            }
+        }
+
+        //do the same but for Z pos
+        if (collision.max(Direction.Axis.Z) < 1  || collision.min(Direction.Axis.Z) > 0) {
+            if (zPos > collision.max(Direction.Axis.Z)+blockPos.getZ() || zPos < collision.min(Direction.Axis.Z)+blockPos.getZ() ) {
+                return true;
+            }
+        }
+
         return false;
     }
 }
