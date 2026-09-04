@@ -67,7 +67,7 @@ public class SPlayerCarrySyncPacket {
         if(carry != null){
             carry.updateAllSyncables(carriedPlayers, customPos);
 
-            PacketHandler.sendToAllClients(new CPlayerCarrySyncPacket(carriedPlayers, customPos, player.getUUID()));
+            PacketHandler.sendToAllClients(carry.getClientSyncPacket(player));
         }
 
     }
