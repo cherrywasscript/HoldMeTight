@@ -110,7 +110,7 @@ public class PlayerCarry {
         //should only be updated server side so should only be called when on server
         if(!player.level().isClientSide){
             DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> 
-            PacketHandler.sendToAllClients(new CPlayerCarrySyncPacket(carriedEntities, customCarryPositions, player.getUUID())));
+            PacketHandler.sendToAllClients(getClientSyncPacket(player)));
         }
     }
 
