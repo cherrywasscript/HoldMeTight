@@ -45,6 +45,12 @@ public abstract class CollarNametagCustomMixin<T extends Entity> {
 
                     List<Pair<UUID, String>> owners = CollarItem.getOwners(stack);
 
+                    for (Pair<UUID,String> pair : owners) {
+                        if (pair.getFirst().compareTo(player.getUUID()) == 0) {
+                            return component;
+                        }  
+                    }
+
                     if (owners != null) {
                         comp.append(owners.get(0).getSecond());
 
