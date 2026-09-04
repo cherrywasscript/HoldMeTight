@@ -168,3 +168,10 @@ version 0.8.0-beta
 
 version 0.8.0.1-beta
 - changed the new water pushing slightly to prevent a crash when using sinytra connector
+
+version 0.8.1-beta
+- made it so the curses of shrinking and growth can also be applied to armour now, their effects stack with themselves and also cancel eachother out (e.g. 3x shrinking pieces will shrink 3x faster but adding 2x growth pieces will negate 2 of the shrinking pieces)
+- added config option for the max size curse of growth can reach
+- added new subcommand to "/customcarry" "/customcarry sync" which syncs your custom carry slots to the server and other players to hopefully avoid too much unintended desync
+- updated vaulting slightly so you can now vault onto blocks that have blocks on them but dont actually prevent you from standing on them, such as open trapdoors (this isnt perfect but should cover most scenarios)
+- added a tooltip to player items in your inventory to make it clearer that you can open and access peoples inventories

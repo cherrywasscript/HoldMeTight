@@ -4,8 +4,6 @@ Bugs:
 - grabbing someone while they crouch might be broken
 - items in the first 4 hotbar slots on carried players show their number in armour slots for some reason
 
-- make it so collar doesnt show "owned by:" if the owner is the same as the person wearing it
-- remove old carry hotkeys
 Features:
 - make it so you can see and edit curios as well as regular inventory
 - more server side options (like disabling tiny players brushing blocks) + ways to disable certain items like the remotes
