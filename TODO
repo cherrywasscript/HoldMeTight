@@ -2,13 +2,11 @@ Bugs:
 - figure out why shift+clicking into and out of carried inventories is so strange
 - dying does weird stuff to carry position syncing? need to check
 - grabbing someone while they crouch might be broken
-- update vaulting so it works with blocks like trapdoors
 - items in the first 4 hotbar slots on carried players show their number in armour slots for some reason
 
-- USING COLLAR KEY THROWS ERROR BUT DOESNT CAUSE CRASH LOOK AT AFTER WORK
-
+- make it so collar doesnt show "owned by:" if the owner is the same as the person wearing it
+- remove old carry hotkeys
 Features:
-- more mobility options while tiny? super jump? - TinySuperJumpMixin (cant seem to find a way that i like to make a super jump work)
 - make it so you can see and edit curios as well as regular inventory
 - more server side options (like disabling tiny players brushing blocks) + ways to disable certain items like the remotes
 - make it so custom carry positions can choose if the player is stuck or not
@@ -23,8 +21,6 @@ Features:
     - leaves  (make climbable)
     - candles!!
 
-- change the "super jump" so it doesnt activate if they should already be able to jump over it
-- work on the collar stuff
 - work on making the size ray good
 - tinies can see in the inventory of bigs carrying them (maybe only the items directly adjacent)
 - "tiny accessable chests" chest with a hole that really small players can enter through and when they open their inventory they open the chest
@@ -43,6 +39,7 @@ Features:
 - look into intergration with simple voice chat
 - add create compatability (belt motion + maybe other stuff)
 
+- go through and make all literal text translateable
 
 stuff i cant/wont do:
 can't:
