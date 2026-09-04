@@ -118,6 +118,7 @@ public class HMTConfig {
                 public final ForgeConfigSpec.DoubleValue maxWingsScale;
                 public final ForgeConfigSpec.DoubleValue minParticleScale;
                 public final ForgeConfigSpec.DoubleValue pickupRatioScale;
+                public final ForgeConfigSpec.DoubleValue growthCurseMaxScale;
                 public final ForgeConfigSpec.BooleanValue miningSpeedScaleLink;
                 public final ForgeConfigSpec.BooleanValue damageTakenScaleLink;
                 public final ForgeConfigSpec.BooleanValue dontSlowDownSmallerMovement;
@@ -146,7 +147,8 @@ public class HMTConfig {
                                 .defineInRange("minParticleScale", 0.5, 0, 1);
                         this.pickupRatioScale = builder.comment("how much smaller an entity needs to be before it can be picked up (e.g. at the default of 0.25 someone at 4x can pickup someone at 1x but not any larger than that)")
                                 .defineInRange("pickupRatio", 0.25, Double.MIN_VALUE, Double.MAX_VALUE);
-
+                        this.growthCurseMaxScale = builder.comment("the maximum size curse of growth will continue until, i would recommend no higher than 8 or 16 unless you are playing with very few people")
+                                .defineInRange("pickupRatio", 8, 2, Double.MAX_VALUE);
                         builder.pop();
                         
                         builder.push("Optional Features");
